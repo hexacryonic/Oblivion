@@ -1,0 +1,356 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Turn Jimbo into THE SHOW NEVER ENDS
+[[patches]]
+[patches.pattern]
+target = "card_character.lua"
+pattern = 'self.children.card = Card(self.T.x, self.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, args.center or G.P_CENTERS.j_joker, {bypass_discovery_center = true})'
+position = "at"
+payload = 'self.children.card = Card(self.T.x, self.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, args.center or G.P_CENTERS.j_ovn_showneverends, {bypass_discovery_center = true})'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card_character.lua"
+pattern = 'colours = {G.C.RED, G.C.BLUE, G.C.ORANGE},'
+position = "at"
+payload = '''colours = {G.C.RARITY['ovn_corrupted'], G.C.BLUE, G.C.PURPLE},'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability and self.ability.perma_debuff then self.debuff = true end'''
+position = "after"
+payload = '''
+local iseeyou = {
+["m_glass"] = "m_ovn_ice",
+["m_gold"] = "m_ovn_dense",
+["m_steel"] = "m_ovn_unob",
+["m_wild"] = "m_ovn_coord",
+}
+
+if self.base.suit == 'ovn_Optics' then
+for k, v in pairs(iseeyou) do
+        if self.config.center.key == k then
+	self:set_ability(G.P_CENTERS[v], nil, true)
+	G.E_MANAGER:add_event(Event({
+          trigger = "after",
+          delay = 0.1,
+            func = function()
+            play_sound('ovn_optic', 1, 1.1)
+            self:juice_up(0.5, 0.5)
+            return true
+            end,
+          }))
+        end
+      end
+    end
+
+if self.base.suit ~= 'ovn_Optics' then
+if not G.your_collection then
+for k, v in pairs(iseeyou) do
+        if self.config.center.key == v then
+	self:set_ability(G.P_CENTERS[k], nil, true)
+	G.E_MANAGER:add_event(Event({
+          trigger = "after",
+          delay = 0.1,
+            func = function()
+            play_sound('ovn_pure', 1, 1.1)
+            self:juice_up(0.5, 0.5)
+            return true
+            end,
+          }))
+        end
+      end
+    end
+  end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.S_A, G.P_CENTERS.c_base)"
+position = "at"
+payload = '''
+local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS['ovn_O'..'_'..'A'], G.P_CENTERS.c_base)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},"
+position = "at"
+payload = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'PURPLE'},
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
+position = "at"
+payload = '''
+local replace = {}
+			for _, v in pairs(corruptionTable) do
+				if G.P_CENTERS[v] then
+					replace[#replace + 1] = v
+				end
+			end
+ 		local option = math.random(#replace)
+   		local chosenoption = replace[option]
+SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[chosenoption],{bypass_discovery_center = true, bypass_discovery_ui = true})
+'''
+match_indent = true
+
+[vars]
+prosopometamorphopsia_joker_key = "j_ovn_pmo"
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+function Card:calculate_joker(context)
+'''
+position = "at"
+payload = '''
+local function corrupted_mod_calc_joker_func(self, context)
+'''
+match_indent = true
+
+# Optics' base chips are doubled
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if initial then self.base.original_value = self.base.value end
+'''
+position = "after"
+payload = '''
+if self.base.suit == 'ovn_Optics' then self.ability.bonus = self.base.nominal end
+'''
+match_indent = true
+
+# ----
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+function Card:is_suit(suit, bypass_debuff, flush_calc)
+'''
+position = "before"
+payload = '''
+function Card:calculate_joker(context)
+    local has_prosopometamorphopsia = next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}'))
+    local return_value = nil
+    if not has_prosopometamorphopsia then
+        return_value = corrupted_mod_calc_joker_func(self, context)
+        return return_value
+    end
+    if (context.other_card and
+        context.other_card.base and
+        (context.other_card.base.id == 11 or context.other_card.base.id == 12 or context.other_card.base.id == 13)) then
+           -- Discard returned effects for Jacks, Queens, and Kings!
+          return nil
+    end
+    return_value = corrupted_mod_calc_joker_func(self, context)
+    if (not return_value and
+        context.other_card and
+        context.other_card.base and
+        context.other_card.base.id == 14) then
+          -- jackify
+          context.other_card.base.id = 11
+          return_value = corrupted_mod_calc_joker_func(self, context)
+          context.other_card.base.id = 14
+          if return_value then return return_value end
+          -- queenify
+          context.other_card.base.id = 12
+          return_value = corrupted_mod_calc_joker_func(self, context)
+          context.other_card.base.id = 14
+          if return_value then return return_value end
+          -- kingify
+          context.other_card.base.id = 13
+          return_value = corrupted_mod_calc_joker_func(self, context)
+          context.other_card.base.id = 14
+          if return_value then return return_value end
+          if next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}')) and next(SMODS.find_card('j_pareidolia')) then
+            context.other_card.base.id = 2
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 3
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 4
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 5
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 6
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 7
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 8
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 9
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+            context.other_card.base.id = 10
+            return_value = corrupted_mod_calc_joker_func(self, context)
+            context.other_card.base.id = 14
+            if return_value then return return_value end
+          end
+    end
+    -- if nothing fancy applies (eg. number or ace-targeting stuff, or still nil effects) it will reach here
+    return return_value
+end
+
+'''
+match_indent = true
+
+## Makes all Jacks, Queens, and Kings never count as face cards, and makes Aces count as face cards
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+position = "after"
+match_indent = true
+pattern = "local id = self:get_id()"
+payload = '''if next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}')) and not next(SMODS.find_card('j_pareidolia')) then
+  if (id == 11 or id == 12 or id == 13) then return false end
+  if (id == 14) then return true end
+end'''
+
+# Show tooltips
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "for _, v in ipairs(info_queue) do"
+position = "before"
+payload = '''for k, _ in pairs(corruptionTable) do
+  if _c.key == k then
+    info_queue[#info_queue+1] = {key = 'ovn_corruptible', set = 'Other'}
+  end
+end
+'''
+match_indent = true
+
+# Wiggle when corruption method is visible
+[[patches]]
+[patches.pattern]
+target = "functions/card.lua"
+pattern = "function Card:calculate_joker(context)"
+position = "after"
+payload = '''for k, _ in pairs(corruptionTable) do
+  if self.key == k then
+    local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
+    juice_card_until(self, eval, true)
+  end
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "  G.FUNCS.can_use_consumeable = function(e)"
+position = "before"
+payload = '''  G.FUNCS.can_weirddiscard = function(e)
+    if G.GAME.current_round.discards_left <= 0 then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    else
+        e.config.colour = G.C.RED
+        e.config.button = 'discard_cards_from_held'
+    end
+  end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+local discard_button = {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_highlighted", one_press = true, shadow = true, func = 'can_discard'}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+      {n=G.UIT.T, config={text = localize('b_discard'), scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
+    }}
+  }}
+'''
+position = "at"
+payload = '''
+  local discard_button =
+  G.GAME.in_corrupt_red and {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_held", one_press = true, shadow = true, func = 'can_weirddiscard'}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+      {n=G.UIT.T, config={text = "Datcard", scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
+    }}
+  }}
+  or not G.GAME.in_corrupt_red and
+  {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_highlighted", one_press = true, shadow = true, func = 'can_discard'}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+      {n=G.UIT.T, config={text = localize('b_discard'), scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
+    }}
+  }}
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+else
+    e.config.colour = G.C.BLUE
+    e.config.button = 'play_cards_from_highlighted'
+end'''
+position = "after"
+payload = '''
+if #G.hand.highlighted >= 1 then
+  for i=1, #G.hand.highlighted do
+    if G.hand.highlighted[i].config.center.key == 'm_ovn_unob' then
+      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+      e.config.button = nil
+    end
+  end
+end
+'''
+match_indent = true
+
+# Corrupt background
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''elseif G.GAME.won then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+position = "at"
+payload = '''elseif G.GAME.won and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
+elseif G.GAME.won and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+match_indent = true

@@ -1,0 +1,16 @@
+{
+	"id": "Oblivion",
+	"name": "Oblivion",
+	"display_name": "Oblivion",
+	"author": ["HexaCryonic"],
+	"description": "G.localization.descriptions.Mod[Oblivion]",
+	"prefix": "ovn",
+	"main_file": "Oblivion.lua",
+	"priority": 69420,
+	"badge_colour": "4168ed",
+	"badge_text_colour": "ffffff",
+	"version": "0.0.0~1",
+	"dependencies": [
+    "Steamodded (>=1.*)"
+  ],
+}
