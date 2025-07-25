@@ -10,8 +10,8 @@ SMODS.Suit{
 	hc_ui_atlas = 'suits_hc',
 
 	loc_txt = {
-	singular = 'Optic',
-	plural = 'Optics'
+		singular = 'Optic',
+		plural = 'Optics'
 	},
 
 	pos = { x = 0, y = 0 },
@@ -21,77 +21,71 @@ SMODS.Suit{
 	hc_colour = HEX('8806FF'),
 
 	in_pool = function(self, args)
-		if args and args.initial_deck then
-		return false
-		end
+		if args and args.initial_deck then return false end
 	end,
 }
+
+----
+
+local function ocular_apply_func()
+	local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
+	for _,rank in ipairs(ranks) do
+		local card_key = ('ovn_O_%s'):format(rank)
+		local card_front = G.P_CARDS[card_key]
+		create_playing_card({front = card_front}, G.deck)
+	end
+	return true
+end
 
 SMODS.Back{
 	key = "ocular",
 	pos = { x = 0, y = 0 },
 	atlas = "deck_atlas",
-	loc_txt = {
-		name = 'Ocular Deck',
-		text = {
-			"Start with a full set of {C:ovn_optic}Optics{}",
-			"in addition to the standard deck"
-		}
-	},
+
 	apply = function(self)
-	G.E_MANAGER:add_event(Event({
-		trigger = 'immediate',
-		func = function()
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'A']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'K']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'Q']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'J']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'T']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'9']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'8']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'7']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'6']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'5']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'4']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'3']}, G.deck, nil, nil, nil)
-		create_playing_card({front = G.P_CARDS['ovn_O'..'_'..'2']}, G.deck, nil, nil, nil)
-		return true
-		end,
-	}))
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = ocular_apply_func,
+		}))
 	end,
 }
+
+----
 
 SMODS.PokerHandPart{ -- Spectrum base (yoink)
 	key = 'spectrum',
 	func = function(hand)
 		local suits = {}
-		for _, v in ipairs(SMODS.Suit.obj_buffer) do
-			suits[v] = 0
+		for _, suit_key in ipairs(SMODS.Suit.obj_buffer) do
+			suits[suit_key] = false
 		end
 		if #hand < 5 then return {} end
-		if G.GAME.hands["ovn_Spectrum"].played > 0 then
-			for i = 1, #hand do
-				if hand[i].config.center_key == 'm_wild' then
-				for k, v in pairs(suits) do
-					if hand[i]:is_suit(k, nil, true) and v == 0 then
-						suits[k] = v + 1; break
+
+		local function count_card(hand_card)
+			-- True if:
+			--- Never played Spectrum, card is not wild
+			--- Played Spectrum (wild cards are then counted)
+			return (
+				G.GAME.hands["ovn_Spectrum"].played == 0
+				and hand_card.config.center_key ~= 'm_wild'
+				or G.GAME.hands["ovn_Spectrum"].played > 0
+			)
+		end
+
+		for _, hand_card in ipairs(hand) do
+			if count_card(hand_card) then
+				for suit_key in pairs(suits) do
+					if hand_card:is_suit(suit_key, nil, true) then
+						suits[suit_key] = true
+						break
 					end
-				end
 				end
 			end
 		end
-		for i = 1, #hand do
-			if hand[i].config.center_key ~= 'm_wild' then
-				for k, v in pairs(suits) do
-					if hand[i]:is_suit(k, nil, true) and v == 0 then
-						suits[k] = v + 1; break
-					end
-				end
-			end
-		end
+
 		local num_suits = 0
-		for _, v in pairs(suits) do
-			if v > 0 then num_suits = num_suits + 1 end
+		for _, has_suit in pairs(suits) do
+			if has_suit then num_suits = num_suits + 1 end
 		end
 		return (num_suits >= 5) and {hand} or {}
 	end
@@ -105,18 +99,20 @@ SMODS.PokerHand{ -- Spectrum (yoink)
 	l_chips = 20,
 	l_mult = 2,
 	example = {
-		{ 'ovn_O_A',    true },
-		{ 'S_7',    true },
+		{ 'ovn_O_A', true },
+		{ 'S_7', true },
 		{ 'H_9', true },
 		{ 'C_K', true },
-		{ 'D_4',    true },
+		{ 'D_4', true },
 	},
+
 	loc_txt = {
-			name = 'Spectrum',
-			description = {
-				'5 cards with 5 different suits.'
-			}
+		name = 'Spectrum',
+		description = {
+			'5 cards with 5 different suits.'
+		}
 	},
+
 	evaluate = function(parts)
 		return parts.ovn_spectrum
 	end
@@ -130,34 +126,37 @@ SMODS.PokerHand{ -- Straight Spectrum (yoink)
 	l_chips = 30,
 	l_mult = 3,
 	example = {
-		{ 'ovn_O_K',    true },
+		{ 'ovn_O_K', true },
 		{ 'S_Q', true },
-		{ 'H_J',    true },
+		{ 'H_J', true },
 		{ 'C_T', true },
-		{ 'D_9',    true }
+		{ 'D_9', true }
 	},
-		loc_txt = {
-				name = 'Straight Spectrum',
-				description = {
-					'A Straight and a Spectrum together.'
-				}
-		},
+	loc_txt = {
+		name = 'Straight Spectrum',
+		description = {
+			'A Straight and a Spectrum together.'
+		}
+	},
+
 	process_loc_text = function(self)
 		SMODS.PokerHand.process_loc_text(self)
 		SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..' (Royal)', self.loc_txt, 'extra')
 	end,
+
 	evaluate = function(parts)
 		if not next(parts.ovn_spectrum) or not next(parts._straight) then return {} end
-		return { SMODS.merge_lists (parts.ovn_spectrum, parts._straight) }
+		return { SMODS.merge_lists(parts.ovn_spectrum, parts._straight) }
 	end,
+
 	modify_display_text = function(self, _cards, scoring_hand)
-		local royal = true
-		for j = 1, #scoring_hand do
-			local rank = SMODS.Ranks[scoring_hand[j].base.value]
-			royal = royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
+		local is_royal = true
+		for _, scoring_card in ipairs(scoring_hand) do
+			local rank = SMODS.Ranks[scoring_card.base.value]
+			is_royal = is_royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
 		end
-		if royal then
-			return self.key..' (Royal)'
+		if is_royal then
+			return self.key .. ' (Royal)'
 		end
 	end
 }
@@ -170,18 +169,19 @@ SMODS.PokerHand{ -- Spectrum House (yoonk)
 	l_chips = 40,
 	l_mult = 3,
 	example = {
-		{ 'ovn_O_K',    true },
+		{ 'ovn_O_K', true },
 		{ 'S_K', true },
-		{ 'H_K',    true },
-		{ 'C_8',    true },
-		{ 'D_8',    true }
+		{ 'H_K', true },
+		{ 'C_8', true },
+		{ 'D_8', true }
 	},
-		loc_txt = {
-				name = 'Spectrum House',
-				description = {
-					'A Full House and a Spectrum together.'
-				}
-		},
+	loc_txt = {
+		name = 'Spectrum House',
+		description = {
+			'A Full House and a Spectrum together.'
+		}
+	},
+
 	evaluate = function(parts)
 		if #parts._3 < 1 or #parts._2 < 2 or not next(parts.ovn_spectrum) then return {} end
 		return {SMODS.merge_lists (parts._all_pairs, parts.ovn_spectrum)}
@@ -196,20 +196,21 @@ SMODS.PokerHand{ -- Spectrum Five (yonk)
 	l_chips = 50,
 	l_mult = 3,
 	example = {
-		{ 'ovn_O_A',    true },
+		{ 'ovn_O_A', true },
 		{ 'S_A', true },
-		{ 'H_A',    true },
-		{ 'C_A',    true },
-		{ 'D_A',    true }
+		{ 'H_A', true },
+		{ 'C_A', true },
+		{ 'D_A', true }
 	},
-		loc_txt = {
-				name = 'Spectrum Five',
-				description = {
-					'A Spectrum with all 5 cards of the same rank.'
-				}
-		},
+	loc_txt = {
+		name = 'Spectrum Five',
+		description = {
+			'A Spectrum with all 5 cards of the same rank.'
+		}
+	},
+
 	evaluate = function(parts)
-		if not next(parts._5)or  not next(parts.ovn_spectrum) then return {} end
+		if not next(parts._5) or not next(parts.ovn_spectrum) then return {} end
 		return {SMODS.merge_lists (parts._5, parts.ovn_spectrum)}
 	end
 }
@@ -232,8 +233,8 @@ SMODS.Consumable{
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
 	loc_txt = {
-			name = 'Ganymede'
-		}
+		name = 'Ganymede'
+	}
 }
 
 SMODS.Consumable{

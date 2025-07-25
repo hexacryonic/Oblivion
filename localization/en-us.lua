@@ -43,6 +43,15 @@
 				},
 			},
 		},
+		Back = {
+			b_ovn_ocular = {
+				name = "Ocular Deck",
+				text = {
+					"Start with a full set of {C:ovn_optic}Optics{}",
+					"in addition to the standard deck"
+				}
+			}
+		},
 		Planet = {
 			c_ovn_reality = {
 				name = "The Complete Fucking Annihilation of Reality",
