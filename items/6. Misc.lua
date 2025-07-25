@@ -64,7 +64,7 @@ SMODS.Blind({
 		return { }
 	end,
 		in_pool = function()
-		for _, v in pairs(corruptionTable) do
+		for _, v in pairs(Oblivion.corruptionMap) do
 			if SMODS.find_card(v) then
 			return true
 			else
@@ -75,7 +75,7 @@ SMODS.Blind({
 		defeat = function(self, silent)
 			if G.GAME.current_round.hands_left >= 1 then
 				for k, v in pairs(G.jokers.cards) do
-					for kk, vv in pairs(corruptionTable) do
+					for kk, vv in pairs(Oblivion.corruptionMap) do
 						if v.config.center.key == vv then
 								G.E_MANAGER:add_event(Event({
 									trigger = "after",
@@ -98,7 +98,7 @@ SMODS.Blind({
 		disable = function(self, silent)
 			if G.GAME.current_round.hands_left >= 1 then
 				for k, v in pairs(G.jokers.cards) do
-					for kk, vv in pairs(corruptionTable) do
+					for kk, vv in pairs(Oblivion.corruptionMap) do
 						if v.config.center.key == vv then
 								G.E_MANAGER:add_event(Event({
 									trigger = "after",
@@ -138,7 +138,7 @@ SMODS.Blind({
 				if v.config.center ~= G.P_CENTERS.c_base then v:change_suit('ovn_Optics') end
 			end
 			for k, v in pairs(G.jokers.cards) do
-				for kk, vv in pairs(corruptionTable) do
+				for kk, vv in pairs(Oblivion.corruptionMap) do
 				if v.config.center.key == kk then
 				G.E_MANAGER:add_event(Event({
 					trigger = "after",
@@ -164,7 +164,7 @@ SMODS.Blind({
 		return { }
 	end,
 		in_pool = function()
-		for k, _ in pairs(corruptionTable) do
+		for k, _ in pairs(Oblivion.corruptionMap) do
 			if SMODS.find_card(k) then
 			return true
 			else
@@ -268,7 +268,7 @@ SMODS.Edition {
 			and card.config.trigger and not corrupting and not dying
 		)
 		then
-		for k, v in pairs(corruptionTable) do
+		for k, v in pairs(Oblivion.corruptionMap) do
 			if card.config.center.key == k then
 			corrupting = true
 			G.E_MANAGER:add_event(Event({

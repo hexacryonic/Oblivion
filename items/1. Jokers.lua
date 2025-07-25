@@ -59,13 +59,13 @@ SMODS.Consumable {
 	atlas = "abyss_atlas",
 	can_use = function(self, card)
 		if #G.jokers.highlighted == 1 then
-		for k, _ in pairs(corruptionTable) do
+		for k, _ in pairs(Oblivion.corruptionMap) do
 			if SMODS.find_card(k) then return true end
 		end
 		end
 	end,
 	in_pool = function()
-		for k, _ in pairs(corruptionTable) do
+		for k, _ in pairs(Oblivion.corruptionMap) do
 		if SMODS.find_card(k) then
 			return true
 		else
@@ -79,7 +79,7 @@ SMODS.Consumable {
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		if not G.your_collection then
-		for k, _ in pairs(corruptionTable) do
+		for k, _ in pairs(Oblivion.corruptionMap) do
 			for i=1, #G.jokers.cards do
 			if G.jokers.cards[i].config.center.key == k then
 				local card = G.jokers.cards[i]
@@ -93,7 +93,7 @@ SMODS.Consumable {
 		end
 	end,
 	use = function(self, card, area, copier)
-		for k, v in pairs(corruptionTable) do
+		for k, v in pairs(Oblivion.corruptionMap) do
 		if G.jokers.highlighted[1].config.center.key == k then
 			G.GAME.justcorrupted = k
 			G.E_MANAGER:add_event(Event({
