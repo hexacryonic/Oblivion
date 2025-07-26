@@ -318,7 +318,7 @@ SMODS.Consumable{
 ----
 
 local function corruption_dissolve(card)
-	add_simple_event(0.1, function()
+	add_simple_event('after', 0.1, function()
 		play_sound("tarot1")
 		card:start_dissolve({G.C.RARITY['ovn_corrupted']})
 	end)
