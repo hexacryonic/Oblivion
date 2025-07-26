@@ -1,3 +1,19 @@
+-- Adds an event to G.E_MANAGER that only has the properties trigger, delay, and func.\
+-- Event function will always return true, so "return true" is not required.\
+-- Consequently, do not use this function if the event function needs to return a non-true value.
+---@param trigger string | nil
+---@param delay number | nil
+---@param func function
+local function add_simple_event(trigger, delay, func)
+	G.E_MANAGER:add_event(Event {
+		trigger = trigger,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
+
+----
+
 SMODS.Suit{
 	key = 'Optics',
 	card_key = 'O',
@@ -27,26 +43,20 @@ SMODS.Suit{
 
 ----
 
-local function ocular_apply_func()
-	local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
-	for _,rank in ipairs(ranks) do
-		local card_key = ('ovn_O_%s'):format(rank)
-		local card_front = G.P_CARDS[card_key]
-		create_playing_card({front = card_front}, G.deck)
-	end
-	return true
-end
-
 SMODS.Back{
 	key = "ocular",
 	pos = { x = 0, y = 0 },
 	atlas = "deck_atlas",
 
 	apply = function(self)
-		G.E_MANAGER:add_event(Event({
-			trigger = 'immediate',
-			func = ocular_apply_func,
-		}))
+		add_simple_event('immediate', nil, function()
+			local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
+			for _,rank in ipairs(ranks) do
+				local card_key = ('ovn_O_%s'):format(rank)
+				local card_front = G.P_CARDS[card_key]
+				create_playing_card({front = card_front}, G.deck)
+			end
+		end)
 	end,
 }
 
@@ -308,16 +318,10 @@ SMODS.Consumable{
 ----
 
 local function corruption_dissolve(card)
-	G.E_MANAGER:add_event(Event({
-		trigger = "after",
-		delay = 0.1,
-		func = function()
-			play_sound("tarot1")
-			card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-			return true
-		end,
-	}))
-
+	add_simple_event(0.1, function()
+		play_sound("tarot1")
+		card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+	end)
 end
 
 SMODS.Enhancement{
@@ -536,18 +540,11 @@ SMODS.Consumable {
 	end,
 
 	use = function(self)
-		local function after_event(delay, func)
-			G.E_MANAGER:add_event(Event {
-				trigger = 'after',
-				delay = delay,
-				func = function() func(); return true end
-			})
-		end
 		local all_highlighted_cards = G.hand.highlighted
 
 		for i,highlighted_card in ipairs(all_highlighted_cards) do
 			local percent = 1.15 - (i - 0.999)/(#all_highlighted_cards - 0.998)*0.3
-			after_event(0.15, function()
+			add_simple_event('after', 0.15, function()
 				G.GAME.corruptingCard = true
 				highlighted_card:flip()
 				play_sound('card1', percent)
@@ -560,24 +557,24 @@ SMODS.Consumable {
 		delay(0.2)
 
 		for _,highlighted_card in ipairs(all_highlighted_cards) do
-			after_event(0.1, function() highlighted_card:change_suit(self.config.suit_conv) end)
+			add_simple_event('after', 0.1, function() highlighted_card:change_suit(self.config.suit_conv) end)
 		end
 
 		for i,highlighted_card in ipairs(all_highlighted_cards) do
 			local percent = 0.85 + ( i - 0.999 ) / ( #all_highlighted_cards - 0.998 ) * 0.3
-			after_event(0.15, function()
+			add_simple_event('after', 0.15, function()
 				highlighted_card:flip()
 				play_sound('ovn_optic', percent, 1.1)
 				highlighted_card:juice_up(0.3, 0.3)
 			end)
 		end
 
-		if G.GAME.in_corrupt_plasma then after_event(0.2, function()
+		if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.2, function()
 			play_sound("ovn_increment", 1, 0.9)
 			G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #all_highlighted_cards))
 		end) end
 
-		after_event(0.2, function() G.hand:unhighlight_all() end)
+		add_simple_event('after', 0.2, function() G.hand:unhighlight_all() end)
 
 		delay(0.5)
 	end,

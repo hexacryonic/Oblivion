@@ -99,7 +99,7 @@ pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC
 position = "at"
 payload = '''
 local replace = {}
-			for _, v in pairs(corruptionTable) do
+			for _, v in pairs(Oblivion.corruption_map) do
 				if G.P_CENTERS[v] then
 					replace[#replace + 1] = v
 				end
@@ -246,7 +246,7 @@ end'''
 target = "functions/common_events.lua"
 pattern = "for _, v in ipairs(info_queue) do"
 position = "before"
-payload = '''for k, _ in pairs(corruptionTable) do
+payload = '''for k, _ in pairs(Oblivion.corruption_map) do
   if _c.key == k then
     info_queue[#info_queue+1] = {key = 'ovn_corruptible', set = 'Other'}
   end
@@ -260,7 +260,7 @@ match_indent = true
 target = "functions/card.lua"
 pattern = "function Card:calculate_joker(context)"
 position = "after"
-payload = '''for k, _ in pairs(corruptionTable) do
+payload = '''for k, _ in pairs(Oblivion.corruption_map) do
   if self.key == k then
     local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
     juice_card_until(self, eval, true)

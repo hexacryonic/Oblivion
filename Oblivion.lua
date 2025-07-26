@@ -54,8 +54,8 @@ end
 
 -- Mapping this way so other mods can add corruptionMap if it's nonexistent
 -- and thus define their own corruptions
-if not Oblivion.corruptionMap then Oblivion.corruptionMap = {} end
-local cmap = Oblivion.corruptionMap
+if not Oblivion.corruption_map then Oblivion.corruption_map = {} end
+local cmap = Oblivion.corruption_map
 cmap["j_joker"]            = "j_ovn_darkjoker"
 cmap["j_fibonacci"]        = "j_ovn_lucasseries"
 cmap["j_reserved_parking"] = "j_ovn_perpendicular"
