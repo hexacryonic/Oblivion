@@ -21,7 +21,7 @@ SMODS.Suit{
 	hc_colour = HEX('8806FF'),
 
 	in_pool = function(self, args)
-		if args and args.initial_deck then return false end
+		return not (args and args.initial_deck)
 	end,
 }
 
@@ -215,6 +215,8 @@ SMODS.PokerHand{ -- Spectrum Five (yonk)
 	end
 }
 
+----
+
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'ganymede',
@@ -303,45 +305,58 @@ SMODS.Consumable{
 		}
 }
 
+----
+
+local function corruption_dissolve(card)
+	G.E_MANAGER:add_event(Event({
+		trigger = "after",
+		delay = 0.1,
+		func = function()
+			play_sound("tarot1")
+			card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+			return true
+		end,
+	}))
+
+end
+
 SMODS.Enhancement{
 	key = "ice",
 	loc_txt = {
 		name = 'Ice Card',
 		text = {
-				"{X:mult,C:white}X#2#{} Mult, loses {X:mult,C:white}X#1#{} Mult",
-				"each time it's played",
-				"Melts at {X:mult,C:white}X1{}"
+			"{X:mult,C:white}X#2#{} Mult, loses {X:mult,C:white}X#1#{} Mult",
+			"each time it's played",
+			"Melts at {X:mult,C:white}X1{}"
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		local item = card and card.ability or self.config
+		return {vars = {
+			item.extra.x_mult_loss,
+			item.extra.current_x_mult
+		}}
+	end,
+
 	atlas = "opticenhance_atlas",
 	pos = { x = 0, y = 0 },
 	in_pool = false,
 	config = {extra = {x_mult_loss = 0.1, current_x_mult = 2}},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card and card.ability.extra.x_mult_loss or self.config.extra.x_mult_loss, card and card.ability.extra.current_x_mult or self.config.extra.current_x_mult } }
-	end,
+	
 	calculate = function(self,card,context)
-	local melting = false
+		local is_melting = false
+		local c_extra = card.ability.extra
+
 		if context.cardarea == G.play and context.main_scoring then
-		melting = true
-		return {
-		x_mult = card.ability.extra.current_x_mult,
-		}
+			is_melting = true
+			return { x_mult = c_extra.current_x_mult }
 		end
-		if (context.after and melting) then
-		card.ability.extra.current_x_mult = card.ability.extra.current_x_mult - card.ability.extra.x_mult_loss
+
+		if (context.after and is_melting) then
+			c_extra.current_x_mult = c_extra.current_x_mult - c_extra.x_mult_loss
 		end
-		if card.ability.extra.current_x_mult <= 1 then
-		G.E_MANAGER:add_event(Event({
-			trigger = "after",
-			delay = 0.1,
-			func = function()
-			play_sound("tarot1")
-			card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-			return true
-			end,
-			}))
-		end
+
+		if c_extra.current_x_mult <= 1 then corruption_dissolve(card) end
 	end,
 }
 
@@ -357,46 +372,61 @@ SMODS.Enhancement{
 				"{C:inactive,s:0.8}(Overdraws when first visible){}"
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		local item = card and card.ability or self.config
+		return {vars = {
+			item.extra.tungsten_handsize_mod,
+			item.extra.holdingthis
+		}}
+	end,
+
 	atlas = "opticenhance_atlas",
 	pos = { x = 1, y = 0 },
 	in_pool = false,
 	config = {extra = {tungsten_handsize_mod = 1, holdingthis = 0}},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card and card.ability.extra.tungsten_handsize_mod or self.config.extra.tungsten_handsize_mod,
-		card and card.ability.extra.holdingthis or self.config.extra.holdingthis } }
-	end,
-	update = function(self, card, dt)
-		if card.area and (card.area == G.hand and not card.debuff) and (card.ability.extra.holdingthis == 0) then
-		G.hand:change_size(-self.config.extra.tungsten_handsize_mod)
-		card.ability.extra.holdingthis = 1
+
+	update = function(self, card, dt) if card.area then
+		local new_size, new_holdingthis
+
+		if (card.area == G.hand) and not (card.debuff) and (card.ability.extra.holdingthis) == 0 then
+			new_size = -self.config.extra.tungsten_handsize_mod
+			new_holdingthis = 1
+		elseif card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
+			new_size = self.config.extra.tungsten_handsize_mod
+			new_holdingthis = 0
 		end
-		if card.area and card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
-		G.hand:change_size(self.config.extra.tungsten_handsize_mod)
-		card.ability.extra.holdingthis = 0
-		end
-	end,
+
+		G.hand:change_size(new_size)
+		card.ability.extra.holdingthis = new_holdingthis
+	end end,
+
 	calculate = function(self,card,context)
 		if context.cardarea == G.play and context.before then
-		G.hand:change_size(card.ability.extra.tungsten_handsize_mod)
-		G.GAME.round_resets.temp_handsize = (G.GAME.round_resets.temp_handsize or 0) + math.floor(card.ability.extra.tungsten_handsize_mod)
+			G.hand:change_size(card.ability.extra.tungsten_handsize_mod)
+			G.GAME.round_resets.temp_handsize = (G.GAME.round_resets.temp_handsize or 0) + math.floor(card.ability.extra.tungsten_handsize_mod)
 		end
 	end,
 }
 
-function change_rank(card, new_rank)
-	local new_code = (card.base.suit == 'Diamonds' and 'D_') or
-	(card.base.suit == 'Spades' and 'S_') or
-	(card.base.suit == 'Clubs' and 'C_') or
-	(card.base.suit == 'Hearts' and 'H_') or
-	(card.base.suit == 'ovn_Optics' and 'ovn_O_')
-	local new_val = (new_rank == 'Ace' and 'A') or
-	(new_rank == 'King' and 'K') or
-	(new_rank == 'Queen' and 'Q') or
-	(new_rank == 'Jack' and 'J') or
-	(new_rank == '10' and 'T') or
-	(new_rank)
-	local new_card = G.P_CARDS[new_code..new_val]
+local function change_rank(card, new_rank)
+	local new_code = ({
+		Diamonds = 'D_',
+		Spades   = 'S_',
+		Clubs    = 'C_',
+		Hearts   = 'H_',
+		ovn_Optics = 'ovn_O_'
+	})[card.base.suit]
 
+	local new_val = ({
+		Ace    = 'A',
+		King   = 'K',
+		Queen  = 'Q',
+		Jack   = 'J',
+		['10'] = 'T'
+	})[new_rank]
+	
+	local new_card_key = new_code .. new_val
+	local new_card = G.P_CARDS[new_card_key]
 	card:set_base(new_card)
 	G.GAME.blind:debuff_card(card)
 end
@@ -410,30 +440,30 @@ SMODS.Enhancement{
 			"card to its {C:attention}left{}",
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		return { }
+	end,
+
 	atlas = "opticenhance_atlas",
 	pos = { x = 2, y = 1 },
 	in_pool = false,
 	config = { },
-	loc_vars = function(self, info_queue, card)
-		return { }
-	end,
+
 	calculate = function(self, card, context)
 		if context.modify_scoring_hand or context.check then
-			local cardTable = G.hand.cards
+			local card_table = G.hand.cards
+			local card_index = -1
 
-			local cardIndex = -1
-
-			for i = 1, #cardTable do
-				if cardTable[i] == card then
-					cardIndex = i
-				end
+			for i,hand_card in ipairs(card_table) do
+				if hand_card == card then card_index = i end
 			end
 
-			if cardIndex > 1 then
-				local otherCardValue = cardTable[cardIndex - 1].base.value
-				if card.base.value == otherCardValue then return end
+			if card_index > 1 then
+				local other_card_value = card_table[card_index - 1].base.value
+				if card.base.value == other_card_value then return end
+
 				card:flip()
-				change_rank(card, otherCardValue)
+				change_rank(card, other_card_value)
 				card:flip()
 			end
 		end
@@ -450,31 +480,36 @@ SMODS.Enhancement{
 				"{C:mult}Cannot be played{}",
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card and card.ability.extra.repetitions or self.config.extra.repetitions }}
+	end,
+
 	atlas = "opticenhance_atlas",
 	pos = { x = 2, y = 0 },
 	in_pool = false,
 	config = {extra = {repetitions = 1}},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card and card.ability.extra.repetitions or self.config.extra.repetitions }}
-	end,
+
 	calculate = function(self, card, context)
+
 	end,
 }
 
 local gu = Game.update
 function Game:update(dt)
 	gu(self, dt)
-	if G.STATE == SELECTING_HAND then
+	if G.STATE ~= SELECTING_HAND then return end
+
 	local unobtally = {}
-	for i=1, #G.hand.cards do
-		if G.hand.cards[i].config.center.key == 'm_ovn_unob' then
-		unobtally[#unobtally + 1] = G.hand.cards[i]
+
+	for _,card in ipairs(G.hand.cards) do
+		if card.config.center.key == 'm_ovn_unob' then
+			table.insert(unobtally, card)
 		end
 	end
+
 	if #unobtally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
 		G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
 		return true
-	end
 	end
 end
 
@@ -495,43 +530,55 @@ SMODS.Consumable {
 	config = {max_highlighted = 2, suit_conv = 'ovn_Optics'},
 	loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 	pos = {x=1, y=0},
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Parallel Tarot', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
+
 	use = function(self)
-		for i=1, #G.hand.highlighted do
-			local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
-			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function()
-				G.GAME.corruptingCard = true;G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);G.GAME.corruptingCard = false;
-			return true end }))
+		local function after_event(delay, func)
+			G.E_MANAGER:add_event(Event {
+				trigger = 'after',
+				delay = delay,
+				func = function() func(); return true end
+			})
+		end
+		local all_highlighted_cards = G.hand.highlighted
+
+		for i,highlighted_card in ipairs(all_highlighted_cards) do
+			local percent = 1.15 - (i - 0.999)/(#all_highlighted_cards - 0.998)*0.3
+			after_event(0.15, function()
+				G.GAME.corruptingCard = true
+				highlighted_card:flip()
+				play_sound('card1', percent)
+				highlighted_card:juice_up(0.3, 0.3)
+				G.GAME.corruptingCard = false
+			end)
 			G.GAME.corruptingCard = false
 		end
+
 		delay(0.2)
-		for i=1, #G.hand.highlighted do
-			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1, func = function()
-				G.hand.highlighted[i]:change_suit(self.config.suit_conv);
-			return true end }))
+
+		for _,highlighted_card in ipairs(all_highlighted_cards) do
+			after_event(0.1, function() highlighted_card:change_suit(self.config.suit_conv) end)
 		end
-		for i=1, #G.hand.highlighted do
-			local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
-			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function()
-				G.hand.highlighted[i]:flip(); play_sound('ovn_optic', percent, 1.1); G.hand.highlighted[i]:juice_up(0.3, 0.3);
-			return true end }))
+
+		for i,highlighted_card in ipairs(all_highlighted_cards) do
+			local percent = 0.85 + ( i - 0.999 ) / ( #all_highlighted_cards - 0.998 ) * 0.3
+			after_event(0.15, function()
+				highlighted_card:flip()
+				play_sound('ovn_optic', percent, 1.1)
+				highlighted_card:juice_up(0.3, 0.3)
+			end)
 		end
-		if G.GAME.in_corrupt_plasma then
-			G.E_MANAGER:add_event(Event({
-			trigger = "after",
-			delay = 0.2,
-			func = function()
-				play_sound("ovn_increment", 1, 0.9)
-				G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #G.hand.highlighted))
-				return true
-			end,
-			}))
-		end
-		G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
-			G.hand:unhighlight_all();
-		return true end }))
+
+		if G.GAME.in_corrupt_plasma then after_event(0.2, function()
+			play_sound("ovn_increment", 1, 0.9)
+			G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #all_highlighted_cards))
+		end) end
+
+		after_event(0.2, function() G.hand:unhighlight_all() end)
+
 		delay(0.5)
 	end,
 }
