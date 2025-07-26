@@ -1,3 +1,19 @@
+local function corrupt_world_deck_cards()
+	local cards = {}
+
+	local suits = {'D', 'C', 'H', 'S'}
+	local ranks = {'2', '3', '4', '5', '6', '7', '8', '9', 'A'}
+
+	for _,suit in ipairs(suits) do
+		for _,rank in ipairs(ranks) do
+			table.insert(cards, {s=suit, r=rank})
+		end
+	end
+
+	table.insert(cards, {s='ovn_O',r='A',})
+	return cards
+end
+
 SMODS.Challenge{
 	key = 'corrupt_world',
 	rules = {
@@ -14,26 +30,21 @@ SMODS.Challenge{
 			{id = 'ovn_but'},
 			{id = 'ovn_world_pmo'},
 		},
-		modifiers = {
-		}
+		modifiers = { }
 	},
 	jokers = {
 		{id = 'j_ovn_pmo', edition = 'negative', eternal = true},
 		{id = 'j_business', eternal = true},
 	},
-	consumeables = {
-	},
-	vouchers = {
-	},
+	consumeables = { },
+	vouchers = { },
 	deck = {
-		cards = {{s='D',r='2',},{s='D',r='3',},{s='D',r='4',},{s='D',r='5',},{s='D',r='6',},{s='D',r='7',},{s='D',r='8',},{s='D',r='9',},{s='D',r='A',},{s='C',r='2',},{s='C',r='3',},{s='C',r='4',},{s='C',r='5',},{s='C',r='6',},{s='C',r='7',},{s='C',r='8',},{s='C',r='9',},{s='C',r='A',},{s='H',r='2',},{s='H',r='3',},{s='H',r='4',},{s='H',r='5',},{s='H',r='6',},{s='H',r='7',},{s='H',r='8',},{s='H',r='9',},{s='H',r='A',},{s='S',r='2',},{s='S',r='3',},{s='S',r='4',},{s='S',r='5',},{s='S',r='6',},{s='S',r='7',},{s='S',r='8',},{s='S',r='9',},{s='S',r='A',},{s='ovn_O',r='A',}},
+		cards = corrupt_world_deck_cards(),
 		type = 'Challenge Deck'
 	},
 	restrictions = {
-		banned_cards = {
-		},
-		banned_tags = {
-		},
+		banned_cards = { },
+		banned_tags = { },
 		banned_other = {
 			{id = 'bl_plant', type = 'blind'},
 		}
