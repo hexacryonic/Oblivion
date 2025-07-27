@@ -1,18 +1,4 @@
--- Adds an event to G.E_MANAGER that only has the properties trigger, delay, and func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value.
----@param trigger string | nil
----@param delay number | nil
----@param func function
-local function add_simple_event(trigger, delay, func)
-	G.E_MANAGER:add_event(Event {
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
-
-----
+local add_simple_event = Oblivion.f.add_simple_event
 
 SMODS.Shader({ key = 'miasma', path = 'miasma.fs' })
 
@@ -51,29 +37,20 @@ SMODS.Blind({
 	end,
 })
 
-local function transmute_jokers(mode)
-	if mode ~= 'pureToCorrupt' or mode ~= 'corruptToPure' then return end
-	if G.GAME.current_round.hands_left < 1 then return end
-	
+local function purify_all_jokers()
 	for _,joker in pairs(G.jokers.cards) do
 		local joker_key = joker.config.center.key
-		for pure_key, corrupt_key in pairs(Oblivion.corruption_map) do
-			local initial_key = 'pureToCorrupt' and pure_key or corrupt_key
-			local new_key = 'pureToCorrupt' and corrupt_key or pure_key
-			local transmute_sound = 'pureToCorrupt' and "ovn_abyss" or "ovn_pure"
+		if Oblivion.f.joker_is_purifiable(joker_key) then
+			Oblivion.f.purify_joker(joker)
+		end
+	end
+end
 
-			if joker_key == initial_key then
-				add_simple_event('after', 0.4, function ()
-					play_sound(transmute_sound)
-					joker:start_dissolve({G.C.MONEY})
-
-					local new_card = create_card("Joker", G.jokers, nil, nil, nil, nil, new_key)
-					new_card:add_to_deck()
-					G.jokers:emplace(new_card)
-					new_card:juice_up(0.3, 0.5)
-				end)
-				break
-			end
+local function corrupt_all_jokers()
+	for _,joker in pairs(G.jokers.cards) do
+		local joker_key = joker.config.center.key
+		if Oblivion.f.joker_is_corruptible(joker_key) then
+			Oblivion.f.corrupt_joker(joker)
 		end
 	end
 end
@@ -103,8 +80,8 @@ SMODS.Blind({
 		end
 	end,
 
-	defeat = function(self, silent) transmute_jokers('corruptToPure') end,
-	disable = function(self, silent) transmute_jokers('corruptToPure') end,
+	defeat = function(self, silent) purify_all_jokers() end,
+	disable = function(self, silent) purify_all_jokers() end,
 })
 
 SMODS.Blind({
@@ -125,14 +102,13 @@ SMODS.Blind({
 	dollars = 8,
 	mult = 2,
 
-	
 	set_blind = function(self, reset, silent)
 		for _,playing_card in pairs(G.playing_cards) do
 			if playing_card.config.center ~= G.P_CENTERS.c_base then
 				playing_card:change_suit('ovn_Optics')
 			end
 		end
-		transmute_jokers('pureToCorrupt')
+		corrupt_all_jokers()
 	end,
 
 	in_pool = function()
@@ -251,15 +227,7 @@ SMODS.Edition {
 		-- Card is corruptable, proceed to corrupt
 		if Oblivion.corruption_map[card_key] then
 			corrupting = true
-			add_simple_event('after', 0.0, function ()
-				play_sound("ovn_abyss", 1, 0.2)
-				card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-
-				local new_card = create_card("Joker", G.jokers, nil, nil, nil, nil, card_key)
-				new_card:add_to_deck()
-				G.jokers:emplace(new_card)
-				new_card:juice_up(0.3, 0.5)
-			end)
+			Oblivion.f.corrupt_joker(card)
 
 			if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.7, function ()
 				play_sound("ovn_increment", 1, 0.9)

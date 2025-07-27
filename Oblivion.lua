@@ -9,6 +9,7 @@ SMODS.current_mod.optional_features = {
 }
 
 if not Oblivion then Oblivion = {} end
+Oblivion.f = {}
 Oblivion.mod_path = tostring(SMODS.current_mod.path)
 
 SMODS.current_mod.description_loc_vars = function()
@@ -31,32 +32,11 @@ local function load_directory(folder_name)
 	end
 end
 
-load_directory("load-assets")
 load_directory("lib")
+load_directory("load-assets")
 load_directory("items")
 
--- Stuff here is for localization splitting
-function Oblivion.compile_localization(loc_table, lang)
-	local loc_folder = ("localization/%s/"):format(lang)
-	local loc_path = Oblivion.mod_path .. loc_folder
-	local loc_sections = {"descriptions", "misc"}
-
-	for _,section in ipairs(loc_sections) do
-		loc_table[section] = loc_table[section] or {}
-		local files = NFS.getDirectoryItems(loc_path .. section)
-		local folder = loc_folder .. section
-		for __,file_name in ipairs(files) do
-			local subsection_name = file_name:gsub(".lua", "")
-			local loc_func, err = SMODS.load_file(folder .. "/" .. file_name, "Oblivion")
-			if err then error(err) end
-
-			local subloc_table = loc_func()
-			loc_table[section][subsection_name] = subloc_table
-		end
-	end
-end
-
--- Mapping this way so other mods can add corruptionMap if it's nonexistent
+-- Mapping this way so other mods can add define_corruption if it's nonexistent
 -- and thus define their own corruptions
 if not Oblivion.corruption_map then Oblivion.corruption_map = {} end
 local cmap = Oblivion.corruption_map
@@ -76,10 +56,34 @@ cmap["j_gluttenous_joker"] = "j_ovn_prideful"
 cmap["j_greedy_joker"]     = "j_ovn_prideful"
 cmap["j_cavendish"]        = "j_ovn_cultivar"
 cmap["j_hologram"]         = "j_ovn_apartfalling"
+cmap["j_gros_michel"]      = "j_ovn_aeon"
 
-if G.GAME and G.GAME.corruptiblemichel then
-	cmap["j_gros_michel"] = "j_ovn_aeon"
+if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
+Oblivion.corruption_condition["j_gros_michel"] = function()
+	return G.GAME and G.GAME.corruptiblemichel
 end
+
+-- Generates immediately after the game finishes loading
+G.E_MANAGER.add_event(Event {
+	blocking = false,
+	func = function()
+		Oblivion.purity_map = {}
+		local pmap = Oblivion.purity_map
+
+		for pure_key,corrupt_key in pairs(Oblivion.define_corruption) do
+			if not pmap[corrupt_key] then
+				pmap[corrupt_key] = pure_key
+			elseif type(pmap[corrupt_key]) == "string" then
+				pmap[corrupt_key] = {pmap[corrupt_key]}
+				table.insert(pmap[corrupt_key], pure_key)
+			else
+				table.insert(pmap[corrupt_key], pure_key)
+			end
+		end
+
+		-- Purity map entries map to either a string (only pure form) or a list of strings (list of pure forms)
+	end
+})
 
 ----
 

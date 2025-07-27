@@ -1,16 +1,4 @@
--- Adds an event to G.E_MANAGER that only has the properties trigger, delay, and func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value.
----@param trigger string | nil
----@param delay number | nil
----@param func function
-local function add_simple_event(trigger, delay, func)
-	G.E_MANAGER:add_event(Event {
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
+local add_simple_event = Oblivion.f.add_simple_event
 
 SMODS.Rarity({
 	key = "corrupted",
@@ -68,17 +56,6 @@ SMODS.Consumable {
 
 	cost = 2,
 
-	can_use = function(self, card)
-		local selected_jokers = G.jokers.highlighted
-		if #selected_jokers == 0 or #selected_jokers >= 2 then return false end
-		
-		local selected_joker = selected_jokers[1]
-		local selected_joker_key = selected_joker.config.center.key
-
-		if Oblivion.corruption_map[selected_joker_key] then return true end
-		return false
-	end,
-
 	in_pool = function()
 		local held_jokers = G.jokers.cards
 		for _,joker in ipairs(held_jokers) do
@@ -109,6 +86,15 @@ SMODS.Consumable {
 		end
 	end,
 
+	can_use = function(self, card)
+		local selected_jokers = G.jokers.highlighted
+		if #selected_jokers ~= 1 then return false end
+
+		local selected_joker = selected_jokers[1]
+		local selected_joker_key = selected_joker.config.center.key
+		return Oblivion.f.joker_is_corruptible(selected_joker_key)
+	end,
+
 	use = function(self, card, area, copier)
 		-- established by can_use that selected_card ~= nil
 		local selected_card = G.jokers.highlighted[1]
@@ -116,18 +102,7 @@ SMODS.Consumable {
 		local corrupted_card_key = Oblivion.corruption_map[selected_card_key]
 
 		G.GAME.justcorrupted = corrupted_card_key
-		add_simple_event('after', 0.4, function()
-			G.GAME.corruptingJoker = true
-			play_sound("ovn_abyss")
-			selected_card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-			G.jokers:remove_from_highlighted(selected_card)
-
-			local corrupted_card = create_card("Joker", G.jokers, nil, nil, nil, nil, corrupted_card_key)
-			corrupted_card:add_to_deck()
-			G.jokers:emplace(corrupted_card)
-			corrupted_card:juice_up(0.3, 0.5)
-			G.GAME.corruptingJoker = false
-		end)
+		Oblivion.f.corrupt_joker(selected_card)
 
 		G.GAME.justcorrupted = nil
 		if G.GAME.in_corrupt_plasma then
