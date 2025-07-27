@@ -14,16 +14,6 @@ end
 
 SMODS.Back{
 	key = "c_red",
-	loc_txt = {
-		name = 'Corrupt Red Deck',
-		text = {
-			"{C:mult}+1{} discard per round",
-			"When you {C:mult}discard{}, all cards",
-			"{C:attention}EXCEPT{} selected are {C:mult}discarded{}",
-			"After a hand, {C:mult}discard{} up to",
-			"{C:attention}5{} held cards at random"
-		}
-	},
 
 	atlas = "cdeck_atlas",
 	pos = { x = 0, y = 0 },
@@ -51,14 +41,6 @@ SMODS.Back{
 
 SMODS.Back{
 	key = "c_blue",
-	loc_txt = {
-		name = 'Corrupt Blue Deck',
-		text = {
-			"{C:chips}+2{} starting Hands",
-			"Hands {C:mult}never reset{}",
-			"{C:chips}+3{} Hands when {C:attention}Boss Blind{} defeated",
-		}
-	},
 
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 0 },
@@ -78,17 +60,6 @@ SMODS.Back{
 
 SMODS.Back{
 	key = "c_yellow",
-	loc_txt = {
-		name = 'Corrupt Yellow Deck',
-		text = {
-			"+{C:money}$120{} each {C:attention}Ante{}",
-			"{C:attention}Infinite{} Hands and discards,",
-			"each cost {C:money}$10{} and {C:money}$5{} respectively",
-			"Cost increases by {X:money,C:white} X1.25 {} (floored) each {C:attention}Ante{}",
-			"{s:0.3} {}",
-			"At less than {C:money}$1{}, {C:mult}Game Over{}",
-		}
-	},
 
 	atlas = "cdeck_atlas",
 	pos = { x = 2, y = 0 },
@@ -140,14 +111,6 @@ SMODS.Back{
 
 SMODS.Back{
 	key = "c_painted",
-	loc_txt = {
-		name = 'Corrupt Painted Deck',
-		text = {
-			"{C:attention}Enhanced{} cards retrigger once",
-			"{C:attention}+5{} hand size",
-			"{C:mult}Jokerless{}"
-		}
-	},
 
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 2 },
@@ -172,16 +135,6 @@ SMODS.Back{
 
 SMODS.Back{
 	key = "c_plasma",
-	loc_txt = {
-		name = 'Corrupt Plasma Deck',
-		text = {
-			"{C:ovn_corrupted}Instability{} exponent operand",
-			"added to score calculation",
-			"{s:0.3} {}",
-			"Start with {C:attention}Joker{},",
-			"{C:attention}The Abyss{}, and {C:attention}Perception{}"
-		}
-	},
 
 	atlas = "cdeck_atlas",
 	pos = { x = 3, y = 2 },

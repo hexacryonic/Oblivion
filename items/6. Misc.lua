@@ -20,13 +20,6 @@ SMODS.Shader({ key = 'miasma', path = 'miasma.fs' })
 
 SMODS.Blind({
 	key = 'nerve',
-	loc_txt = {
-		name = 'The Nerve',
-		text = {
-			'All Optic cards',
-			'are debuffed'
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return {}
 	end,
@@ -87,14 +80,6 @@ end
 
 SMODS.Blind({
 	key = 'purity',
-	loc_txt = {
-		name = 'The Purity',
-		text = {
-			'When defeated or disabled:',
-			'Purify all Corrupted Jokers',
-			'if any hands remain'
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { }
 	end,
@@ -124,14 +109,6 @@ SMODS.Blind({
 
 SMODS.Blind({
 	key = 'stygian',
-	loc_txt = {
-		name = 'Stygian Sigil',
-		text = {
-			'When entering Blind:',
-			'Corrupt all possible Jokers and',
-			'convert enhanced cards to Optics'
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { }
 	end,
@@ -170,13 +147,6 @@ SMODS.Blind({
 
 SMODS.Tag({
 	key = "corrtag",
-	loc_txt = {
-		name = 'Corrupted Tag',
-		text = {
-		"Shop has a free",
-		"{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
-		}
-	},
 	config = { type = "store_joker_create" },
 
 	atlas = "ctags_atlas",
@@ -223,16 +193,8 @@ SMODS.Tag({
 
 SMODS.Edition {
 	key = "miasma",
-	loc_txt = {
-		name = "Miasma",
-		label = "Miasma",
-		text = {
-			"{C:attention}Retriggers{} in scoring thrice, then {C:ovn_corrupted}corrupts{}",
-			"if possible, otherwise {C:mult}self-destructs{}"
-		}
-	},
 	config = { retriggers = 3 },
-	loc_vars = function(self)
+	loc_vars = function(self, info_queue, center)
 		local retriggers = (
 			center
 			and center.edition
@@ -291,7 +253,7 @@ SMODS.Edition {
 				play_sound("ovn_abyss", 1, 0.2)
 				card:start_dissolve({G.C.RARITY['ovn_corrupted']})
 
-				local new_card = create_card("Joker", G.jokers, nil, nil, nil, nil, v)
+				local new_card = create_card("Joker", G.jokers, nil, nil, nil, nil, card_key)
 				new_card:add_to_deck()
 				G.jokers:emplace(new_card)
 				new_card:juice_up(0.3, 0.5)
@@ -311,7 +273,7 @@ SMODS.Edition {
 		end
 
 		if context.final_scoring_step and context.cardarea == G.play then
-			for _,scored_card in ipairs(scoring_hand) do
+			for _,scored_card in ipairs(context.scoring_hand) do
 				if not scored_card.edition.ovn_miasma then goto continue_miasma_calculate_finalscoringstep end
 
 				-- Editioned playing card is already optics, self-destruct
@@ -352,13 +314,6 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_Oblivion",
 	key = "oblivion",
-	loc_txt = {
-		name = 'Oblivion',
-		text = {
-			"Add {C:ovn_corrupted}Miasma{} {C:attention}Edition{} to",
-			"{C:attention}#1#{} selected playing card or {C:attention}Joker{}"
-		}
-	},
 	loc_vars = function(self, info_queue)
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 		return {vars = {self.config.max_highlighted}}

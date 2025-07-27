@@ -18,12 +18,6 @@ SMODS.Consumable {
 	set = "Mutation",
 	name = "ovn_m_aplus",
 	key = "aplus",
-	loc_txt = {
-		name = 'A-Plus',
-		text = {
-			"{C:attention}Aces{} gain {C:mult}+#1# bonus Mult{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { self.config.mult } }
 	end,
@@ -69,15 +63,6 @@ SMODS.Consumable {
 	set = "Mutation",
 	name = "ovn_m_stonks",
 	key = "stonks",
-	loc_txt = {
-		name = 'Explosive Growth',
-		text = {
-			"{C:ovn_mutation}Unique{}: Only usable once",
-			"{s:0.3} {}",
-			"Next {C:ovn_mutation}non-Unique Mutation{} is used",
-			"{C:attention}#1#{} additional times, then banished"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { self.config.more } }
 		end,

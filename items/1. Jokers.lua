@@ -28,14 +28,7 @@ SMODS.Rarity({ -- Nyarlathotep (and W.D. Gaster with Cryptid) is internally clas
 
 SMODS.Joker {
 	key = 'john',
-	loc_txt = {
-		name = 'John Oblivion',
-		text = {
-			"Creates a {C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
-			"when sold"
-		}
-	},
-	
+
 	atlas = 'notcorrupted',
 	pos = { x = 0, y = 0 },
 	
@@ -69,15 +62,10 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_The Abyss",
 	key = "abyss",
-	loc_txt = {
-		name = 'The Abyss',
-		text = {
-			"{C:ovn_corrupted}Corrupt{} a selected {C:attention}Corruptible Joker{}"
-		}
-	},
 
 	atlas = "abyss_atlas",
 	pos = {x=0, y=0},
+
 	cost = 2,
 
 	can_use = function(self, card)
@@ -155,13 +143,6 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_charybdis",
 	key = "charybdis",
-	loc_txt = {
-		name = 'Charybdis',
-		text = {
-			"Create {C:attention}#1#{} random {C:ovn_corrupted}Corrupted{} {C:attention}Jokers{}",
-			"Destroy all other {C:attention}Jokers{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { self.config.create } }
 	end,
@@ -212,13 +193,6 @@ SMODS.Consumable {
 
 SMODS.Joker {
 	key = 'darkjoker',
-	loc_txt = {
-		name = 'Parallel Joker',
-		text = {
-			"{C:chips}+#1#{} Chips",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Joker{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips } }
 	end,
@@ -249,15 +223,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'lucasseries',
-	loc_txt = {
-		name = 'Lucas Series',
-		text = {
-			"Each played",
-			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
-			"gives {X:mult,C:white} X#1# {} Mult when scored",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Fibonacci{}"
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -292,14 +257,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'perpendicular',
-	loc_txt = {
-		name = 'Perpendicular Parking',
-		text = {
-			"Scored cards earn {C:attention}$#1#{} if another",
-			"card of its {C:attention}same rank{} is held in hand",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Reserved Parking{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.money } }
 	end,
@@ -344,17 +301,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'yolo',
-	loc_txt = {
-		name = 'Fuck It, We Ball',
-		text = {
-			"Each played card gives",
-			"{X:mult,C:white} X#1# {} Mult when scored",
-			"{s:0.3} {}",
-			"{C:chips}-a fucktillion{} Hands",
-			"when hand played",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Acrobat{}"
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -401,24 +347,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'supplydrop',
-	loc_txt = {
-		name = 'Supply Drop',
-		text = {
-		"Sell this Joker to {C:attention}store{} the",
-		"Joker to its left, if its rarity",
-		"is not higher than {C:red}Rare{}",
-		"{s:0.3} {}",
-
-		"When this Joker is sold",
-		"again, even between runs,",
-		"create the stored Joker",
-		"and remove it from storage",
-		"{s:0.3} {}",
-		"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
-		"{s:0.2} {}",
-		"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gift Card{}"
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		local stored = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop and localize{type = "name_text", set = "Joker", key = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop} or localize("k_none")
 		return { vars = { stored } }
@@ -486,16 +414,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'pmo',
-	loc_txt = {
-		name = 'Prosopometamorphopsia',
-		text = {
-			"Effects that would target",
-			"{C:attention}any face card{} target {C:attention}Aces{} instead",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Pareidolia{}",
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Code by Airtoum{}"
-		}
-	},
 
 	atlas = 'corrupted',
 	pos = { x = 3, y = 0 },
@@ -534,14 +452,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'showneverends',
-	loc_txt = {
-		name = 'THE SHOW NEVER ENDS',
-		text = {
-			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
-			"banish or destroy their counterparts",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Showman{}"
-		}
-	},
 
 	atlas = 'corrupted',
 	pos = { x = 1, y = 2 },
@@ -558,18 +468,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'airstrike',
-	loc_txt = {
-		name = 'Air Strike',
-		text = {
-			"Held or unscoring {C:attention}10{}s stockpile",
-			"{X:mult,C:white} X#1# {} Mult every hand played",
-			"When scored, {C:attention}10{}s give their stockpiled Mult",
-			"and reset their stockpile after the hand",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Walkie Talkie{}",
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Art by Andromeda{}"
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -590,15 +488,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'bombastic',
-	loc_txt = {
-		name = 'Bombastic Joker',
-		text = {
-			"{C:mult}+#1#{} Mult if played",
-			"hand contains",
-			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Droll Joker{}",
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
@@ -629,15 +518,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'insightful',
-	loc_txt = {
-		name = 'Insightful Joker',
-		text = {
-			"{C:chips}+#1#{} Chips if played",
-			"hand contains",
-			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Crafty Joker{}",
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.chips } }
 	end,
@@ -668,15 +548,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'breach',
-	loc_txt = {
-		name = 'The Breach',
-		text = {
-			"{X:mult,C:white} X#1# {} Mult if played",
-			"hand contains",
-			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}The Tribe{}",
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
@@ -707,14 +578,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'prideful',
-	loc_txt = {
-		name = 'Prideful Joker',
-		text = {
-			"Played cards with {C:ovn_optic}Optic{} suit",
-			"give {C:mult}+#1#{} Mult when scored",
-			"{C:inactive,s:0.8}Corrupted from the{} {C:attention,s:0.8}Sinful Jokers{}"
-		}
-	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
@@ -744,16 +607,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'cultivar',
-	loc_txt = {
-		name = 'Theoretical Cultivar',
-		text = {
-			"{X:mult,C:white} X#1# {} Mult",
-			"{C:green}#2# in #3#{} chance this",
-			"card is destroyed",
-			"at end of round",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Cavendish{}",
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.Xmult,
@@ -817,15 +670,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'apartfalling',
-	loc_txt = {
-		name = 'A Part Falling',
-		text = {
-			"This Joker gains {X:mult,C:white} X#2# {} Mult",
-			"whenever a Joker {C:ovn_corrupted}corrupts{}",
-			"{C:inactive}Currently{} {X:mult,C:white} X#1# {}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Hologram{}",
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.x_mult,
@@ -873,16 +717,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'aeon',
-	loc_txt = {
-		name = 'Aeon Cavendish',
-		text = {
-			"{X:mult,C:white} X#1# {} Mult",
-			"{C:green}#2# in #3#{} chance this",
-			"card is destroyed",
-			"at end of round",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Cavendish{}",
-		}
-	},
 	config = { extra = { Xmult = 4, odds = 4 } },
 	loc_vars = function(self, info_queue, card)
 		return {vars = {

@@ -116,13 +116,6 @@ SMODS.PokerHand{ -- Spectrum (yoink)
 		{ 'D_4', true },
 	},
 
-	loc_txt = {
-		name = 'Spectrum',
-		description = {
-			'5 cards with 5 different suits.'
-		}
-	},
-
 	evaluate = function(parts)
 		return parts.ovn_spectrum
 	end
@@ -141,12 +134,6 @@ SMODS.PokerHand{ -- Straight Spectrum (yoink)
 		{ 'H_J', true },
 		{ 'C_T', true },
 		{ 'D_9', true }
-	},
-	loc_txt = {
-		name = 'Straight Spectrum',
-		description = {
-			'A Straight and a Spectrum together.'
-		}
 	},
 
 	process_loc_text = function(self)
@@ -185,12 +172,6 @@ SMODS.PokerHand{ -- Spectrum House (yoonk)
 		{ 'C_8', true },
 		{ 'D_8', true }
 	},
-	loc_txt = {
-		name = 'Spectrum House',
-		description = {
-			'A Full House and a Spectrum together.'
-		}
-	},
 
 	evaluate = function(parts)
 		if #parts._3 < 1 or #parts._2 < 2 or not next(parts.ovn_spectrum) then return {} end
@@ -211,12 +192,6 @@ SMODS.PokerHand{ -- Spectrum Five (yonk)
 		{ 'H_A', true },
 		{ 'C_A', true },
 		{ 'D_A', true }
-	},
-	loc_txt = {
-		name = 'Spectrum Five',
-		description = {
-			'A Spectrum with all 5 cards of the same rank.'
-		}
 	},
 
 	evaluate = function(parts)
@@ -326,14 +301,6 @@ end
 
 SMODS.Enhancement{
 	key = "ice",
-	loc_txt = {
-		name = 'Ice Card',
-		text = {
-			"{X:mult,C:white}X#2#{} Mult, loses {X:mult,C:white}X#1#{} Mult",
-			"each time it's played",
-			"Melts at {X:mult,C:white}X1{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config
 		return {vars = {
@@ -366,16 +333,6 @@ SMODS.Enhancement{
 
 SMODS.Enhancement{
 	key = "dense",
-	loc_txt = {
-		name = 'Tungsten Card',
-		text = {
-				"{C:attention}-#1#{} hand size",
-				"while held in hand",
-				"{C:attention}+#1#{} hand size",
-				"this round when played",
-				"{C:inactive,s:0.8}(Overdraws when first visible){}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config
 		return {vars = {
@@ -437,13 +394,6 @@ end
 
 SMODS.Enhancement{
 	key = "coord",
-	loc_txt = {
-		name = 'Coordinate Card',
-		text = {
-			"Copies the rank of the",
-			"card to its {C:attention}left{}",
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { }
 	end,
@@ -476,14 +426,6 @@ SMODS.Enhancement{
 
 SMODS.Enhancement{
 	key = "unob",
-	loc_txt = {
-		name = 'Unobtanium Card',
-		text = {
-				"{C:attention}Retrigger{} all scoring cards",
-				"{C:attention}#1#{} time while held in hand",
-				"{C:mult}Cannot be played{}",
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card and card.ability.extra.repetitions or self.config.extra.repetitions }}
 	end,
@@ -521,14 +463,6 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_Perception",
 	key = "perception",
-	loc_txt = {
-		name = 'Perception',
-		text = {
-			"{C:ovn_corrupted}Corrupts{} up to",
-			"{C:attention}#1#{} selected cards",
-			"to {C:ovn_optic}Optics{}"
-		}
-	},
 	cost = 2,
 	atlas = "abyss_atlas",
 	config = {max_highlighted = 2, suit_conv = 'ovn_Optics'},

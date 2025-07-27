@@ -75,13 +75,6 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_Insecurity",
 	key = "insecurity",
-	loc_txt = {
-		name = 'Insecurity',
-		text = {
-			"{C:ovn_corrupted}You begin to feel like{}",
-			"{C:ovn_corrupted}you're being watched{}"
-		}
-	},
 	
 	atlas = "cataclysm_atlas",
 	pos = {x=0, y=0},
@@ -103,13 +96,6 @@ SMODS.Consumable {
 	set = "Planet",
 	name = "ovn_Tres",
 	key = "tres",
-	loc_txt = {
-		name = 'TrEs-2b',
-		text = {
-			"{C:ovn_corrupted}The world around you{}",
-			"{C:ovn_corrupted}begins to darken{}"
-		}
-	},
 
 	atlas = "cataclysm_atlas",
 	pos = {x=1, y=0},
@@ -132,13 +118,6 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_Recall",
 	key = "recall",
-	loc_txt = {
-		name = 'Recall',
-		text = {
-			"{C:ovn_corrupted}Memories of a cataclysm{}",
-			"{C:ovn_corrupted}begin to resurface{}"
-		}
-	},
 
 	atlas = "cataclysm_atlas",
 	pos = {x=2, y=0},
