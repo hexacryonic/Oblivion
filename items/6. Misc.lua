@@ -191,6 +191,8 @@ SMODS.Tag({
 	end,
 })
 
+--[[
+
 SMODS.Edition {
 	key = "miasma",
 	config = { retriggers = 3 },
@@ -232,7 +234,7 @@ SMODS.Edition {
 			repetitions = self.config.retriggers,
 			card = card,
 		} end
-
+		
 		if not (
 			-- Conditional - Do not skip if:
 			context.post_joker -- Scoring loop at post-Joker calculation
@@ -267,7 +269,7 @@ SMODS.Edition {
 		else
 			dying = true
 			add_simple_event('after', 0.0, function ()
-				play_sound("ovn_optic", percent, 0.2)
+				play_sound("ovn_optic", nil, 0.2)
 				card:start_dissolve({G.C.RARITY['ovn_corrupted']})
 			end)
 		end
@@ -289,7 +291,7 @@ SMODS.Edition {
 					add_simple_event('after', 0.1, function ()
 						card:change_suit('ovn_Optics')
 						card:set_edition(nil, true)
-						play_sound('ovn_optic', percent, 1.1)
+						play_sound('ovn_optic', nil, 1.1)
 						card:juice_up(0.3, 0.3)
 					end)
 
@@ -308,7 +310,7 @@ SMODS.Edition {
 		if context.joker_main then card.config.trigger = true end
 		if context.after then card.config.trigger = nil end
 	end,
-}
+}]]
 
 SMODS.Consumable {
 	set = "Spectral",
