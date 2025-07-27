@@ -64,13 +64,13 @@ Oblivion.corruption_condition["j_gros_michel"] = function()
 end
 
 -- Generates immediately after the game finishes loading
-G.E_MANAGER.add_event(Event {
+G.E_MANAGER:add_event(Event {
 	blocking = false,
 	func = function()
 		Oblivion.purity_map = {}
 		local pmap = Oblivion.purity_map
 
-		for pure_key,corrupt_key in pairs(Oblivion.define_corruption) do
+		for pure_key,corrupt_key in pairs(Oblivion.corruption_map) do
 			if not pmap[corrupt_key] then
 				pmap[corrupt_key] = pure_key
 			elseif type(pmap[corrupt_key]) == "string" then
@@ -82,6 +82,7 @@ G.E_MANAGER.add_event(Event {
 		end
 
 		-- Purity map entries map to either a string (only pure form) or a list of strings (list of pure forms)
+		return true
 	end
 })
 
