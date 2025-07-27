@@ -57,7 +57,6 @@ Oblivion.f.corrupt_joker = function(card)
         corrupted_card.ability.extra.ovn_former_form = card_key
 
         G.GAME.corruptingJoker = false
-        return true
     end)
 end
 
@@ -89,7 +88,6 @@ Oblivion.f.purify_joker = function(card)
         purified_card:juice_up(0.3, 0.5)
 
         G.GAME.purifyingJoker = false
-        return true
     end)
 end
 
