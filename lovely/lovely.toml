@@ -150,79 +150,52 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 position = "before"
 payload = '''
 function Card:calculate_joker(context)
-    local has_prosopometamorphopsia = next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}'))
-    local return_value = nil
-    if not has_prosopometamorphopsia then
-        return_value = corrupted_mod_calc_joker_func(self, context)
-        return return_value
-    end
-    if (context.other_card and
-        context.other_card.base and
-        (context.other_card.base.id == 11 or context.other_card.base.id == 12 or context.other_card.base.id == 13)) then
-           -- Discard returned effects for Jacks, Queens, and Kings!
-          return nil
-    end
+  local has_pmo = next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}'))
+  local has_pareidolia = next(SMODS.find_card('j_pareidolia'))
+  local return_value = nil
+
+  if not has_pmo then
     return_value = corrupted_mod_calc_joker_func(self, context)
-    if (not return_value and
-        context.other_card and
-        context.other_card.base and
-        context.other_card.base.id == 14) then
-          -- jackify
-          context.other_card.base.id = 11
-          return_value = corrupted_mod_calc_joker_func(self, context)
-          context.other_card.base.id = 14
-          if return_value then return return_value end
-          -- queenify
-          context.other_card.base.id = 12
-          return_value = corrupted_mod_calc_joker_func(self, context)
-          context.other_card.base.id = 14
-          if return_value then return return_value end
-          -- kingify
-          context.other_card.base.id = 13
-          return_value = corrupted_mod_calc_joker_func(self, context)
-          context.other_card.base.id = 14
-          if return_value then return return_value end
-          if next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}')) and next(SMODS.find_card('j_pareidolia')) then
-            context.other_card.base.id = 2
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 3
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 4
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 5
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 6
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 7
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 8
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 9
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-            context.other_card.base.id = 10
-            return_value = corrupted_mod_calc_joker_func(self, context)
-            context.other_card.base.id = 14
-            if return_value then return return_value end
-          end
-    end
-    -- if nothing fancy applies (eg. number or ace-targeting stuff, or still nil effects) it will reach here
     return return_value
+  end
+
+  local kqj = {[11]=true, [12]=true, [13]=true}
+  local is_kqj = (
+    context.other_card
+    and context.other_card.base
+    and kqj[context.other_card.base.id]
+  )
+
+  -- Discard returned effects for Jacks, Queens, and Kings!
+  if is_kqj then return nil end
+  return_value = corrupted_mod_calc_joker_func(self, context)
+
+  if return_value and not (
+    context.other_card
+    and context.other_card.base
+    and context.other_card.base.id == 14
+  ) then return return_value end
+
+  -- jackify, queenify, kingify
+  for rank = 11, 13 do
+    context.other_card.base.id = rank
+    return_value = corrupted_mod_calc_joker_func(self, context)
+    context.other_card.base.id = 14
+    if return_value then return return_value end
+  end
+
+  -- Only proceed if pmo and pareidolia are held
+  if not (has_pmo and has_pareidolia) then return return_value end
+
+  for rank = 2, 10 do
+    context.other_card.base.id = rank
+    return_value = corrupted_mod_calc_joker_func(self, context)
+    context.other_card.base.id = 14
+    if return_value then return return_value end
+  end
+
+  -- if nothing fancy applies (eg. number or ace-targeting stuff, or still nil effects) it will reach here
+  return return_value
 end
 
 '''
