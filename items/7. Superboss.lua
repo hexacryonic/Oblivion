@@ -153,6 +153,6 @@ SMODS.Consumable {
 	can_use = function(self, card) return true end,
 
 	use = function(self, card, area, copier)
-		ominous_consumable_consequence("recall", card, 1, 1.2)
+		ominous_consumable_consequence("recall", card)
 	end,
 }
