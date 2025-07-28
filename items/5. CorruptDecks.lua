@@ -62,6 +62,7 @@ SMODS.Back{
 		G.GAME.round_resets.discards = G.GAME.cy_discardcost
 		G.GAME.current_round.hands_left = G.GAME.cy_handcost
 		G.GAME.current_round.discards_left = G.GAME.cy_discardcost
+		G.GAME.cy_gaveantemoney = false
 		ease_dollars(G.GAME.cy_dollarsperante)
 		G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
 		add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
@@ -83,12 +84,17 @@ SMODS.Back{
 			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
 		end
 
-		if G.GAME.round_resets.blind_states.Boss == 'Defeated' then
+		if G.GAME.round_resets.blind_states.Boss == 'Defeated' and not G.GAME.cy_gaveantemoney then
 			G.GAME.cy_handcost = math.floor(G.GAME.cy_handcost * 1.25)
 			G.GAME.cy_discardcost = math.floor(G.GAME.cy_discardcost * 1.25)
 			ease_dollars(G.GAME.cy_dollarsperante)
 			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
 			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
+			G.GAME.cy_gaveantemoney = true
+		end
+
+		if context.starting_shop then
+			G.GAME.cy_gaveantemoney = false
 		end
 
 		if G.GAME.dollars >= (math.floor(G.GAME.dollars) + math.floor(G.GAME.dollars)) then
