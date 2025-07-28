@@ -251,22 +251,19 @@ SMODS.Joker {
 			local scored_card = context.other_card
 			local scored_card_rank = SMODS.Ranks[scored_card.base.value].key
 
-			local held_cards = G.hand.cards
-			for _,held_card in ipairs(held_cards) do
+			for _,held_card in ipairs(G.hand.cards) do
 				local held_card_rank = held_card.base.value
+
 				if scored_card_rank == held_card_rank then
-					local money_gain = card.ability.extra.money
-
-					G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + money_gain
-					G.E_MANAGER:add_event(Event {func = function()
-						G.GAME.dollar_buffer = 0
-						return true
-					end})
-
+					G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
 					return {
-						message = localize('$') .. money_gain,
-						dollars = money_gain,
-						colour = G.C.MONEY
+						dollars = card.ability.extra.money,
+						func = function()
+							G.E_MANAGER:add_event(Event {func = function()
+								G.GAME.dollar_buffer = 0
+								return true
+							end})
+						end
 					}
 				end
 			end
@@ -372,7 +369,7 @@ SMODS.Joker {
 
 	add_to_deck = function(self, card, from_debuff)
 		if from_debuff then return end
-		if not G.PORFILES[G.SETTINGS.profile].ovn_supply_drop then return end
+		if not G.PROFILES[G.SETTINGS.profile].ovn_supply_drop then return end
 
 		local stored_card = create_card("Joker", G.joker, nil, nil, nil, nil, G.PROFILES[G.SETTINGS.profile].ovn_supply_drop)
 		stored_card:add_to_deck()

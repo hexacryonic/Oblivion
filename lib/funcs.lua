@@ -46,7 +46,7 @@ Oblivion.f.corrupt_joker = function(card)
 
         play_sound("ovn_abyss")
         card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-        G.jokers:remove_from_highlight(card)
+        G.jokers:remove_from_highlighted(card)
 
         local corrupted_card = create_card("Joker", G.jokers, nil, nil, nil, nil, corrupted_card_key)
         corrupted_card:add_to_deck()
@@ -80,7 +80,7 @@ Oblivion.f.purify_joker = function(card)
 
         play_sound("ovn_pure")
         card:start_dissolve({G.C.MONEY})
-        G.jokers:remove_from_highlight(card)
+        G.jokers:remove_from_highlighted(card)
 
         local purified_card = create_card("Joker", G.jokers, nil, nil, nil, nil, pure_card_key)
         purified_card:add_to_deck()
