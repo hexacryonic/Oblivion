@@ -68,7 +68,7 @@ SMODS.Sound({
 			and not G.booster_pack
 			and not G.booster_pack_sparkles
 			and not G.booster_pack_meteors
-			and not (G.GAME.blund and G.GAME.blind.boss)
+			and not (G.GAME.blind and G.GAME.blind.boss)
 		)
 	end,
 })

@@ -565,14 +565,14 @@ SMODS.Joker {
 	cost = 7,
 
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			if context.other_card:is_suit("ovn_Optics") then
-				return {
-					a_mult = card.ability.extra.mult,
-					color = G.C.MULT,
-					card = card
-				}
-			end
+		if (
+			context.individual
+			and context.cardarea == G.play
+			and context.other_card:is_suit("ovn_Optics")
+		) then
+			return {
+				mult = card.ability.extra.mult,
+			}
 		end
 	end
 }
