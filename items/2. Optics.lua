@@ -334,20 +334,17 @@ SMODS.Enhancement{
 	in_pool = false,
 	config = {extra = {tungsten_handsize_mod = 1, holdingthis = 0}},
 
-	update = function(self, card, dt) if card.area then
-		local new_size, new_holdingthis
-
-		if (card.area == G.hand) and not (card.debuff) and (card.ability.extra.holdingthis) == 0 then
-			new_size = -self.config.extra.tungsten_handsize_mod
-			new_holdingthis = 1
-		elseif card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
-			new_size = self.config.extra.tungsten_handsize_mod
-			new_holdingthis = 0
+	update = function(self, card, dt)
+		if card.area then
+			if (card.area == G.hand) and not (card.debuff) and (card.ability.extra.holdingthis) == 0 then
+				G.hand:change_size(-self.config.extra.tungsten_handsize_mod)
+				card.ability.extra.holdingthis = 1
+			elseif card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
+				G.hand:change_size(self.config.extra.tungsten_handsize_mod)
+				card.ability.extra.holdingthis = 0
+			end
 		end
-
-		G.hand:change_size(new_size)
-		card.ability.extra.holdingthis = new_holdingthis
-	end end,
+	end,
 
 	calculate = function(self,card,context)
 		if context.cardarea == G.play and context.before then
