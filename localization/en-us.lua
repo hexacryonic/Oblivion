@@ -45,7 +45,7 @@ local loc =  {
 		},
 
 		Edition = {
-			e_cry_miasma = {
+			e_ovn_miasma = {
 				name = "Miasma",
 				label = "Miasma",
 				text = {
@@ -96,7 +96,7 @@ local loc =  {
 			}
 		},
 		Tag = {
-			tag_cry_corrtag = {
+			tag_ovn_corrtag = {
 				name = 'Corrupted Tag',
 				text = {
 					"Shop has a free",
