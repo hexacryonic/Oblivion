@@ -299,7 +299,7 @@ SMODS.Enhancement{
 
 	atlas = "opticenhance_atlas",
 	pos = { x = 0, y = 0 },
-	in_pool = false,
+	in_pool = function() return false end,
 	config = {extra = {x_mult_loss = 0.1, current_x_mult = 2}},
 	
 	calculate = function(self,card,context)
@@ -331,7 +331,7 @@ SMODS.Enhancement{
 
 	atlas = "opticenhance_atlas",
 	pos = { x = 1, y = 0 },
-	in_pool = false,
+	in_pool = function() return false end,
 	config = {extra = {tungsten_handsize_mod = 1, holdingthis = 0}},
 
 	update = function(self, card, dt)
@@ -385,7 +385,7 @@ SMODS.Enhancement{
 
 	atlas = "opticenhance_atlas",
 	pos = { x = 2, y = 1 },
-	in_pool = false,
+	in_pool = function() return false end,
 	config = { },
 
 	calculate = function(self, card, context)
@@ -417,7 +417,7 @@ SMODS.Enhancement{
 
 	atlas = "opticenhance_atlas",
 	pos = { x = 2, y = 0 },
-	in_pool = false,
+	in_pool = function() return false end,
 	config = {extra = {repetitions = 1}},
 
 	calculate = function(self, card, context)
