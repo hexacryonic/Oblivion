@@ -228,7 +228,7 @@ match_indent = true
 target = "functions/button_callbacks.lua"
 pattern = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.mult, 0.9, 1000)'''
 position = "at"
-payload = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.mult, 0.69, 1000)'''
+payload = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.mult, G.GAME.in_corrupt_plasma and 0.69 or 0.9, 1000)'''
 match_indent = true
 
 # Make chip and mult stay at the current scale
@@ -237,5 +237,5 @@ match_indent = true
 target = "functions/button_callbacks.lua"
 pattern = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.chips, 0.9, 1000)'''
 position = "at"
-payload = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.chips, 0.69, 1000)'''
+payload = '''e.config.object.scale = scale_number(G.GAME.current_round.current_hand.chips, G.GAME.in_corrupt_plasma and 0.69 or 0.9, 1000)'''
 match_indent = true
