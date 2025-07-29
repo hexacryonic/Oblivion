@@ -114,6 +114,10 @@ SMODS.Back{
 		G.GAME.joker_rate = 0
 		G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots - math.huge
 		G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size + 5
+		G.GAME.banned_keys["p_buffoon_normal_1"] = true
+		G.GAME.banned_keys["p_buffoon_normal_2"] = true
+		G.GAME.banned_keys["p_buffoon_jumbo_1"] = true
+		G.GAME.banned_keys["p_buffoon_mega_1"] = true
 	end,
 
 	calculate = function(self, card, context)

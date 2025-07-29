@@ -254,3 +254,20 @@ elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '
     ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
 '''
 match_indent = true
+
+# Fix for Corrupted Painted Deck
+# Temporary - Ideal solution is probably to give the deck some juice capabilities
+# Since deck-caused retriggers put the "again!" on some random top-left position
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+                    play_sound(sound, 0.8+percent*0.2, volume)
+                    if not extra or not extra.no_juice then
+'''
+position = "at"
+payload = '''
+play_sound(sound, 0.8+percent*0.2, volume)
+if (not extra or not extra.no_juice) and card.juice_up then
+'''
+match_indent = true
