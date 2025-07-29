@@ -136,6 +136,11 @@ SMODS.Back{
 	atlas = "cdeck_atlas",
 	pos = { x = 3, y = 2 },
 
+	config = {
+		consumables = {'c_ovn_abyss', 'c_ovn_perception'},
+		jokers = {'j_joker'}
+	},
+
 	apply = function(self)
 		G.GAME.in_corrupt = true
 		G.GAME.in_corrupt_plasma = true
