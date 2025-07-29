@@ -113,19 +113,6 @@ match_indent = true
 [vars]
 prosopometamorphopsia_joker_key = "j_ovn_pmo"
 
-
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''
-function Card:calculate_joker(context)
-'''
-position = "at"
-payload = '''
-local function corrupted_mod_calc_joker_func(self, context)
-'''
-match_indent = true
-
 # Optics' base chips are doubled
 [[patches]]
 [patches.pattern]
@@ -140,66 +127,6 @@ if self.base.suit == 'ovn_Optics' then self.ability.bonus = self.base.nominal en
 match_indent = true
 
 # ----
-
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''
-function Card:is_suit(suit, bypass_debuff, flush_calc)
-'''
-position = "before"
-payload = '''
-function Card:calculate_joker(context)
-  local has_pmo = next(SMODS.find_card('{{lovely:prosopometamorphopsia_joker_key}}'))
-  local has_pareidolia = next(SMODS.find_card('j_pareidolia'))
-  local return_value = nil
-
-  if not has_pmo then
-    return_value = corrupted_mod_calc_joker_func(self, context)
-    return return_value
-  end
-
-  local kqj = {[11]=true, [12]=true, [13]=true}
-  local is_kqj = (
-    context.other_card
-    and context.other_card.base
-    and kqj[context.other_card.base.id]
-  )
-
-  -- Discard returned effects for Jacks, Queens, and Kings!
-  if is_kqj then return nil end
-  return_value = corrupted_mod_calc_joker_func(self, context)
-
-  if return_value and not (
-    context.other_card
-    and context.other_card.base
-    and context.other_card.base.id == 14
-  ) then return return_value end
-
-  -- jackify, queenify, kingify
-  for rank = 11, 13 do
-    context.other_card.base.id = rank
-    return_value = corrupted_mod_calc_joker_func(self, context)
-    context.other_card.base.id = 14
-    if return_value then return return_value end
-  end
-
-  -- Only proceed if pmo and pareidolia are held
-  if not (has_pmo and has_pareidolia) then return return_value end
-
-  for rank = 2, 10 do
-    context.other_card.base.id = rank
-    return_value = corrupted_mod_calc_joker_func(self, context)
-    context.other_card.base.id = 14
-    if return_value then return return_value end
-  end
-
-  -- if nothing fancy applies (eg. number or ace-targeting stuff, or still nil effects) it will reach here
-  return return_value
-end
-
-'''
-match_indent = true
 
 ## Makes all Jacks, Queens, and Kings never count as face cards, and makes Aces count as face cards
 [[patches]]

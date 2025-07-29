@@ -416,10 +416,6 @@ SMODS.Joker {
 			return ret_value
 		end
 	end,
-
-	calculate = function(self, card, context)
-		return {vars = {}}
-	end
 }
 
 SMODS.Joker {
@@ -432,10 +428,6 @@ SMODS.Joker {
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
-
-	calculate = function(self, card, context)
-		return {vars = {}}
-	end
 }
 
 SMODS.Joker {
@@ -452,10 +444,6 @@ SMODS.Joker {
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
-
-	calculate = function(self, card, context)
-		return {vars = {}}
-	end
 }
 
 SMODS.Joker {
