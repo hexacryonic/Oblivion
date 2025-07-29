@@ -300,19 +300,23 @@ SMODS.Enhancement{
 	atlas = "opticenhance_atlas",
 	pos = { x = 0, y = 0 },
 	in_pool = function() return false end,
-	config = {extra = {x_mult_loss = 0.1, current_x_mult = 2}},
+	config = {extra = {
+		x_mult_loss = 0.1,
+		current_x_mult = 2,
+		is_melting = false
+	}},
 	
 	calculate = function(self,card,context)
-		local is_melting = false
 		local c_extra = card.ability.extra
 
 		if context.cardarea == G.play and context.main_scoring then
-			is_melting = true
+			c_extra.is_melting = true
 			return { x_mult = c_extra.current_x_mult }
 		end
 
-		if (context.after and is_melting) then
+		if (context.after and c_extra.is_melting) then
 			c_extra.current_x_mult = c_extra.current_x_mult - c_extra.x_mult_loss
+			c_extra.is_melting = false
 		end
 
 		if c_extra.current_x_mult <= 1 then corruption_dissolve(card) end
