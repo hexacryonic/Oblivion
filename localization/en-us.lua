@@ -47,7 +47,6 @@ local loc =  {
 		Edition = {
 			e_ovn_miasma = {
 				name = "Miasma",
-				label = "Miasma",
 				text = {
 					"{C:attention}Retriggers{} in scoring thrice, then {C:ovn_corrupted}corrupts{}",
 					"if possible, otherwise {C:mult}self-destructs{}"
@@ -107,6 +106,9 @@ local loc =  {
 	},
 
 	misc = {
+		labels = {
+			ovn_miasma = "Miasma"
+		},
 		dictionary = {
 			stored = "Stored!",
 			empty = "Emptied!",
