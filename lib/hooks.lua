@@ -71,6 +71,14 @@ end
 
 local cardupd8_hook = Card.update
 function Card:update(dt)
-	if G.STAGE == G.STAGES.RUN then Oblivion.f.transmute_enhancement(self) end
+	if G.STAGE == G.STAGES.RUN then
+		local card_suit = self.base.suit
+		if card_suit == 'ovn_Optics' then
+			Oblivion.f.corrupt_enhancement(self)
+		-- required to preserve enhancements in Collection
+		elseif self.area == G.hand then
+			Oblivion.f.purify_enhancement(self)
+		end
+	end
 	cardupd8_hook(self, dt)
 end
