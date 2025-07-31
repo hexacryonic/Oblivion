@@ -394,28 +394,6 @@ SMODS.Joker {
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
-
-	init = function(self)
-		local cgi_ref = Card.get_id
-		override_pmo = false
-
-		function Card:get_id()
-			local id = cgi_ref(self)
-			if next(SMODS.find_card("j_ovn_pmo")) and next(SMODS.find_card("j_pareidolia")) and not override_pmo then
-				id = 14
-			end
-			return id
-		end
-
-		--Fix issues with View Deck
-		local gui_vd = G.UIDEF.view_deck
-		function G.UIDEF.view_deck(unplayed_only)
-			override_pmo = true
-			local ret_value = gui_vd(unplayed_only)
-			override_pmo = false
-			return ret_value
-		end
-	end,
 }
 
 SMODS.Joker {
