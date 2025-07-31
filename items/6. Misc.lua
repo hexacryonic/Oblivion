@@ -167,8 +167,6 @@ SMODS.Tag({
 	end,
 })
 
---[[
-
 SMODS.Edition {
 	key = "miasma",
 	config = { retriggers = 3 },
@@ -199,86 +197,56 @@ SMODS.Edition {
 	},
 
 	calculate = function(self, card, context)
-		local corrupting = false
-		local dying = false
-
 		if context.other_card == card and (
+			-- Repeat playing cards
 			(context.repetition and context.cardarea == G.play)
+			-- or retrigger Jokers
 			or (context.retrigger_joker_check and not context.retrigger_joker)
-		) then return {
-			message = localize("k_again_ex"),
-			repetitions = self.config.retriggers,
-			card = card,
-		} end
+		) then return { repetitions = self.config.retriggers } end
 		
-		if not (
-			-- Conditional - Do not skip if:
-			context.post_joker -- Scoring loop at post-Joker calculation
-			and context.cardarea == G.jokers -- targetting Jokers
-			and card.config.trigger
-			and not corrupting
-			and not dying
-		) then goto skip_miasma_calculate end
+		-- Either corrupt or kill Joker
+		if context.after and context.cardarea == G.jokers then
+			-- Card is corruptable, proceed to corrupt
+			if Oblivion.f.joker_is_corruptible(card.config.center.key) then
+				Oblivion.f.corrupt_joker(card)
 
-		----
+				if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.7, function ()
+					play_sound("ovn_increment", 1, 0.9)
+					G.GAME.instability = (G.GAME.instability + G.GAME.corrumod)
+				end) end
 
-		local card_key = card.config.center.key
-
-		-- Card is corruptable, proceed to corrupt
-		if Oblivion.corruption_map[card_key] then
-			corrupting = true
-			Oblivion.f.corrupt_joker(card)
-
-			if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.7, function ()
-				play_sound("ovn_increment", 1, 0.9)
-				G.GAME.instability = (G.GAME.instability + G.GAME.corrumod)
-			end) end
-		-- Card cannot be corrupted, self-destruct
-		else
-			dying = true
-			add_simple_event('after', 0.0, function ()
-				play_sound("ovn_optic", nil, 0.2)
-				card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-			end)
-		end
-
-		if context.final_scoring_step and context.cardarea == G.play then
-			for _,scored_card in ipairs(context.scoring_hand) do
-				if not scored_card.edition.ovn_miasma then goto continue_miasma_calculate_finalscoringstep end
-
-				-- Editioned playing card is already optics, self-destruct
-				if scored_card.base.suit == 'ovn_Optics' then
-					if context.destroying_card then
-						add_simple_event('after', 0.1, function ()
-							card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-						end)
-					end
-				
-				-- Editioned playing card not optics, proceed to corrupt
-				else
-					add_simple_event('after', 0.1, function ()
-						card:change_suit('ovn_Optics')
-						card:set_edition(nil, true)
-						play_sound('ovn_optic', nil, 1.1)
-						card:juice_up(0.3, 0.3)
-					end)
-
-					if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.2, function ()
-						play_sound("ovn_increment", 1, 0.9)
-						G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #G.hand.highlighted))
-					end) end
-				end
-
-				::continue_miasma_calculate_finalscoringstep::
+			-- Card cannot be corrupted, self-destruct
+			else
+				add_simple_event('after', 0.0, function ()
+					play_sound("ovn_optic", nil, 0.2)
+					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+				end)
 			end
 		end
 
-		::skip_miasma_calculate::
+		-- Either corrupt or kill playing card
+		if context.after and context.cardarea == G.play then
+			-- Editioned playing card is already optics, self-destruct
+			if card.base.suit == 'ovn_Optics' then
+				add_simple_event('after', 0.1, function ()
+					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+				end)
 
-		if context.joker_main then card.config.trigger = true end
-		if context.after then card.config.trigger = nil end
+			-- Editioned playing card not optics, proceed to corrupt
+			else
+				add_simple_event('after', 0.1, function ()
+					card:set_edition(nil)
+					card:change_suit('ovn_Optics')
+				end)
+
+				if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.2, function ()
+					play_sound("ovn_increment", 1, 0.9)
+					G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #G.hand.highlighted))
+				end) end
+			end
+		end
 	end,
-}]]
+}
 
 SMODS.Consumable {
 	set = "Spectral",
