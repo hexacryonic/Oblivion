@@ -320,7 +320,15 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'supplydrop',
 	loc_vars = function(self, info_queue, center)
-		local stored = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop and localize{type = "name_text", set = "Joker", key = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop} or localize("k_none")
+		local stored = (
+			G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
+			and localize{
+				type = "name_text",
+				set = "Joker",
+				key = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
+			}
+			or localize("k_none")
+		)
 		return { vars = { stored } }
 	end,
 
@@ -336,33 +344,36 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.selling_self and not context.retrigger_joker and not context.blueprint then
 			for i = 2, #G.jokers.cards do
-				if G.jokers.cards[i] ~= card then
-					goto continue_ovn_supplydrop_calculate
+				if G.jokers.cards[i] == card then
+
+					local left_joker = G.jokers.cards[i-1]
+					local left_joker_rarity = left_joker.config.center.rarity
+
+					-- greater than rarity or not corrupted
+					if not (
+						left_joker_rarity < 3
+						or left_joker_rarity == "ovn_corrupted"
+					) then break end
+
+					local save_file = G.PROFILES[G.SETTINGS.profile]
+					if not save_file.ovn_supply_drop then
+						local left_joker_key = left_joker.config.center.key
+						save_file.ovn_supply_drop = left_joker_key
+
+						add_simple_event('after', 0.1, function ()
+							left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
+						end)
+						card_eval_status_text(
+							card,
+							"extra",
+							nil,
+							nil,
+							nil,
+							{ message = localize("stored"), colour = G.C.DARK_EDITION }
+						)
+					end
+					break
 				end
-
-				local left_joker = G.jokers.cards[i-1]
-				local left_joker_rarity = left_joker.config.center.rarity
-
-				-- greater than rarity or not corrupted
-				if left_joker_rarity > 3 or left_joker_rarity ~= "ovn_corrupted" then break end
-
-				if not G.PROFILES[G.SETTINGS.profile].ovn_supply_drop then
-					local left_joker_key = left_joker.config.center.key
-					G.PROFILES[G.SETTINGS.profile].ovn_supply_drop = left_joker_key
-					add_simple_event('after', 0.1, function ()
-						left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
-					end)
-					card_eval_status_text(
-						card,
-						"extra",
-						nil,
-						nil,
-						nil,
-						{ message = localize("stored"), colour = G.C.DARK_EDITION }
-					)
-				end
-
-				::continue_ovn_supplydrop_calculate::
 			end
 		end
 	end,
