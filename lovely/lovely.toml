@@ -59,9 +59,6 @@ SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CA
 '''
 match_indent = true
 
-[vars]
-prosopometamorphopsia_joker_key = "j_ovn_pmo"
-
 # Optics' base chips are doubled
 [[patches]]
 [patches.pattern]
