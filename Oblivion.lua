@@ -63,13 +63,21 @@ Oblivion.corruption_condition["j_gros_michel"] = function()
 	return G.GAME and G.GAME.corruptiblemichel
 end
 
+-- Similar to corruption_map
+if not Oblivion.enhancement_corrupt then Oblivion.enhancement_corrupt = {} end
+local cenh = Oblivion.enhancement_corrupt
+cenh["m_glass"] = "m_ovn_ice"
+cenh["m_gold"]  = "m_ovn_dense"
+cenh["m_steel"] = "m_ovn_unob"
+cenh["m_wild"]  = "m_ovn_coord"
+
 -- Generates immediately after the game finishes loading
 G.E_MANAGER:add_event(Event {
 	blocking = false,
 	func = function()
+		-- Corrupt to Pure Jokers
 		Oblivion.purity_map = {}
 		local pmap = Oblivion.purity_map
-
 		for pure_key,corrupt_key in pairs(Oblivion.corruption_map) do
 			if not pmap[corrupt_key] then
 				pmap[corrupt_key] = pure_key
@@ -79,6 +87,13 @@ G.E_MANAGER:add_event(Event {
 			else
 				table.insert(pmap[corrupt_key], pure_key)
 			end
+		end
+
+		-- Corrupt to Pure Enhancements
+		Oblivion.enhancement_purify = {}
+		local penh = Oblivion.enhancement_purify
+		for pure_key,corrupt_key in pairs(Oblivion.enhancement_corrupt) do
+			penh[corrupt_key] = pure_key
 		end
 
 		-- Purity map entries map to either a string (only pure form) or a list of strings (list of pure forms)

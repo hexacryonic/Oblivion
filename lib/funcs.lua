@@ -104,7 +104,37 @@ end
 
 ----
 
-
 Oblivion.f.joker_is_purifiable = function(card_key)
 	return Oblivion.purity_map[card_key] and true or false
+end
+
+----
+
+Oblivion.f.transmute_enhancement = function(card)
+	local enhancement_key = card.config.center.key
+	local card_suit = card.base.suit
+
+	-- Just turned into Optics
+	if card_suit == 'ovn_Optics' then
+		local new_enhancement = Oblivion.enhancement_corrupt[enhancement_key]
+		if new_enhancement then
+			card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
+			add_simple_event('after', 0.1, function()
+				play_sound('ovn_optic', 1, 1.1)
+				card:juice_up(0.5, 0.5)
+			end)
+		end
+	end
+
+	-- Just turned into non-Optics - preserve enhancements in Collection
+	if card_suit ~= 'ovn_Optics' and card.area == G.hand then
+		local new_enhancement = Oblivion.enhancement_purify[enhancement_key]
+		if new_enhancement then
+			card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
+			add_simple_event('after', 0.1, function()
+				play_sound('ovn_pure', 1, 1.1)
+				card:juice_up(0.5, 0.5)
+			end)
+		end
+	end
 end

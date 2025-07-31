@@ -52,6 +52,8 @@ function Card:calculate_joker(context)
 	return calc_hook(self, context)
 end
 
+----
+
 local is_face_hook = Card.is_face
 function Card:is_face()
 	local has_pmo = next(SMODS.find_card('j_ovn_pmo')) and true or false
@@ -63,4 +65,12 @@ function Card:is_face()
 	
 	-- If nothing else
 	return is_face_hook(self)
+end
+
+----
+
+local cardupd8_hook = Card.update
+function Card:update(dt)
+	if G.STAGE == G.STAGES.RUN then Oblivion.f.transmute_enhancement(self) end
+	cardupd8_hook(self, dt)
 end
