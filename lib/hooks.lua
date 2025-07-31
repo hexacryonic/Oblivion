@@ -1,5 +1,11 @@
 local calc_hook = Card.calculate_joker
-function Card:calculate_joker(context) -- PMO rank redirection
+function Card:calculate_joker(context)
+	-- Wiggle if corruption method is found
+	if Oblivion.f.joker_is_corruptible(self.key) then
+		local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
+		juice_card_until(self, eval, true)
+	end
+
 	local has_pmo = next(SMODS.find_card('j_ovn_pmo')) and true or false
 	local has_pareidolia = next(SMODS.find_card('j_pareidolia')) and true or false
 

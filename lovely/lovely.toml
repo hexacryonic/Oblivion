@@ -154,63 +154,6 @@ end
 '''
 match_indent = true
 
-# Wiggle when corruption method is visible
-[[patches]]
-[patches.pattern]
-target = "functions/card.lua"
-pattern = "function Card:calculate_joker(context)"
-position = "after"
-payload = '''for k, _ in pairs(Oblivion.corruption_map) do
-  if self.key == k then
-    local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
-    juice_card_until(self, eval, true)
-  end
-end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/button_callbacks.lua"
-pattern = "  G.FUNCS.can_use_consumeable = function(e)"
-position = "before"
-payload = '''  G.FUNCS.can_weirddiscard = function(e)
-    if G.GAME.current_round.discards_left <= 0 then
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
-    else
-        e.config.colour = G.C.RED
-        e.config.button = 'discard_cards_from_held'
-    end
-  end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = '''
-local discard_button = {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_highlighted", one_press = true, shadow = true, func = 'can_discard'}, nodes={
-    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-      {n=G.UIT.T, config={text = localize('b_discard'), scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
-    }}
-  }}
-'''
-position = "at"
-payload = '''
-  local discard_button =
-  G.GAME.in_corrupt_red and {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_held", one_press = true, shadow = true, func = 'can_weirddiscard'}, nodes={
-    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-      {n=G.UIT.T, config={text = "Datcard", scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
-    }}
-  }}
-  or not G.GAME.in_corrupt_red and
-  {n=G.UIT.C, config={id = 'discard_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.RED, button = "discard_cards_from_highlighted", one_press = true, shadow = true, func = 'can_discard'}, nodes={
-    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-      {n=G.UIT.T, config={text = localize('b_discard'), scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
-    }}
-  }}
-'''
-match_indent = true
-
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"
