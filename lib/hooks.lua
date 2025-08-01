@@ -1,7 +1,7 @@
 local calc_hook = Card.calculate_joker
 function Card:calculate_joker(context)
 	-- Wiggle if corruption method is found
-	if Oblivion.f.joker_is_corruptible(self.key) then
+	if Ovn_f.joker_is_corruptible(self.key) then
 		local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
 		juice_card_until(self, eval, true)
 	end
@@ -74,10 +74,10 @@ function Card:update(dt)
 	if G.STAGE == G.STAGES.RUN then
 		local card_suit = self.base.suit
 		if card_suit == 'ovn_Optics' then
-			Oblivion.f.corrupt_enhancement(self)
+			Ovn_f.corrupt_enhancement(self)
 		-- required to preserve enhancements in Collection
 		elseif self.area == G.hand then
-			Oblivion.f.purify_enhancement(self)
+			Ovn_f.purify_enhancement(self)
 		end
 	end
 
@@ -88,7 +88,7 @@ function Card:update(dt)
 		local card_key = self.config.center.key
 		if not card_key then return end
 
-		if Oblivion.f.is_corruptbanished(card_key) and not (
+		if Ovn_f.is_corruptbanished(card_key) and not (
 			self.ability.extra
 			and self.ability.extra.getting_corrupt_banished
 		) then

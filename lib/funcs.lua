@@ -1,4 +1,4 @@
-function Oblivion.f.compile_localization(loc_table, lang)
+function Ovn_f.compile_localization(loc_table, lang)
 	local loc_folder = ("localization/%s/"):format(lang)
 	local loc_path = Oblivion.mod_path .. loc_folder
 	local loc_sections = {"descriptions", "misc"}
@@ -26,18 +26,18 @@ end
 ---@param trigger string | nil
 ---@param delay number | nil
 ---@param func function
-Oblivion.f.add_simple_event = function(trigger, delay, func)
+Ovn_f.add_simple_event = function(trigger, delay, func)
 	G.E_MANAGER:add_event(Event {
 		trigger = trigger,
 		delay = delay,
 		func = function() func(); return true end
 	})
 end
-local add_simple_event = Oblivion.f.add_simple_event
+local add_simple_event = Ovn_f.add_simple_event
 
 ----
 
-Oblivion.f.corrupt_joker = function(card)
+Ovn_f.corrupt_joker = function(card)
 	local card_key = card.config.center.key
 	local corrupted_card_key = Oblivion.corruption_map[card_key]
 
@@ -62,7 +62,7 @@ end
 
 ----
 
-Oblivion.f.is_corruptbanished = function(key)
+Ovn_f.is_corruptbanished = function(key)
 	local has_tsne = next(SMODS.find_card('j_ovn_showneverends')) and true or false
 
 	-- If the Joker is corruptable, continue
@@ -82,7 +82,7 @@ end
 
 ----
 
-Oblivion.f.purify_joker = function(card)
+Ovn_f.purify_joker = function(card)
 	local card_key = card.config.center.key
 	local pmap_entry = Oblivion.purity_map[card_key]
 	local pure_card_key = (
@@ -113,7 +113,7 @@ end
 
 ----
 
-Oblivion.f.joker_is_corruptible = function(card_key)
+Ovn_f.joker_is_corruptible = function(card_key)
 	if Oblivion.corruption_map[card_key] == nil then return false end
 
 	local condition_func = Oblivion.corruption_condition[card_key]
@@ -124,13 +124,13 @@ end
 
 ----
 
-Oblivion.f.joker_is_purifiable = function(card_key)
+Ovn_f.joker_is_purifiable = function(card_key)
 	return Oblivion.purity_map[card_key] and true or false
 end
 
 ----
 
-Oblivion.f.corrupt_enhancement = function(card)
+Ovn_f.corrupt_enhancement = function(card)
 	local enhancement_key = card.config.center.key
 	local cenh = Oblivion.enhancement_corrupt
 	local new_enhancement = cenh[enhancement_key]
@@ -145,7 +145,7 @@ end
 
 ----
 
-Oblivion.f.purify_enhancement = function(card)
+Ovn_f.purify_enhancement = function(card)
 	local enhancement_key = card.config.center.key
 	local penh = Oblivion.enhancement_purify
 	local new_enhancement = penh[enhancement_key]

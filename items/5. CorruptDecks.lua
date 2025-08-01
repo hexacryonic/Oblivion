@@ -1,4 +1,4 @@
-local add_simple_event = Oblivion.f.add_simple_event
+local add_simple_event = Ovn_f.add_simple_event
 
 SMODS.Back{
 	key = "c_red",

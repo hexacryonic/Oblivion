@@ -148,5 +148,5 @@ local loc =  {
 	},
 }
 
-Oblivion.f.compile_localization(loc, "en-us")
+Ovn_f.compile_localization(loc, "en-us")
 return loc

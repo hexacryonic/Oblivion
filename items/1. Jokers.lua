@@ -1,4 +1,4 @@
-local add_simple_event = Oblivion.f.add_simple_event
+local add_simple_event = Ovn_f.add_simple_event
 
 SMODS.Rarity({
 	key = "corrupted",
@@ -92,7 +92,7 @@ SMODS.Consumable {
 
 		local selected_joker = selected_jokers[1]
 		local selected_joker_key = selected_joker.config.center.key
-		return Oblivion.f.joker_is_corruptible(selected_joker_key)
+		return Ovn_f.joker_is_corruptible(selected_joker_key)
 	end,
 
 	use = function(self, card, area, copier)
@@ -102,7 +102,7 @@ SMODS.Consumable {
 		local corrupted_card_key = Oblivion.corruption_map[selected_card_key]
 
 		G.GAME.justcorrupted = corrupted_card_key
-		Oblivion.f.corrupt_joker(selected_card)
+		Ovn_f.corrupt_joker(selected_card)
 
 		G.GAME.justcorrupted = nil
 		if G.GAME.in_corrupt_plasma then

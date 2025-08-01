@@ -9,8 +9,9 @@ SMODS.current_mod.optional_features = {
 }
 
 if not Oblivion then Oblivion = {} end
-Oblivion.f = {}
 Oblivion.mod_path = tostring(SMODS.current_mod.path)
+-- Function object
+Ovn_f = {}
 
 SMODS.current_mod.description_loc_vars = function()
 	return {

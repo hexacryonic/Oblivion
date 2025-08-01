@@ -1,4 +1,4 @@
-local add_simple_event = Oblivion.f.add_simple_event
+local add_simple_event = Ovn_f.add_simple_event
 
 SMODS.Shader({ key = 'miasma', path = 'miasma.fs' })
 
@@ -40,8 +40,8 @@ SMODS.Blind({
 local function purify_all_jokers()
 	for _,joker in pairs(G.jokers.cards) do
 		local joker_key = joker.config.center.key
-		if Oblivion.f.joker_is_purifiable(joker_key) then
-			Oblivion.f.purify_joker(joker)
+		if Ovn_f.joker_is_purifiable(joker_key) then
+			Ovn_f.purify_joker(joker)
 		end
 	end
 end
@@ -49,8 +49,8 @@ end
 local function corrupt_all_jokers()
 	for _,joker in pairs(G.jokers.cards) do
 		local joker_key = joker.config.center.key
-		if Oblivion.f.joker_is_corruptible(joker_key) then
-			Oblivion.f.corrupt_joker(joker)
+		if Ovn_f.joker_is_corruptible(joker_key) then
+			Ovn_f.corrupt_joker(joker)
 		end
 	end
 end
@@ -207,8 +207,8 @@ SMODS.Edition {
 		-- Either corrupt or kill Joker
 		if context.after and context.cardarea == G.jokers then
 			-- Card is corruptable, proceed to corrupt
-			if Oblivion.f.joker_is_corruptible(card.config.center.key) then
-				Oblivion.f.corrupt_joker(card)
+			if Ovn_f.joker_is_corruptible(card.config.center.key) then
+				Ovn_f.corrupt_joker(card)
 
 				if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.7, function ()
 					play_sound("ovn_increment", 1, 0.9)
