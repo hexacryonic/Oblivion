@@ -63,6 +63,9 @@ end
 ----
 
 Ovn_f.is_corruptbanished = function(key)
+	-- Do not continue if purification is occurring
+	if G.GAME.purifyingJoker then return false end
+
 	local has_tsne = next(SMODS.find_card('j_ovn_showneverends')) and true or false
 
 	-- If the Joker is corruptable, continue
@@ -106,9 +109,8 @@ Ovn_f.purify_joker = function(card)
         purified_card:add_to_deck()
         G.jokers:emplace(purified_card)
         purified_card:juice_up(0.3, 0.5)
-
-        G.GAME.purifyingJoker = false
     end)
+	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
 end
 
 ----
