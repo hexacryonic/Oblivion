@@ -62,6 +62,26 @@ end
 
 ----
 
+Oblivion.f.is_corruptbanished = function(key)
+	local has_tsne = next(SMODS.find_card('j_ovn_showneverends')) and true or false
+
+	-- If the Joker is corruptable, continue
+	local corrupt_key = Oblivion.corruption_map[key]
+	if not corrupt_key then return false end
+
+	-- If its corruption is present, continue
+	local has_corrupt_joker = next(SMODS.find_card(corrupt_key)) and true or false
+	if not has_corrupt_joker then return false end
+
+	-- If show never ends is not held, continue
+	if has_tsne then return false end
+
+	-- DIE
+	return true
+end
+
+----
+
 Oblivion.f.purify_joker = function(card)
 	local card_key = card.config.center.key
 	local pmap_entry = Oblivion.purity_map[card_key]

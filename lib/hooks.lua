@@ -80,5 +80,21 @@ function Card:update(dt)
 			Oblivion.f.purify_enhancement(self)
 		end
 	end
+
 	cardupd8_hook(self, dt)
+
+	if self.area == G.jokers then
+		-- Destroy card if it is corruptbanished
+		local card_key = self.config.center.key
+		if not card_key then return end
+
+		if Oblivion.f.is_corruptbanished(card_key) and not (
+			self.ability.extra
+			and self.ability.extra.getting_corrupt_banished
+		) then
+			SMODS.destroy_cards(self)
+			if not self.ability.extra then self.ability.extra = {} end
+			self.ability.extra.getting_corrupt_banished = true
+		end
+	end
 end

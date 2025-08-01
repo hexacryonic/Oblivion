@@ -417,6 +417,8 @@ SMODS.Joker {
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
+
+	-- Functionality implemented in Card:update hook
 }
 
 SMODS.Joker {
