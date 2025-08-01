@@ -1,7 +1,7 @@
 -- lib/ui_funcs.lua
 -- These functions are used by UI elements, usually those in lib/ui_hook.lua
 
--- == SUPPLEMENTARY FUNCTION used in discard_cards_from_held
+-- == used in discard_cards_from_held
 local function get_cards_to_discard()
 	local cards_to_discard = {}
 
@@ -21,7 +21,7 @@ local function get_cards_to_discard()
 	return cards_to_discard
 end
 
--- == SUPPLEMENTARY FUNCTION used in discard_cards_from_held
+-- == used in discard_cards_from_held
 local function send_discard_contexts(cards_to_discard)
 	local discarded_cards = {}
 	local destroyed_cards = {}
