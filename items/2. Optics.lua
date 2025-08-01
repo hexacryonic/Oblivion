@@ -373,12 +373,15 @@ local function change_rank(card, new_rank)
 		Queen  = 'Q',
 		Jack   = 'J',
 		['10'] = 'T'
-	})[new_rank]
-	
+	})[new_rank] or new_rank
+
 	local new_card_key = new_code .. new_val
 	local new_card = G.P_CARDS[new_card_key]
+
+	card:flip()
 	card:set_base(new_card)
 	G.GAME.blind:debuff_card(card)
+	card:flip()
 end
 
 SMODS.Enhancement{
@@ -404,10 +407,7 @@ SMODS.Enhancement{
 			if card_index > 1 then
 				local other_card_value = card_table[card_index - 1].base.value
 				if card.base.value == other_card_value then return end
-
-				card:flip()
 				change_rank(card, other_card_value)
-				card:flip()
 			end
 		end
 	end,
