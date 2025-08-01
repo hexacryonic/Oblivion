@@ -48,13 +48,19 @@ Ovn_f.corrupt_joker = function(card)
         card:start_dissolve({G.C.RARITY['ovn_corrupted']})
         G.jokers:remove_from_highlighted(card)
 
-        local corrupted_card = create_card("Joker", G.jokers, nil, nil, nil, nil, corrupted_card_key)
-        corrupted_card:add_to_deck()
-        G.jokers:emplace(corrupted_card)
+        local corrupted_card = SMODS.add_card{
+			set = "Joker",
+			area = G.jokers,
+			key = corrupted_card_key
+		}
         corrupted_card:juice_up(0.3, 0.5)
 
         if not corrupted_card.ability.extra then corrupted_card.ability.extra = {} end
         corrupted_card.ability.extra.ovn_former_form = card_key
+		corrupted_card:calculate_joker{
+			ovn_corrupted_from = true,
+			former_form_key = card_key
+		}
 
         G.GAME.corruptingJoker = false
     end)
