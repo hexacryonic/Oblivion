@@ -83,6 +83,22 @@ function Card:update(dt)
 
 	cardupd8_hook(self, dt)
 
+	if G.STATE == G.STATES.SELECTING_HAND then
+		local unob_tally = 0
+
+		for _,card in ipairs(G.hand.cards) do
+			if card.config.center.key == 'm_ovn_unob' then
+				unob_tally = unob_tally + 1
+			end
+		end
+
+		if unob_tally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
+			G.STATE = G.STATES.GAME_OVER
+			G.STATE_COMPLETE = false
+			return true
+		end
+	end
+
 	if self.area == G.jokers then
 		-- Destroy card if it is corruptbanished
 		local card_key = self.config.center.key
@@ -100,4 +116,58 @@ function Card:update(dt)
 			self.ability.extra.getting_corrupt_banished = true
 		end
 	end
+end
+
+----
+
+--[[
+calculate_repetitions hook is modified from Paperback utilities/hooks.lua
+https://github.com/Balatro-Paperback/paperback/?tab=MIT-1-ov-file
+
+MIT License
+
+Copyright (c) 2025 Nether
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+]]
+local calcrep_hook = SMODS.calculate_repetitions
+SMODS.calculate_repetitions = function(card, context, reps)
+	for _,area in ipairs(SMODS.get_card_areas('playing_cards')) do
+		for _,area_card  in ipairs(area.cards or {}) do
+			if area_card ~= card then
+				local eval = area_card:calculate_enhancement {
+					other_card = card,
+					cardarea = card.area,
+					scoring_hand = context.scoring_hand,
+					ovn_repetition_from_playing_card = true,
+				}
+
+				if eval and eval.repetitions then
+					for _ = 1, eval.repetitions do
+						eval.card = eval.card or card
+						eval.message = eval.message or (not eval.remove_default_message and localize('k_again_ex'))
+						reps[#reps + 1] = { key = eval }
+					end
+				end
+			end
+		end
+	end
+
+	return calcrep_hook(card, context, reps)
 end

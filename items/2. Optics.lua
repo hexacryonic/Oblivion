@@ -420,28 +420,19 @@ SMODS.Enhancement{
 	config = {extra = {repetitions = 1}},
 
 	calculate = function(self, card, context)
+		-- Custom context
+		if (
+			context.ovn_repetition_from_playing_card
+			and card.area == G.hand
+			and context.other_card.area == G.play
+		) then
+			return {repetitions = card.ability.extra.repetitions}
+		end
 	end,
 	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
 }
 
-local gu = Game.update
-function Game:update(dt)
-	gu(self, dt)
-	if G.STATE ~= SELECTING_HAND then return end
-
-	local unobtally = {}
-
-	for _,card in ipairs(G.hand.cards) do
-		if card.config.center.key == 'm_ovn_unob' then
-			table.insert(unobtally, card)
-		end
-	end
-
-	if #unobtally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
-		G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
-		return true
-	end
-end
+----
 
 SMODS.Consumable {
 	set = "Tarot",
