@@ -500,7 +500,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
-	config = { extra = { mult = 3 } },
+	config = { extra = { xmult = 4 } },
 	
 	atlas = 'corrupted',
 	pos = { x = 2, y = 1 },
@@ -513,7 +513,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
 			return {
-				xmult = card.ability.extra.mult,
+				xmult = card.ability.extra.xmult,
 			}
 		end
 	end
