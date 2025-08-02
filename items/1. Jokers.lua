@@ -1,9 +1,5 @@
 local add_simple_event = Ovn_f.add_simple_event
 
--- NOTE: New context, context.ovn_corrupted_from
--- which is true when a Joker came out of corruption (distinct from add_to_deck func)
--- Alongisde it is the property "former_form_key", string that is a Joker key
-
 SMODS.Rarity({
 	key = "corrupted",
 	badge_colour = HEX('2349cb'),
