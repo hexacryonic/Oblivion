@@ -19,5 +19,13 @@ return {
 			"Add {C:ovn_corrupted}Miasma{} {C:attention}Edition{} to",
 			"{C:attention}#1#{} selected playing card or {C:attention}Joker{}"
 		}
+	},
+	c_ovn_eidolon = {
+		name = 'Eidolon',
+		text = {
+			"Add an {C:ovn_indigo}Indigo Seal{}",
+			"to {C:attention}1{} selected",
+			"card in your hand"
+		}
 	}
 }

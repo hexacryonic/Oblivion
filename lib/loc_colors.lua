@@ -12,6 +12,7 @@ function loc_colour(_c, _default)
 	loc_c.spade         = G.C.SUITS.Spades
 	loc_c.club          = G.C.SUITS.Clubs
 	loc_c.ovn_optic     = G.C.SUITS.ovn_Optics
+	loc_c.ovn_indigo    = HEX('252fe3')
 
 	return lc(_c, _default)
 end

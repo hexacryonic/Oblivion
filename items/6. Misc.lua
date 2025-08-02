@@ -300,6 +300,40 @@ SMODS.Consumable {
 
 ----
 
+SMODS.Consumable {
+	set = "Spectral",
+	name = "ovn_Eidolon",
+	key = "eidolon",
+	config = { extra = { seal = 'ovn_indigo' }, max_highlighted = 1 },
+
+	atlas = "cataclysm_atlas",
+	pos = {x=2, y=0},
+
+	cost = 4,
+
+	set_card_type_badge = function(self, card, badges)
+		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
+	end,
+
+	use = function(self, card, area, copier)
+		-- Modified version of VanillaRemade Deja Vu implementation
+        local converted_card = G.hand.highlighted[1]
+
+		add_simple_event(nil, nil, function ()
+			play_sound('tarot1')
+			card:juice_up(0.3, 0.5)
+		end)
+
+		add_simple_event('after', 0.1, function ()
+			converted_card:set_seal(card.ability.extra.seal, nil, true)
+		end)
+		delay(0.5)
+		add_simple_event('after', 0.2, function ()
+			G.hand:unhighlight_all()
+		end)
+	end,
+}
+
 SMODS.Seal {
 	key = 'indigo',
 	badge_colour = HEX('252fe3'),
