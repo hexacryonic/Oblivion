@@ -337,7 +337,6 @@ SMODS.Consumable {
 SMODS.Seal {
 	key = 'indigo',
 	badge_colour = HEX('252fe3'),
-	config = { extra = { is_destroyed = false } },
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
@@ -346,7 +345,6 @@ SMODS.Seal {
 		if (
 			context.ovn_corruption_occurred
 			and context.ovn_corruption_type == "Joker"
-			and not card.ability.seal.extra.is_destroyed
 			and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
 			and card.area == G.hand
 		) then
@@ -355,10 +353,6 @@ SMODS.Seal {
 				SMODS.add_card({ set = 'Spectral' })
 				card:juice_up(0.3, 0.5)
 				G.GAME.consumeable_buffer = 0
-				card.ability.seal.extra.is_destroyed = true
-
-				delay(0.5)
-				SMODS.destroy_cards(card)
 			end)
 		end
 	end

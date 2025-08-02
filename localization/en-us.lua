@@ -49,7 +49,6 @@ local loc =  {
 					"when a Joker is corrupted",
 					"while this card is visible",
                     "{C:inactive}(Must have room)",
-					"{S:1.1,C:red,E:2}self destructs{}"
 				}
 			},
 		},
