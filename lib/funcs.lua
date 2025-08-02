@@ -37,6 +37,12 @@ local add_simple_event = Ovn_f.add_simple_event
 
 ----
 
+Ovn_f.has_joker = function(card_key)
+	return next(SMODS.find_card(card_key)) and true or false
+end
+
+----
+
 Ovn_f.corrupt_joker = function(card)
 	local card_key = card.config.center.key
 	local corrupted_card_key = Oblivion.corruption_map[card_key]
@@ -72,14 +78,14 @@ Ovn_f.is_corruptbanished = function(key)
 	-- Do not continue if purification is occurring
 	if G.GAME.purifyingJoker then return false end
 
-	local has_tsne = next(SMODS.find_card('j_ovn_showneverends')) and true or false
+	local has_tsne = Ovn_f.has_joker('j_ovn_showneverends')
 
 	-- If the Joker is corruptable, continue
 	local corrupt_key = Oblivion.corruption_map[key]
 	if not corrupt_key then return false end
 
 	-- If its corruption is present, continue
-	local has_corrupt_joker = next(SMODS.find_card(corrupt_key)) and true or false
+	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
 	if not has_corrupt_joker then return false end
 
 	-- If show never ends is not held, continue

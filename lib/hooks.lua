@@ -6,8 +6,8 @@ function Card:calculate_joker(context)
 		juice_card_until(self, eval, true)
 	end
 
-	local has_pmo = next(SMODS.find_card('j_ovn_pmo')) and true or false
-	local has_pareidolia = next(SMODS.find_card('j_pareidolia')) and true or false
+	local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
+	local has_pareidolia = Ovn_f.has_joker('j_pareidolia')
 
 	-- PMO functionality
 	if has_pmo and (
@@ -56,7 +56,7 @@ end
 
 local is_face_hook = Card.is_face
 function Card:is_face()
-	local has_pmo = next(SMODS.find_card('j_ovn_pmo')) and true or false
+	local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
 
 	-- PMO functionality
 	if has_pmo then

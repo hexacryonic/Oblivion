@@ -82,7 +82,7 @@ SMODS.Consumable {
 			if not Oblivion.corruption_map[joker_key] then goto continue_ovn_The_Abyss_set_ability end
 
 			local eval = function()
-				return next(SMODS.find_card("c_ovn_abyss")) and not G.RESET_JIGGLES
+				return Ovn_f.has_joker("c_ovn_abyss") and not G.RESET_JIGGLES
 			end
 			juice_card_until(joker, eval, true)
 
