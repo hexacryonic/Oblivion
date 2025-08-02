@@ -125,6 +125,10 @@ SMODS.Consumable {
 	atlas = "charybdis_atlas",
 	pos = {x=0, y=0},
 
+	set_card_type_badge = function(self, card, badges)
+		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
+	end,
+
 	config = { create = 2 },
 	cost = 4,
 
