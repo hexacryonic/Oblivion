@@ -72,12 +72,17 @@ end
 local cardupd8_hook = Card.update
 function Card:update(dt)
 	if G.STAGE == G.STAGES.RUN then
-		local card_suit = self.base.suit
-		if card_suit == 'ovn_Optics' then
-			Ovn_f.corrupt_enhancement(self)
 		-- required to preserve enhancements in Collection
-		elseif self.area == G.hand then
-			Ovn_f.purify_enhancement(self)
+		if self.area == G.hand or self.area == G.pack_cards then
+			local card_suit = self.base.suit
+			if card_suit == 'ovn_Optics' then
+				if not G.GAME.ovn_has_ocular then
+					G.GAME.ovn_has_ocular = true
+				end
+				Ovn_f.corrupt_enhancement(self)
+			else
+				Ovn_f.purify_enhancement(self)
+			end
 		end
 	end
 

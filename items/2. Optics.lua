@@ -20,7 +20,8 @@ SMODS.Suit{
 	hc_colour = HEX('8806FF'),
 
 	in_pool = function(self, args)
-		return not (args and args.initial_deck)
+		if args and args.initial_deck then return false end
+		return G.GAME.ovn_has_ocular
 	end,
 }
 
@@ -32,6 +33,7 @@ SMODS.Back{
 	atlas = "deck_atlas",
 
 	apply = function(self)
+		G.GAME.ovn_has_ocular = true
 		add_simple_event('immediate', nil, function()
 			local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
 			for _,rank in ipairs(ranks) do
