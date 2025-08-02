@@ -319,15 +319,20 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'supplydrop',
 	loc_vars = function(self, info_queue, center)
-		local stored = (
-			G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
-			and localize{
+		local stored
+		local stored_joker = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
+
+		if stored_joker then
+			table.insert(info_queue, G.P_CENTERS[stored_joker])
+			stored = localize{
 				type = "name_text",
 				set = "Joker",
-				key = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
+				key = stored_joker
 			}
-			or localize("k_none")
-		)
+		else
+			stored = localize("k_none")
+		end
+
 		return { vars = { stored } }
 	end,
 

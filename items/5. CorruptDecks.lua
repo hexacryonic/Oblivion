@@ -130,8 +130,24 @@ SMODS.Back{
 	end,
 }
 
+-- Dummy tag used solely to hold the Instability tooltip
+SMODS.Tag {
+	key = "instability",
+	no_collection = true,
+	unlocked = false,
+	discovered = false
+}
+
 SMODS.Back{
 	key = "c_plasma",
+	loc_vars = function(self, info_queue, back)
+		return { vars = {
+			localize { type = 'name_text', key = 'tag_ovn_instability', set = 'Tag' },
+			localize { type = 'name_text', key = self.config.jokers[1], set = 'Joker' },
+			localize { type = 'name_text', key = self.config.consumables[1], set = 'Tarot' },
+			localize { type = 'name_text', key = self.config.consumables[2], set = 'Tarot' },
+		} }
+	end,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 3, y = 2 },

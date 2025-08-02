@@ -30,7 +30,7 @@ local loc =  {
 			ovn_corruptible = {
 				name = "Corruptible",
 				text = {
-					'This Joker has',
+					'#1# has',
 					'{C:ovn_corrupted}corruption potential{}',
 				},
 			},
@@ -46,7 +46,7 @@ local loc =  {
 				name = "Indigo Seal",
 				text = {
 					"Creates a {C:spectral}Spectral {}card",
-					"when a Joker is corrupted",
+					"when a Joker is {C:ovn_corrupted}corrupted{}",
 					"while this card is visible",
                     "{C:inactive}(Must have room)",
 				}
@@ -110,7 +110,16 @@ local loc =  {
 					"Shop has a free",
 					"{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
 				}
-			}
+			},
+			-- Dummy tag; see items/5. CorruptDecks (Corrupted Plasma Deck)
+			tag_ovn_instability = {
+				name = "Instability",
+				text = {
+					"{C:ovn_corrupted}-0.05 {}after playing a hand",
+					"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
+					"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
+				}
+			},
 		}
 	},
 
@@ -137,6 +146,12 @@ local loc =  {
 			ch_c_ovn_spacer = { "{s:0.3} {}" },
 			ch_c_ovn_world_aces = { "You have an {C:attention}Ace{} of each suit" },
 			ch_c_ovn_world_pmo = { "{C:ovn_corrupted}Prosopometamorphopsia{}" },
+		},
+		suits_singular = {
+			ovn_Optics = "Optic"
+		},
+		suits_plural = {
+			ovn_Optics = "Optics"
 		},
 		poker_hands = {
 			["ovn_Spectrum"] = "Spectrum",

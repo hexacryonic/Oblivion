@@ -13,11 +13,6 @@ SMODS.Suit{
 	lc_ui_atlas = 'suits',
 	hc_ui_atlas = 'suits_hc',
 
-	loc_txt = {
-		singular = 'Optic',
-		plural = 'Optics'
-	},
-
 	pos = { x = 0, y = 0 },
 	ui_pos = { x = 0, y = 0 },
 

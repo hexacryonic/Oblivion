@@ -46,11 +46,11 @@ return {
 	b_ovn_c_plasma = {
 		name = 'Corrupt Plasma Deck',
 		text = {
-			"{C:ovn_corrupted}Instability{} exponent operand",
+			"{C:ovn_corrupted,T:tag_ovn_instability}#1#{} exponent operand",
 			"added to score calculation",
 			"{s:0.3} {}",
-			"Start with {C:attention}Joker{},",
-			"{C:attention}The Abyss{}, and {C:attention}Perception{}"
+			"Start with {C:attention,T:j_joker}#2#{},",
+			"{C:attention,T:c_ovn_abyss}#3#{}, and {C:attention,T:c_ovn_perception}#4#{}"
 		}
 	}
 }

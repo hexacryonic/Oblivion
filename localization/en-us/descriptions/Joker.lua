@@ -54,6 +54,7 @@ return {
 			"create the stored Joker",
 			"and remove it from storage",
 			"{s:0.3} {}",
+
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
 			"{s:0.2} {}",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gift Card{}"
