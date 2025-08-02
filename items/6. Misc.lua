@@ -302,8 +302,12 @@ SMODS.Consumable {
 
 SMODS.Seal {
 	key = 'indigo',
-	badge_colour = G.C.RED,
+	badge_colour = HEX('252fe3'),
 	config = { extra = { is_destroyed = false } },
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+
 	calculate = function(self, card, context)
 		if (
 			context.ovn_corruption_occurred

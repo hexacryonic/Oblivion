@@ -14,6 +14,7 @@ local card_atlases = {
 	cdeck_atlas        = "corruptdeck",
 	mutation_atlas     = "mutation",
 	cboosters_atlas    = "cbooster",
+	seals_atlas        = "seals"
 }
 
 for key, path in pairs(card_atlases) do
