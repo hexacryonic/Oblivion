@@ -130,19 +130,21 @@ SMODS.Back{
 	end,
 }
 
--- Dummy tag used solely to hold the Instability tooltip
-SMODS.Tag {
-	key = "instability",
+-- Dummy Joker used solely to hold the Instability tooltip
+SMODS.Joker {
+	key = "instabilitytooltip",
 	no_collection = true,
 	unlocked = false,
-	discovered = false
+	discovered = false,
+	check_for_unlock = function() return false end,
+	in_pool = function() return false end,
 }
 
 SMODS.Back{
 	key = "c_plasma",
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
-			localize { type = 'name_text', key = 'tag_ovn_instability', set = 'Tag' },
+			localize { type = 'name_text', key = 'j_ovn_instabilitytooltip', set = 'Joker' },
 			localize { type = 'name_text', key = self.config.jokers[1], set = 'Joker' },
 			localize { type = 'name_text', key = self.config.consumables[1], set = 'Tarot' },
 			localize { type = 'name_text', key = self.config.consumables[2], set = 'Tarot' },

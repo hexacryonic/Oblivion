@@ -111,15 +111,6 @@ local loc =  {
 					"{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
 				}
 			},
-			-- Dummy tag; see items/5. CorruptDecks (Corrupted Plasma Deck)
-			tag_ovn_instability = {
-				name = "Instability",
-				text = {
-					"{C:ovn_corrupted}-0.05 {}after playing a hand",
-					"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
-					"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
-				}
-			},
 		}
 	},
 

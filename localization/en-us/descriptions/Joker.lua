@@ -152,5 +152,14 @@ return {
 			"and can be obtained multiple times",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gros Michel{}",
 		}
-	}
+	},
+	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
+	j_ovn_instabilitytooltip = {
+		name = "Instability",
+		text = {
+			"{C:ovn_corrupted}-0.05 {}after playing a hand",
+			"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
+			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
+		}
+	},
 }
