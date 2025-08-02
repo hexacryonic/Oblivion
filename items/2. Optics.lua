@@ -416,7 +416,7 @@ SMODS.Enhancement{
 SMODS.Enhancement{
 	key = "unob",
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card and card.ability.extra.repetitions or self.config.extra.repetitions }}
+		return { vars = { card.ability.extra.repetitions }}
 	end,
 
 	atlas = "opticenhance_atlas",
@@ -425,8 +425,8 @@ SMODS.Enhancement{
 	config = {extra = {repetitions = 1}},
 
 	calculate = function(self, card, context)
-
 	end,
+	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
 }
 
 local gu = Game.update

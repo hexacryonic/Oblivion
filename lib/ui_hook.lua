@@ -93,3 +93,22 @@ function create_UIBox_HUD()
 	end
 	return ret
 end
+
+local canplay_hook = G.FUNCS.can_play
+function G.FUNCS.can_play(e)
+	local has_unob = false
+	for _,selected_card in ipairs(G.hand.highlighted) do
+		local enhancement_key = selected_card.config.center.key
+		if enhancement_key == "m_ovn_unob" then
+			has_unob = true
+			break
+		end
+	end
+
+	if has_unob then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+	else
+		canplay_hook(e)
+	end
+end
