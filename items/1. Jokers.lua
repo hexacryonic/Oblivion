@@ -439,6 +439,21 @@ SMODS.Joker {
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
+
+	calculate = function (self, card, context)
+		if context.individual and context.cardarea == 'unscored' then
+			context.other_card.ability.perma_x_mult = (
+				(context.other_card.ability.perma_x_mult or 0)
+				+ card.ability.extra.xmult
+			)
+		end
+
+		if (
+			context.individual
+			and context.cardarea == G.play
+			and context.other_card.base.value == '10'
+		) then context.other_card.ability.perma_x_mult = 0 end
+	end
 }
 
 SMODS.Joker {
