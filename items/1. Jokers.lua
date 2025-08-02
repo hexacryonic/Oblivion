@@ -338,56 +338,81 @@ SMODS.Joker {
 
 	calculate = function(self, card, context)
 		if context.selling_self and not context.retrigger_joker and not context.blueprint then
-			for i = 2, #G.jokers.cards do
-				if G.jokers.cards[i] == card then
-
-					local left_joker = G.jokers.cards[i-1]
-					local left_joker_rarity = left_joker.config.center.rarity
-
-					-- greater than rarity or not corrupted
-					if not (
-						left_joker_rarity < 3
-						or left_joker_rarity == "ovn_corrupted"
-					) then break end
-
-					local save_file = G.PROFILES[G.SETTINGS.profile]
-					if not save_file.ovn_supply_drop then
-						local left_joker_key = left_joker.config.center.key
-						save_file.ovn_supply_drop = left_joker_key
-
-						add_simple_event('after', 0.1, function ()
-							left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
-						end)
-						card_eval_status_text(
-							card,
-							"extra",
-							nil,
-							nil,
-							nil,
-							{ message = localize("stored"), colour = G.C.DARK_EDITION }
-						)
+			if not G.PROFILES[G.SETTINGS.profile].ovn_supply_drop then
+				local card_index
+				for i = 2, #G.jokers.cards do
+					if G.jokers.cards[i] == card then
+						card_index = i
+						break
 					end
-					break
 				end
+
+				if not card_index then return end
+				local left_joker = G.jokers.cards[card_index-1]
+				local left_joker_rarity = left_joker.config.center.rarity
+
+				-- greater than rare or not corrupted
+				if not (
+					(type(left_joker_rarity) == "number" and left_joker_rarity < 3)
+					or left_joker_rarity == "ovn_corrupted"
+				) then return end
+
+				local save_file = G.PROFILES[G.SETTINGS.profile]
+				if not save_file.ovn_supply_drop then
+					local left_joker_key = left_joker.config.center.key
+					local left_joker_edition = left_joker.edition and left_joker.edition.key
+					local left_joker_stickers = {}
+					for sticker_key in pairs(SMODS.Stickers) do
+						if left_joker.ability[sticker_key] then
+							table.insert(left_joker_stickers, sticker_key)
+						end
+					end
+
+					save_file.ovn_supply_drop = left_joker_key
+					save_file.ovn_supply_drop_edition = left_joker_edition
+					save_file.ovn_supply_drop_sticker = left_joker_stickers
+
+					add_simple_event('after', 0.1, function ()
+						left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
+					end)
+					card_eval_status_text(
+						card,
+						"extra",
+						nil,
+						nil,
+						nil,
+						{ message = localize("stored"), colour = G.C.DARK_EDITION }
+					)
+				end
+			else
+				local save_file = G.PROFILES[G.SETTINGS.profile]
+
+				local stored_joker_key = save_file.ovn_supply_drop
+				local stored_joker_edition = save_file.ovn_supply_drop_edition
+				local stored_joker_sticker = save_file.ovn_supply_drop_sticker
+
+				local stored_card = SMODS.add_card{
+					set = 'Joker',
+					area = G.joker,
+					key = stored_joker_key,
+					edition = stored_joker_edition,
+					stickers = stored_joker_sticker
+				}
+
+				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop = nil
+				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop_edition = nil
+				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop_sticker = nil
+
+				return {
+					card_eval_status_text(stored_card, "extra", nil, nil, nil, {
+						message = localize("empty"),
+						colour = G.C.DARK_EDITION,
+					}),
+				}
 			end
 		end
 	end,
 
-	add_to_deck = function(self, card, from_debuff)
-		if from_debuff then return end
-		if not G.PROFILES[G.SETTINGS.profile].ovn_supply_drop then return end
-
-		local stored_card = create_card("Joker", G.joker, nil, nil, nil, nil, G.PROFILES[G.SETTINGS.profile].ovn_supply_drop)
-		stored_card:add_to_deck()
-		G.jokers:emplace(stored_card)
-		G.PROFILES[G.SETTINGS.profile].ovn_supply_drop = nil
-		return {
-			card_eval_status_text(stored_card, "extra", nil, nil, nil, {
-				message = localize("empty"),
-				colour = G.C.DARK_EDITION,
-			}),
-		}
-	end,
 }
 
 SMODS.Joker {
