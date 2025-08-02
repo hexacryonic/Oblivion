@@ -6,13 +6,13 @@ local add_simple_event = Ovn_f.add_simple_event
 
 SMODS.Rarity({
 	key = "corrupted",
-	loc_txt = {name = "Corrupted"},
 	badge_colour = HEX('2349cb'),
 })
 
-SMODS.Rarity({ -- Nyarlathotep (and W.D. Gaster with Cryptid) is internally classified as a separate rarity so that it can't appear in the usual Corrupted summoning pools
+-- Nyarlathotep (and W.D. Gaster with Cryptid) is internally classified as a separate rarity
+-- so that it can't appear in the usual Corrupted summoning pools
+SMODS.Rarity({
 	key = "supercorrupted",
-	loc_txt = {name = "Corrupted"},
 	badge_colour = HEX('2349cb'),
 })
 

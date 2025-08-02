@@ -107,11 +107,15 @@ local loc =  {
 
 	misc = {
 		labels = {
-			ovn_miasma = "Miasma"
+			ovn_miasma = "Miasma",
+			k_ovn_corrupted = "Corrupted",
+			k_ovn_supercorrupted = "Corrupted",
 		},
 		dictionary = {
 			stored = "Stored!",
 			empty = "Emptied!",
+			k_ovn_corrupted = "Corrupted",
+			k_ovn_supercorrupted = "Corrupted",
 		},
 		challenge_names = {
 			c_ovn_corrupt_world = "Corrupt World",
