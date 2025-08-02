@@ -42,6 +42,16 @@ local loc =  {
 					'into {C:ovn_corrupted}unique{} versions',
 				},
 			},
+			ovn_indigo_seal = {
+				name = "Indigo Seal",
+				text = {
+					"Creates a {C:spectral}Spectral {}card",
+					"when a Joker is corrupted",
+					"while this card is visible",
+                    "{C:inactive}(Must have room)",
+					"{S:1.1,C:red,E:2}self destructs{}"
+				}
+			},
 		},
 
 		Edition = {
@@ -110,6 +120,7 @@ local loc =  {
 			ovn_miasma = "Miasma",
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
+			ovn_indigo_seal = "Indigo Seal"
 		},
 		dictionary = {
 			stored = "Stored!",

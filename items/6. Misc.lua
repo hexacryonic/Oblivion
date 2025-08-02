@@ -297,3 +297,31 @@ SMODS.Consumable {
 		end)
 	end,
 }
+
+----
+
+SMODS.Seal {
+	key = 'indigo',
+	badge_colour = G.C.RED,
+	config = { extra = { is_destroyed = false } },
+	calculate = function(self, card, context)
+		if (
+			context.ovn_corruption_occurred
+			and context.ovn_corruption_type == "Joker"
+			and not card.ability.seal.extra.is_destroyed
+			and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
+			and card.area == G.hand
+		) then
+			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+			add_simple_event('before', 0, function ()
+				SMODS.add_card({ set = 'Spectral' })
+				card:juice_up(0.3, 0.5)
+				G.GAME.consumeable_buffer = 0
+				card.ability.seal.extra.is_destroyed = true
+
+				delay(0.5)
+				SMODS.destroy_cards(card)
+			end)
+		end
+	end
+}

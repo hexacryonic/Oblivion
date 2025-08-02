@@ -65,8 +65,14 @@ Ovn_f.corrupt_joker = function(card)
         corrupted_card.ability.extra.ovn_former_form = card_key
 		corrupted_card:calculate_joker{
 			ovn_corrupted_from = true,
-			former_form_key = card_key
+			ovn_former_form_key = card_key
 		}
+		SMODS.calculate_context({
+			ovn_corruption_occurred = true,
+			ovn_corruption_type = "Joker",
+			ovn_former_form_key = card_key,
+			ovn_corrupted_card = corrupted_card
+		})
 
         G.GAME.corruptingJoker = false
     end)
