@@ -432,7 +432,7 @@ SMODS.Joker {
 	cost = 4,
 
 	calculate = function (self, card, context)
-		if context.individual and context.cardarea == 'unscored' then
+		if context.individual and (context.cardarea == 'unscored' or context.cardarea == G.hand) then
 			context.other_card.ability.perma_x_mult = (
 				(context.other_card.ability.perma_x_mult or 0)
 				+ card.ability.extra.xmult
