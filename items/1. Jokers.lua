@@ -189,12 +189,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				chip_mod = card.ability.extra.chips,
-				message = localize {
-					type = 'variable',
-					key = 'a_chips',
-					vars = { card.ability.extra.chips }
-				}
+				chips = card.ability.extra.chips,
 			}
 		end
 	end
@@ -474,13 +469,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
 			return {
-				message = localize({
-					type = "variable",
-					key = "a_mult",
-					vars = { card.ability.extra.mult },
-				}),
-				colour = G.C.RED,
-				mult_mod = card.ability.extra.mult,
+				mult = card.ability.extra.mult,
 			}
 		end
 	end
@@ -504,13 +493,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
 			return {
-				message = localize({
-					type = "variable",
-					key = "a_chips",
-					vars = { card.ability.extra.chips },
-				}),
-				colour = G.C.BLUE,
-				chip_mod = card.ability.extra.chips,
+				chips = card.ability.extra.chips,
 			}
 		end
 	end
@@ -534,13 +517,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
 			return {
-				message = localize({
-					type = "variable",
-					key = "a_xmult",
-					vars = { card.ability.extra.mult },
-				}),
-				colour = G.C.RED,
-				Xmult_mod = card.ability.extra.mult,
+				xmult = card.ability.extra.mult,
 			}
 		end
 	end
@@ -597,12 +574,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				message = localize {
-					type = 'variable',
-					key = 'a_xmult',
-					vars = { card.ability.extra.Xmult }
-				},
-				Xmult_mod = card.ability.extra.Xmult
+				xmult = card.ability.extra.Xmult
 			}
 		end
 
@@ -663,15 +635,11 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.x_mult > 1 then
 			return {
-				message = localize({
-					type = "variable",
-					key = "a_xmult",
-					vars = { card.ability.extra.x_mult },
-				}),
-				Xmult_mod = card.ability.extra.x_mult,
+				xmult = card.ability.extra.x_mult,
 			}
+		end
 
-		elseif G.GAME.corruptingJoker and not context.blueprint then
+		if context.ovn_corruption_occurred and context.ovn_corruption_type == "Joker" then
 			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.extra
 			card_eval_status_text(card, "extra", nil, nil, nil, {
 				message = localize {
@@ -706,7 +674,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				Xmult_mod = card.ability.extra.Xmult
+				xmult = card.ability.extra.Xmult
 			}
 		end
 	end
