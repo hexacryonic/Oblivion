@@ -14,15 +14,25 @@ SMODS.Back{
 
 	calculate = function(self, card, context)
 		if context.after then add_simple_event(nil, nil, function ()
-			local _cards = {}
-			for _,hand_card in ipairs(G.hand.cards) do table.insert(_cards, hand_card) end
+			local any_selected = nil
+			local discarded_cards = {}
+			for _,hand_card in ipairs(G.hand.cards) do
+				table.insert(discarded_cards, hand_card)
+			end
 
-			for i = 1, 5 do if G.hand.cards[i] then
-				local selected_card, card_key = pseudorandom_element(_cards, pseudoseed("CRed"))
-				G.hand:add_to_highlighted(selected_card, true)
+			for i = 1, 5 do
+				if G.hand.cards[i] then
+					local selected_card, card_key = pseudorandom_element(discarded_cards, pseudoseed("CRed"))
+					G.hand:add_to_highlighted(selected_card, true)
+					table.remove(discarded_cards, card_key)
+					any_selected = true
+				end
+			end
+			
+			if any_selected then
+				delay(1.5)
 				G.FUNCS.discard_cards_from_highlighted(nil, true)
-				G.hand:unhighlight_all()
-			end end
+			end
 		end) end
 	end,
 }
