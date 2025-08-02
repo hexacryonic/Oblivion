@@ -78,7 +78,9 @@ Ovn_f.is_corruptbanished = function(key)
 	-- Do not continue if purification is occurring
 	if G.GAME.purifyingJoker then return false end
 
+	-- If show never ends is not held, continue
 	local has_tsne = Ovn_f.has_joker('j_ovn_showneverends')
+	if has_tsne then return false end
 
 	-- If the Joker is corruptable, continue
 	local corrupt_key = Oblivion.corruption_map[key]
@@ -87,9 +89,6 @@ Ovn_f.is_corruptbanished = function(key)
 	-- If its corruption is present, continue
 	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
 	if not has_corrupt_joker then return false end
-
-	-- If show never ends is not held, continue
-	if has_tsne then return false end
 
 	-- DIE
 	return true
