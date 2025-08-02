@@ -28,14 +28,12 @@ function Card:calculate_joker(context)
 			local aced_calc_value = calc_hook(self, context)
 			card_base.id = initial_id
 
-			print(regular_calc_value, aced_calc_value)
-			
 			-- one of them being nil implies a rank check
 			if not (regular_calc_value ~= nil and aced_calc_value ~= nil) then
 				return
 			end
 		end
-		
+
 		if card_base.id ~= 14 then return calc_hook(self, context) end
 
 		-- jackify, queenify, kingify
