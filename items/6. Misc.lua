@@ -256,7 +256,7 @@ SMODS.Consumable {
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 		return {vars = {self.config.max_highlighted}}
 	end,
-	config = {max_highlighted = 1},
+	config = {max_highlighted = 2},
 
 	atlas = "cataclysm_atlas",
 	pos = {x=2, y=0},
