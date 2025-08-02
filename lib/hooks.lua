@@ -93,7 +93,9 @@ function Card:update(dt)
 			and self.ability.extra.getting_corrupt_banished
 		) then
 			SMODS.destroy_cards(self)
-			if not self.ability.extra then self.ability.extra = {} end
+			if not self.ability.extra or type(self.ability.extra) ~= "table" then
+				self.ability.extra = {}
+			end
 			self.ability.extra.getting_corrupt_banished = true
 		end
 	end
