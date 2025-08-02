@@ -80,8 +80,8 @@ match_indent = true
 target = "functions/common_events.lua"
 pattern = "for _, v in ipairs(info_queue) do"
 position = "before"
-payload = '''for k, _ in pairs(Oblivion.corruption_map) do
-  if _c.key == k then
+payload = '''for j_key in pairs(Oblivion.corruption_map) do
+  if _c.key == j_key and Ovn_f.joker_is_corruptible(j_key) then
     info_queue[#info_queue+1] = {key = 'ovn_corruptible', set = 'Other'}
   end
 end
