@@ -147,10 +147,9 @@ return {
 		name = 'Aeon Cavendish',
 		text = {
 			"{X:mult,C:white} X#1# {} Mult",
-			"{C:green}#2# in #3#{} chance this",
-			"card is destroyed",
-			"at end of round",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Cavendish{}",
+			"{C:orange}Cavendish {}is no longer extinct",
+			"and can be obtained multiple times",
+			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gros Michel{}",
 		}
 	}
 }

@@ -75,7 +75,7 @@ SMODS.Blind({
 
 	in_pool = function()
 		for _,corrupt_key in pairs(Oblivion.corruption_map) do
-			if next(SMODS.find_card(corrupt_key)) then return true end
+			if Ovn_f.has_joker(corrupt_key) then return true end
 			return false
 		end
 	end,

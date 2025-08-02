@@ -672,12 +672,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'aeon',
-	config = { extra = { Xmult = 4, odds = 4 } },
+	config = { extra = { Xmult = 4} },
 	loc_vars = function(self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.j_cavendish)
 		return {vars = {
 			card.ability.extra.Xmult,
-			G.GAME.probabilities.normal or 1,
-			card.ability.extra.odds
 		}}
 	end,
 
@@ -692,43 +691,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				message = localize {
-					type = 'variable',
-					key = 'a_xmult',
-					vars = { card.ability.extra.Xmult }
-				},
 				Xmult_mod = card.ability.extra.Xmult
 			}
-		end
-
-		if context.end_of_round and context.game_over == false and not context.repetition and not context.blueprint then
-			local extinct_odds = G.GAME.probabilities.normal / card.ability.extra.odds
-			if pseudorandom('cultivar') >= extinct_odds then return { message = 'Safe!' } end
-
-			-- Odd is hit
-			add_simple_event(nil, nil, function ()
-				play_sound('tarot1')
-				card.T.r = -0.2
-				card:juice_up(0.3, 0.4)
-				card.states.drag.is = true
-				card.children.center.pinch.x = true
-
-				G.E_MANAGER:add_event(Event {
-					trigger = 'after',
-					delay = 0.3,
-					blockable = false,
-					func = function()
-						G.jokers:remove_card(card)
-						card:remove()
-						card = nil
-						return true;
-					end
-				})
-			end)
-
-			G.GAME.pool_flags.gros_michel_extinct = false
-			G.GAME.corruptiblemichel = true
-			return { message = 'Extinct!' }
 		end
 	end
 }
