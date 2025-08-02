@@ -90,6 +90,7 @@ function Card:update(dt)
 
 		if Ovn_f.is_corruptbanished(card_key) and not (
 			self.ability.extra
+			and type(self.ability.extra) == "table"
 			and self.ability.extra.getting_corrupt_banished
 		) then
 			SMODS.destroy_cards(self)
