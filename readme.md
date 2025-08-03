@@ -1,9 +1,9 @@
-An expansion to Balatro themed around an <span style="color:#4379cb">**otherworldly corruption**</span>!
-* Use many new <span style="color:#4379cb">**Corrupted Jokers**</span>, which act as sidegrades to existing Jokers.
-* Discover the special <span style="color:#7E41B6">**Optics**</span> suit that twists Enhancements and Seals, featuring the <span style="color:#7E41B6">**Spectrum**</span> hand types.
-* Test your mettle in <span style="color:#4379cb">**Corrupt Challenges**</span>, buffed versions of the 20 vanilla challenges for the truly daring.
-* <span style="color:#4379cb">**Corrupt Decks**</span> bend the rules of existing decks for a more uniquely challenging experience.
-* <span style="font-size:1.5em; color:#FE5F55">**[[REDACTED]]**</span>
+An expansion to Balatro themed around an **otherworldly corruption**!
+* Use many new **Corrupted Jokers**, which act as sidegrades to existing Jokers.
+* Discover the special **Optics** suit that twists Enhancements and Seals, featuring the **Spectrum** hand types.
+* Test your mettle in **Corrupt Challenges**, buffed versions of the 20 vanilla challenges for the truly daring.
+* **Corrupt Decks** bend the rules of existing decks for a more uniquely challenging experience.
+* **[[REDACTED]]**
 
 And more!
 
