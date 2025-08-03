@@ -52,6 +52,8 @@ function create_UIBox_buttons()
 	return b_uibox_hook()
 end
 
+----
+
 -- Add Instability to UI (thanks math)
 local cuih = create_UIBox_HUD
 function create_UIBox_HUD()
@@ -94,6 +96,8 @@ function create_UIBox_HUD()
 	return ret
 end
 
+----
+
 local canplay_hook = G.FUNCS.can_play
 function G.FUNCS.can_play(e)
 	local has_unob = false
@@ -105,10 +109,26 @@ function G.FUNCS.can_play(e)
 		end
 	end
 
-	if has_unob then
+	if has_unob or (
+		G.GAME.ovn_cghost_first_hand_drawn ~= nil
+		and not G.GAME.ovn_cghost_first_hand_drawn
+	) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
 	else
 		canplay_hook(e)
+	end
+end
+
+local candiscard_hook = G.FUNCS.can_discard
+function G.FUNCS.can_discard(e)
+	if (
+		G.GAME.ovn_cghost_first_hand_drawn ~= nil
+		and not G.GAME.ovn_cghost_first_hand_drawn
+	) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+	else
+		candiscard_hook(e)
 	end
 end
