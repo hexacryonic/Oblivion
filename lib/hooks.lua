@@ -174,3 +174,39 @@ SMODS.calculate_repetitions = function(card, context, reps)
 
 	return calcrep_hook(card, context, reps)
 end
+
+----
+
+local cardclick_hook = Card.click
+function Card:click()
+	-- Prevent card selection on C-Ghost Deck draw
+	if G.GAME.ovn_cghost_first_hand_drawn ~= nil then
+		if G.GAME.ovn_cghost_first_hand_drawn then
+			cardclick_hook(self)
+		end
+	else
+		cardclick_hook(self)
+	end
+end
+
+----
+
+local startrun_hook = Game.start_run
+function Game:start_run(args)
+	-- For use in C-Ghost deck
+	self.ovn_ghostspec = CardArea(
+		G.ROOM.T.x + 9,
+		G.ROOM.T.y,
+		G.CARD_W*1.1,
+		1.05*G.CARD_H,
+		{card_limit = 1, type = 'consumeable', highlight_limit = 0}
+	)
+	G.ovn_ghostspec = self.ovn_ghostspec
+	Ovn_f.add_simple_event(nil, nil, function()
+		-- C-Ghost anti-cheese :P
+		SMODS.calculate_context({
+			ovn_run_started = true
+		})
+	end)
+	startrun_hook(self, args)
+end

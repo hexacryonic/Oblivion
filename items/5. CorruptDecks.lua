@@ -122,37 +122,41 @@ SMODS.Back{
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
-		G.GAME.ovn_first_hand_drawn = false
-
-		G.ovn_ghostspec = CardArea(
-			G.ROOM.T.x + 9,
-			G.ROOM.T.y,
-			G.CARD_W*1.1,
-			1.05*G.CARD_H,
-			{card_limit = 1, type = 'consumeable', highlight_limit = 0}
-		)
+		G.GAME.ovn_cghost = true
+		G.GAME.ovn_cghost_first_hand_drawn = true
+		G.GAME.ovn_cghost_ghostspec = nil
 	end,
 
 	calculate = function(self, card, context)
 		if context.setting_blind then
-			G.GAME.ovn_first_hand_drawn = false
+			G.GAME.ovn_cghost_first_hand_drawn = false
 		end
 
-		if context.hand_drawn and not G.GAME.ovn_first_hand_drawn then
-			G.GAME.ovn_first_hand_drawn = true
+		if not G.GAME.ovn_cghost_first_hand_drawn and (
+			context.hand_drawn
+			or (context.ovn_run_started and G.STATE == G.STATES.SELECTING_HAND)
+		) then
 			local speclogic = Oblivion.spectral_logic
-			local valid_specs = {}
-			for spec_key, spec_info in pairs(speclogic) do
-				if spec_info.usable() and not next(SMODS.find_card(spec_key)) then
-					table.insert(valid_specs, spec_key)
+			local selected_spec
+
+			if not G.GAME.ovn_cghost_ghostspec then
+				local valid_specs = {}
+				for spec_key, spec_info in pairs(speclogic) do
+					if spec_info.usable() and not next(SMODS.find_card(spec_key)) then
+						table.insert(valid_specs, spec_key)
+					end
 				end
+
+				selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
+				G.GAME.ovn_cghost_ghostspec = selected_spec
+			else
+				selected_spec = G.GAME.ovn_cghost_ghostspec
 			end
 
-			local selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
 			local logic = speclogic[selected_spec]
 			print(selected_spec)
 			local selected_cards = {}
-			
+
 			if logic.select > 0 and #logic.select_area > 0 and logic.card_point_calc then
 				print("poopshit")
 				local point_list = {}
@@ -190,9 +194,6 @@ SMODS.Back{
 					area = G.ovn_ghostspec,
 					edition = 'e_negative'
 				}
-				spectral.states.click.can = false
-				spectral.states.hover.can = false
-				spectral.states.drag.can = false
 
 				local function use_event(is_selected)
 					local mu = is_selected and 0 or 1
@@ -203,6 +204,11 @@ SMODS.Back{
 							for _,area in ipairs(logic.select_area) do
 								G[area]:unhighlight_all()
 							end
+							add_simple_event('after', 2.5 - mu, function()
+								G.GAME.ovn_cghost_first_hand_drawn = true
+								G.GAME.ovn_cghost_ghostspec = nil
+								save_run()
+							end)
 						end)
 					end)
 				end
@@ -210,7 +216,8 @@ SMODS.Back{
 				if #selected_cards > 0 then
 					add_simple_event('after', 1, function()
 						for _,selected_card in ipairs(selected_cards) do
-							selected_card:click()
+							G.hand.config.highlighted_limit = G.hand.config.highlighted_limit + 1
+							selected_card.area:add_to_highlighted(selected_card)
 						end
 						use_event(true)
 					end)
