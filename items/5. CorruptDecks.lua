@@ -114,6 +114,99 @@ SMODS.Back{
 }
 
 SMODS.Back{
+	key = "c_ghost",
+	config = { spectral_rate = 6 },
+
+	atlas = "cdeck_atlas",
+	pos = { x = 2, y = 1 },
+
+	apply = function(self)
+		G.GAME.in_corrupt = true
+		G.GAME.ovn_first_hand_drawn = false
+	end,
+
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			G.GAME.ovn_first_hand_drawn = false
+		end
+
+		if context.hand_drawn and not G.GAME.ovn_first_hand_drawn then
+			G.GAME.ovn_first_hand_drawn = true
+			local speclogic = Oblivion.spectral_logic
+			local valid_specs = {}
+			for spec_key, spec_info in pairs(speclogic) do
+				if spec_info.usable() and not next(SMODS.find_card(spec_key)) then
+					table.insert(valid_specs, spec_key)
+				end
+			end
+
+			local selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
+			local logic = speclogic[selected_spec]
+			print(selected_spec)
+			local selected_cards = {}
+			
+			if logic.select > 0 and #logic.select_area > 0 and logic.card_point_calc then
+				print("poopshit")
+				local point_list = {}
+				local card_points = {} -- key number, value cards
+				for _,area in ipairs(logic.select_area) do
+					for _,area_card in ipairs(G[area].cards) do
+						local area_card_point = logic.card_point_calc(area_card)
+						if not card_points[area_card_point] then
+							card_points[area_card_point] = {}
+							table.insert(point_list, area_card_point)
+						end
+						table.insert(card_points[area_card_point], area_card)
+					end
+				end
+
+				table.sort(point_list)
+				local select_count = logic.select
+				while select_count > 0 do
+					local max_point = point_list[#point_list]
+					local point_cards = card_points[max_point]
+
+					local random_card,i = pseudorandom_element(point_cards, pseudoseed('c_ghost_pick'))
+					table.insert(selected_cards, random_card)
+
+					table.remove(point_cards, i)
+					if #point_cards == 0 then point_list[#point_list] = nil end
+					select_count = select_count - 1
+				end
+			end
+
+			add_simple_event(nil, nil, function()
+				local spectral = SMODS.add_card{
+					set = 'Spectral',
+					key = selected_spec,
+				}
+				local function use_event(is_selected)
+					local mu = is_selected and 0.5 or 0
+					add_simple_event('after', 1.5 - mu, function()
+						spectral:use_consumeable()
+						add_simple_event('after', 2 - mu, function()
+							SMODS.destroy_cards(spectral)
+							for _,area in ipairs(logic.select_area) do
+								G[area]:unhighlight_all()
+							end
+						end)
+					end)
+				end
+
+				if #selected_cards > 0 then
+					add_simple_event('after', 1, function()
+						for _,selected_card in ipairs(selected_cards) do
+							selected_card:click()
+						end
+						use_event(true)
+					end)
+				else use_event(false) end
+			end)
+		end
+	end,
+}
+
+SMODS.Back{
 	key = "c_painted",
 
 	atlas = "cdeck_atlas",

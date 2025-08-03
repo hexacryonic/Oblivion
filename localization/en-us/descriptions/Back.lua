@@ -35,6 +35,15 @@ return {
 			"At less than {C:money}$1{}, {C:mult}Game Over{}",
 		}
 	},
+	b_ovn_c_ghost = {
+		name = 'Corrupt Ghost Deck',
+		text = {
+			"{C:spectral}Spectral {}cards frequently",
+			"appear in the shop",
+			"When starting a round, a {C:attention}random",
+			"{C:spectral}Spectral {}card is used against you"
+		}
+	},
 	b_ovn_c_painted = {
 		name = 'Corrupt Painted Deck',
 		text = {
