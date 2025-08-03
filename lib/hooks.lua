@@ -196,7 +196,7 @@ function Game:start_run(args)
 	-- For use in C-Ghost deck
 	self.ovn_ghostspec = CardArea(
 		G.ROOM.T.x + 9,
-		G.ROOM.T.y,
+		G.ROOM.T.y*1.1,
 		G.CARD_W*1.1,
 		1.05*G.CARD_H,
 		{card_limit = 1, type = 'consumeable', highlight_limit = 0}

@@ -125,6 +125,7 @@ SMODS.Back{
 		G.GAME.ovn_cghost = true
 		G.GAME.ovn_cghost_first_hand_drawn = true
 		G.GAME.ovn_cghost_ghostspec = nil
+		G.GAME.ovn_cghost_pseudorandom = {}
 	end,
 
 	calculate = function(self, card, context)
@@ -139,6 +140,7 @@ SMODS.Back{
 			local speclogic = Oblivion.spectral_logic
 			local selected_spec
 
+			-- Ghostspec was not saved - grab one and save
 			if not G.GAME.ovn_cghost_ghostspec then
 				local valid_specs = {}
 				for spec_key, spec_info in pairs(speclogic) do
@@ -149,40 +151,51 @@ SMODS.Back{
 
 				selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
 				G.GAME.ovn_cghost_ghostspec = selected_spec
+			-- Ghostspec was saved - use it
 			else
+				print('N I C E   T R Y ,   P L A Y E R .')
 				selected_spec = G.GAME.ovn_cghost_ghostspec
 			end
 
 			local logic = speclogic[selected_spec]
-			print(selected_spec)
 			local selected_cards = {}
 
+			-- Figure out which cards to select, if any
 			if logic.select > 0 and #logic.select_area > 0 and logic.card_point_calc then
-				print("poopshit")
+				-- card_points indexes point_list in a sorted manner
 				local point_list = {}
 				local card_points = {} -- key number, value cards
+
+				-- Calculate each card's point value
 				for _,area in ipairs(logic.select_area) do
 					for _,area_card in ipairs(G[area].cards) do
 						local area_card_point = logic.card_point_calc(area_card)
 						if not card_points[area_card_point] then
 							card_points[area_card_point] = {}
-							table.insert(point_list, area_card_point)
 						end
+						table.insert(point_list, area_card_point)
 						table.insert(card_points[area_card_point], area_card)
 					end
 				end
 
+				-- Time to select cards
 				table.sort(point_list)
 				local select_count = logic.select
 				while select_count > 0 do
 					local max_point = point_list[#point_list]
 					local point_cards = card_points[max_point]
 
-					local random_card,i = pseudorandom_element(point_cards, pseudoseed('c_ghost_pick'))
+					-- Save pseudorandom values since rerolled between sessions
+					local pseudo_index = logic.select - select_count + 1
+					local pseudolist = G.GAME.ovn_cghost_pseudorandom
+					pseudolist[pseudo_index] = pseudolist[pseudo_index] or pseudoseed('c_ghost_pick')
+
+					-- Select card
+					local random_card,i = pseudorandom_element(point_cards, pseudolist[pseudo_index])
 					table.insert(selected_cards, random_card)
 
 					table.remove(point_cards, i)
-					if #point_cards == 0 then point_list[#point_list] = nil end
+					point_list[#point_list] = nil
 					select_count = select_count - 1
 				end
 			end
@@ -195,18 +208,24 @@ SMODS.Back{
 					edition = 'e_negative'
 				}
 
-				local function use_event(is_selected)
-					local mu = is_selected and 0 or 1
-					add_simple_event('after', 1.5 - mu, function()
+				-- god-awful requirement of timings
+				-- to prevent premature deselection crashing everything
+				local function use_event(is_selectcards)
+					local shorten = is_selectcards and 0 or 1
+
+					add_simple_event('after', 1.5 - shorten, function()
 						spectral:use_consumeable()
-						add_simple_event('after', 2 - mu, function()
+
+						add_simple_event('after', 2 - shorten, function()
 							SMODS.destroy_cards(spectral)
 							for _,area in ipairs(logic.select_area) do
 								G[area]:unhighlight_all()
 							end
-							add_simple_event('after', 2.5 - mu, function()
+
+							add_simple_event('after', 2.5 - shorten, function()
 								G.GAME.ovn_cghost_first_hand_drawn = true
 								G.GAME.ovn_cghost_ghostspec = nil
+								G.GAME.ovn_cghost_pseudorandom = {}
 								save_run()
 							end)
 						end)
@@ -221,7 +240,9 @@ SMODS.Back{
 						end
 						use_event(true)
 					end)
-				else use_event(false) end
+				else
+					use_event(false)
+				end
 			end)
 		end
 	end,

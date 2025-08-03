@@ -21,3 +21,12 @@ if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
     ovn_corrupted_card = card
 }
 ```
+
+This context is used when a run is started or loaded. It is sent by the `Game.start_run` hook.
+```lua
+if context.ovn_run_started then
+{
+    ovn_run_started = true,
+    -- Recommended to check G.STATE as well
+}
+```
