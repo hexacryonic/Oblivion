@@ -302,7 +302,7 @@ SMODS.Enhancement{
 		current_x_mult = 2,
 		is_melting = false
 	}},
-	
+
 	calculate = function(self,card,context)
 		local c_extra = card.ability.extra
 

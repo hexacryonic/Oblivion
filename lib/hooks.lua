@@ -60,7 +60,7 @@ function Card:is_face()
 	if has_pmo then
 		return self.base and self.base.id == 14 or false
 	end
-	
+
 	-- If nothing else
 	return is_face_hook(self)
 end

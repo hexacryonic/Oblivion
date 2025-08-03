@@ -1,3 +1,5 @@
+--[[ Shhhh
+
 local add_simple_event = Ovn_f.add_simple_event
 
 G.FUNCS.welcometohell = function()
@@ -18,12 +20,12 @@ G.FUNCS.welcometohell = function()
 			pitch_shift = 0.25,
 		}
 	end)
-	
+
 	add_simple_event('after', 2.6, function ()
 		text:pop_out(4)
 		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupted, contrast = 1}
 	end)
-	
+
 	G.GAME.win_ante = 9
 end
 
@@ -63,12 +65,12 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_Insecurity",
 	key = "insecurity",
-	
+
 	atlas = "cataclysm_atlas",
 	pos = {x=0, y=0},
 
 	cost = 2,
-	
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = ominous_consumable_badge()
 	end,
@@ -123,3 +125,5 @@ SMODS.Consumable {
 		ominous_consumable_consequence("recall", card)
 	end,
 }
+
+]]

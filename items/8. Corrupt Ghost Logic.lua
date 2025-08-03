@@ -9,7 +9,9 @@ local hold_enhancements = {
 
 speclogic['c_talisman'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -35,7 +37,9 @@ speclogic['c_talisman'] = {
 
 speclogic['c_aura'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         -- Aura cannot target cards with editions
         if card.edition then return end
@@ -63,7 +67,9 @@ speclogic['c_aura'] = {
 
 speclogic['c_deja_vu'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -87,7 +93,9 @@ speclogic['c_deja_vu'] = {
 
 speclogic['c_trance'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -111,7 +119,9 @@ speclogic['c_trance'] = {
 
 speclogic['c_medium'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -136,7 +146,9 @@ speclogic['c_medium'] = {
 
 speclogic['c_cryptid'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -161,7 +173,9 @@ speclogic['c_cryptid'] = {
 
 speclogic['c_ovn_oblivion'] = {
     select = 1,
-    select_area = {'hand', 'jokers'},
+    select_area = function()
+        return {G.hand, G.jokers}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -191,7 +205,9 @@ speclogic['c_ovn_oblivion'] = {
 
 speclogic['c_ovn_eidolon'] = {
     select = 1,
-    select_area = {'hand'},
+    select_area = function()
+        return {G.hand}
+    end,
     card_point_calc = function(card)
         local points = 0
         local function p_add(n) points = points + n end
@@ -209,7 +225,7 @@ speclogic['c_ovn_eidolon'] = {
 
 local default_state = {
     select = 0,
-    select_area = {},
+    select_area = function() return {} end,
     usable = function()
         return true
     end
@@ -217,7 +233,7 @@ local default_state = {
 
 local check_edition = {
     select = 0,
-    select_area = {},
+    select_area = function() return {} end,
     usable = function()
         for _,card in ipairs(G.jokers.cards) do
             if not card.edition then return true end
@@ -228,7 +244,7 @@ local check_edition = {
 
 local check_j_slots = {
     select = 0,
-    select_area = {},
+    select_area = function() return {} end,
     usable = function()
         return #G.jokers.cards < G.jokers.config.card_limit
     end

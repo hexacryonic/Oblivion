@@ -203,7 +203,7 @@ SMODS.Edition {
 			-- or retrigger Jokers
 			or (context.retrigger_joker_check and not context.retrigger_joker)
 		) then return { repetitions = self.config.retriggers } end
-		
+
 		-- Either corrupt or kill Joker
 		if context.after and context.cardarea == G.jokers then
 			-- Card is corruptable, proceed to corrupt
@@ -277,11 +277,11 @@ SMODS.Consumable {
 		if (#selected_jokers + #selected_playing_card - poopshit == 1) then
 			local lone_selected_joker_has_edition = #selected_jokers == 1 and selected_jokers[1].edition
 			local lone_selected_pcard_has_edition = #selected_playing_card == 1 and selected_playing_card[1].edition
-			
+
 			if lone_selected_joker_has_edition or lone_selected_pcard_has_edition then
 				return false
 			end
-			
+
 			return true
 		end
 	end,

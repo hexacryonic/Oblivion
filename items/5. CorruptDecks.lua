@@ -28,7 +28,7 @@ SMODS.Back{
 					any_selected = true
 				end
 			end
-			
+
 			if any_selected then
 				delay(1.5)
 				G.FUNCS.discard_cards_from_highlighted(nil, true)
@@ -159,16 +159,17 @@ SMODS.Back{
 
 			local logic = speclogic[selected_spec]
 			local selected_cards = {}
+			local select_areas = logic.select_area()
 
 			-- Figure out which cards to select, if any
-			if logic.select > 0 and #logic.select_area > 0 and logic.card_point_calc then
+			if logic.select > 0 and #select_areas > 0 and logic.card_point_calc then
 				-- card_points indexes point_list in a sorted manner
 				local point_list = {}
 				local card_points = {} -- key number, value cards
 
 				-- Calculate each card's point value
-				for _,area in ipairs(logic.select_area) do
-					for _,area_card in ipairs(G[area].cards) do
+				for _,area in ipairs(select_areas) do
+					for _,area_card in ipairs(area.cards) do
 						local area_card_point = logic.card_point_calc(area_card)
 						if not card_points[area_card_point] then
 							card_points[area_card_point] = {}
@@ -211,15 +212,15 @@ SMODS.Back{
 				-- god-awful requirement of timings
 				-- to prevent premature deselection crashing everything
 				local function use_event(is_selectcards)
-					local shorten = is_selectcards and 0 or 1
+					local shorten = is_selectcards and 0 or 0.75
 
 					add_simple_event('after', 1.5 - shorten, function()
 						spectral:use_consumeable()
 
 						add_simple_event('after', 2 - shorten, function()
 							SMODS.destroy_cards(spectral)
-							for _,area in ipairs(logic.select_area) do
-								G[area]:unhighlight_all()
+							for _,area in ipairs(select_areas) do
+								area:unhighlight_all()
 							end
 
 							add_simple_event('after', 2.5 - shorten, function()

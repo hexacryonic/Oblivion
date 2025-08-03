@@ -63,7 +63,7 @@ local tefdats = {
 		if Cryptid.enabled("set_cry_poker_hand_stuff") ~= true or Cryptid.enabled("c_cry_universe") ~= true then
 			return
 		end
-		
+
 		if #hand >= 65 then
 			local deck_booleans = {}
 			local scored_cards = {}

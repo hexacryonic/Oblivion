@@ -19,7 +19,7 @@ SMODS.Joker {
 
 	atlas = 'notcorrupted',
 	pos = { x = 0, y = 0 },
-	
+
 	blueprint_compat = false,
 	discovered = true,
 	unlocked = true,
@@ -147,7 +147,7 @@ SMODS.Consumable {
 				table.insert(deletable_jokers, held_joker)
 			end
 		end
-		
+
 		if #deletable_jokers > 0 then
 			add_simple_event(nil, nil, function ()
 				SMODS.destroy_cards(deletable_jokers)
@@ -179,13 +179,13 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 0 },
-	
+
 	blueprint_compat = true,
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 3,
-	
+
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -235,7 +235,7 @@ SMODS.Joker {
 		return { vars = { card.ability.extra.money } }
 	end,
 	config = { extra = { money = 1 } },
-	
+
 	atlas = 'corrupted',
 	pos = { x = 1, y = 0 },
 
@@ -293,7 +293,7 @@ SMODS.Joker {
 			G.GAME.yolo = true
 			return nil, true
 		end
-		
+
 		if context.individual and context.cardarea == G.play then
 			return {
 				x_mult = card.ability.extra.xmult,
@@ -301,13 +301,13 @@ SMODS.Joker {
 				card = card
 			}
 		end
-		
+
 		if G.GAME.yolo then
 			if G.GAME.current_round.hands_played > 0 and G.GAME.chips/G.GAME.blind.chips < 1 then
 				G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
 				return true
 			end
-			
+
 			if context.end_of_round and context.cardarea == G.jokers and not context.game_over then
 				G.GAME.yolo = false
 				return nil, true
@@ -456,7 +456,7 @@ SMODS.Joker {
 		return { vars = { center.ability.extra.xmult } }
 	end,
 	config = { extra = { xmult = 0.2 } },
-	
+
 	atlas = 'corrupted',
 	pos = { x = 0, y = 2 },
 
@@ -532,7 +532,7 @@ SMODS.Joker {
 		return { vars = { center.ability.extra.xmult } }
 	end,
 	config = { extra = { xmult = 4 } },
-	
+
 	atlas = 'corrupted',
 	pos = { x = 2, y = 1 },
 
