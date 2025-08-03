@@ -133,7 +133,7 @@ SMODS.Consumable {
 	cost = 4,
 
 	can_use = function(self, card)
-		return true
+		return #G.jokers.cards < G.jokers.config.card_limit
 	end,
 	use = function(self, card, area, copier)
 		local create_count = self.config.create
@@ -148,21 +148,19 @@ SMODS.Consumable {
 			end
 		end
 		
-		local _first_dissolve = nil
-
-		add_simple_event('before', 0.75, function ()
-			for _,deletable_joker in ipairs(deletable_jokers) do
-				deletable_joker:start_dissolve(nil, _first_dissolve)
-				_first_dissolve = true
-			end
+		add_simple_event(nil, nil, function ()
+			SMODS.destroy_cards(deletable_jokers)
 		end)
 
 		add_simple_event('after', 0.4, function ()
 			for _=1,jokers_to_create_count do
-				local new_card = create_card('Joker', G.jokers, nil , 'ovn_corrupted', nil, nil, nil, 'ovn_charybdis')
-				new_card:add_to_deck()
-				G.jokers:emplace(new_card)
-				new_card:start_materialize()
+				SMODS.add_joker{
+					set = 'Joker',
+					area = G.joker,
+					rarity = 'ovn_corrupted',
+					skip_materialize = false,
+					key_append = 'ovn_charybdis'
+				}
 				G.GAME.joker_buffer = 0
 			end
 		end)
