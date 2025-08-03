@@ -123,6 +123,14 @@ SMODS.Back{
 	apply = function(self)
 		G.GAME.in_corrupt = true
 		G.GAME.ovn_first_hand_drawn = false
+
+		G.ovn_ghostspec = CardArea(
+			G.ROOM.T.x + 9,
+			G.ROOM.T.y,
+			G.CARD_W*1.1,
+			1.05*G.CARD_H,
+			{card_limit = 1, type = 'consumeable', highlight_limit = 0}
+		)
 	end,
 
 	calculate = function(self, card, context)
@@ -179,9 +187,14 @@ SMODS.Back{
 				local spectral = SMODS.add_card{
 					set = 'Spectral',
 					key = selected_spec,
+					area = G.ovn_ghostspec
 				}
+				spectral.states.click.can = false
+				spectral.states.hover.can = false
+				spectral.states.drag.can = false
+
 				local function use_event(is_selected)
-					local mu = is_selected and 0.5 or 0
+					local mu = is_selected and 0 or 1
 					add_simple_event('after', 1.5 - mu, function()
 						spectral:use_consumeable()
 						add_simple_event('after', 2 - mu, function()

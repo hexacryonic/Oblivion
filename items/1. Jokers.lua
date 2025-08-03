@@ -532,7 +532,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'breach',
 	loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.mult } }
+		return { vars = { center.ability.extra.xmult } }
 	end,
 	config = { extra = { xmult = 4 } },
 	
