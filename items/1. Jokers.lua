@@ -148,13 +148,15 @@ SMODS.Consumable {
 			end
 		end
 		
-		add_simple_event(nil, nil, function ()
-			SMODS.destroy_cards(deletable_jokers)
-		end)
+		if #deletable_jokers > 0 then
+			add_simple_event(nil, nil, function ()
+				SMODS.destroy_cards(deletable_jokers)
+			end)
+		end
 
 		add_simple_event('after', 0.4, function ()
 			for _=1,jokers_to_create_count do
-				SMODS.add_joker{
+				SMODS.add_card{
 					set = 'Joker',
 					area = G.joker,
 					rarity = 'ovn_corrupted',
