@@ -187,7 +187,8 @@ SMODS.Back{
 				local spectral = SMODS.add_card{
 					set = 'Spectral',
 					key = selected_spec,
-					area = G.ovn_ghostspec
+					area = G.ovn_ghostspec,
+					edition = 'e_negative'
 				}
 				spectral.states.click.can = false
 				spectral.states.hover.can = false
