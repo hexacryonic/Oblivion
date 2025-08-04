@@ -236,7 +236,6 @@ SMODS.Back{
 				if #selected_cards > 0 then
 					add_simple_event('after', 1, function()
 						for _,selected_card in ipairs(selected_cards) do
-							G.hand.config.highlighted_limit = G.hand.config.highlighted_limit + 1
 							selected_card.area:add_to_highlighted(selected_card)
 						end
 						use_event(true)
