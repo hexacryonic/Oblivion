@@ -1,4 +1,7 @@
 local add_simple_event = Ovn_f.add_simple_event
+to_big = to_big or function(x)
+	return x
+end
 
 SMODS.Rarity({
 	key = "corrupted",
@@ -426,7 +429,7 @@ SMODS.Joker {
 		end
 
 		if G.GAME.yolo then
-			if G.GAME.current_round.hands_played > 0 and G.GAME.chips/G.GAME.blind.chips < 1 then
+			if G.GAME.current_round.hands_played > to_big(0) and G.GAME.chips/G.GAME.blind.chips < to_big(1) then
 				G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
 				return true
 			end
