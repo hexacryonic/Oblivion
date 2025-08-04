@@ -1,3 +1,4 @@
+--[[
 SMODS.ConsumableType {
 	key = "Mutation",
 	primary_colour = HEX("3598ef"),
@@ -80,3 +81,4 @@ SMODS.Consumable {
 	can_use = function(self, card) return true end,
 	use = function(self, card, area, copier) G.GAME.stonks = self.config.more end,
 }
+]]

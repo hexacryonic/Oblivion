@@ -148,7 +148,7 @@ return {
 		name = 'Aeon Cavendish',
 		text = {
 			"{X:mult,C:white} X#1# {} Mult",
-			"{C:orange}Cavendish {}is no longer extinct",
+			"{C:attention}Cavendish {}is no longer extinct",
 			"and can be obtained multiple times",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gros Michel{}",
 		}
