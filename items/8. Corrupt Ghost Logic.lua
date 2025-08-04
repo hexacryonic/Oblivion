@@ -265,7 +265,7 @@ speclogic['c_ovn_charybdis'] = check_j_slots
 
 speclogic['c_ankh'] = {
     select = 0,
-    select_area = {},
+    select_area = function() return {} end,
     usable = function()
         return 0 < #G.jokers.cards and #G.jokers.cards < G.jokers.config.card_limit
     end
