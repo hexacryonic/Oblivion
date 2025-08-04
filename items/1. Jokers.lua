@@ -757,7 +757,10 @@ SMODS.Joker {
 			G.GAME.corruptiblemichel = true
 			return { message = 'Extinct!' }
 		end
-	end
+	end,
+    in_pool = function(self, args)
+        return G.GAME.pool_flags.gros_michel_extinct
+    end
 }
 
 SMODS.Joker {
@@ -827,5 +830,8 @@ SMODS.Joker {
 				xmult = card.ability.extra.Xmult
 			}
 		end
-	end
+	end,
+    in_pool = function(self, args)
+        return G.GAME.corruptiblemichel
+    end
 }
