@@ -172,7 +172,7 @@ speclogic['c_cryptid'] = {
 }
 
 speclogic['c_ovn_oblivion'] = {
-    select = 1,
+    select = 2,
     select_area = function()
         return {G.hand, G.jokers}
     end,
