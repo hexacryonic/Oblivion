@@ -1,3 +1,14 @@
+local macro = {
+	p_ovn_wicked_normal = {
+		name = "Wicked Pack",
+		text = {
+			"Choose {C:attention}#1# {}of up to {C:attention}#2#",
+			"{C:ovn_corrupted}Corrupted {C:joker}Joker {}cards",
+			"or a {C:attention}#3#"
+		}
+	}
+}
+
 local loc =  {
 	descriptions = {
 		Mod = {
@@ -51,6 +62,9 @@ local loc =  {
                     "{C:inactive}(Must have room)",
 				}
 			},
+			p_ovn_wicked_normal_1 = macro.p_ovn_wicked_normal,
+			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
+			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal
 		},
 
 		Edition = {
@@ -74,7 +88,8 @@ local loc =  {
 			c_ovn_abyss = {
 				name = 'The Abyss',
 				text = {
-					"{C:ovn_corrupted}Corrupt{} a selected {C:attention}Corruptible Joker{}"
+					"{C:ovn_corrupted}Corrupt{} a selected",
+					"{C:attention}Corruptible Joker{}"
 				}
 			},
 			c_ovn_perception = {
@@ -111,6 +126,37 @@ local loc =  {
 					"{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
 				}
 			},
+			tag_ovn_miasmatag = {
+				name = 'Miasma Tag',
+				text = {
+					"Next base edition shop",
+					"Joker is free and",
+					"becomes {C:ovn_corrupted}Miasma"
+				}
+			},
+			tag_ovn_stygiantag = {
+				name = 'Styigan Tag',
+				text = {
+					"Gives a free",
+					"{C:ovn_corrupted}Wicked Pack"
+				}
+			},
+		},
+		Voucher = {
+			v_ovn_wicked_invocation = {
+				name = 'Wicked Invocation',
+				text = {
+					"{C:ovn_corrupted}Wicked Packs {}now",
+					"appear in the shop",
+				}
+			},
+			v_ovn_call_of_the_void = {
+				name = 'Call of the Void',
+				text = {
+					"{C:ovn_corrupted}Corrupted Jokers {}now",
+					"appear in the shop"
+				}
+			}
 		}
 	},
 
@@ -126,6 +172,7 @@ local loc =  {
 			empty = "Emptied!",
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
+			k_ovn_wicked_pack = "Wicked Pack",
 		},
 		challenge_names = {
 			c_ovn_corrupt_world = "Corrupt World",

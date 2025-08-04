@@ -3,6 +3,17 @@ local add_simple_event = Ovn_f.add_simple_event
 SMODS.Rarity({
 	key = "corrupted",
 	badge_colour = HEX('2349cb'),
+	default_weight = 0,
+    get_weight = function(self, weight, object_type)
+        return (
+			G.GAME.used_vouchers.v_ovn_call_of_the_void
+			and 0.25
+			or 0
+		)
+    end,
+	pools = {
+		["Joker"] = true
+	}
 })
 
 -- Nyarlathotep (and W.D. Gaster with Cryptid) is internally classified as a separate rarity
@@ -45,6 +56,8 @@ SMODS.Joker {
 		end
 	end,
 }
+
+----
 
 SMODS.Consumable {
 	set = "Tarot",
@@ -170,6 +183,117 @@ SMODS.Consumable {
 	end,
 }
 
+----
+
+local function booster_wicked_normal(num)
+	SMODS.Booster {
+		key = "wicked_normal_" .. num,
+		kind = 'ovn_Wicked',
+		group_key = 'k_ovn_wicked_pack',
+		loc_vars = function(self, info_queue, card)
+			table.insert(info_queue, G.P_CENTERS['c_ovn_abyss'])
+			return {
+				vars = {
+					card.ability.choose,
+					card.ability.extra - 1,
+					localize { type = 'name_text', key = 'c_ovn_abyss', set = 'Tarot' }
+				}
+			}
+		end,
+
+		atlas = 'cboosters_atlas',
+		pos = {x=num - 1, y=0},
+
+		config = { extra = 4, choose = 1 },
+		weight = 0,
+		cost = 6,
+
+		particles = function(self)
+			G.booster_pack_sparkles = Particles(1, 1, 0, 0, {
+				timer = 0.015,
+				scale = 0.1,
+				initialize = true,
+				lifespan = 2,
+				speed = 1.5,
+				padding = 1,
+				attach = G.ROOM_ATTACH,
+				colours = {
+					G.ARGS.LOC_COLOURS.ovn_corrupted,
+					G.ARGS.LOC_COLOURS.ovn_mutation,
+					G.ARGS.LOC_COLOURS.ovn_indigo,
+				},
+				fill = true
+			})
+			G.booster_pack_sparkles.fade_alpha = 1
+			G.booster_pack_sparkles:fade(1, 0)
+		end,
+
+		ease_background_colour = function(self)
+			ease_colour(G.C.DYN_UI.MAIN, lighten(G.ARGS.LOC_COLOURS.ovn_corrupt1, 0.2))
+			ease_background_colour{
+				new_colour = darken(G.ARGS.LOC_COLOURS.ovn_corrupt1, 0.5),
+				contrast = 1
+			}
+		end,
+
+		create_card = function(self, card, i)
+			local _card
+			if i == 1 then
+				_card = {
+					set = "Tarot",
+					area = G.pack_cards,
+					skip_materialize = true,
+					key = 'c_ovn_abyss'
+				}
+			else
+				_card = {
+					set = "Joker",
+					area = G.pack_cards,
+					skip_materialize = true,
+					rarity = 'ovn_corrupted',
+					key_append = 'ovn_wicked_pack'
+				}
+			end
+			return _card
+		end,
+	}
+end
+
+booster_wicked_normal(1)
+booster_wicked_normal(2)
+booster_wicked_normal(3)
+
+SMODS.Voucher {
+	key = "wicked_invocation",
+
+	atlas = "voucher_atlas",
+	pos = {x=0, y=0},
+	cost = 10,
+
+	redeem = function(self, card)
+		add_simple_event(nil, nil, function()
+			G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0.6
+		end)
+	end,
+}
+
+SMODS.Voucher {
+	key = "call_of_the_void",
+	requires = {'v_ovn_wicked_invocation'},
+
+	atlas = "voucher_atlas",
+	pos = {x=1, y=0},
+	cost = 10,
+
+	redeem = function(self, card)
+		G.GAME.ovn_corrupted_mod = 2
+	end
+}
+
+----
+
 SMODS.Joker {
 	key = 'darkjoker',
 	loc_vars = function(self, info_queue, card)
@@ -194,7 +318,6 @@ SMODS.Joker {
 		end
 	end
 }
-
 SMODS.Joker {
 	key = 'lucasseries',
 	loc_vars = function(self, info_queue, center)

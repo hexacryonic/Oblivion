@@ -123,7 +123,6 @@ SMODS.Blind({
 
 SMODS.Tag({
 	key = "corrtag",
-	config = { type = "store_joker_create" },
 
 	atlas = "ctags_atlas",
 	pos = { x = 0, y = 0 },
@@ -166,6 +165,68 @@ SMODS.Tag({
 		end
 	end,
 })
+
+SMODS.Tag({
+	key = "miasmatag",
+
+	atlas = "ctags_atlas",
+	pos = { x = 1, y = 0 },
+
+	min_ante = 2,
+
+	apply = function(self, tag, context)
+		if context.type == 'store_joker_modify' then
+			if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+				local lock = tag.ID
+				G.CONTROLLER.locks[lock] = true
+				context.card.temp_edition = true
+				tag:yep('+', G.C.DARK_EDITION, function()
+					context.card.temp_edition = nil
+					context.card:set_edition({ ovn_miasma = true }, true)
+					context.card.ability.couponed = true
+					context.card:set_cost()
+					G.CONTROLLER.locks[lock] = nil
+					return true
+				end)
+				tag.triggered = true
+				return true
+			end
+		end
+	end,
+})
+
+SMODS.Tag({
+	key = "stygiantag",
+
+	atlas = "ctags_atlas",
+	pos = { x = 3, y = 0 },
+
+	min_ante = 2,
+
+	apply = function(self, tag, context)
+		if context.type == 'new_blind_choice' then
+			local lock = tag.ID
+			G.CONTROLLER.locks[lock] = true
+			tag:yep('+', G.C.PURPLE, function()
+				local booster = SMODS.create_card { key = 'p_ovn_wicked_normal_' .. math.random(1, 3), area = G.play }
+				booster.T.x = G.play.T.x + G.play.T.w / 2 - G.CARD_W * 1.27 / 2
+				booster.T.y = G.play.T.y + G.play.T.h / 2 - G.CARD_H * 1.27 / 2
+				booster.T.w = G.CARD_W * 1.27
+				booster.T.h = G.CARD_H * 1.27
+				booster.cost = 0
+				booster.from_tag = true
+				G.FUNCS.use_card({ config = { ref_table = booster } })
+				booster:start_materialize()
+				G.CONTROLLER.locks[lock] = nil
+				return true
+			end)
+			tag.triggered = true
+			return true
+		end
+	end
+})
+
+----
 
 SMODS.Edition {
 	key = "miasma",
@@ -317,7 +378,7 @@ SMODS.Consumable {
 
 	use = function(self, card, area, copier)
 		-- Modified version of VanillaRemade Deja Vu implementation
-        local converted_card = G.hand.highlighted[1]
+		local converted_card = G.hand.highlighted[1]
 
 		add_simple_event(nil, nil, function ()
 			play_sound('tarot1')
