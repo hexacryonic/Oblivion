@@ -332,29 +332,31 @@ SMODS.Consumable {
 		local selected_jokers = G.jokers.highlighted
 		local selected_playing_card = G.hand.highlighted
 
-		-- idk what the value in poopshit is for -oin
-		local poopshit = selected_playing_card[1] and selected_playing_card[1] == self and 1 or 0
+		local exclude_self = G.consumeables.highlighted[1] == self and 1 or 0
+		if (#selected_jokers + #selected_playing_card - exclude_self ~= card.ability.max_highlighted) then return false end
 
-		if (#selected_jokers + #selected_playing_card - poopshit == 1) then
-			local lone_selected_joker_has_edition = #selected_jokers == 1 and selected_jokers[1].edition
-			local lone_selected_pcard_has_edition = #selected_playing_card == 1 and selected_playing_card[1].edition
-
-			if lone_selected_joker_has_edition or lone_selected_pcard_has_edition then
-				return false
-			end
-
-			return true
+		local has_edition = false
+		for _,joker in ipairs(selected_jokers) do
+			if joker.edition then has_edition = true end
 		end
+		for _,playing_card in ipairs(selected_playing_card) do
+			if playing_card.edition then has_edition = true end
+		end
+
+		return not has_edition
 	end,
 
 	use = function(self, card, area, copier)
-		local target_cardarea = #G.jokers.highlighted == 1 and G.jokers or G.hand
-		local target_card = target_cardarea.highlighted[1]
+		local selected_cards = {}
+		for _,joker in ipairs(G.jokers.highlighted) do table.insert(selected_cards, joker) end
+		for _,playing_card in ipairs(G.hand.highlighted) do table.insert(selected_cards, playing_card) end
 		add_simple_event(nil, nil, function ()
-			play_sound('tarot1')
-			target_card:set_edition({ ovn_miasma = true })
-			target_card:juice_up(0.3, 0.5)
-			target_cardarea:remove_from_highlighted(target_card)
+			for _,target_card in ipairs(selected_cards) do
+				play_sound('tarot1')
+				target_card:set_edition({ ovn_miasma = true })
+				target_card:juice_up(0.3, 0.5)
+				target_card.area:remove_from_highlighted(target_card)
+			end
 		end)
 	end,
 }
