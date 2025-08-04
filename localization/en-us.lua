@@ -135,7 +135,7 @@ local loc =  {
 				}
 			},
 			tag_ovn_stygiantag = {
-				name = 'Styigan Tag',
+				name = 'Stygian Tag',
 				text = {
 					"Gives a free",
 					"{C:ovn_corrupted}Wicked Pack"
