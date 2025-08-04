@@ -424,7 +424,7 @@ SMODS.Joker {
 		end
 
 		if G.GAME.yolo then
-			if G.GAME.current_round.hands_played > to_big(0) and G.GAME.chips/G.GAME.blind.chips < to_big(1) then
+			if to_big(G.GAME.current_round.hands_played) > to_big(0) and to_big(G.GAME.chips/G.GAME.blind.chips) < to_big(1) then
 				G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
 				return true
 			end
