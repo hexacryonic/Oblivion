@@ -121,12 +121,7 @@ SMODS.Consumable {
 		Ovn_f.corrupt_joker(selected_card)
 
 		G.GAME.justcorrupted = nil
-		if G.GAME.in_corrupt_plasma then
-			add_simple_event('after', 0.7, function()
-				play_sound("ovn_increment", 1, 0.9)
-				G.GAME.instability = (G.GAME.instability + G.GAME.corrumod)
-			end)
-		end
+		Ovn_f.corruption_instability(1)
 	end,
 }
 

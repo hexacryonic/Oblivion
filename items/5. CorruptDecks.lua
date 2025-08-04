@@ -313,11 +313,6 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		if context.after then
-			add_simple_event('immediate', 0.0, function ()
-				play_sound("ovn_decrement", 1, 0.8)
-				G.GAME.instability = (G.GAME.instability - 0.05)
-			end)
-		end
+		if context.after then Ovn_f.increase_instability(-0.05) end
 	end,
 }

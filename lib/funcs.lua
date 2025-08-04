@@ -176,3 +176,29 @@ Ovn_f.purify_enhancement = function(card)
 		end)
 	end
 end
+
+----
+
+Ovn_f.increase_instability = function(amount)
+	if not G.GAME.in_corrupt_plasma then return end
+	add_simple_event('after', 0.5, function ()
+		if amount < 0 then
+			play_sound("ovn_decrement", 1, 0.8)
+		elseif amount > 0 then
+			play_sound("ovn_increment", 1, 0.9)
+		end
+		G.GAME.instability = G.GAME.instability + amount
+	end)
+end
+
+Ovn_f.corruption_instability = function(factor)
+	if G.GAME.in_corrupt_plasma then
+		Ovn_f.increase_instability((G.GAME.corrumod or 0)*factor)
+	end
+end
+
+Ovn_f.optic_instability = function(factor)
+	if G.GAME.in_corrupt_plasma then
+		Ovn_f.increase_instability((G.GAME.opticmod or 0)*factor)
+	end
+end

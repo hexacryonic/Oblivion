@@ -270,11 +270,7 @@ SMODS.Edition {
 			-- Card is corruptable, proceed to corrupt
 			if Ovn_f.joker_is_corruptible(card.config.center.key) then
 				Ovn_f.corrupt_joker(card)
-
-				if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.7, function ()
-					play_sound("ovn_increment", 1, 0.9)
-					G.GAME.instability = (G.GAME.instability + G.GAME.corrumod)
-				end) end
+				Ovn_f.corruption_instability(1)
 
 			-- Card cannot be corrupted, self-destruct
 			else
@@ -299,11 +295,7 @@ SMODS.Edition {
 					card:set_edition(nil)
 					card:change_suit('ovn_Optics')
 				end)
-
-				if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.2, function ()
-					play_sound("ovn_increment", 1, 0.9)
-					G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #G.hand.highlighted))
-				end) end
+				Ovn_f.optic_instability(#G.hand.highlighted)
 			end
 		end
 	end,

@@ -39,7 +39,7 @@ target = "functions/common_events.lua"
 pattern = '''if vals.handname and G.GAME.current_round.current_hand.handname ~= vals.handname then'''
 position = "before"
 payload = '''
-if vals.inst and G.GAME.current_round.current_hand.inst ~= vals.inst then
+if vals.inst and G.GAME.current_round.current_hand.inst ~= vals.inst and G.GAME.in_corrupt_plasma then
     local delta = (type(vals.inst) == 'number' and type(G.GAME.current_round.current_hand.inst) == 'number')and (vals.inst - G.GAME.current_round.current_hand.inst) or 0
     if delta < 0 then delta = ''..delta; col = G.C.RED
     elseif delta > 0 then delta = '+'..delta

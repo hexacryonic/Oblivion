@@ -480,11 +480,7 @@ SMODS.Consumable {
 			end)
 		end
 
-		if G.GAME.in_corrupt_plasma then add_simple_event('after', 0.2, function()
-			play_sound("ovn_increment", 1, 0.9)
-			G.GAME.instability = (G.GAME.instability + (G.GAME.opticmod * #all_highlighted_cards))
-		end) end
-
+		Ovn_f.optic_instability(#all_highlighted_cards)
 		add_simple_event('after', 0.2, function() G.hand:unhighlight_all() end)
 
 		delay(0.5)
