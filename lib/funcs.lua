@@ -193,12 +193,12 @@ end
 
 Ovn_f.corruption_instability = function(factor)
 	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.corrumod or 0)*factor)
+		Ovn_f.increase_instability((G.GAME.corrumod or 0)*(factor or 1))
 	end
 end
 
 Ovn_f.optic_instability = function(factor)
 	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.opticmod or 0)*factor)
+		Ovn_f.increase_instability((G.GAME.opticmod or 0)*(factor or 1))
 	end
 end

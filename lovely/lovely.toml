@@ -159,3 +159,26 @@ if Ovn_f.is_corruptbanished(v.key) then add = nil end
 if v.key == 'j_cavendish' and Ovn_f.has_joker('j_ovn_aeon') then add = true end
 '''
 match_indent = true
+
+# Increase instability when corrupted Joker from booster pack is bought
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "elseif card.ability.set == 'Booster' then"
+position = "before"
+payload = '''
+local card_key = card.config.center.key
+if Ovn_f.joker_is_purifiable(card_key) then
+  Ovn_f.corruption_instability(1)
+end
+'''
+match_indent = true
+
+# Increase instability when card created via copying
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "copy_card(rightmost, G.hand.highlighted[i])"
+position = "after"
+payload = "Ovn_f.optic_instability(1)"
+match_indent = true
