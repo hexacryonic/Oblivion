@@ -180,5 +180,5 @@ match_indent = true
 target = "card.lua"
 pattern = "copy_card(rightmost, G.hand.highlighted[i])"
 position = "after"
-payload = "Ovn_f.optic_instability(1)"
+payload = "if rightmost.base.suit == 'ovn_Optics' then Ovn_f.optic_instability(1) end"
 match_indent = true
