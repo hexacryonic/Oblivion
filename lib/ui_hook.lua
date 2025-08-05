@@ -49,7 +49,7 @@ local b_uibox_hook_c_red = function()
 		[".sorthand_button__text"] = { scale = text_scale*0.7, colour = G.C.UI.TEXT_LIGHT }
 	}
 
-	local poopshit =
+	local hand_sort_options =
 	{"column", class="other_actions", {
 		{"row", class="row_styles", {
 			{"row", class="row_styles", {
@@ -89,7 +89,7 @@ local b_uibox_hook_c_red = function()
 	local jtml =
 	{"root", class="playdiscard_root", {
 		G.SETTINGS.play_button_pos == 1 and discard_button or play_button,
-		poopshit,
+		hand_sort_options,
 		G.SETTINGS.play_button_pos == 1 and play_button or discard_button,
 	}}
 
