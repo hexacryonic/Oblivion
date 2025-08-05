@@ -180,7 +180,7 @@ end
 ----
 
 Ovn_f.increase_instability = function(amount)
-	if not G.GAME.in_corrupt_plasma then return end
+	if not G.GAME.in_corrupt_plasma or amount == 0 then return end
 	add_simple_event('after', 0.5, function ()
 		if amount < 0 then
 			play_sound("ovn_decrement", 1, 0.8)
