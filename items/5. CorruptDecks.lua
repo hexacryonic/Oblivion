@@ -64,14 +64,17 @@ SMODS.Back{
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
+		G.GAME.in_corrupt_yellow = true
 		G.GAME.cy_dollarsperante = 120
 		G.GAME.cy_handcost = 10
 		G.GAME.cy_discardcost = 5
 		G.GAME.modifiers.money_per_hand = 0
 		G.GAME.round_resets.hands = G.GAME.cy_handcost
 		G.GAME.round_resets.discards = G.GAME.cy_discardcost
-		G.GAME.current_round.hands_left = G.GAME.cy_handcost
-		G.GAME.current_round.discards_left = G.GAME.cy_discardcost
+		G.GAME.c_yellow_current_round = {
+			hands_cost = "$" .. G.GAME.cy_handcost,
+			discard_cost = "$" .. G.GAME.cy_discardcost
+		}
 		G.GAME.cy_gaveantemoney = false
 		ease_dollars(G.GAME.cy_dollarsperante)
 		G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
@@ -79,9 +82,6 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		G.GAME.current_round.hands_left = G.GAME.cy_handcost
-		G.GAME.current_round.discards_left = G.GAME.cy_discardcost
-
 		if context.before then
 			ease_dollars(-G.GAME.cy_handcost)
 			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - G.GAME.cy_handcost
@@ -95,9 +95,13 @@ SMODS.Back{
 		end
 
 		if G.GAME.round_resets.blind_states.Boss == 'Defeated' and not G.GAME.cy_gaveantemoney then
-			G.GAME.cy_handcost = math.floor(G.GAME.cy_handcost * 1.25)
-			G.GAME.cy_discardcost = math.floor(G.GAME.cy_discardcost * 1.25)
-			ease_dollars(G.GAME.cy_dollarsperante)
+			add_simple_event(nil, nil, function()
+				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25))
+				delay(0.75)
+				Ovn_f.ease_discard_cost(math.floor(G.GAME.cy_discardcost * 1.25))
+				delay(1)
+				ease_dollars(G.GAME.cy_dollarsperante)
+			end)
 			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
 			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
 			G.GAME.cy_gaveantemoney = true

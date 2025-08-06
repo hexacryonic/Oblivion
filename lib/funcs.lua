@@ -202,3 +202,88 @@ Ovn_f.optic_instability = function(factor)
 		Ovn_f.increase_instability((G.GAME.opticmod or 0)*(factor or 1))
 	end
 end
+
+----
+-- Primarily used in C-Yellow Deck
+
+Ovn_f.ease_hand_cost = function(amount, instant)
+	if not G.GAME.in_corrupt_yellow then return end
+	local _mod = function(mod)
+		local hand_UI = G.HUD:get_UIE_by_ID('hand_UI_count')
+		mod = mod or 0
+		local text = '+'
+		local col = G.C.MONEY
+		if mod < 0 then
+			text = ''
+			col = G.C.RED
+		end
+
+		--Ease from current chips to the new number of chips
+		G.GAME.cy_handcost = G.GAME.cy_handcost + mod
+		G.GAME.c_yellow_current_round.hands_cost =  "$" .. G.GAME.cy_handcost
+		hand_UI.config.object:update()
+		G.HUD:recalculate()
+
+		--Popup text next to the chips in UI showing number of chips gained/lost
+		attention_text({
+			text = text..mod,
+			scale = 0.8,
+			hold = 0.7,
+			cover = hand_UI.parent,
+			cover_colour = col,
+			align = 'cm',
+		})
+
+		--Play a chip sound
+		play_sound('coin6')
+	end
+
+	if instant then
+		_mod(amount)
+	else
+		add_simple_event('immediate', nil, function()
+			_mod(amount)
+		end)
+	end
+end
+
+Ovn_f.ease_discard_cost = function(amount, instant)
+	if not G.GAME.in_corrupt_yellow then return end
+	local _mod = function(mod)
+		local discard_UI = G.HUD:get_UIE_by_ID('discard_UI_count')
+		mod = mod or 0
+		local text = '+'
+		local col = G.C.MONEY
+		if mod < 0 then
+			text = ''
+			col = G.C.RED
+		end
+
+		--Ease from current chips to the new number of chips
+		G.GAME.cy_discardcost = G.GAME.cy_discardcost + mod
+		G.GAME.c_yellow_current_round.discard_cost =  "$" .. G.GAME.cy_discardcost
+		discard_UI.config.object:update()
+		G.HUD:recalculate()
+
+		--Popup text next to the chips in UI showing number of chips gained/lost
+		attention_text({
+			text = text..mod,
+			scale = 0.8,
+			hold = 0.7,
+			cover = discard_UI.parent,
+			cover_colour = col,
+			align = 'cm',
+		})
+
+		--Play a chip sound
+		play_sound('coin6')
+	end
+
+	if instant then
+		_mod(amount)
+	else
+		add_simple_event('immediate', nil, function()
+			_mod(amount)
+		end)
+	end
+end
