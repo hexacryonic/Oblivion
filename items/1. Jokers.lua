@@ -35,6 +35,7 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 
 	blueprint_compat = false,
+	eternal_compat = false,
 	discovered = true,
 	unlocked = true,
 	rarity = 2,

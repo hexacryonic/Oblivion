@@ -135,10 +135,10 @@ SMODS.PokerHand{ -- Straight Spectrum (yoink)
 		local is_royal = true
 		for _, scoring_card in ipairs(scoring_hand) do
 			local rank = SMODS.Ranks[scoring_card.base.value]
-			is_royal = is_royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
+			is_royal = is_royal and (rank.key == 'Ace' or rank.key == '10' or rank.face) or false
 		end
 		if is_royal then
-			return self.key .. ' (Royal)'
+			return 'ovn_Royal Spectrum'
 		end
 	end
 }

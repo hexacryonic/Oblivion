@@ -17,7 +17,7 @@ return {
 		name = 'Oblivion',
 		text = {
 			"Add {C:ovn_corrupted}Miasma{} {C:attention}Edition{} to",
-			"{C:attention}#1#{} selected playing card or {C:attention}Joker{}"
+			"{C:attention}#1#{} selected playing cards or {C:attention}Joker{}"
 		}
 	},
 	c_ovn_eidolon = {
