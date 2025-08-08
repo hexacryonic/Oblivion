@@ -367,9 +367,8 @@ SMODS.Joker {
 	cost = 8,
 
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			local scored_card = context.other_card
-			local scored_card_rank = SMODS.Ranks[scored_card.base.value].key
+		if context.individual and context.cardarea == G.play and context.other_card then
+			local scored_card_rank = SMODS.Ranks[context.other_card.base.value].key
 
 			for _,held_card in ipairs(G.hand.cards) do
 				local held_card_rank = held_card.base.value
@@ -425,8 +424,9 @@ SMODS.Joker {
 
 		if G.GAME.yolo then
 			if to_big(G.GAME.current_round.hands_played) > to_big(0) and to_big(G.GAME.chips/G.GAME.blind.chips) < to_big(1) then
-				G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
-				return true
+				G.STATE = G.STATES.GAME_OVER
+				G.STATE_COMPLETE = false
+				return nil, true
 			end
 
 			if context.end_of_round and context.cardarea == G.jokers and not context.game_over then
@@ -590,7 +590,7 @@ SMODS.Joker {
 		if context.indivual and context.other_card.base.value == '10' then
 			local c_ability = context.other_card.ability
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
-				local fallback = c_ability.perma_x_mult or 0
+				local fallback = c_ability and c_ability.perma_x_mult or 0
 				c_ability.perma_x_mult = fallback + card.ability.extra.xmult
 			elseif context.cardarea == G.play then
 				c_ability.perma_x_mult = 0

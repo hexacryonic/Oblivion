@@ -1,28 +1,24 @@
 -- lib/ui_funcs.lua
 -- These functions are used by UI elements, usually those in lib/ui_hook.lua
 
--- == used in discard_cards_from_held
+-- Form a list of held but unselected playing cards, for datcarding.
+---@return table
 local function get_cards_to_discard()
+	-- == used in discard_cards_from_held
 	local cards_to_discard = {}
 
 	for i = 1, #G.hand.cards do
-		cards_to_discard[#cards_to_discard + 1] = G.hand.cards[i]
-	end
-
-	-- (Iterate backwards due to table.remove shifting stuff around)
-	for i = #cards_to_discard, 1, -1 do
-		for _,selected_card in ipairs(G.hand.highlighted) do
-			if cards_to_discard[i] == selected_card then
-				table.remove(cards_to_discard, i)
-			end
-		end
+		if not G.hand.cards[i].highlighted then table.insert(cards_to_discard, G.hand.cards[i]) end
 	end
 
 	return cards_to_discard
 end
 
--- == used in discard_cards_from_held
+-- During datcarding, send contexts that are sent in typical discarding.
+---@param cards_to_discard table
+---@return nil
 local function send_discard_contexts(cards_to_discard)
+	-- == used in discard_cards_from_held
 	local discarded_cards = {}
 	local destroyed_cards = {}
 	local current_jokers = G.jokers.cards
@@ -66,8 +62,11 @@ end
 
 ----
 
--- == used in b_uibox_corrupt_red_deck
+-- Determine whether datcarding can occur.
+---@param e any
+---@return nil
 G.FUNCS.can_weirddiscard = function(e)
+	-- == used in b_uibox_corrupt_red_deck
 	if G.GAME.current_round.discards_left <= 0 then
 		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 		e.config.button = nil
@@ -77,8 +76,12 @@ G.FUNCS.can_weirddiscard = function(e)
 	end
 end
 
--- == used in b_uibox_corrupt_red_deck
+-- Datcard, or discard all unselected playing cards on hand.\
+-- Primarily used in Corrupt Red Deck.
+---@param e any
+---@return nil
 G.FUNCS.discard_cards_from_held = function(e)
+	-- == used in b_uibox_corrupt_red_deck
 	stop_use()
 	G.CONTROLLER.interrupt.focus = true
 	G.CONTROLLER:save_cardarea_focus('hand')
@@ -110,27 +113,32 @@ G.FUNCS.discard_cards_from_held = function(e)
 
 	send_discard_contexts(cards_to_discard)
 
-	if not hook then
-		if G.GAME.modifiers.discard_cost then
-			ease_dollars(-G.GAME.modifiers.discard_cost)
-		end
-		ease_discard(-1)
-		G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1
-		G.STATE = G.STATES.DRAW_TO_HAND
-		G.E_MANAGER:add_event(Event({
-			trigger = 'immediate',
-			func = function()
-				G.STATE_COMPLETE = false
-				return true
-			end
-		}))
+	--if not hook then -- I don't know what this conditional is for - it's always nil -O
+	if G.GAME.modifiers.discard_cost then
+		ease_dollars(-G.GAME.modifiers.discard_cost)
 	end
+	ease_discard(-1)
+	G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1
+	G.STATE = G.STATES.DRAW_TO_HAND
+	G.E_MANAGER:add_event(Event({
+		trigger = 'immediate',
+		func = function()
+			G.STATE_COMPLETE = false
+			return true
+		end
+	}))
+	--end
 end
 
 G.C.INST = HEX('04248F')
 G.C.UI_INST = G.C.INST
--- == used in create_UIBox_HUD
+
+-- Update Instability UI text.\
+-- Primarily used in Corrupt Plasma Deck.
+---@param e any
+---@return nil
 G.FUNCS.hand_inst_UI_set = function(e)
+	-- == used in create_UIBox_HUD
 	local new_inst_text = number_format(((G.GAME and G.GAME.instability) or 1))
 	if new_inst_text ~= G.GAME.current_round.current_hand.inst_text then
 		G.GAME.current_round.current_hand.inst_text = new_inst_text

@@ -29,7 +29,7 @@ local function load_directory(folder_name)
 		local file_format = ("%s/%s")
 		local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
 		if err then error(err) end --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
-		file_func()
+		if file_func then file_func() end
 	end
 end
 

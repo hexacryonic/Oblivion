@@ -22,6 +22,10 @@ end
 
 -- == Music
 
+local sync_group = {
+	music1 = true,
+}
+
 SMODS.Sound({
 	key = "musicDoom",
 	path = "musicDoom.ogg",
@@ -57,7 +61,6 @@ SMODS.Sound({
 	key = "musicCorrupt",
 	path = "musicCorrupt.ogg",
 
-	sync = true,
 	pitch = 1,
 
 	select_music_track = function()
@@ -77,7 +80,6 @@ SMODS.Sound({
 	key = "musicCorruptShop",
 	path = "musicCorruptShop.ogg",
 
-	sync = true,
 	pitch = 1,
 
 	select_music_track = function()
@@ -97,7 +99,6 @@ SMODS.Sound({
 	key = "musicCorruptPack1",
 	path = "musicCorruptPack1.ogg",
 
-	sync = true,
 	pitch = 1,
 
 	select_music_track = function()
@@ -115,7 +116,6 @@ SMODS.Sound({
 	key = "musicCorruptPack2",
 	path = "musicCorruptPack2.ogg",
 
-	sync = true,
 	pitch = 1,
 
 	select_music_track = function()
@@ -132,7 +132,6 @@ SMODS.Sound({
 	key = "musicCorruptBoss",
 	path = "musicCorruptBoss.ogg",
 
-	sync = true,
 	pitch = 1,
 
 	select_music_track = function()
