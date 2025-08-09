@@ -11,14 +11,14 @@ local function split(input, sep)
 end
 
 local element_to_n = {
-	root   = "ROOT",
-	row    = "R",
-	column = "C",
-	text   = "T",
-	object = "O",
-	box    = "B",
-	slider = "S",
-	input  = "I"
+	root   = function() return G.UIT.ROOT end,
+	row    = function() return G.UIT.R end,
+	column = function() return G.UIT.C end,
+	text   = function() return G.UIT.T end,
+	object = function() return G.UIT.O end,
+	box    = function() return G.UIT.B end,
+	slider = function() return G.UIT.S end,
+	input  = function() return G.UIT.I end
 }
 
 -- not listed bellow: text, class
@@ -44,10 +44,12 @@ local style_to_config = {
 	align = "align",
 
 	minimumWidth = "minw",
+	minWidth = "minw",
 	width = "w",
 	maxWidth = "maxw",
 
 	minimumHeight = "minh",
+	minHeight = "minw",
 	height = "h",
 	maxHeight = "maxh",
 
@@ -70,6 +72,8 @@ local style_to_config = {
 	focus = "focus_args",
 
 	scale = "scale",
+	-- fillColor and color both map to "colour"? that's because:
+	-- "colour" is for BOTH G.UIT.R/C background, and G.UIT.T color
 	colour = "colour",
 	color = "colour",
 	textOrientation = "vert",
@@ -132,9 +136,9 @@ local function generate_uibox_definition(jtml, stylesheet)
 	local element_classes = jtml.class and split(jtml.class, "%s") or {}
 	local element_id = jtml.id
 
-	local n_key = element_to_n[element_name]
-	uibox_table.n = G.UIT[n_key]
+	uibox_table.n = element_to_n[element_name] and element_to_n[element_name]()
 
+	-- Element attributes to config
 	for attribute, value in pairs(jtml) do
 		if attribute_to_config[attribute] then
 			local config_key = attribute_to_config[attribute]
@@ -142,19 +146,19 @@ local function generate_uibox_definition(jtml, stylesheet)
 		end
 	end
 
-	-- First, ID style
+	-- First, apply ID style
 	if element_id and stylesheet["#" .. element_id] then
 		local stylerule = stylesheet["#" .. element_id]
 		add_stylerule_to_config(uibox_table.config, stylerule)
 	end
-	-- Next, class styles in order of classes
+	-- Next, apply class styles in order of classes
 	for _,classname in ipairs(element_classes) do
 		if stylesheet["." .. classname] then
 			local stylerule = stylesheet["." .. classname]
 			add_stylerule_to_config(uibox_table.config, stylerule)
 		end
 	end
-	-- Finally, inline style
+	-- Finally, apply inline style
 	if element_style then
 		add_stylerule_to_config(uibox_table.config, element_style)
 	end
