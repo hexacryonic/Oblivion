@@ -51,38 +51,32 @@ SMODS.PokerHandPart{ -- Spectrum base (yoink)
 	key = 'spectrum',
 	func = function(hand)
 		local suits = {}
-		for _, suit_key in ipairs(SMODS.Suit.obj_buffer) do
-			suits[suit_key] = false
-		end
+		local has_wild = false
 		if #hand < 5 then return {} end
 
-		local function count_card(hand_card)
-			-- True if:
-			--- Never played Spectrum, card is not wild
-			--- Played Spectrum (wild cards are then counted)
-			return (
-				G.GAME.hands["ovn_Spectrum"].played == 0
-				and hand_card.config.center_key ~= 'm_wild'
-				or G.GAME.hands["ovn_Spectrum"].played > 0
-			)
-		end
-
 		for _, hand_card in ipairs(hand) do
-			if count_card(hand_card) then
-				for suit_key in pairs(suits) do
-					if hand_card:is_suit(suit_key, nil, true) then
-						suits[suit_key] = true
-						break
-					end
-				end
+			if hand_card.config.center_key == 'm_wild' then
+				has_wild = true
 			end
+			suits[hand_card.base.suit] = true
 		end
 
 		local num_suits = 0
-		for _, has_suit in pairs(suits) do
-			if has_suit then num_suits = num_suits + 1 end
+		for _ in pairs(suits) do
+			num_suits = num_suits + 1
 		end
-		return (num_suits >= 5) and {hand} or {}
+
+		if (
+			num_suits < 5
+			and has_wild
+			and G.GAME.hands["ovn_Spectrum"].played > 0
+		) then
+			return {hand}
+		elseif num_suits >= 5 then
+			return {hand}
+		else
+			return {}
+		end
 	end
 }
 
