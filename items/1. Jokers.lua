@@ -763,6 +763,36 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = 'aeon',
+	config = { extra = { Xmult = 4} },
+	loc_vars = function(self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.j_cavendish)
+		return {vars = {
+			card.ability.extra.Xmult,
+		}}
+	end,
+
+	atlas = 'corrupted',
+	pos = { x = 4, y = 0 },
+
+	discovered = true,
+	unlocked = true,
+	rarity = "ovn_corrupted",
+	cost = 8,
+
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.Xmult
+			}
+		end
+	end,
+    in_pool = function(self, args)
+        return G.GAME.corruptiblemichel
+    end
+}
+
+SMODS.Joker {
 	key = 'apartfalling',
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
@@ -803,34 +833,4 @@ SMODS.Joker {
 			return nil, true
 		end
 	end
-}
-
-SMODS.Joker {
-	key = 'aeon',
-	config = { extra = { Xmult = 4} },
-	loc_vars = function(self, info_queue, card)
-		table.insert(info_queue, G.P_CENTERS.j_cavendish)
-		return {vars = {
-			card.ability.extra.Xmult,
-		}}
-	end,
-
-	atlas = 'corrupted',
-	pos = { x = 4, y = 0 },
-
-	discovered = true,
-	unlocked = true,
-	rarity = "ovn_corrupted",
-	cost = 8,
-
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				xmult = card.ability.extra.Xmult
-			}
-		end
-	end,
-    in_pool = function(self, args)
-        return G.GAME.corruptiblemichel
-    end
 }
