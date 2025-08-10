@@ -200,6 +200,9 @@ local loc =  {
 			k_ovn_supercorrupted = "Corrupted",
 			k_ovn_wicked_pack = "Wicked Pack",
 		},
+		v_dictionary = {
+			a_hands_minus = "-#1# Hands",
+		},
 		challenge_names = {
 			c_ovn_corrupt_world = "Corrupt World",
 		},

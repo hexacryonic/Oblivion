@@ -162,4 +162,15 @@ return {
 			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
 		}
 	},
+	j_ovn_spiral_of_addiction = {
+		name = "Spiral of Addiction",
+		text = {
+			"This Joker gains {X:mult,C:white}X#1# {} Mult per round",
+			"where {C:attention}every discard {}is used",
+			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
+			"{C:red}#3# {}hand size next round if",
+			"at least {C:attention}1 {}discard remains",
+			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Drunkard{}",
+		}
+	}
 }

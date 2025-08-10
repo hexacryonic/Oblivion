@@ -57,8 +57,9 @@ cmap["j_wrathful_joker"]   = "j_ovn_prideful"
 cmap["j_gluttenous_joker"] = "j_ovn_prideful"
 cmap["j_greedy_joker"]     = "j_ovn_prideful"
 cmap["j_cavendish"]        = "j_ovn_cultivar"
-cmap["j_hologram"]         = "j_ovn_apartfalling"
 cmap["j_gros_michel"]      = "j_ovn_aeon"
+cmap["j_hologram"]         = "j_ovn_apartfalling"
+cmap["j_drunkard"]         = "j_ovn_spiral_of_addiction"
 
 if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
 Oblivion.corruption_condition["j_gros_michel"] = function()

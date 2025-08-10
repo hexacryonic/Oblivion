@@ -834,3 +834,73 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = 'spiral_of_addiction',
+	loc_vars = function(self, info_queue, card)
+		return { vars = {
+			card.ability.extra.xmult_gain,
+			card.ability.extra.xmult,
+			card.ability.extra.handsize_change
+		}}
+	end,
+	config = {
+		extra = {
+			xmult = 1,
+			xmult_gain = 0.15,
+			handsize_change = -2,
+			do_handsize_change = false,
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	discovered = true,
+	unloocked = true,
+	rarity = "ovn_corrupted",
+	cost = 6,
+
+	calculate = function(self, card, context)
+		local card_extra = card.ability.extra
+
+		if context.joker_main then
+			return {
+				xmult = card_extra.xmult
+			}
+		end
+
+		if (
+			context.end_of_round
+			and not context.game_over
+			and context.main_eval
+			and not context.blueprint
+		) then
+			if G.GAME.current_round.discards_left <= 0 then
+				card_extra.xmult = card_extra.xmult + card_extra.xmult_gain
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}
+			else
+				card_extra.do_handsize_change = true
+			end
+		end
+
+		if context.setting_blind and card_extra.do_handsize_change then
+			add_simple_event(nil, nil, function()
+				ease_hands_played(card_extra.handsize_change)
+				SMODS.calculate_effect(
+					{ message = localize {
+						type = 'variable',
+						key = card_extra.handsize_change >= 0 and 'a_hands' or 'a_hands_minus',
+						vars = { math.abs(card_extra.handsize_change) }
+					}},
+					context.blueprint_card or card
+				)
+			end)
+			card_extra.do_handsize_change = false
+		end
+	end
+}
