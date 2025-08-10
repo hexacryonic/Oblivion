@@ -14,6 +14,10 @@ return {
 			"{C:attention}EXCEPT{} selected are {C:mult}discarded{}",
 			"After a hand, {C:mult}discard{} up to",
 			"{C:attention}5{} held cards at random"
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Red Rum"
 		}
 	},
 	b_ovn_c_blue = {
@@ -22,6 +26,10 @@ return {
 			"{C:chips}+2{} starting Hands",
 			"Hands {C:mult}never reset{}",
 			"{C:chips}+3{} Hands when {C:attention}Boss Blind{} defeated",
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Blue Blitz"
 		}
 	},
 	b_ovn_c_yellow = {
@@ -33,6 +41,10 @@ return {
 			"Cost increases by {X:money,C:white} X1.25 {} (floored) each {C:attention}Ante{}",
 			"{s:0.3} {}",
 			"At less than {C:money}$1{}, {C:mult}Game Over{}",
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Yellow Yearlong"
 		}
 	},
 	b_ovn_c_ghost = {
@@ -42,6 +54,10 @@ return {
 			"appear in the shop",
 			"When starting a round, a {C:attention}random",
 			"{C:spectral}Spectral {}card is used against you"
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Ghostly Gall"
 		}
 	},
 	b_ovn_c_painted = {
@@ -50,6 +66,10 @@ return {
 			"{C:attention}Enhanced{} cards retrigger once",
 			"{C:attention}+5{} hand size",
 			"{C:mult}Jokerless{}"
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Painted Paladin"
 		}
 	},
 	b_ovn_c_plasma = {
@@ -60,6 +80,10 @@ return {
 			"{s:0.3} {}",
 			"Start with {C:attention,T:j_joker}#2#{},",
 			"{C:attention,T:c_ovn_abyss}#3#{}, and {C:attention,T:c_ovn_perception}#4#{}"
+		},
+		unlock = {
+			"Unlock the achievement",
+			"{C:attention}Plasma Plight"
 		}
 	}
 }

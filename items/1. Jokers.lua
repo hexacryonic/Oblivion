@@ -36,8 +36,6 @@ SMODS.Joker {
 
 	blueprint_compat = false,
 	eternal_compat = false,
-	discovered = true,
-	unlocked = true,
 	rarity = 2,
 	cost = 6,
 
@@ -304,8 +302,6 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 
 	blueprint_compat = true,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 3,
 
@@ -328,8 +324,6 @@ SMODS.Joker {
 	pos = { x = 2, y = 0 },
 
 	blueprint_compat = true,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -362,8 +356,6 @@ SMODS.Joker {
 	pos = { x = 1, y = 0 },
 
 	blueprint_compat = true,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -402,8 +394,6 @@ SMODS.Joker {
 	pos = { x = 4, y = 1 },
 
 	blueprint_compat = true,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -462,8 +452,6 @@ SMODS.Joker {
 	pos = { x = 3, y = 1 },
 
 	blueprint_compat = false,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -552,8 +540,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 3, y = 0 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 }
@@ -564,8 +550,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 1, y = 2 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -582,8 +566,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 0, y = 2 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 6,
 
@@ -610,8 +592,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 2, y = 2 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 5,
 
@@ -634,8 +614,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 3, y = 2 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 5,
 
@@ -658,8 +636,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 2, y = 1 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 9,
 
@@ -683,8 +659,6 @@ SMODS.Joker {
 	pos = { x = 4, y = 2 },
 
 	blueprint_compat = true,
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -715,8 +689,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -775,8 +747,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -810,8 +780,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
 
-	discovered = true,
-	unlocked = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 	calculate = function(self, card, context)
@@ -856,8 +824,6 @@ SMODS.Joker {
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
 
-	discovered = true,
-	unloocked = true,
 	rarity = "ovn_corrupted",
 	cost = 6,
 

@@ -1,10 +1,18 @@
 local add_simple_event = Ovn_f.add_simple_event
+local function achievement_get(key)
+	return SMODS.Achievements["ach_ovn_" .. key].earned
+end
 
 SMODS.Back{
 	key = "c_red",
 
 	atlas = "cdeck_atlas",
 	pos = { x = 0, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("red_rum") then return true end
+	end,
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
@@ -43,6 +51,11 @@ SMODS.Back{
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 0 },
 
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("blue_blitz") then return true end
+	end,
+
 	apply = function(self)
 		G.GAME.in_corrupt = true
 		G.GAME.starting_params.hands = G.GAME.starting_params.hands + 2
@@ -61,6 +74,11 @@ SMODS.Back{
 
 	atlas = "cdeck_atlas",
 	pos = { x = 2, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("yellow_yearlong") then return true end
+	end,
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
@@ -123,6 +141,11 @@ SMODS.Back{
 
 	atlas = "cdeck_atlas",
 	pos = { x = 2, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("ghostly_gall") then return true end
+	end,
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
@@ -258,6 +281,11 @@ SMODS.Back{
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 2 },
 
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("painted_paladin") then return true end
+	end,
+
 	apply = function(self)
 		G.GAME.in_corrupt = true
 		G.GAME.joker_rate = 0
@@ -302,6 +330,11 @@ SMODS.Back{
 
 	atlas = "cdeck_atlas",
 	pos = { x = 3, y = 2 },
+
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("plasma_plight") then return true end
+	end,
 
 	config = {
 		consumables = {'c_ovn_abyss', 'c_ovn_perception'},

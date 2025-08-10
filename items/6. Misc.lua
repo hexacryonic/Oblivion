@@ -246,8 +246,6 @@ SMODS.Edition {
 	disable_base_shader = true,
 	apply_to_float = true,
 
-	discovered = true,
-	unlocked = true,
 	in_shop = false,
 	weight = 8,
 	extra_cost = 4,

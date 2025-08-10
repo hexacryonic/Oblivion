@@ -7,6 +7,7 @@ end
 
 SMODS.Achievement{
 	key = "red_rum",
+	order = 1,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local has_spiral = Ovn_f.has_joker('j_ovn_sprial_of_addiction')
@@ -20,6 +21,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "blue_blitz",
+	order = 2,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local round_count = G.GAME.round
@@ -34,6 +36,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "yellow_yearlong",
+	order = 3,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local money_count = G.GAME.dollars
@@ -47,6 +50,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "groundless_greenery",
+	order = 4,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local money_count = G.GAME.dollars
@@ -63,6 +67,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "bleakest_blackout",
+	order = 5,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local max_joker_count = G.GAME.max_jokers
@@ -76,6 +81,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "magic_malaise",
+	order = 6,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local tarot_use_count = (
@@ -93,6 +99,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "negated_nebula",
+	order = 7,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local tarot_use_count = (
@@ -110,6 +117,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "ghostly_gall",
+	order = 8,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local tarot_use_count = (
@@ -125,12 +133,13 @@ SMODS.Achievement{
 	end
 }
 
--- absolved abandoment
--- checkered changeling
--- zodiac zenith
+-- absolved abandoment, order = 9
+-- checkered changeling, order = 10
+-- zodiac zenith, order = 11
 
 SMODS.Achievement{
 	key = "painted_paladin",
+	order = 12,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local joker_count = #G.jokers.cards
@@ -144,6 +153,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "anticipated_anaglyphs",
+	order = 13,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local double_tag_count = 0
@@ -162,6 +172,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "plasma_plight",
+	order = 14,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local blind_requirement = G.GAME.blind.chips
@@ -176,6 +187,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "erratic_eruption",
+	order = 15,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			if (
@@ -188,6 +200,7 @@ SMODS.Achievement{
 
 SMODS.Achievement{
 	key = "ocular_overseer",
+	order = 16,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			local optics_count = 0
@@ -204,12 +217,13 @@ SMODS.Achievement{
 	end
 }
 
--- decoherent deity
--- abyssal absolution
--- autocannibalism
+-- decoherent deity, order = 17
+-- abyssal absolution, order = 18
+-- autocannibalism, order = 19
 
 SMODS.Achievement{
 	key = "ace_combat",
+	order = 20,
 	unlock_condition = function(self, args)
 		local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
 		local has_pareidolia = Ovn_f.has_joker('j_ovn_pareidolia')
@@ -217,7 +231,7 @@ SMODS.Achievement{
 	end
 }
 
--- singular strike
--- exposed nerve
--- do it first
--- bananas
+-- singular strike, order = 20
+-- exposed nerve, order = 21
+-- do it first, order = 22
+-- bananas, order = 23
