@@ -412,3 +412,28 @@ SMODS.Seal {
 		end
 	end
 }
+
+----
+
+SMODS.DeckSkin{
+	key = 'novadrift',
+	suit = 'ovn_Optics',
+	loc_txt = {["en-us"] = "Nova Drift"},
+
+	palettes = {
+		{
+			key = 'lc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+			atlas = "ovn_skin_nd_lc",
+			pos_style = 'collab',
+		},
+		{
+			key = 'hc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+			atlas = "ovn_skin_nd_hc",
+			pos_style = 'collab',
+		},
+	}
+}
