@@ -331,7 +331,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 11,
+	cost = 7,
 
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
@@ -555,7 +555,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 7,
 }
 
 SMODS.Joker {
@@ -567,7 +567,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 8,
 
 	-- Functionality implemented in Card:update hook
 }
@@ -585,7 +585,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 6,
 
 	calculate = function (self, card, context)
 		if context.indivual and context.other_card.base.value == '10' then
@@ -613,7 +613,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 5,
 
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
@@ -637,7 +637,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 5,
 
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
@@ -661,7 +661,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 9,
 
 	calculate = function(self, card, context)
 		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
@@ -718,7 +718,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 7,
 
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -783,7 +783,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 8,
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.x_mult > 1 then
 			return {
@@ -821,7 +821,7 @@ SMODS.Joker {
 	discovered = true,
 	unlocked = true,
 	rarity = "ovn_corrupted",
-	cost = 4,
+	cost = 8,
 
 	calculate = function(self, card, context)
 		if context.joker_main then
