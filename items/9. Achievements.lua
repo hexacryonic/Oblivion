@@ -175,12 +175,12 @@ SMODS.Achievement{
 }
 
 SMODS.Achievement{
-	key = "eratic_eruption",
+	key = "erratic_eruption",
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
 			if (
 				cdeck_cond("b_erratic")
-				and pseudorandom("eratic_eruption") < (1/8)
+				and pseudorandom("erratic_eruption") < (1/8)
 			) then return true end
 		end
 	end
