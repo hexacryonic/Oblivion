@@ -16,8 +16,10 @@ return {
 			"{C:attention}5{} held cards at random"
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Red Rum"
+			"On {C:attention}Red {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win without discarding whilst",
+			"holding {C:attention}Spiral of Addiction"
 		}
 	},
 	b_ovn_c_blue = {
@@ -28,8 +30,10 @@ return {
 			"{C:chips}+3{} Hands when {C:attention}Boss Blind{} defeated",
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Blue Blitz"
+			"On {C:attention}Blue {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win whilst having beaten",
+			"every played blind in 1 hand"
 		}
 	},
 	b_ovn_c_yellow = {
@@ -43,8 +47,9 @@ return {
 			"At less than {C:money}$1{}, {C:mult}Game Over{}",
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Yellow Yearlong"
+			"On {C:attention}Yellow {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"with at least {C:money}$365 {}in bank",
 		}
 	},
 	b_ovn_c_ghost = {
@@ -56,8 +61,10 @@ return {
 			"{C:spectral}Spectral {}card is used against you"
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Ghostly Gall"
+			"On {C:attention}Ghost {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win without using",
+			"any {C:spectral}Spectral {}cards,"
 		}
 	},
 	b_ovn_c_painted = {
@@ -68,8 +75,10 @@ return {
 			"{C:mult}Jokerless{}"
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Painted Paladin"
+			"On {C:attention}Painted {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win whilst holding {C:attention}7",
+			"or more Jokers at once"
 		}
 	},
 	b_ovn_c_plasma = {
@@ -82,8 +91,12 @@ return {
 			"{C:attention,T:c_ovn_abyss}#3#{}, and {C:attention,T:c_ovn_perception}#4#{}"
 		},
 		unlock = {
-			"Unlock the achievement",
-			"{C:attention}Plasma Plight"
+			"{s:0.9}On {s:0.9,C:attention}Plasma {s:0.9}Deck with",
+			"{s:0.9,C:blue}Blue Stake {s:0.9}or higher,",
+			"{s:0.9}win with a score at least",
+			"{s:0.9,C:attention}20 {s:0.9}times greater than",
+			"{s:0.9}the Showdown Boss",
+			"{s:0.9}Blind requirement"
 		}
 	}
 }
