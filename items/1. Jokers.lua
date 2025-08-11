@@ -856,7 +856,7 @@ SMODS.Joker {
 
 		if context.setting_blind and card_extra.do_handsize_change then
 			add_simple_event(nil, nil, function()
-				ease_hands_played(card_extra.handsize_change)
+				Ovn_f.temp_handsize_change(card_extra.handsize_change)
 				SMODS.calculate_effect(
 					{ message = localize {
 						type = 'variable',

@@ -348,3 +348,10 @@ Ovn_f.ease_discard_cost = function(amount, instant)
 		end)
 	end
 end
+
+----
+
+Ovn_f.temp_handsize_change = function(amount)
+	G.hand:change_size(amount)
+	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
+end
