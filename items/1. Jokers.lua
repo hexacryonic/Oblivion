@@ -570,7 +570,7 @@ SMODS.Joker {
 	cost = 6,
 
 	calculate = function (self, card, context)
-		if context.indivual and context.other_card.base.value == '10' then
+		if context.individual and context.other_card.base.value == '10' then
 			local c_ability = context.other_card.ability
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
 				local fallback = c_ability and c_ability.perma_x_mult or 0
