@@ -323,7 +323,7 @@ SMODS.Consumable {
 		local selected_playing_card = G.hand.highlighted
 
 		local exclude_self = G.consumeables.highlighted[1] == self and 1 or 0
-		if (#selected_jokers + #selected_playing_card - exclude_self ~= card.ability.max_highlighted) then return false end
+		if (#selected_jokers + #selected_playing_card - exclude_self > card.ability.max_highlighted) then return false end
 
 		local has_edition = false
 		for _,joker in ipairs(selected_jokers) do
