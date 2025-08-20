@@ -60,6 +60,8 @@ cmap["j_cavendish"]        = "j_ovn_cultivar"
 cmap["j_gros_michel"]      = "j_ovn_aeon"
 cmap["j_hologram"]         = "j_ovn_apartfalling"
 cmap["j_drunkard"]         = "j_ovn_spiral_of_addiction"
+cmap["j_mystic_summit"]    = "j_ovn_collapsing_world"
+cmap["j_erosion"]          = "j_ovn_collapsing_world"
 
 if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
 Oblivion.corruption_condition["j_gros_michel"] = function()
@@ -82,6 +84,9 @@ G.E_MANAGER:add_event(Event {
 		Oblivion.purity_map = {}
 		local pmap = Oblivion.purity_map
 		for pure_key,corrupt_key in pairs(Oblivion.corruption_map) do
+			if not G.P_CENTERS[corrupt_key] then
+				print("[OBLIVION] Purity mapping: Joker " .. corrupt_key .. " does not exist!")
+			end
 			if not pmap[corrupt_key] then
 				pmap[corrupt_key] = pure_key
 			elseif type(pmap[corrupt_key]) == "string" then
@@ -96,6 +101,9 @@ G.E_MANAGER:add_event(Event {
 		Oblivion.enhancement_purify = {}
 		local penh = Oblivion.enhancement_purify
 		for pure_key,corrupt_key in pairs(Oblivion.enhancement_corrupt) do
+			if not G.P_CENTERS[corrupt_key] then
+				print("[OBLIVION] Purity mapping: Joker " .. corrupt_key .. " does not exist!")
+			end
 			penh[corrupt_key] = pure_key
 		end
 

@@ -93,6 +93,27 @@ Ovn_f.corrupt_joker = function(card)
     end)
 end
 
+-- Sets a random former form of a (corrupted) card/
+---@param card Card
+---@return nil|string
+Ovn_f.set_random_former_form = function(card)
+	if card.ability.extra and card.ability.extra.ovn_former_form then return end
+	local card_key = card.config.center.key
+
+	card.ability.extra = card.ability.extra or {}
+
+	local pure_form_options = Oblivion.purity_map[card_key]
+	if not pure_form_options then return end
+	if type(pure_form_options) == "string" then
+		card.ability.extra.ovn_former_form = pure_form_options
+		return pure_form_options
+	end
+
+	local former_form = pseudorandom_element(pure_form_options, "ovn_former_form")
+	card.ability.extra.ovn_former_form = former_form
+	return former_form
+end
+
 ----
 
 -- Determines if a Joker should be out of all pools\

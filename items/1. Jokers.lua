@@ -861,3 +861,66 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = 'collapsing_world',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult_set[card.ability.extra.ovn_former_form] or 3,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			mult_set = {
+				j_mystic_summit = 3,
+				j_erosion = 4,
+			},
+			mult = 0
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 7,
+	blueprint_compat = false,
+
+	add_to_deck = function(self, card, context)
+		Ovn_f.set_random_former_form(card)
+	end,
+	calculate = function(self, card, context)
+		if (
+			context.discard
+			and not context.blueprint
+			and G.GAME.current_round.discards_left == 1
+			and (
+				context.other_card == G.hand.highlighted[1]
+				or context.other_card == G.hand.highlighted[#G.hand.highlighted]
+			)
+		) then
+			local message, colour
+			-- only give mult on first card (i.e. give mult once per discard)
+			if context.other_card == G.hand.highlighted[1] then
+				local cardextra = card.ability.extra
+				cardextra.mult = cardextra.mult + cardextra.mult_set[cardextra.ovn_former_form]
+				message = localize {
+					type = 'variable',
+					key = 'a_mult',
+					vars = { cardextra.mult_set[cardextra.ovn_former_form] }
+				}
+				colour = G.C.RED
+			end
+			return {
+				remove = true,
+				message = message,
+				colour = colour
+			}
+		end
+
+		if context.joker_main then return {
+			mult = card.ability.extra.mult
+		} end
+	end
+}

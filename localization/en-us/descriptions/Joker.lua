@@ -1,4 +1,13 @@
 return {
+	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
+	j_ovn_instabilitytooltip = {
+		name = "Instability",
+		text = {
+			"{C:ovn_corrupted}-0.05 {}after playing a hand",
+			"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
+			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
+		}
+	},
 	j_ovn_john = {
 		name = 'John Oblivion',
 		text = {
@@ -140,7 +149,7 @@ return {
 		text = {
 			"This Joker gains {X:mult,C:white} X#2# {} Mult",
 			"whenever a Joker {C:ovn_corrupted}corrupts{}",
-			"{C:inactive}Currently{} {X:mult,C:white} X#1# {}",
+			"{C:inactive}Currently {X:mult,C:white}X#1#{C:inactive})",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Hologram{}",
 		}
 	},
@@ -153,15 +162,6 @@ return {
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gros Michel{}",
 		}
 	},
-	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
-	j_ovn_instabilitytooltip = {
-		name = "Instability",
-		text = {
-			"{C:ovn_corrupted}-0.05 {}after playing a hand",
-			"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
-			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
-		}
-	},
 	j_ovn_spiral_of_addiction = {
 		name = "Spiral of Addiction",
 		text = {
@@ -171,6 +171,17 @@ return {
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Drunkard{}",
+		}
+	},
+	j_ovn_collapsing_world = {
+		name = "Edge of a Collapsing World",
+		text = {
+			"The {C:attention}rightmost and leftmost {}cards",
+			"discarded in the {C:attention}final Discard",
+			"of the round are {C:red}destroyed,",
+			"then this Joker gains {C:mult}+#1# {}Mult",
+			"{C:inactive}Currently {C:mult}X#2#{C:inactive})",
+			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Mystic Summit or Erosion{}",
 		}
 	}
 }
