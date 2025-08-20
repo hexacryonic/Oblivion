@@ -322,7 +322,7 @@ SMODS.Consumable {
 		local selected_jokers = G.jokers.highlighted
 		local selected_playing_card = G.hand.highlighted
 		local exclude_self = G.consumeables.highlighted[1] == self and 1 or 0
-		
+
 		local selected_card_count = #selected_jokers + #selected_playing_card - exclude_self
 		if (selected_card_count == 0 or selected_card_count > card.ability.max_highlighted) then return false end
 

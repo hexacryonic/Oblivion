@@ -41,20 +41,17 @@ SMODS.Joker {
 
 	calculate = function(self, card, context)
 		if context.selling_self and not context.blueprint and not context.retrigger_joker then
-			card_eval_status_text(
-				card,
-				"extra",
-				nil,
-				nil,
-				nil,
-				{ message = localize("k_plus_joker"), colour = G.C.RARITY["ovn_corrupted"] }
-			)
-			local new_card = create_card("Joker", G.jokers, nil, "ovn_corrupted", nil, nil, nil, "ovn_john")
-
-			new_card:add_to_deck()
-			G.jokers:emplace(new_card)
-			new_card:start_materialize()
-			return nil, true
+			SMODS.add_card{
+				set = "Joker",
+				area = G.jokers,
+				rarity = "ovn_corrupted",
+				key_append = "ovn_john"
+			}
+			return {
+				message = localize('k_plus_joker'),
+				colour = G.C.RARITY["ovn_corrupted"],
+				message_card = card
+			}
 		end
 	end,
 }
@@ -367,15 +364,8 @@ SMODS.Joker {
 				local held_card_rank = held_card.base.value
 
 				if scored_card_rank == held_card_rank then
-					G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
 					return {
 						dollars = card.ability.extra.money,
-						func = function()
-							G.E_MANAGER:add_event(Event {func = function()
-								G.GAME.dollar_buffer = 0
-								return true
-							end})
-						end
 					}
 				end
 			end
@@ -767,12 +757,12 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.x_mult,
-			card.ability.extra.extra
+			card.ability.extra.xmult_increase
 		}}
 	end,
 	config = {
 		extra = {
-			extra = 0.75,
+			xmult_increase = 0.75,
 			x_mult = 1,
 		},
 	},
@@ -790,15 +780,16 @@ SMODS.Joker {
 		end
 
 		if context.ovn_corruption_occurred and context.ovn_corruption_type == "Joker" then
-			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.extra
-			card_eval_status_text(card, "extra", nil, nil, nil, {
-				message = localize {
-					type = "variable",
+			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.xmult_increase
+			return {
+				message = localize{
 					key = "a_xmult",
-					vars = { card.ability.extra.x_mult },
+					type = "variable",
+					vars = { card.ability.extra.x_mult }
 				},
-			})
-			return nil, true
+				colour = G.C.MULT,
+				message_card = card
+			}
 		end
 	end
 }
