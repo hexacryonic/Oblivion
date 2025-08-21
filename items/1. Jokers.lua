@@ -462,7 +462,7 @@ SMODS.Joker {
 
 				-- greater than rare or not corrupted
 				if not (
-					(type(left_joker_rarity) == "number" and left_joker_rarity < 3)
+					(type(left_joker_rarity) == "number" and left_joker_rarity <= 3)
 					or left_joker_rarity == "ovn_corrupted"
 				) then return end
 
