@@ -194,7 +194,6 @@ SMODS.Consumable{
 		SMODS.Consumable.process_loc_text(self)
 		G.localization.descriptions[self.set][self.key].text = target_text
 	end,
-	generate_ui = 0,
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
@@ -216,7 +215,6 @@ SMODS.Consumable{
 		SMODS.Consumable.process_loc_text(self)
 		G.localization.descriptions[self.set][self.key].text = target_text
 	end,
-	generate_ui = 0,
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
@@ -238,7 +236,6 @@ SMODS.Consumable{
 		SMODS.Consumable.process_loc_text(self)
 		G.localization.descriptions[self.set][self.key].text = target_text
 	end,
-	generate_ui = 0,
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
@@ -260,7 +257,6 @@ SMODS.Consumable{
 		SMODS.Consumable.process_loc_text(self)
 		G.localization.descriptions[self.set][self.key].text = target_text
 	end,
-	generate_ui = 0,
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
