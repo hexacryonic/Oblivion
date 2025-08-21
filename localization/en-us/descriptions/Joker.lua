@@ -183,5 +183,14 @@ return {
 			"{C:inactive}(Currently {C:mult}X#2#{C:inactive})",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Mystic Summit or Erosion{}",
 		}
+	},
+	j_ovn_master_of_puppets = {
+		name = "Master of Puppets",
+		text = {
+			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
+			"a random {C:attention}Jack {}in your deck is given",
+			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
+			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Hit the Road{}"
+		}
 	}
 }

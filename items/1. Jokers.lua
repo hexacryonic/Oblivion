@@ -924,3 +924,70 @@ SMODS.Joker {
 		} end
 	end
 }
+
+SMODS.Joker {
+	key = 'master_of_puppets',
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	calculate = function(self, card, context)
+		if context.selling_card and context.cardarea == G.jokers then
+			local sold_rarity = context.card.config.center.rarity
+			local jack_list = {}
+			for _,playing_card in ipairs(G.playing_cards) do
+				if (
+					playing_card.base.value == "Jack"
+					and playing_card.config.center.key ~= "m_stone"
+					and (
+						(sold_rarity == 1 and playing_card.config.center.key == "c_base")
+						or (sold_rarity == 2 and playing_card.seal == nil)
+						or (sold_rarity == 3 and playing_card.edition == nil)
+					)
+				) then
+					table.insert(jack_list, playing_card)
+				end
+			end
+			if #jack_list < 1 then return end
+			local selected_jack = pseudorandom_element(
+				jack_list,
+				"ovn_master_of_puppets_jack"
+			) --[[@as Card]]
+
+
+			add_simple_event(nil, nil, function()
+				-- Common generates enhancement
+				if sold_rarity == 1 then
+					local enhancement = SMODS.poll_enhancement{
+						guaranteed = true,
+						type_key = "ovn_master_of_puppets"
+					}
+					selected_jack:set_ability(enhancement)
+
+				-- Uncommon generates seal
+				elseif sold_rarity == 2 then
+					local seal = SMODS.poll_seal{
+						guaranteed = true,
+						type_key = "ovn_master_of_puppets"
+					}
+					selected_jack:set_seal(seal)
+
+				-- Rare generates edition
+				elseif sold_rarity == 3 then
+					local edition = poll_edition(
+						"ovn_master_of_puppets",
+						nil, true, true,
+						{"e_foil", "e_holo", "e_polychrome"}
+					)
+					selected_jack:set_edition(edition)
+				end
+
+				selected_jack:juice_up()
+				card:juice_up()
+				play_sound('tarot1')
+			end)
+		end
+	end
+}
