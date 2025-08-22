@@ -260,7 +260,7 @@ function SMODS.GUI.hand_chips_container(scale)
 		local operator_scale = 0.5*scale -- 0.5 is size of operator text in OG code
 
 		return
-		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.1}, nodes={
+		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.05}, nodes={
 			quasi_operator(operator_scale, "(", G.C.RARITY['ovn_corrupted']),
 			chips_container(text_scale, w, h),
 			quasi_operator(operator_scale, "X", G.C.UI_MULT),
