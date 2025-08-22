@@ -256,18 +256,18 @@ end
 ---@param factor? integer
 ---@return nil
 Ovn_f.corruption_instability = function(factor)
-	if G.GAME.in_corrupt_plasma then
-		Ovn_f.change_instability((G.GAME.corrumod or 0)*(factor or 1))
-	end
+	factor = factor or 1
+	local mod = G.GAME.corrupmod or 0
+	Ovn_f.change_instability(mod*factor)
 end
 
 -- This increase of instability is used when a playing card of Optics is obtained.
 ---@param factor? integer
 ---@return nil
 Ovn_f.optic_instability = function(factor)
-	if G.GAME.in_corrupt_plasma then
-		Ovn_f.change_instability((G.GAME.opticmod or 0)*(factor or 1))
-	end
+	factor = factor or 1
+	local mod = G.GAME.opticmod or 0
+	Ovn_f.change_instability(mod*factor)
 end
 
 ----

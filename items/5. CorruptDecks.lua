@@ -376,6 +376,8 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		if context.after then Ovn_f.change_instability(-0.05) end
+		if context.after then
+			Ovn_f.change_instability(-0.05)
+		end
 	end,
 }
