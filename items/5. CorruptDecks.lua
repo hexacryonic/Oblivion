@@ -317,7 +317,7 @@ SMODS.Joker {
 	in_pool = function() return false end,
 }
 
--- Values are dummy; to change instability, use Ovn_f.increase_instability
+-- Values are dummy; to change instability, use Ovn_f.change_instability
 SMODS.Scoring_Parameter {
 	key = 'instability',
 	default_value = 1,
@@ -376,6 +376,6 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		if context.after then Ovn_f.increase_instability(-0.05) end
+		if context.after then Ovn_f.change_instability(-0.05) end
 	end,
 }

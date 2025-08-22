@@ -237,7 +237,7 @@ end
 -- Changes Instability on Corrupt Plasma Deck, else does nothing.
 ---@param amount number
 ---@return nil
-Ovn_f.increase_instability = function(amount)
+Ovn_f.change_instability = function(amount)
 	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	add_simple_event('after', 0.5, function ()
 		if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
@@ -257,7 +257,7 @@ end
 ---@return nil
 Ovn_f.corruption_instability = function(factor)
 	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.corrumod or 0)*(factor or 1))
+		Ovn_f.change_instability((G.GAME.corrumod or 0)*(factor or 1))
 	end
 end
 
@@ -266,7 +266,7 @@ end
 ---@return nil
 Ovn_f.optic_instability = function(factor)
 	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.opticmod or 0)*(factor or 1))
+		Ovn_f.change_instability((G.GAME.opticmod or 0)*(factor or 1))
 	end
 end
 
