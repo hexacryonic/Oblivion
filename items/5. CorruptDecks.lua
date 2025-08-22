@@ -369,7 +369,6 @@ SMODS.Back{
 
 	apply = function(self)
 		G.GAME.in_corrupt = true
-		G.GAME.in_corrupt_plasma = true
 		G.GAME.corrumod = 0.2
 		G.GAME.opticmod = 0.025
 		SMODS.set_scoring_calculation("ovn_instable")
