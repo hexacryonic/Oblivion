@@ -317,6 +317,32 @@ SMODS.Joker {
 	in_pool = function() return false end,
 }
 
+-- Values are dummy; to change instability, use Ovn_f.increase_instability
+SMODS.Scoring_Parameter {
+	key = 'instability',
+	default_value = 1,
+	colour = G.C.RARITY['ovn_corrupted'],
+	flame_handler = function(self)
+		return {
+			id = 'flame_'..self.key, 
+			arg_tab = self.key..'_flames',
+			colour = G.C.RARITY['ovn_corrupted'],
+			accent = self.lick
+		}
+	end,
+
+	level_up_hand = function() end,
+	modify = function() end,
+}
+
+SMODS.Scoring_Calculation {
+	key = "instable",
+	func = function(self, chips, mult, flames)
+		local instability = G.GAME.ovn_instability
+		return (chips * mult) ^ instability
+	end
+}
+
 SMODS.Back{
 	key = "c_plasma",
 	loc_vars = function(self, info_queue, back)
@@ -344,9 +370,9 @@ SMODS.Back{
 	apply = function(self)
 		G.GAME.in_corrupt = true
 		G.GAME.in_corrupt_plasma = true
-		G.GAME.instability = 1
 		G.GAME.corrumod = 0.2
 		G.GAME.opticmod = 0.025
+		SMODS.set_scoring_calculation("ovn_instable")
 	end,
 
 	calculate = function(self, card, context)

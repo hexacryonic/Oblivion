@@ -238,14 +238,17 @@ end
 ---@param amount number
 ---@return nil
 Ovn_f.increase_instability = function(amount)
-	if not G.GAME.in_corrupt_plasma or amount == 0 or amount == nil then return end
+	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	add_simple_event('after', 0.5, function ()
-		if amount < 0 then
-			play_sound("ovn_decrement", 1, 0.8)
-		elseif amount > 0 then
-			play_sound("ovn_increment", 1, 0.9)
+		if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
+			if amount < 0 then
+				play_sound("ovn_decrement", 1, 0.8)
+			elseif amount > 0 then
+				play_sound("ovn_increment", 1, 0.9)
+			end
 		end
-		G.GAME.instability = G.GAME.instability + amount
+		G.GAME.ovn_instability = G.GAME.ovn_instability + amount
+		update_hand_text({delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
 	end)
 end
 
