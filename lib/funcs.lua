@@ -384,9 +384,17 @@ end
 ---@param card_index number
 ---@return nil
 Ovn_f.guaranteed_modifier = function(card, card_index)
+	if ( -- skip if card already has modifier
+		next(SMODS.get_enhancements(card) --[[@as table]])
+		or card.seal
+		or card.edition
+	) then return end
+
 	card_index = card_index or ""
-	local modifiers = {"enhancement", "seal", "edition"}
-	local indices = {}
+	-- 1 = enhancement
+	-- 2 = seal
+	-- 3 = edition
+	local modifier_weights = {1, 1, 1, 2, 2, 3}
 	local function seedkey(input)
 		return (
 			"ovn_guaranteed_modifier"
@@ -394,35 +402,49 @@ Ovn_f.guaranteed_modifier = function(card, card_index)
 			.. card_index
 		)
 	end
-	-- a modifier is guaranteed
-	-- 1 in 8 chance for another modifier
-	-- 1 in 16 chance for yet another modifier
-	table.insert(indices, math.ceil(pseudoseed(seedkey("i"))*3))
-	if pseudoseed(seedkey()) < (1/8) then
-		table.insert(indices, math.ceil(pseudoseed(seedkey("i2"))*2))
-		if pseudoseed(seedkey("2")) < (1/16) then
-			table.insert(indices, 1)
-		end
+
+	-- Set the first modifier applied
+	local selected_modifier = pseudorandom_element(modifier_weights, seedkey("modweight"))
+	if selected_modifier == 1 then
+		local enhancement = SMODS.poll_enhancement{
+			guaranteed = true,
+			type_key = seedkey("enhancement")
+		}
+		if enhancement then card:set_ability(enhancement) end
+	elseif selected_modifier == 2 then
+		card:set_seal(SMODS.poll_seal{
+			guaranteed = true,
+			type_key = seedkey("seal")
+		})
+	elseif selected_modifier == 3 then
+		card:set_edition(poll_edition(
+			seedkey("edition"),
+			nil, true, true
+		))
 	end
 
-	for _,i in ipairs(indices) do
-		local current_modifier = modifiers[i]
-		if current_modifier == "enhancement" then
-			card:set_ability(SMODS.poll_enhancement{
-				guaranteed = true,
-				type_key = seedkey("enhancement")
-			})
-		elseif current_modifier == "seal" then
-			card:set_seal(SMODS.poll_seal{
-				guaranteed = true,
-				type_key = seedkey("seal")
-			})
-		elseif current_modifier == "edition" then
-			card:set_edition(poll_edition(
-				seedkey("edition"),
-				nil, true, true
-			))
-		end
-		table.remove(modifiers, i)
+	-- Set the rest of the modifiers, but only if chance is struck
+	if selected_modifier ~= 1 then
+		local enhancement = SMODS.poll_enhancement{
+			key = seedkey("enhancement_2_chance"),
+			type_key = seedkey("enhancement_2")
+		}
+		if enhancement then card:set_ability(enhancement) end
+	end
+	if selected_modifier ~= 2 then
+		card:set_seal(SMODS.poll_seal{
+			key = seedkey("seal_2_chance"),
+			type_key = seedkey("seal_2")
+		})
+	end
+	if selected_modifier ~= 3 then
+		card:set_edition(poll_edition(
+			seedkey("edition_2"),
+			nil, true, false, {
+				"e_polychrome",
+				"e_holo",
+				"e_foil"
+			}
+		))
 	end
 end
