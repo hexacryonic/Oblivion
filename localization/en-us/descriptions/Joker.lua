@@ -197,5 +197,15 @@ return {
 			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
 			corrupted_from("Hit the Road"),
 		}
+	},
+	j_ovn_infinitesimal = {
+		name = "Infinitesimal Joker",
+		text = {
+			"{C:dark_edition}+#1#{} Joker slot",
+			"This Joker gains {C:mult}+#2# {}Mult",
+			"when a {C:attention}3 {}is scored",
+			"{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)",
+			corrupted_from("Wee Joker"),
+		}
 	}
 }
