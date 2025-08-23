@@ -378,7 +378,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult } }
 	end,
-	config = { extra = { mult = 1 } },
+	config = { extra = { mult = 2 } },
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 0 },
