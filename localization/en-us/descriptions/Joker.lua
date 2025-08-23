@@ -208,8 +208,8 @@ return {
 			corrupted_from("Wee Joker"),
 		}
 	},
-	j_ovn_migrane = {
-		name = "Migrane",
+	j_ovn_migraine = {
+		name = "Migraine",
 		text = {
 			"{C:attention}Standard Packs {}only",
 			"contain modified {C:ovn_optic}Optic {}cards",

@@ -1045,10 +1045,10 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = 'migrane',
+	key = 'migraine',
 	atlas = 'corrupted',
 	pos = {x=2, y=3},
 	rarity = 'ovn_corrupted',
 	cost = 6
-	-- Functionality implemented in "Migrane makes all standard pack cards Optics" Lovely patch 
+	-- Functionality implemented in "Migranie makes all standard pack cards Optics" Lovely patch 
 }
