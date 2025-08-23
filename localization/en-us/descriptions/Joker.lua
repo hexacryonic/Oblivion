@@ -24,7 +24,7 @@ return {
 		name = 'Parallel Joker',
 		text = {
 			"{C:chips}+#1#{} Chips",
-			corrupted_from("Joker")
+			corrupted_from("Joker"),
 		}
 	},
 	j_ovn_lucasseries = {
@@ -33,7 +33,7 @@ return {
 			"Each played",
 			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
 			"gives {X:mult,C:white} X#1# {} Mult when scored",
-			corrupted_from("Fibonacci")
+			corrupted_from("Fibonacci"),
 		}
 	},
 	j_ovn_perpendicular = {
@@ -41,7 +41,7 @@ return {
 		text = {
 			"Scored cards earn {C:attention}$#1#{} if another",
 			"card of its {C:attention}same rank{} is held in hand",
-			corrupted_from("Reserved Parking")
+			corrupted_from("Reserved Parking"),
 		}
 	},
 	j_ovn_yolo = {
@@ -52,7 +52,7 @@ return {
 			"{s:0.3} {}",
 			"{C:chips}-a fucktillion{} Hands",
 			"when hand played",
-			corrupted_from("Acrobat")
+			corrupted_from("Acrobat"),
 		}
 	},
 	j_ovn_supplydrop = {
@@ -71,7 +71,7 @@ return {
 
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
 			"{s:0.2} {}",
-			corrupted_from("Gift Card")
+			corrupted_from("Gift Card"),
 		}
 	},
 	j_ovn_pmo = {
@@ -79,7 +79,7 @@ return {
 		text = {
 			"Effects that would target",
 			"{C:attention}any face card{} target {C:attention}Aces{} instead",
-			corrupted_from("Pareidolia")
+			corrupted_from("Pareidolia"),
 			"{s:0.3} {}",
 			"{C:inactive,s:0.8}Code by Airtoum{}"
 		}
@@ -89,7 +89,7 @@ return {
 		text = {
 			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
 			"banish or destroy their counterparts",
-			corrupted_from("Showman")
+			corrupted_from("Showman"),
 		}
 	},
 	j_ovn_airstrike = {
@@ -99,7 +99,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult every hand played",
 			"When scored, {C:attention}10{}s give their stockpiled Mult",
 			"and reset their stockpile after the hand",
-			corrupted_from("Walkie Talkie")
+			corrupted_from("Walkie Talkie"),
 			"{s:0.3} {}",
 			"{C:inactive,s:0.8}Art by Andromeda{}"
 		}
@@ -110,7 +110,7 @@ return {
 			"{C:mult}+#1#{} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("Droll Joker")
+			corrupted_from("Droll Joker"),
 		}
 	},
 	j_ovn_insightful = {
@@ -119,7 +119,7 @@ return {
 			"{C:chips}+#1#{} Chips if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("Crafty Joker")
+			corrupted_from("Crafty Joker"),
 		}
 	},
 	j_ovn_breach = {
@@ -128,7 +128,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("The Tribe")
+			corrupted_from("The Tribe"),
 		}
 	},
 	j_ovn_prideful = {
@@ -146,7 +146,7 @@ return {
 			"{C:green}#2# in #3#{} chance this",
 			"card is destroyed",
 			"at end of round",
-			corrupted_from("Cavendish")
+			corrupted_from("Cavendish"),
 		}
 	},
 	j_ovn_apartfalling = {
@@ -155,7 +155,7 @@ return {
 			"This Joker gains {X:mult,C:white} X#2# {} Mult",
 			"whenever a Joker {C:ovn_corrupted}corrupts{}",
 			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive}Mult)",
-			corrupted_from("Hologram")
+			corrupted_from("Hologram"),
 		}
 	},
 	j_ovn_aeon = {
@@ -164,7 +164,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult",
 			"{C:attention}Cavendish {}is no longer extinct",
 			"and can be obtained multiple times",
-			corrupted_from("Gros Michel")
+			corrupted_from("Gros Michel"),
 		}
 	},
 	j_ovn_spiral_of_addiction = {
@@ -175,7 +175,7 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive}Mult)",
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
-			corrupted_from("Drunkard")
+			corrupted_from("Drunkard"),
 		}
 	},
 	j_ovn_collapsing_world = {
@@ -186,7 +186,7 @@ return {
 			"of the round are {C:red}destroyed,",
 			"then this Joker gains {C:mult}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
-			corrupted_from("Mystic Summit or Erosion")
+			corrupted_from("Mystic Summit or Erosion"),
 		}
 	},
 	j_ovn_master_of_puppets = {
@@ -195,7 +195,7 @@ return {
 			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
 			"a random {C:attention}Jack {}in your deck is given",
 			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
-			corrupted_from("Hit the Road")
+			corrupted_from("Hit the Road"),
 		}
 	}
 }
