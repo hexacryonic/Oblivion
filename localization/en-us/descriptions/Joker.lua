@@ -215,5 +215,14 @@ return {
 			"contain modified {C:ovn_optic}Optic {}cards",
 			corrupted_from("Hallucination"),
 		}
+	},
+	j_ovn_database = {
+		name = "Database",
+		text = {
+			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
+			"obtained cumulatively over the run",
+			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
+			corrupted_from("Abstract Joker"),
+		}
 	}
 }

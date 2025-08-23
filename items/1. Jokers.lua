@@ -1050,5 +1050,34 @@ SMODS.Joker {
 	pos = {x=2, y=3},
 	rarity = 'ovn_corrupted',
 	cost = 6
-	-- Functionality implemented in "Migranie makes all standard pack cards Optics" Lovely patch 
+	-- Functionality implemented in "Migraine makes all standard pack cards Optics" Lovely patch 
+}
+
+SMODS.Joker {
+	key = 'database',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.chips_per,
+			card.ability.extra.chips_per*(G.GAME.cumulative_unique_joker_count or 0)
+		}}
+	end,
+	config = {
+		extra = {
+			chips_per = 20
+		},
+	},
+
+	atlas = 'corrupted',
+	pos = {x=3, y=3},
+
+	rarity = 'ovn_corrupted',
+	cost = 6,
+
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				chips = card.ability.extra.chips_per*G.GAME.cumulative_unique_joker_count
+			}
+		end
+	end
 }

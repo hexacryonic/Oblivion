@@ -209,6 +209,8 @@ function Game:start_run(args)
 		})
 	end)
 	startrun_hook(self, args)
+	G.GAME.cumulative_unique_joker_count = 0
+	G.GAME.cumulative_unique_jokers = {}
 end
 
 ----
@@ -223,5 +225,12 @@ function Card:add_to_deck(from_debuff)
 		and G.GAME.in_corrupt_plasma
 	) then
 		Ovn_f.optic_instability(1)
+	end
+
+	if self.ability.set == "Joker" then
+		if not G.GAME.cumulative_unique_jokers[self.config.center.key] then
+			G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count + 1
+			G.GAME.cumulative_unique_jokers[self.config.center.key] = true
+		end
 	end
 end
