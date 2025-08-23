@@ -83,6 +83,64 @@ SMODS.Joker {
 	end
 }
 
+SMODS.Joker {
+	key = 'ice_joker',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult_gain,
+			card.ability.extra.xmult,
+			card.ability.extra.xmult_gain_gain
+		}}
+	end,
+	config = {
+		extra = {
+			xmult = 1,
+			xmult_gain = 0.05,
+			xmult_gain_gain = 0.05
+		}
+	},
+
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=0, y=0 },
+
+	rarity = 2,
+	cost = 6,
+
+	calculate = function(self, card, context)
+		local card_extra = card.ability.extra
+		if context.joker_main then
+			return {xmult = card_extra.xmult}
+		end
+
+		if context.ovn_ice_degraded then
+			card_extra.xmult = card_extra.xmult + card_extra.xmult_gain
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				message_card = card
+			}
+		end
+
+		if context.remove_playing_cards and not context.blueprint then
+			local ice_cards = 0
+			for _,removed_card in ipairs(context.removed) do
+				if removed_card.ice_melted then
+					ice_cards = ice_cards + 1
+				end
+			end
+			if ice_cards > 0 then
+				card_extra.xmult_gain = card_extra.xmult_gain + card_extra.xmult_gain_gain*ice_cards
+					return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}, true
+			end
+		end
+	end
+}
+
 ----
 
 SMODS.Consumable {

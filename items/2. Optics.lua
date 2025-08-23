@@ -267,13 +267,6 @@ SMODS.Consumable{
 
 ----
 
-local function corruption_dissolve(card)
-	add_simple_event('after', 0.1, function()
-		play_sound("tarot1")
-		card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-	end)
-end
-
 SMODS.Enhancement{
 	key = "ice",
 	loc_vars = function(self, info_queue, card)
@@ -301,12 +294,30 @@ SMODS.Enhancement{
 			return { x_mult = c_extra.current_x_mult }
 		end
 
-		if (context.after and c_extra.is_melting) then
+		if context.after and c_extra.is_melting then
 			c_extra.current_x_mult = c_extra.current_x_mult - c_extra.x_mult_loss
 			c_extra.is_melting = false
+
+			if c_extra.current_x_mult > 1 then
+				SMODS.calculate_context{
+					ovn_ice_degraded = true,
+					other_card = card,
+					ovn_ice_xmult = c_extra.current_x_mult
+				}
+			end
 		end
 
-		if c_extra.current_x_mult <= 1 then corruption_dissolve(card) end
+		if (
+			context.destroy_card == card
+			and context.cardarea == G.play
+			and c_extra.current_x_mult <= (1 + card.ability.extra.x_mult_loss)
+		) then
+			card.ice_melted = true
+			add_simple_event(nil, nil, function()
+				play_sound("tarot1")
+			end)
+			return {remove = true}
+		end
 	end,
 }
 

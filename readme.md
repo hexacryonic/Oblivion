@@ -86,3 +86,13 @@ if context.ovn_run_started then
     -- Recommended to check G.STATE as well
 }
 ```
+
+This context is used when an Ice card degrades. It is sent by the Ice enhancement register.
+```lua
+if context.ovn_ice_degraded then
+{
+    ovn_ice_degraded = true,
+    other_card = ice_card,
+    ovn_ice_xmult = number
+}
+```

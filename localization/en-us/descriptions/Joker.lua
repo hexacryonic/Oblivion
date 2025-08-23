@@ -29,6 +29,16 @@ return {
 			'{C:inactive,s:0.8}the cold Joker of out hot eat the Joker"'
 		}
 	},
+	j_ovn_ice_joker = {
+		name = 'Ice Joker',
+		text = {
+			"This Joker gains {X:mult,C:white}+X#1# {} Mult",
+			"when an {C:attention}Ice Card {}degrades",
+			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
+			"This gain increases by {C:attention}+#3#",
+			"when an {C:attention}Ice Card {}fully melts"
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
