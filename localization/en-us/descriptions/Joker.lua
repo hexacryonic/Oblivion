@@ -44,7 +44,8 @@ return {
 	j_ovn_darkjoker = {
 		name = 'Parallel Joker',
 		text = {
-			"{C:chips}+#1#{} Chips",
+			"Played cards give",
+			"{C:mult}+#1#{} Mult when scored",
 			corrupted_from("Joker"),
 		}
 	},

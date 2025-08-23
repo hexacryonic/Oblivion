@@ -376,9 +376,9 @@ SMODS.Voucher {
 SMODS.Joker {
 	key = 'darkjoker',
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.chips } }
+		return { vars = { card.ability.extra.mult } }
 	end,
-	config = { extra = { chips = 50 } },
+	config = { extra = { mult = 1 } },
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 0 },
@@ -388,9 +388,9 @@ SMODS.Joker {
 	cost = 3,
 
 	calculate = function(self, card, context)
-		if context.joker_main then
+		if context.individual and context.cardarea == G.play then
 			return {
-				chips = card.ability.extra.chips,
+				mult = card.ability.extra.mult
 			}
 		end
 	end
