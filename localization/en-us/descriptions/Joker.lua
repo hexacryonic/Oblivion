@@ -180,7 +180,7 @@ return {
 			"discarded in the {C:attention}final Discard",
 			"of the round are {C:red}destroyed,",
 			"then this Joker gains {C:mult}+#1# {}Mult",
-			"{C:inactive}(Currently {C:mult}X#2#{C:inactive})",
+			"{C:inactive}(Currently {C:mult}+#2#{C:inactive})",
 			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Mystic Summit or Erosion{}",
 		}
 	},
