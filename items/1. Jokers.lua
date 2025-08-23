@@ -1031,7 +1031,7 @@ SMODS.Joker {
 	config = {
 		extra = {
 			joker_slots = 1,
-			mult_gain = 3,
+			mult_gain = 2,
 			mult = 0,
 		},
 	},
@@ -1090,7 +1090,7 @@ SMODS.Joker {
 	end,
 	config = {
 		extra = {
-			chips_per = 20
+			chips_per = 10
 		},
 	},
 
