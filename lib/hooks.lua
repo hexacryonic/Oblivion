@@ -210,3 +210,18 @@ function Game:start_run(args)
 	end)
 	startrun_hook(self, args)
 end
+
+----
+
+local addtodeck_hook = Card.add_to_deck
+function Card:add_to_deck(from_debuff)
+	addtodeck_hook(self, from_debuff)
+	if (
+		not from_debuff
+		and self.config.card
+		and self.config.card.suit == "ovn_Optics"
+		and G.GAME.in_corrupt_plasma
+	) then
+		Ovn_f.optic_instability(1)
+	end
+end
