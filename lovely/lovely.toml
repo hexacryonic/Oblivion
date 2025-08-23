@@ -202,3 +202,15 @@ G.hand:change_size(-G.GAME.current_round.temp_handsize_change)
 G.GAME.current_round.temp_handsize_change = 0
 '''
 match_indent = true
+
+# Migrane makes all standard pack cards Optics
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)"
+position = "after"
+payload = '''if Ovn_f.has_joker('j_ovn_migrane') and card.base then
+  card:change_suit('ovn_Optics')
+  Ovn_f.guaranteed_modifier(i, card)
+end'''
+match_indent = true

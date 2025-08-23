@@ -372,3 +372,48 @@ Ovn_f.temp_handsize_change = function(amount)
 	G.hand:change_size(amount)
 	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
 end
+
+----
+
+Ovn_f.guaranteed_modifier = function(card_index, card)
+	local modifiers = {"enhancement", "seal", "edition"}
+	local indices = {}
+	local function seedkey(input)
+		return (
+			"ovn_guaranteed_modifier"
+			.. (input and ("_" .. input) or "")
+			.. card_index
+		)
+	end
+	-- a modifier is guaranteed
+	-- 1 in 8 chance for another modifier
+	-- 1 in 16 chance for yet another modifier
+	table.insert(indices, math.ceil(pseudoseed(seedkey("i"))*3))
+	if pseudoseed(seedkey()) < (1/8) then
+		table.insert(indices, math.ceil(pseudoseed(seedkey("i2"))*2))
+		if pseudoseed(seedkey("2")) < (1/16) then
+			table.insert(indices, 1)
+		end
+	end
+
+	for _,i in ipairs(indices) do
+		local current_modifier = modifiers[i]
+		if current_modifier == "enhancement" then
+			card:set_ability(SMODS.poll_enhancement{
+				guaranteed = true,
+				type_key = seedkey("enhancement")
+			})
+		elseif current_modifier == "seal" then
+			card:set_seal(SMODS.poll_seal{
+				guaranteed = true,
+				type_key = seedkey("seal")
+			})
+		elseif current_modifier == "edition" then
+			card:set_edition(poll_edition(
+				seedkey("edition"),
+				nil, true, true
+			))
+		end
+		table.remove(modifiers, i)
+	end
+end

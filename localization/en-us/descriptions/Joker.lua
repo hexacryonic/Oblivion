@@ -207,5 +207,13 @@ return {
 			"{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)",
 			corrupted_from("Wee Joker"),
 		}
+	},
+	j_ovn_migrane = {
+		name = "Migrane",
+		text = {
+			"{C:attention}Standard Packs {}only",
+			"contain modified {C:ovn_optic}Optic {}cards",
+			corrupted_from("Hallucination"),
+		}
 	}
 }
