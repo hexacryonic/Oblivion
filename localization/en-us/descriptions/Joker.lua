@@ -20,6 +20,17 @@ return {
 			"when sold"
 		}
 	},
+	j_ovn_ovn = {
+		name = 'ovn',
+		text = {
+			"When {C:attention}Boss Blind defeated,",
+			"make the leftmost {C:attention}Joker {C:dark_edition}Miasma",
+			'{C:inactive,s:0.8}"Why do they call it oven when you of in',
+			'{C:inactive,s:0.8}the cold Joker of out hot eat the Joker"'
+		}
+	},
+
+	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
 		name = 'Parallel Joker',
 		text = {

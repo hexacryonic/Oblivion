@@ -56,6 +56,33 @@ SMODS.Joker {
 	end,
 }
 
+SMODS.Joker {
+	key = 'ovn',
+	atlas = 'corrupted',
+	pos  = { x=4, y=0 },
+
+	blueprint_compat = false,
+	rarity = 3,
+	cost = 99999,
+
+	calculate = function(self, card, context)
+		if (
+			context.end_of_round
+			and context.cardarea == G.jokers
+			and not context.game_over
+			and context.beat_boss
+		) then
+			add_simple_event(nil, nil, function ()
+				local leftmost_joker = G.jokers.cards[1]
+				leftmost_joker:set_edition("e_ovn_miasma")
+				leftmost_joker:juice_up()
+				card:juice_up()
+				play_sound('tarot1')
+			end)
+		end
+	end
+}
+
 ----
 
 SMODS.Consumable {
