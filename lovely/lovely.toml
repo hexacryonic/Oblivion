@@ -209,7 +209,7 @@ match_indent = true
 target = "card.lua"
 pattern = "card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)"
 position = "after"
-payload = '''if Ovn_f.has_joker('j_ovn_migraine') and card.base then
+payload = '''if Ovn_f.has_joker('j_ovn_migraine') and (card.ability.set == "Default" or card.ability.set == "Enhanced") then
   card:change_suit('ovn_Optics')
   Ovn_f.guaranteed_modifier(card, i)
 end'''

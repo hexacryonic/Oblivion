@@ -378,7 +378,8 @@ end
 
 ----
 
--- Sets a guaranteed modifier (enhancement, seal, edition) on a card.
+-- Sets a guaranteed modifier (enhancement, seal, edition) on a card,\
+-- if it doesn't have one already.
 ---@param card Card
 ---@param card_index number
 ---@return nil
