@@ -211,6 +211,6 @@ pattern = "card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GA
 position = "after"
 payload = '''if Ovn_f.has_joker('j_ovn_migrane') and card.base then
   card:change_suit('ovn_Optics')
-  Ovn_f.guaranteed_modifier(i, card)
+  Ovn_f.guaranteed_modifier(card, i)
 end'''
 match_indent = true

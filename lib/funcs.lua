@@ -368,6 +368,9 @@ end
 
 ----
 
+-- Temporarily changes hand size, just for the round.
+---@param amount integer
+---@return nil
 Ovn_f.temp_handsize_change = function(amount)
 	G.hand:change_size(amount)
 	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
@@ -375,7 +378,12 @@ end
 
 ----
 
-Ovn_f.guaranteed_modifier = function(card_index, card)
+-- Sets a guaranteed modifier (enhancement, seal, edition) on a card.
+---@param card Card
+---@param card_index number
+---@return nil
+Ovn_f.guaranteed_modifier = function(card, card_index)
+	card_index = card_index or ""
 	local modifiers = {"enhancement", "seal", "edition"}
 	local indices = {}
 	local function seedkey(input)
