@@ -76,8 +76,7 @@ Ovn_f.corrupt_joker = function(card)
 		}
         corrupted_card:juice_up(0.3, 0.5)
 
-        if not corrupted_card.ability.extra then corrupted_card.ability.extra = {} end
-        corrupted_card.ability.extra.ovn_former_form = card_key
+		corrupted_card.ability.ovn_former_form = card_key
 		corrupted_card:calculate_joker{
 			ovn_corrupted_from = true,
 			ovn_former_form_key = card_key
@@ -93,24 +92,22 @@ Ovn_f.corrupt_joker = function(card)
     end)
 end
 
--- Sets a random former form of a (corrupted) card/
+-- Sets a random former form of a (corrupted) card if not set./
 ---@param card Card
 ---@return nil|string
 Ovn_f.set_random_former_form = function(card)
-	if card.ability.extra and card.ability.extra.ovn_former_form then return end
+	if card.ability.ovn_former_form then return end
 	local card_key = card.config.center.key
-
-	card.ability.extra = card.ability.extra or {}
 
 	local pure_form_options = Oblivion.purity_map[card_key]
 	if not pure_form_options then return end
 	if type(pure_form_options) == "string" then
-		card.ability.extra.ovn_former_form = pure_form_options
+		card.ability.ovn_former_form = pure_form_options
 		return pure_form_options
 	end
 
 	local former_form = pseudorandom_element(pure_form_options, "ovn_former_form")
-	card.ability.extra.ovn_former_form = former_form
+	card.ability.ovn_former_form = former_form
 	return former_form
 end
 
@@ -149,8 +146,7 @@ Ovn_f.purify_joker = function(card)
 	local card_key = card.config.center.key
 	local pmap_entry = Oblivion.purity_map[card_key]
 	local pure_card_key = (
-		card.ability.extra
-		and card.ability.extra.ovn_former_form
+		card.ability.ovn_former_form
 		or (
 			type(pmap_entry) == "table"
 			and pseudorandom_element(pmap_entry, pseudoseed("purifyJoker"))
