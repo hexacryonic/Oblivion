@@ -261,5 +261,13 @@ return {
 			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
 			corrupted_from("Abstract Joker"),
 		}
+	},
+	j_ovn_cigarette_card = {
+		name = "Cigarette Card",
+		text = {
+			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
+			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
+			corrupted_from("Baseball Card"),
+		}
 	}
 }

@@ -1219,3 +1219,34 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = 'cigarette_card',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult
+		}}
+	end,
+	config = {
+		extra = {
+			xmult = 1.5
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=3},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	calculate = function(self, card, context)
+		if context.other_joker and context.other_joker.config.center.rarity == "ovn_corrupted" then
+			return {
+				xmult = card.ability.extra.xmult,
+				message_card = context.other_joker
+			}
+		end
+	end,
+	-- Additional functionality implemented in
+	-- "Cigarette Card makes all Uncommons Miasma" Lovely patch 
+}
