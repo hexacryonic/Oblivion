@@ -191,7 +191,7 @@ return {
 		text = {
 			"This Joker gains {X:mult,C:white} X#2# {} Mult",
 			"whenever a Joker {C:ovn_corrupted}corrupts{}",
-			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive}Mult)",
+			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive} Mult)",
 			corrupted_from("Hologram"),
 		}
 	},
@@ -209,7 +209,7 @@ return {
 		text = {
 			"This Joker gains {X:mult,C:white}X#1# {} Mult per round",
 			"where {C:attention}every discard {}is used",
-			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive}Mult)",
+			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
 			corrupted_from("Drunkard"),
