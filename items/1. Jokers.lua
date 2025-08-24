@@ -149,8 +149,8 @@ SMODS.Joker {
 		}
 	},
 	-- placeholder
-	atlas = "opticenhance_atlas",
-	pos = { x=3, y=0 },
+	atlas = "notcorrupted",
+	pos = { x=1, y=0 },
 
 	rarity = 1,
 	cost = 4,
@@ -176,7 +176,7 @@ SMODS.Joker {
 		}
 	},
 	atlas = 'corrupted',
-	pos  = { x=4, y=0 },
+	pos  = { x=0, y=3 },
 
 	rarity = "ovn_corrupted",
 	cost = 4,
@@ -1019,7 +1019,7 @@ SMODS.Joker {
 	},
 
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	pos = {x=0, y=4},
 
 	rarity = 'ovn_corrupted',
 	cost = 7,
