@@ -97,8 +97,9 @@ local loc =  {
 			e_ovn_miasma = {
 				name = "Miasma",
 				text = {
-					"{C:attention}Retriggers{} in scoring thrice, then {C:ovn_corrupted}corrupts{}",
-					"if possible, otherwise {C:mult}self-destructs{}"
+					"{C:attention}Retriggers{} in scoring thrice,",
+					"then {C:ovn_corrupted}corrupts{} if possible,",
+					"otherwise {S:1.1,C:red,E:2}self-destructs{}"
 				}
 			}
 		},
