@@ -209,8 +209,8 @@ function Game:start_run(args)
 		})
 	end)
 	startrun_hook(self, args)
-	G.GAME.cumulative_unique_joker_count = 0
-	G.GAME.cumulative_unique_jokers = {}
+	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
+	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
 end
 
 ----
