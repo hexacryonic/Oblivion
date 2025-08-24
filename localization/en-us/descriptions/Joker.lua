@@ -39,6 +39,21 @@ return {
 			"when an {C:attention}Ice Card {}fully melts"
 		}
 	},
+	j_ovn_pure_visage = {
+		name = "Pure Visage",
+		text = {
+			"Once per round, press",
+			"{C:attention}side button {}to {C:ovn_corrupted}corrupt {}this Joker"
+		}
+	},
+	-- Corrupt Visage goes here for immediate viewing after Pure Visage
+	j_ovn_corrupt_visage = {
+		name = "Corrupt Visage",
+		text = {
+			"Once per round, press",
+			"{C:attention}side button {}to {C:blue}purify {}this Joker"
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {

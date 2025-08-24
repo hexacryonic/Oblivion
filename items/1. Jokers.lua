@@ -141,6 +141,59 @@ SMODS.Joker {
 	end
 }
 
+SMODS.Joker {
+	key = 'pure_visage',
+	config = {
+		extra = {
+			on_cooldown = false
+		}
+	},
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=3, y=0 },
+
+	rarity = 1,
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			card.ability.extra.on_cooldown = false
+		end
+
+		if context.ovn_purified_from then
+			card.ability.extra.on_cooldown = true
+		end
+	end
+	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
+}
+
+-- Corrupt Visage goes here for immediate viewing after Pure Visage
+SMODS.Joker {
+	key = 'corrupt_visage',
+	config = {
+		extra = {
+			on_cooldown = false
+		}
+	},
+	atlas = 'corrupted',
+	pos  = { x=4, y=0 },
+
+	rarity = "ovn_corrupted",
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			card.ability.extra.on_cooldown = false
+		end
+
+		if context.ovn_corrupted_from then
+			Ovn_f.corruption_instability(1)
+			card.ability.extra.on_cooldown = true
+		end
+	end
+	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
+}
+
 ----
 
 SMODS.Consumable {

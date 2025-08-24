@@ -165,6 +165,16 @@ Ovn_f.purify_joker = function(card)
         purified_card:add_to_deck()
         G.jokers:emplace(purified_card)
         purified_card:juice_up(0.3, 0.5)
+
+		purified_card:calculate_joker{
+			ovn_purified_from = true,
+		}
+		SMODS.calculate_context({
+			ovn_purification_occurred = true,
+			ovn_purification_type = "Joker",
+			ovn_former_form_key = card_key,
+			ovn_purified_card = purified_card
+		})
     end)
 	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
 end

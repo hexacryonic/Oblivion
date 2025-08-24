@@ -78,6 +78,25 @@ if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
 }
 ```
 
+This context is used on the newly created (purified) Joker after a previous Joker was purified. It is sent by `Ovn_f.purify_joker`.
+```lua
+if context.ovn_purified_from then
+{
+    ovn_purified_from = true,
+}
+```
+
+This context is used when Joker corruption occurs. It is sent by `Ovn_f.corrupt_joker`.
+```lua
+if context.ovn_purification_occurred and ovn_purification_type == "Joker" then
+{
+    ovn_purification_occurred = true,
+    ovn_purification_type = "Joker",
+    ovn_former_form_key = card_key,
+    ovn_purified_card = card
+}
+```
+
 This context is used when a run is started or loaded. It is sent by the `Game.start_run` hook.
 ```lua
 if context.ovn_run_started then
