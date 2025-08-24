@@ -68,7 +68,7 @@ if initial then self.base.original_value = self.base.value end
 '''
 position = "after"
 payload = '''
-if self.base.suit == 'ovn_Optics' then self.ability.bonus = self.base.nominal end
+if self.base.suit == 'ovn_Optics' then self.base.nominal = self.base.nominal*2 end
 '''
 match_indent = true
 
