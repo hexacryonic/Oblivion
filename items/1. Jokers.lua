@@ -968,7 +968,11 @@ SMODS.Joker {
 			}
 		end
 
-		if context.ovn_corruption_occurred and context.ovn_corruption_type == "Joker" then
+		if (
+			context.ovn_corruption_occurred
+			and context.ovn_corruption_type == "Joker"
+			and not context.blueprint
+		) then
 			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.xmult_increase
 			return {
 				message = localize{
