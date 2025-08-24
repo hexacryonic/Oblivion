@@ -80,6 +80,7 @@ cenh["m_glass"] = "m_ovn_ice"
 cenh["m_gold"]  = "m_ovn_dense"
 cenh["m_steel"] = "m_ovn_unob"
 cenh["m_wild"]  = "m_ovn_coord"
+cenh["m_stone"]  = "m_ovn_crystal"
 
 -- Generates immediately after the game finishes loading
 G.E_MANAGER:add_event(Event {

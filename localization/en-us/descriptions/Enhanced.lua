@@ -29,7 +29,16 @@ return {
 		text = {
 			"{C:attention}Retrigger{} all scoring cards",
 			"{C:attention}#1#{} time while held in hand",
-			"{C:mult}Cannot be played{}",
+			"{S:1.1,C:red,E:2}Cannot be played{}",
 		}
 	},
+	m_ovn_crystal = {
+		name = 'Crystal Card',
+		text = {
+			"{S:1.1,C:red,E:2}Never scores",
+			"{C:planet}Levels up {}played {C:attention}Poker Hand",
+			"{C:red}Shatters {}after being",
+			"played {C:attention}#1# {}times"
+		}
+	}
 }

@@ -435,6 +435,42 @@ SMODS.Enhancement{
 	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
 }
 
+SMODS.Enhancement{
+	key = "crystal",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.plays_left }}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 1, y = 1 },
+	in_pool = function() return false end,
+	config = {extra = {plays_left = 3}},
+
+	never_scores = true,
+
+	calculate = function(self, card, context)
+		if context.before and context.cardarea == "unscored" then
+			card.ability.extra.plays_left = card.ability.extra.plays_left - 1
+			return {
+				level_up = true,
+				message = localize('k_level_up_ex')
+			}
+		end
+
+		if (
+			context.destroy_card == card
+			and context.cardarea == "unscored"
+			and card.ability.extra.plays_left <= 0
+		) then
+			add_simple_event(nil, nil, function ()
+				play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
+			end)
+			return {remove = true}
+		end
+	end,
+	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+}
+
 ----
 
 SMODS.Consumable {
