@@ -276,5 +276,15 @@ return {
 			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
 			corrupted_from("Baseball Card"),
 		}
+	},
+	j_ovn_library_of_babel = {
+		name = "Library of Babel",
+		text = {
+			"This Joker gains {X:mult,C:white}X#1# {} Mult",
+			"when played poker hand hasn't been",
+			"played within the {C:attention}last #2# {}hands",
+			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
+			corrupted_from("To-Do List, Card Sharp, or Obelisk")
+		}
 	}
 }

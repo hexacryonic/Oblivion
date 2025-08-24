@@ -244,3 +244,12 @@ payload = '''if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.r
   card:set_edition("e_ovn_miasma")
 end'''
 match_indent = true
+
+# Update last-played-hand tracker
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})"
+position = "after"
+payload = "Ovn_f.update_hands_last_played(text)"
+match_indent = true

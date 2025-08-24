@@ -462,3 +462,15 @@ Ovn_f.guaranteed_modifier = function(card, card_index)
 		))
 	end
 end
+
+----
+
+-- Updates the hands last-played tracker.
+---@param scoring_hand string|nil
+---@return nil
+Ovn_f.update_hands_last_played = function(scoring_name)
+	for key,count in pairs(G.GAME.hands_last_played) do
+		G.GAME.hands_last_played[key] = count + 1
+	end
+	G.GAME.hands_last_played[scoring_name] = 0
+end

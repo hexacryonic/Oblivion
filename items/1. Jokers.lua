@@ -53,6 +53,9 @@ SMODS.Joker {
 				message_card = card
 			}
 		end
+		if context.before then
+			print(context.scoring_name)
+		end
 	end,
 }
 
@@ -1304,4 +1307,55 @@ SMODS.Joker {
 	end,
 	-- Additional functionality implemented in
 	-- "Cigarette Card makes all Uncommons Miasma" Lovely patch 
+}
+
+SMODS.Joker {
+	key = 'library_of_babel',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult_set[card.ability.ovn_former_form or "j_todo_list"],
+			card.ability.extra.last_played_threshold,
+			card.ability.extra.xmult
+		}}
+	end,
+	config = {
+		extra = {
+			xmult_set = {
+				j_todo_list = 0.2,
+				j_card_sharp = 0.3,
+				j_obelisk = 0.4
+			},
+			xmult = 1,
+			last_played_threshold = 3
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	add_to_deck = function(self, card, context)
+		Ovn_f.set_random_former_form(card)
+	end,
+	calculate = function (self, card, context)
+		if context.before then
+			local hand = context.scoring_name
+			if G.GAME.hands_last_played[hand] >= card.ability.extra.last_played_threshold then
+				card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_set[card.ability.ovn_former_form]
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}
+			end
+		end
+
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
 }

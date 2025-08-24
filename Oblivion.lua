@@ -67,6 +67,9 @@ cmap["j_wee"]              = "j_ovn_infinitesimal"
 cmap["j_hallucination"]    = "j_ovn_migraine"
 cmap["j_abstract"]         = "j_ovn_database"
 cmap["j_ovn_pure_visage"]  = "j_ovn_corrupt_visage"
+cmap["j_todo_list"]        = "j_ovn_library_of_babel"
+cmap["j_card_sharp"]       = "j_ovn_library_of_babel"
+cmap["j_obelisk"]          = "j_ovn_library_of_babel"
 
 if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
 Oblivion.corruption_condition["j_gros_michel"] = function()
