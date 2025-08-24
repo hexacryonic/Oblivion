@@ -194,6 +194,57 @@ SMODS.Joker {
 	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
 }
 
+SMODS.Joker {
+	key = 'crystal_joker',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.extra_plays
+		}}
+	end,
+	config = {
+		extra = {
+			extra_plays = 2
+		}
+	},
+
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=1, y=1 },
+
+	rarity = 2,
+	cost = 6,
+
+	add_to_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_crystal" then
+				playing_card.ability.extra.plays_left = (
+					playing_card.ability.extra.plays_left
+					+ card.ability.extra.extra_plays
+				)
+			end
+		end
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_crystal" then
+				playing_card.ability.extra.plays_left = (
+					playing_card.ability.extra.plays_left
+					- card.ability.extra.extra_plays
+				)
+				if playing_card.ability.extra.plays_left <= 0 then
+					add_simple_event(nil, nil, function ()
+						play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
+						SMODS.destroy_cards(playing_card)
+					end)
+				end
+			end
+		end
+	end
+	-- Additional functionality found in "set_ability", Crystal enhancement register
+}
+
 ----
 
 SMODS.Consumable {

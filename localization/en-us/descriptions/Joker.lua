@@ -54,6 +54,13 @@ return {
 			"{C:attention}side button {}to {C:blue}purify {}this Joker"
 		}
 	},
+	j_ovn_crystal_joker = {
+		name = "Crystal Joker",
+		text = {
+			"{C:attention}Crystal Cards {}last",
+			"for {C:attention}+#1# {}extra hands"
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {

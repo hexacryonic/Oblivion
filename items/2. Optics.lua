@@ -448,6 +448,15 @@ SMODS.Enhancement{
 
 	never_scores = true,
 
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_crystal_jokers = SMODS.find_card('j_ovn_crystal_joker')
+		for _,crystal_joker in ipairs(all_crystal_jokers) do
+			card.ability.extra.plays_left = (
+				card.ability.extra.plays_left
+				+ crystal_joker.ability.extra.extra_plays
+			)
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == "unscored" then
 			card.ability.extra.plays_left = card.ability.extra.plays_left - 1
