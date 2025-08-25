@@ -69,6 +69,15 @@ return {
 			'are {C:red}destroyed'
 		}
 	},
+	j_ovn_purifier = {
+		name = "Purifier",
+		text = {
+			"When Blind is selected,",
+			"the {C:attention}leftmost {C:ovn_corrupted}Corrupted {}Joker",
+			"is {C:blue}purified {}to give this card {C:red}+#1# {}Mult",
+			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {

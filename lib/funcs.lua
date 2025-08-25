@@ -64,6 +64,7 @@ Ovn_f.corrupt_joker = function(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.corruptingJoker = true
+		local ability = card.ability
 
         play_sound("ovn_abyss")
         card:start_dissolve({G.C.RARITY['ovn_corrupted']})
@@ -79,7 +80,8 @@ Ovn_f.corrupt_joker = function(card)
 		corrupted_card.ability.ovn_former_form = card_key
 		corrupted_card:calculate_joker{
 			ovn_corrupted_from = true,
-			ovn_former_form_key = card_key
+			ovn_former_form_key = card_key,
+			ovn_former_form_ability = ability
 		}
 		SMODS.calculate_context({
 			ovn_corruption_occurred = true,
@@ -156,6 +158,7 @@ Ovn_f.purify_joker = function(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.purifyingJoker = true
+		local ability = card.ability
 
         play_sound("ovn_pure")
         card:start_dissolve({G.C.MONEY})
@@ -168,6 +171,8 @@ Ovn_f.purify_joker = function(card)
 
 		purified_card:calculate_joker{
 			ovn_purified_from = true,
+			ovn_former_form_key = card_key,
+			ovn_former_form_ability = ability
 		}
 		SMODS.calculate_context({
 			ovn_purification_occurred = true,

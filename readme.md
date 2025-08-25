@@ -63,7 +63,8 @@ This context is used on the newly created (corrupted) Joker after a previous Jok
 if context.ovn_corrupted_from then
 {
     ovn_corrupted_from = true,
-    ovn_former_form_key = card_key
+    ovn_former_form_key = card_key,
+    ovn_former_form_ability = table
 }
 ```
 
@@ -83,6 +84,8 @@ This context is used on the newly created (purified) Joker after a previous Joke
 if context.ovn_purified_from then
 {
     ovn_purified_from = true,
+    ovn_former_form_key = card_key,
+    ovn_former_form_ability = table
 }
 ```
 

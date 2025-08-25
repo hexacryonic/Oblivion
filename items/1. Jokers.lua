@@ -269,6 +269,63 @@ SMODS.Joker {
 	end
 }
 
+-- Get the leftmost corrupted Joker, if any.
+---@return integer
+---@return Card|nil
+local function get_leftmost_corrupted_joker()
+	for i,card in ipairs(G.jokers.cards) do
+		if card.config.center.rarity == "ovn_corrupted" then
+			return i, card
+		end
+	end
+	return -1, nil
+end
+
+SMODS.Joker {
+	key = 'purifier',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult_gain,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			mult_gain = 10,
+			mult = 0
+		}
+	},
+
+	--[[
+	atlas = "notcorrupted",
+	pos = { x=1, y=0 },
+	]]
+
+	rarity = 2,
+	cost = 5,
+
+	calculate = function (self, card, context)
+		if context.setting_blind then
+			local _, leftmost = get_leftmost_corrupted_joker()
+			if leftmost then
+				Ovn_f.purify_joker(leftmost)
+				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}
+			end
+		end
+
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+}
+
 ----
 
 SMODS.Consumable {
