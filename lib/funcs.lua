@@ -130,6 +130,8 @@ Ovn_f.is_corruptbanished = function(card_key)
 	-- In pool if Joker is not even corruptible
 	local corrupt_key = Oblivion.corruption_map[card_key]
 	if not corrupt_key then return false end
+	-- Do not destroy if self-corruptible
+	if corrupt_key == card_key then return false end
 
 	-- In pool if Joker's corrupt variant is not hled
 	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
@@ -471,7 +473,7 @@ end
 ----
 
 -- Updates the hands last-played tracker.
----@param scoring_hand string|nil
+---@param scoring_name string|nil
 ---@return nil
 Ovn_f.update_hands_last_played = function(scoring_name)
 	for key,count in pairs(G.GAME.hands_last_played) do

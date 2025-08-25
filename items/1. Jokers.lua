@@ -1465,3 +1465,50 @@ SMODS.Joker {
 		end
 	end
 }
+
+-- MAJOR BUG: Description does not update regardless if values changed
+SMODS.Joker {
+	key = 'nexus_point',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult,
+			card.ability.extra.xmult_gain
+		}}
+	end,
+	config = {
+		extra = {
+			xmult_gain = 0.2,
+			xmult = 1.1,
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 7,
+
+	calculate = function (self, card, context)
+		if (
+			context.ovn_corrupted_from
+			and context.ovn_former_form_key == "j_ovn_nexus_point"
+		) then
+			local former_ability = context.ovn_former_form_ability
+			add_simple_event("after", 0.1, function ()
+				card.ability.extra.xmult_gain = former_ability.extra.xmult_gain
+				card.ability.extra.xmult = former_ability.extra.xmult + card.ability.extra.xmult_gain
+				SMODS.calculate_effect({
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}, card)
+			end)
+		end
+
+		if context.individual and context.cardarea == G.play then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
+}

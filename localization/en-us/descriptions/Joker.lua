@@ -310,5 +310,14 @@ return {
 			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
 			"create a {C:attention}Glass Card {}of its rank and suit"
 		}
+	},
+	j_ovn_nexus_point = {
+		name = "Nexus Point",
+		text = {
+			"This Joker can be {C:ovn_corrupted}repeatedly corrupted",
+			"Scored cards give {X:mult,C:white}X1.1 {} Mult",
+			"Increases by {X:mult,C:white}X0.2 {} each time this Joker",
+			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
+		}
 	}
 }
