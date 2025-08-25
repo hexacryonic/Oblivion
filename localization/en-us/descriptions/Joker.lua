@@ -61,6 +61,14 @@ return {
 			"for {C:attention}+#1# {}extra hands"
 		}
 	},
+	j_ovn_trolley_problem = {
+		name = "Trolley Problem",
+		text = {
+			'{C:attention}Unscoring {}cards in',
+			'{C:attention}"of a Kind" {}hands',
+			'are {C:red}destroyed'
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
@@ -285,6 +293,13 @@ return {
 			"played within the {C:attention}last #2# {}hands",
 			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
 			corrupted_from("To-Do List, Card Sharp, or Obelisk")
+		}
+	},
+	j_ovn_bottled_ship_of_theseus = {
+		name = "Bottled Ship of Theseus",
+		text = {
+			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
+			"create a {C:attention}Glass Card {}of its rank and suit"
 		}
 	}
 }

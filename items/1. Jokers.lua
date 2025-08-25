@@ -248,6 +248,27 @@ SMODS.Joker {
 	-- Additional functionality found in "set_ability", Crystal enhancement register
 }
 
+SMODS.Joker {
+	key = 'trolley_problem',
+	config = { extra = { valid_hands = {
+		["Three of a Kind"] = true,
+		["Four of a Kind"] = true,
+		["Five of a Kind"] = true
+	}}},
+	rarity = 3,
+	cost = 8,
+
+	calculate = function (self, card, context)
+		if (
+			context.destroy_card
+			and context.cardarea == 'unscored'
+			and self.config.extra.valid_hands[context.scoring_name]
+		) then
+			return {remove = true}
+		end
+	end
+}
+
 ----
 
 SMODS.Consumable {
@@ -1356,6 +1377,34 @@ SMODS.Joker {
 			return {
 				xmult = card.ability.extra.xmult
 			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'bottled_ship_of_theseus',
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	calculate = function (self, card, context)
+		if context.remove_playing_cards and not context.blueprint then
+			for _,removed_card in ipairs(context.removed) do
+				if removed_card.config.center.key ~= "m_glass" then
+					local rank = removed_card.base.value
+					local suit = removed_card.base.suit
+					add_simple_event(nil, nil, function ()
+						SMODS.add_card { -- Random enhanced 3 of Clubs
+							set = "Enhanced",
+							rank = rank,
+							suit = suit,
+							enhancement = "m_glass"
+						}
+					end)
+				end
+			end
 		end
 	end
 }
