@@ -40,5 +40,20 @@ return {
 			"{C:red}Shatters {}after being",
 			"played {C:attention}#1# {}times"
 		}
+	},
+	m_ovn_radiant = {
+		name = 'Radiant Card',
+		text = {
+			"While held in hand,",
+			"{C:attention}scoring {}cards get bonus {C:chips}chips",
+			"equal to {C:attention}this card's {C:chips}chip {}value"
+		}
+	},
+	m_ovn_dynamo = {
+		name = 'Dynamo Card',
+		text = {
+			"If this card is {C:attention}played {}and {C:attention}unscoring,",
+			"scored cards give {C:mult}+#1# {}Mult"
+		}
 	}
 }

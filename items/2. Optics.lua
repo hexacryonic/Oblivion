@@ -480,6 +480,66 @@ SMODS.Enhancement{
 	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
 }
 
+SMODS.Enhancement{
+	key = "radiant",
+	config = {extra = {bonus_chips = 0}},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 3, y = 0 },
+	in_pool = function() return false end,
+
+
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_radiant_jokers = SMODS.find_card('j_ovn_radiant_joker')
+		for _,radiant_joker in ipairs(all_radiant_jokers) do
+			card.ability.extra.bonus_chips = (
+				card.ability.extra.bonus_chips
+				+ radiant_joker.ability.extra.extra_chips
+			)
+		end
+	end,
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == G.hand then
+			local card_chip = card.base.nominal + card.ability.extra.bonus_chips
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.bonus = other_card.ability.bonus + card_chip
+				add_simple_event(nil, nil, function ()
+					other_card:juice_up()
+				end)
+			end
+		end
+	end
+}
+
+SMODS.Enhancement{
+	key = 'dynamo',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {mult = 7}
+	},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 0, y = 1 },
+	in_pool = function() return false end,
+
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult + card.ability.extra.mult
+			end
+		end
+		if context.after and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult - card.ability.extra.mult
+			end
+		end
+	end
+}
+
 ----
 
 SMODS.Consumable {

@@ -326,6 +326,66 @@ SMODS.Joker {
 	end
 }
 
+SMODS.Joker {
+	key = 'radiant_joker',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.extra_chips,
+			card.ability.extra.chip_increase
+		}}
+	end,
+	config = {
+		extra = {
+			extra_chips = 5,
+			chip_increase = 1,
+		}
+	},
+
+	atlas = "opticenhance_atlas",
+	pos = { x=3, y=0 },
+
+	rarity = 2,
+	cost = 6,
+
+	add_to_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_radiant" then
+				playing_card.ability.extra.bonus_chips = (
+					playing_card.ability.extra.bonus_chips
+					+ card.ability.extra.extra_chips
+				)
+			end
+		end
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_radiant" then
+				playing_card.ability.extra.bonus_chips = (
+					playing_card.ability.extra.bonus_chips
+					- card.ability.extra.extra_chips
+				)
+			end
+		end
+	end,
+	calculate = function (self, card, context)
+		if (
+			context.individual
+			and context.other_card.config.center.key == "m_ovn_radiant"
+			and context.cardarea == G.play
+		) then
+			card.ability.extra.extra_chips = card.ability.extra.extra_chips + card.ability.extra.chip_increase
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.CHIPS,
+				message_card = card
+			}
+		end
+	end
+	-- Additional functionality found in "set_ability", Radiant enhancement register
+}
+
 ----
 
 SMODS.Consumable {

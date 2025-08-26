@@ -78,6 +78,15 @@ return {
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		}
 	},
+	j_ovn_radiant_joker = {
+		name = "Radiant Joker",
+		text = {
+			"{C:attention}Radiant {}Cards give scoring",
+			"cards {C:chips}+#1# {}more extra Chips",
+			"Increase this by {C:chips}+#2# {}when",
+			"a {C:attention}Radiant {}Card is scored"
+		}
+	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
