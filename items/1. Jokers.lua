@@ -677,6 +677,7 @@ SMODS.Joker {
 			if to_big(G.GAME.current_round.hands_played) > to_big(0) and to_big(G.GAME.chips/G.GAME.blind.chips) < to_big(1) then
 				G.STATE = G.STATES.GAME_OVER
 				G.STATE_COMPLETE = false
+				G.GAME.yolo = false
 				return nil, true
 			end
 
