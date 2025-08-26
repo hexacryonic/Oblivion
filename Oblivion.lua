@@ -73,6 +73,8 @@ cmap["j_obelisk"]             = "j_ovn_library_of_babel"
 cmap["j_ovn_trolley_problem"] = "j_ovn_bottled_ship_of_theseus"
 cmap["j_ovn_purifier"]        = "j_ovn_nexus_point"
 cmap["j_ovn_nexus_point"]     = "j_ovn_nexus_point"
+cmap["j_supernova"]           = "j_ovn_event_horizon"
+cmap["j_constellation"]       = "j_ovn_event_horizon"
 
 if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
 Oblivion.corruption_condition["j_gros_michel"] = function()

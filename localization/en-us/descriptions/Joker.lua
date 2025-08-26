@@ -308,7 +308,8 @@ return {
 		name = "Bottled Ship of Theseus",
 		text = {
 			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
-			"create a {C:attention}Glass Card {}of its rank and suit"
+			"create a {C:attention}Glass Card {}of its rank and suit",
+			corrupted_from("Trolley Problem")
 		}
 	},
 	j_ovn_nexus_point = {
@@ -318,6 +319,17 @@ return {
 			"Scored cards give {X:mult,C:white}X1.1 {} Mult",
 			"Increases by {X:mult,C:white}X0.2 {} each time this Joker",
 			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
+			corrupted_from("Purifier or Nexus Point")
+		}
+	},
+	j_ovn_event_horizon = {
+		name = "Event Horizon",
+		text = {
+			"{C:red}Hands no longer level up",
+			"Instead, this Joker gains half of",
+			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
+			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
+			corrupted_from("Supernova or Constellation")
 		}
 	}
 }

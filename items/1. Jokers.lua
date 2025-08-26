@@ -1513,3 +1513,35 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = 'event_horizon',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.chips,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			chips = 0,
+			mult = 0,
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 7,
+
+	calculate = function (self, card, context)
+		if context.joker_main then
+			return {
+				chips = card.ability.extra.chips,
+				mult  = card.ability.extra.mult
+			}
+		end
+	end
+	-- Additional funcitonality in level_up_hand hook
+}
