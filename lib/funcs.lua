@@ -55,7 +55,7 @@ end
 
 ----
 
--- Destroys a Joker and creates its corrupted variant.
+-- Transforms a Joker into its corrupted variant.
 ---@param card Card
 ---@return nil
 Ovn_f.corrupt_joker = function(card)
@@ -67,18 +67,13 @@ Ovn_f.corrupt_joker = function(card)
 		local ability = card.ability
 
         play_sound("ovn_abyss")
-        card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-        G.jokers:remove_from_highlighted(card)
+		if corrupted_card_key ~= card_key then
+			card:set_ability(G.P_CENTERS[corrupted_card_key])
+		end
+        card:juice_up(0.3, 0.5)
 
-        local corrupted_card = SMODS.add_card{
-			set = "Joker",
-			area = G.jokers,
-			key = corrupted_card_key
-		}
-        corrupted_card:juice_up(0.3, 0.5)
-
-		corrupted_card.ability.ovn_former_form = card_key
-		corrupted_card:calculate_joker{
+		card.ability.ovn_former_form = card_key
+		card:calculate_joker{
 			ovn_corrupted_from = true,
 			ovn_former_form_key = card_key,
 			ovn_former_form_ability = ability
@@ -87,7 +82,7 @@ Ovn_f.corrupt_joker = function(card)
 			ovn_corruption_occurred = true,
 			ovn_corruption_type = "Joker",
 			ovn_former_form_key = card_key,
-			ovn_corrupted_card = corrupted_card
+			ovn_corrupted_card = card
 		})
 
         G.GAME.corruptingJoker = false
@@ -143,7 +138,7 @@ end
 
 ----
 
--- Destroys a Joker and creates its pure variant.
+-- Transforms a Joker into its pure variant.
 ---@param card Card
 ---@return nil
 Ovn_f.purify_joker = function(card)
@@ -163,15 +158,12 @@ Ovn_f.purify_joker = function(card)
 		local ability = card.ability
 
         play_sound("ovn_pure")
-        card:start_dissolve({G.C.MONEY})
-        G.jokers:remove_from_highlighted(card)
+		if pure_card_key ~= card_key then
+			card:set_ability(G.P_CENTERS[pure_card_key])
+        end
+		card:juice_up(0.3, 0.5)
 
-        local purified_card = create_card("Joker", G.jokers, nil, nil, nil, nil, pure_card_key)
-        purified_card:add_to_deck()
-        G.jokers:emplace(purified_card)
-        purified_card:juice_up(0.3, 0.5)
-
-		purified_card:calculate_joker{
+		card:calculate_joker{
 			ovn_purified_from = true,
 			ovn_former_form_key = card_key,
 			ovn_former_form_ability = ability
@@ -180,7 +172,7 @@ Ovn_f.purify_joker = function(card)
 			ovn_purification_occurred = true,
 			ovn_purification_type = "Joker",
 			ovn_former_form_key = card_key,
-			ovn_purified_card = purified_card
+			ovn_purified_card = card
 		})
     end)
 	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
