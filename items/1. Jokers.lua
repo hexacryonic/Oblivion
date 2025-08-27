@@ -1321,17 +1321,17 @@ SMODS.Joker {
 	key = 'infinitesimal',
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
-			card.ability.extra.joker_slots,
+			card.ability.card_limit,
 			card.ability.extra.mult_gain,
 			card.ability.extra.mult
 		}}
 	end,
 	config = {
 		extra = {
-			joker_slots = 1,
 			mult_gain = 2,
 			mult = 0,
 		},
+		card_limit = 1,
 	},
 
 	atlas = 'corrupted',
@@ -1340,12 +1340,6 @@ SMODS.Joker {
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
-	add_to_deck = function(self, card, fron_debuff)
-		G.jokers:change_size(card.ability.extra.joker_slots)
-	end,
-	remove_from_deck = function(self, card, fron_debuff)
-		G.jokers:change_size(-card.ability.extra.joker_slots)
-	end,
 	calculate = function(self, card, context)
 		if (
 			context.individual

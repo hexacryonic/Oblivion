@@ -373,25 +373,3 @@ function SMODS.GUI.hand_chips_container(scale)
 	end
 	return handchipscontainer_hook(scale)
 end
-
-----
-
-local canselect_hook = G.FUNCS.can_select_card
-function G.FUNCS.can_select_card(e)
-	local card = e.config.ref_table
-	if card.label == "j_ovn_infinitesimal" then
-        e.config.colour = G.C.GREEN
-        e.config.button = 'use_card'
-	else
-		canselect_hook(e)
-	end
-end
-
-local checkbuyspace_hook = G.FUNCS.check_for_buy_space
-function G.FUNCS.check_for_buy_space(card)
-	if card.label == "j_ovn_infinitesimal" then
-		return true
-	else
-		return checkbuyspace_hook(card)
-	end
-end
