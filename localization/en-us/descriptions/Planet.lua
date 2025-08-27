@@ -1,4 +1,29 @@
+local planet_loc = function()
+	return {
+		"{S:0.8}({S:0.8,V:1}lvl.#1#{S:0.8}){} Level up",
+		"{C:attention}#2#",
+		"{C:mult}+#3#{} Mult and",
+		"{C:chips}+#4#{} chips",
+	}
+end
+
 return {
+	c_ovn_ganymede = {
+		name = "Ganymede",
+		text = planet_loc()
+	},
+	c_ovn_callisto = {
+		name = "Callisto",
+		text = planet_loc()
+	},
+	c_ovn_io = {
+		name = "Io",
+		text = planet_loc()
+	},
+	c_ovn_europa = {
+		name = "Europa",
+		text = planet_loc()
+	},
 	c_ovn_tres = {
 		name = 'TrEs-2b',
 		text = {

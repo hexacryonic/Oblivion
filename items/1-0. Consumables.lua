@@ -132,6 +132,25 @@ SMODS.Consumable {
 
 ----------------
 
+-- Quick reference to Planet loc_vars.
+---@param self table|SMODS.Center
+---@param info_queue table
+---@param card table|Card
+---@return table
+local function planet_loc_vars(self, info_queue, card)
+	local hand_type = card.ability.hand_type
+	local hand_ref = G.GAME.hands[hand_type]
+	return {vars = {
+		hand_ref.level,
+		localize(hand_type, 'poker_hands'),
+		hand_ref.l_mult,
+		hand_ref.l_chips,
+		colours = {
+			(hand_ref.level == 1 and G.C.UI.TEXT_DARK or G.C.HAND_LEVELS[math.min(7, hand_ref.level)])
+		}
+	}}
+end
+
 -----------
 -- PLANET
 -- Ganymede
@@ -139,22 +158,15 @@ SMODS.Consumable {
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'ganymede',
-	--! `h_` prefix was removed
+	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum', softlock = true },
-	pos = {x = 0, y = 0 },
+	
 	atlas = 'spectrum_atlas',
-	process_loc_text = function(self)
-		--use another planet's loc txt instead
-		local target_text = G.localization.descriptions[self.set]['c_mercury'].text
-		SMODS.Consumable.process_loc_text(self)
-		G.localization.descriptions[self.set][self.key].text = target_text
-	end,
+	pos = {x = 0, y = 0 },
+	
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
-	loc_txt = {
-		name = 'Ganymede'
-	}
 }
 
 -----------
@@ -164,22 +176,15 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'callisto',
-	--! `h_` prefix was removed
+	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Straight Spectrum', softlock = true },
-	pos = {x = 1, y = 0 },
+	
 	atlas = 'spectrum_atlas',
-	process_loc_text = function(self)
-		--use another planet's loc txt instead
-		local target_text = G.localization.descriptions[self.set]['c_mercury'].text
-		SMODS.Consumable.process_loc_text(self)
-		G.localization.descriptions[self.set][self.key].text = target_text
-	end,
+	pos = {x = 1, y = 0 },
+	
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
-	loc_txt = {
-			name = 'Callisto'
-		}
 }
 
 ---------
@@ -189,22 +194,15 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'io',
-	--! `h_` prefix was removed
+	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum House', softlock = true },
-	pos = {x = 2, y = 0 },
+	
 	atlas = 'spectrum_atlas',
-	process_loc_text = function(self)
-		--use another planet's loc txt instead
-		local target_text = G.localization.descriptions[self.set]['c_mercury'].text
-		SMODS.Consumable.process_loc_text(self)
-		G.localization.descriptions[self.set][self.key].text = target_text
-	end,
+	pos = {x = 2, y = 0 },
+	
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
-	loc_txt = {
-			name = 'Io'
-		}
 }
 
 ---------
@@ -214,22 +212,15 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'europa',
-	--! `h_` prefix was removed
+	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum Five', softlock = true },
-	pos = {x = 3, y = 0 },
+
 	atlas = 'spectrum_atlas',
-	process_loc_text = function(self)
-		--use another planet's loc txt instead
-		local target_text = G.localization.descriptions[self.set]['c_mercury'].text
-		SMODS.Consumable.process_loc_text(self)
-		G.localization.descriptions[self.set][self.key].text = target_text
-	end,
+	pos = {x = 3, y = 0 },
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
-	loc_txt = {
-			name = 'Europa'
-		}
 }
 
 ----------------
