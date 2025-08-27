@@ -3,6 +3,39 @@ to_big = to_big or function(x)
 	return x
 end
 
+---@param card Card
+---@param target string
+---@param scalar string
+---@param colour? table
+---@param message_key? string
+---@return nil
+local function simple_scale(card, target, scalar, colour, message_key)
+	SMODS.scale_card(card, {
+		ref_table = card.ability.extra,
+		ref_value = target,
+		scalar_value = scalar,
+		message_key = message_key,
+		message_colour = colour
+	})
+end
+
+---@param card Card
+---@param target string
+---@param scalar string
+---@param colour? table
+---@param message_key? string
+---@return nil
+local function former_form_scale(card, target, scalar, colour, message_key)
+	SMODS.scale_card(card, {
+		ref_table = card.ability.extra,
+		ref_value = target,
+		scalar_table = card.ability.extra[scalar],
+		scalar_value = card.ability.ovn_former_form,
+		message_key = message_key,
+		message_colour = colour
+	})
+end
+
 SMODS.Rarity({
 	key = "corrupted",
 	badge_colour = HEX('2349cb'),
@@ -117,28 +150,14 @@ SMODS.Joker {
 		end
 
 		if context.ovn_ice_degraded then
-			card_extra.xmult = card_extra.xmult + card_extra.xmult_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				message_card = card
-			}
+			simple_scale(card, "xmult", "xmult_gain", G.C.RED)
 		end
 
 		if context.remove_playing_cards and not context.blueprint then
-			local ice_cards = 0
 			for _,removed_card in ipairs(context.removed) do
 				if removed_card.ice_melted then
-					ice_cards = ice_cards + 1
+					simple_scale(card, "xmult_gain", "xmult_gain_gain", G.C.RED)
 				end
-			end
-			if ice_cards > 0 then
-				card_extra.xmult_gain = card_extra.xmult_gain + card_extra.xmult_gain_gain*ice_cards
-					return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					message_card = card
-				}, true
 			end
 		end
 	end
@@ -221,6 +240,7 @@ SMODS.Joker {
 		if from_debuff then return end
 		for _,playing_card in ipairs(G.playing_cards) do
 			if playing_card.config.center.key == "m_ovn_crystal" then
+				-- This is not scaling, hence no simple_scale use
 				playing_card.ability.extra.plays_left = (
 					playing_card.ability.extra.plays_left
 					+ card.ability.extra.extra_plays
@@ -309,12 +329,7 @@ SMODS.Joker {
 			local _, leftmost = get_leftmost_corrupted_joker()
 			if leftmost then
 				Ovn_f.purify_joker(leftmost)
-				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-				return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					message_card = card
-				}
+				simple_scale(card, "mult", "mult_gain", G.C.MULT)
 			end
 		end
 
@@ -375,12 +390,7 @@ SMODS.Joker {
 			and context.other_card.config.center.key == "m_ovn_radiant"
 			and context.cardarea == G.play
 		) then
-			card.ability.extra.extra_chips = card.ability.extra.extra_chips + card.ability.extra.chip_increase
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.CHIPS,
-				message_card = card
-			}
+			simple_scale(card, "extra_chips", "chip_increase", G.C.CHIPS)
 		end
 	end
 	-- Additional functionality found in "set_ability", Radiant enhancement register
@@ -640,6 +650,7 @@ SMODS.Joker {
 		end
 	end
 }
+
 SMODS.Joker {
 	key = 'lucasseries',
 	loc_vars = function(self, info_queue, center)
@@ -894,8 +905,13 @@ SMODS.Joker {
 		if context.individual and context.other_card.base.value == '10' then
 			local c_ability = context.other_card.ability
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
-				local fallback = c_ability and c_ability.perma_x_mult or 0
-				c_ability.perma_x_mult = fallback + card.ability.extra.xmult
+				SMODS.scale_card(context.other_card, {
+					ref_table = context.other_card,
+					ref_value = "perma_x_mult",
+					scalar_table = card.ability.extra,
+					scalar_value = "xmult",
+					colour = G.C.MULT
+				})
 			elseif context.cardarea == G.play then
 				c_ability.perma_x_mult = 0
 			end
@@ -1115,16 +1131,7 @@ SMODS.Joker {
 			and context.ovn_corruption_type == "Joker"
 			and not context.blueprint
 		) then
-			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.xmult_increase
-			return {
-				message = localize{
-					key = "a_xmult",
-					type = "variable",
-					vars = { card.ability.extra.x_mult }
-				},
-				colour = G.C.MULT,
-				message_card = card
-			}
+			simple_scale(card, "xmult", "xmult_increase", G.C.MULT, "a_xmult")
 		end
 	end
 }
@@ -1169,12 +1176,7 @@ SMODS.Joker {
 			and not context.blueprint
 		) then
 			if G.GAME.current_round.discards_left <= 0 then
-				card_extra.xmult = card_extra.xmult + card_extra.xmult_gain
-				return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					message_card = card
-				}
+				simple_scale(card, "xmult", "xmult_gain", G.C.MULT)
 			else
 				card_extra.do_handsize_change = true
 			end
@@ -1235,23 +1237,11 @@ SMODS.Joker {
 				or context.other_card == G.hand.highlighted[#G.hand.highlighted]
 			)
 		) then
-			local message, colour
 			-- only give mult on first card (i.e. give mult once per discard)
 			if context.other_card == G.hand.highlighted[1] then
-				local cardextra = card.ability.extra
-				cardextra.mult = cardextra.mult + cardextra.mult_set[cardextra.ovn_former_form]
-				message = localize {
-					type = 'variable',
-					key = 'a_mult',
-					vars = { cardextra.mult_set[cardextra.ovn_former_form] }
-				}
-				colour = G.C.RED
+				former_form_scale(card, "mult", "mult_set", G.C.RED, "a_mult")
 			end
-			return {
-				remove = true,
-				message = message,
-				colour = colour
-			}
+			return { remove = true }
 		end
 
 		if context.joker_main then return {
@@ -1363,12 +1353,7 @@ SMODS.Joker {
 			and context.other_card.base.value == "3"
 			and not context.blueprint
 		) then
-			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-			return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
-                message_card = card
-            }
+			simple_scale(card, "mult", "mult_gain", G.C.MULT)
 		end
 
 		if context.joker_main then
@@ -1482,12 +1467,7 @@ SMODS.Joker {
 		if context.before then
 			local hand = context.scoring_name
 			if G.GAME.hands_last_played[hand] >= card.ability.extra.last_played_threshold then
-				card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_set[card.ability.ovn_former_form]
-				return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					message_card = card
-				}
+				former_form_scale(card, "xmult", "xmult_set", G.C.MULT)
 			end
 		end
 
@@ -1555,15 +1535,10 @@ SMODS.Joker {
 			and context.ovn_former_form_key == "j_ovn_nexus_point"
 		) then
 			local former_ability = context.ovn_former_form_ability
-			add_simple_event("after", 0.1, function ()
-				card.ability.extra.xmult_gain = former_ability.extra.xmult_gain
-				card.ability.extra.xmult = former_ability.extra.xmult + card.ability.extra.xmult_gain
-				SMODS.calculate_effect({
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					message_card = card
-				}, card)
-			end)
+			card.ability.extra.xmult_gain = former_ability.extra.xmult_gain
+			card.ability.extra.xmult = former_ability.extra.xmult
+			simple_scale(card, "xmult", "xmult_gain", G.C.RED)
+			print("Nexus Point XMult: " .. card.ability.extra.xmult)
 		end
 
 		if context.individual and context.cardarea == G.play then
