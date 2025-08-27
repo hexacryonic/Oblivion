@@ -58,16 +58,24 @@ return {
 	j_ovn_pure_visage = {
 		name = "Pure Visage",
 		text = {
-			"Once per round, press",
-			"{C:attention}side button {}to {C:ovn_corrupted}corrupt {}this Joker"
+			"In #1# rounds,",
+			"click {C:attention}side button {}to",
+			"{C:ovn_corrupted}corrupt {}this Joker"
+		}
+	},
+	j_ovn_pure_visage_ready = {
+		name = "Pure Visage",
+		text = {
+			"Click {C:attention}side button {}to",
+			"{C:ovn_corrupted}corrupt {}this Joker"
 		}
 	},
 	-- Corrupt Visage goes here for immediate viewing after Pure Visage
 	j_ovn_corrupt_visage = {
 		name = "Corrupt Visage",
 		text = {
-			"Once per round, press",
-			"{C:attention}side button {}to {C:blue}purify {}this Joker"
+			"{X:mult,C:white}X#1# {} Mult",
+			"{C:blue}Purifies {}at end of round"
 		}
 	},
 	j_ovn_trolley_problem = {

@@ -168,14 +168,12 @@ function G.FUNCS.transmute_card(e)
 	local card = e.config.ref_table
 	if card.config.center.key == "j_ovn_pure_visage" then
 		Ovn_f.corrupt_joker(card)
-	elseif card.config.center.key == "j_ovn_corrupt_visage" then
-		Ovn_f.purify_joker(card)
 	end
 end
 
 function G.FUNCS.can_transmute(e)
 	local card = e.config.ref_table
-	if not card.ability.extra.on_cooldown then
+	if card.ability.extra.on_cooldown <= 0 then
 		e.config.colour = G.C.GREEN
 		e.config.button = "transmute_card"
 	else
@@ -187,7 +185,7 @@ end
 local usesellbuttons_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
 	if card.area ~= G.jokers then return usesellbuttons_hook(card) end
-	if card.config.center.key == "j_ovn_pure_visage" or card.config.center.key == "j_ovn_corrupt_visage" then
+	if card.config.center.key == "j_ovn_pure_visage" then
 		local button_jtml_stylesheet = {
 			[".button"] = {
 				align = "center-right",

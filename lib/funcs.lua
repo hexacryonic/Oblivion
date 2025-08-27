@@ -61,6 +61,7 @@ end
 Ovn_f.corrupt_joker = function(card)
 	local card_key = card.config.center.key
 	local corrupted_card_key = Oblivion.corruption_map[card_key]
+	G.jokers:remove_from_highlighted(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.corruptingJoker = true
@@ -71,6 +72,7 @@ Ovn_f.corrupt_joker = function(card)
 			card:set_ability(G.P_CENTERS[corrupted_card_key])
 		end
         card:juice_up(0.3, 0.5)
+		
 
 		card.ability.ovn_former_form = card_key
 		card:calculate_joker{
@@ -152,6 +154,7 @@ Ovn_f.purify_joker = function(card)
 			or pmap_entry -- type == "string"
 		)
 	)
+	G.jokers:remove_from_highlighted(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.purifyingJoker = true

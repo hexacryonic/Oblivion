@@ -270,9 +270,17 @@ SMODS.Joker {
 --------------
 SMODS.Joker {
 	key = 'pure_visage',
+	loc_vars = function (self, info_queue, card)
+		return {
+			key = "j_ovn_pure_visage" .. (card.ability.extra.on_cooldown <= 0 and "_ready" or ""),
+			vars = card.ability.extra.on_cooldown > 0 and {
+				card.ability.extra.on_cooldown
+			} or nil
+		}
+	end,
 	config = {
 		extra = {
-			on_cooldown = false
+			on_cooldown = 2
 		}
 	},
 	-- placeholder
@@ -284,11 +292,13 @@ SMODS.Joker {
 
 	calculate = function(self, card, context)
 		if context.setting_blind then
-			card.ability.extra.on_cooldown = false
-		end
-
-		if context.ovn_purified_from then
-			card.ability.extra.on_cooldown = true
+			local do_return = card.ability.extra.on_cooldown - 1 > -1
+			card.ability.extra.on_cooldown = math.max(0, card.ability.extra.on_cooldown - 1)
+			if do_return then return {
+				message = "",
+				colour = G.C.CLEAR,
+				message_card = card
+			} end
 		end
 	end
 	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
@@ -300,9 +310,14 @@ SMODS.Joker {
 -- Corrupt Visage goes here for immediate navigation after Pure Visage
 SMODS.Joker {
 	key = 'corrupt_visage',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult
+		}}
+	end,
 	config = {
 		extra = {
-			on_cooldown = false
+			xmult = 3
 		}
 	},
 	atlas = 'corrupted',
@@ -312,13 +327,18 @@ SMODS.Joker {
 	cost = 4,
 
 	calculate = function(self, card, context)
-		if context.setting_blind then
-			card.ability.extra.on_cooldown = false
-		end
-
 		if context.ovn_corrupted_from then
 			Ovn_f.corruption_instability(1)
-			card.ability.extra.on_cooldown = true
+		end
+
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+
+		if context.end_of_round and context.cardarea == G.jokers then
+			Ovn_f.purify_joker(card)
 		end
 	end
 	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
