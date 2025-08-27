@@ -365,3 +365,14 @@ function level_up_hand(card, hand, instant, amount)
 		lvluphand_hook(card, hand, instant, amount)
 	end
 end
+
+----
+
+local createcard_hook = create_card
+function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+	local card = createcard_hook(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+	if card and card.base.suit == "ovn_Optics" and Oblivion.enhancement_corrupt[card.config.center.key] then
+		Ovn_f.corrupt_enhancement(card)
+	end
+	return card
+end
