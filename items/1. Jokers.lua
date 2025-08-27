@@ -1574,3 +1574,41 @@ SMODS.Joker {
 	end
 	-- Additional funcitonality in level_up_hand hook
 }
+
+SMODS.Joker {
+	key = 'philosophers_stone',
+	loc_vars = function (self, info_queue, card)
+		local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'ovn_philosophers_stone')
+		return {vars = {
+			num,
+			denom
+		}}
+	end,
+	config = {
+		extra = {
+			odds = 3
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 8,
+
+	calculate = function (self, card, context)
+		if context.final_scoring_step then
+			for i,other_card in ipairs(context.scoring_hand) do
+				if SMODS.pseudorandom_probability(card, 'ovn_philosophers_stone' .. i, 1, card.ability.extra.odds) then
+					local enhancement = other_card.config.center.key
+					-- This excludes undefined/unenhanced cards
+					if Oblivion.enhancement_corrupt[enhancement] then
+						Ovn_f.corrupt_enhancement(other_card)
+					elseif Oblivion.enhancement_purify[enhancement] then
+						Ovn_f.purify_enhancement(other_card)
+					end
+				end
+			end
+		end
+	end
+}

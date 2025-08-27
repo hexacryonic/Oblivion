@@ -340,5 +340,13 @@ return {
 			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
 			corrupted_from("Supernova or Constellation")
 		}
+	},
+	j_ovn_philosophers_stone = {
+		name = "Philosopher's Stone",
+		text = {
+			"After playing, each {C:attention}numbered {}card",
+			"has a {C:green}#1# in #2# {}chance to have",
+			"their enhancement {C:attention}transmuted"
+		}
 	}
 }
