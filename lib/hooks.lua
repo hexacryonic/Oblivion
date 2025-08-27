@@ -69,6 +69,10 @@ end
 
 local card_changesuit_hook = Card.change_suit
 function Card:change_suit(new_suit)
+	if new_suit == "ovn_Optics" then
+		G.GAME.ovn_has_ocular = true
+	end
+
 	local transmute_type = "none"
 	-- Non-Optics -> Optics - Corrupt enhancement
 	if (
@@ -81,7 +85,9 @@ function Card:change_suit(new_suit)
 		and new_suit ~= "ovn_Optics"
 	) then transmute_type = "purify"
 	end
+
 	card_changesuit_hook(self, new_suit)
+
 	if transmute_type ~= "none" then
 		Ovn_f[transmute_type .. "_enhancement"](self)
 	end
@@ -371,8 +377,11 @@ end
 local createcard_hook = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
 	local card = createcard_hook(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-	if card and card.base.suit == "ovn_Optics" and Oblivion.enhancement_corrupt[card.config.center.key] then
-		Ovn_f.corrupt_enhancement(card)
+	if card and card.base.suit == "ovn_Optics" then
+		G.GAME.ovn_has_ocular = true
+		if Oblivion.enhancement_corrupt[card.config.center.key] then
+			Ovn_f.corrupt_enhancement(card)
+		end
 	end
 	return card
 end
