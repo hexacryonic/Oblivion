@@ -160,10 +160,10 @@ SMODS.Consumable{
 	key = 'ganymede',
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum', softlock = true },
-	
+
 	atlas = 'spectrum_atlas',
 	pos = {x = 0, y = 0 },
-	
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
@@ -178,10 +178,10 @@ SMODS.Consumable{
 	key = 'callisto',
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Straight Spectrum', softlock = true },
-	
+
 	atlas = 'spectrum_atlas',
 	pos = {x = 1, y = 0 },
-	
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
@@ -196,10 +196,10 @@ SMODS.Consumable{
 	key = 'io',
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum House', softlock = true },
-	
+
 	atlas = 'spectrum_atlas',
 	pos = {x = 2, y = 0 },
-	
+
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
