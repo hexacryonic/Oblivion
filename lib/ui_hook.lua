@@ -164,6 +164,107 @@ end
 
 ----
 
+function G.FUNCS.transmute_card(e)
+	local card = e.config.ref_table
+	if card.config.center.key == "j_ovn_pure_visage" then
+		Ovn_f.corrupt_joker(card)
+	elseif card.config.center.key == "j_ovn_corrupt_visage" then
+		Ovn_f.purify_joker(card)
+	end
+end
+
+function G.FUNCS.can_transmute(e)
+	local card = e.config.ref_table
+	if not card.ability.extra.on_cooldown then
+		e.config.colour = G.C.GREEN
+		e.config.button = "transmute_card"
+	else
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	end
+end
+
+local usesellbuttons_hook = G.UIDEF.use_and_sell_buttons
+function G.UIDEF.use_and_sell_buttons(card)
+	if card.area ~= G.jokers then return usesellbuttons_hook(card) end
+	if card.config.center.key == "j_ovn_pure_visage" or card.config.center.key == "j_ovn_corrupt_visage" then
+		local button_jtml_stylesheet = {
+			[".button"] = {
+				align = "center-right",
+				padding = 0.1,
+				roundness = 0.08,
+				minWidth = 1.25,
+				hover = true,
+				shadow = true,
+				fillColour = G.C.UI.BACKGROUND_INACTIVE,
+				onePress = true,
+			},
+			[".button-toptext"] = {
+				colour = G.C.UI.TEXT_LIGHT,
+				scale = 0.4,
+				shadow = true
+			},
+			["button-btmtext1"] = {
+				colour = G.C.WHITE,
+				shadow = true,
+				scale = 0.4
+			},
+			["button-btmtext2"] = {
+				colour = G.C.WHITE,
+				shadow = true,
+				scale = 0.55
+			},
+		}
+		local sell_button =
+		{"column", style={align="center-right"}, {
+			{"column", reftable=card, class="button", onclick="sell_card", ondraw="can_sell_card", {
+				{"box", style={width=0.1, height=0.6}},
+				{"column", style={align="top-middle"}, {
+					{"row", style={align="center-middle", maxWidth=1.25}, {
+						{"text", class="button-toptext", text=localize("b_sell")}
+					}},
+					-- no idea why jtml for this doesnt work so here
+					{n=G.UIT.R, config={align = "cm"}, nodes={
+						{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
+						{n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+					}}
+				}}
+			}}
+		}}
+		local switch_button =
+		{"column", style={align="center-right"}, {
+			{"column", reftable=card, class="button", onclick="transmute_card", ondraw="can_transmute", {
+				{"box", style={width=0.2, height=0.6}},
+				{"column", style={align="center-middle"}, {
+					{"row", style={align="center-middle", maxWidth=1.25}, {
+						{"text", class="button-toptext", text="Switch"}
+					}},
+				}}
+			}}
+		}}
+
+		local function button_row(jtml)
+			return {"row", style={align="center-left"}, {jtml}}
+		end
+
+		local container =
+		{"root", style={padding=0, fillColour=G.C.CLEAR}, {
+			{"column", style={padding=0, align="center-left"}, {
+				button_row(switch_button),
+				-- spacing
+				{"row", style={minHeight=0.1, fillColour=G.C.CLEAR}},
+				button_row(sell_button),
+			}}
+		}}
+
+		return Ovn_f.jtml_to_uiboxdef(container, button_jtml_stylesheet)
+	end
+
+	return usesellbuttons_hook(card)
+end
+
+----
+
 local canplay_hook = G.FUNCS.can_play
 function G.FUNCS.can_play(e)
 	local has_unob = false
@@ -271,4 +372,26 @@ function SMODS.GUI.hand_chips_container(scale)
 		}}
 	end
 	return handchipscontainer_hook(scale)
+end
+
+----
+
+local canselect_hook = G.FUNCS.can_select_card
+function G.FUNCS.can_select_card(e)
+	local card = e.config.ref_table
+	if card.label == "j_ovn_infinitesimal" then
+        e.config.colour = G.C.GREEN
+        e.config.button = 'use_card'
+	else
+		canselect_hook(e)
+	end
+end
+
+local checkbuyspace_hook = G.FUNCS.check_for_buy_space
+function G.FUNCS.check_for_buy_space(card)
+	if card.label == "j_ovn_infinitesimal" then
+		return true
+	else
+		return checkbuyspace_hook(card)
+	end
 end

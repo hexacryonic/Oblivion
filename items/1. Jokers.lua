@@ -53,7 +53,337 @@ SMODS.Joker {
 				message_card = card
 			}
 		end
+		if context.before then
+			print(context.scoring_name)
+		end
 	end,
+}
+
+SMODS.Joker {
+	key = 'ovn',
+	atlas = 'corrupted',
+	pos  = { x=4, y=0 },
+
+	blueprint_compat = false,
+	rarity = 3,
+	cost = 10,
+
+	calculate = function(self, card, context)
+		if (
+			context.end_of_round
+			and context.cardarea == G.jokers
+			and not context.game_over
+			and context.beat_boss
+		) then
+			add_simple_event(nil, nil, function ()
+				local leftmost_joker = G.jokers.cards[1]
+				leftmost_joker:set_edition("e_ovn_miasma")
+				leftmost_joker:juice_up()
+				card:juice_up()
+				play_sound('tarot1')
+			end)
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'ice_joker',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult_gain,
+			card.ability.extra.xmult,
+			card.ability.extra.xmult_gain_gain
+		}}
+	end,
+	config = {
+		extra = {
+			xmult = 1,
+			xmult_gain = 0.05,
+			xmult_gain_gain = 0.05
+		}
+	},
+
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=0, y=0 },
+
+	rarity = 2,
+	cost = 6,
+
+	calculate = function(self, card, context)
+		local card_extra = card.ability.extra
+		if context.joker_main then
+			return {xmult = card_extra.xmult}
+		end
+
+		if context.ovn_ice_degraded then
+			card_extra.xmult = card_extra.xmult + card_extra.xmult_gain
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				message_card = card
+			}
+		end
+
+		if context.remove_playing_cards and not context.blueprint then
+			local ice_cards = 0
+			for _,removed_card in ipairs(context.removed) do
+				if removed_card.ice_melted then
+					ice_cards = ice_cards + 1
+				end
+			end
+			if ice_cards > 0 then
+				card_extra.xmult_gain = card_extra.xmult_gain + card_extra.xmult_gain_gain*ice_cards
+					return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}, true
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'pure_visage',
+	config = {
+		extra = {
+			on_cooldown = false
+		}
+	},
+	-- placeholder
+	atlas = "notcorrupted",
+	pos = { x=1, y=0 },
+
+	rarity = 1,
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			card.ability.extra.on_cooldown = false
+		end
+
+		if context.ovn_purified_from then
+			card.ability.extra.on_cooldown = true
+		end
+	end
+	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
+}
+
+-- Corrupt Visage goes here for immediate viewing after Pure Visage
+SMODS.Joker {
+	key = 'corrupt_visage',
+	config = {
+		extra = {
+			on_cooldown = false
+		}
+	},
+	atlas = 'corrupted',
+	pos  = { x=0, y=3 },
+
+	rarity = "ovn_corrupted",
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			card.ability.extra.on_cooldown = false
+		end
+
+		if context.ovn_corrupted_from then
+			Ovn_f.corruption_instability(1)
+			card.ability.extra.on_cooldown = true
+		end
+	end
+	-- Functionality implemented in G.UIDEF.use_and_sell_buttons hook
+}
+
+SMODS.Joker {
+	key = 'crystal_joker',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.extra_plays
+		}}
+	end,
+	config = {
+		extra = {
+			extra_plays = 2
+		}
+	},
+
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=1, y=1 },
+
+	rarity = 2,
+	cost = 6,
+
+	add_to_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_crystal" then
+				playing_card.ability.extra.plays_left = (
+					playing_card.ability.extra.plays_left
+					+ card.ability.extra.extra_plays
+				)
+			end
+		end
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_crystal" then
+				playing_card.ability.extra.plays_left = (
+					playing_card.ability.extra.plays_left
+					- card.ability.extra.extra_plays
+				)
+				if playing_card.ability.extra.plays_left <= 0 then
+					add_simple_event(nil, nil, function ()
+						play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
+						SMODS.destroy_cards(playing_card)
+					end)
+				end
+			end
+		end
+	end
+	-- Additional functionality found in "set_ability", Crystal enhancement register
+}
+
+SMODS.Joker {
+	key = 'trolley_problem',
+	config = { extra = { valid_hands = {
+		["Three of a Kind"] = true,
+		["Four of a Kind"] = true,
+		["Five of a Kind"] = true
+	}}},
+	rarity = 3,
+	cost = 8,
+
+	calculate = function (self, card, context)
+		if (
+			context.destroy_card
+			and context.cardarea == 'unscored'
+			and self.config.extra.valid_hands[context.scoring_name]
+		) then
+			return {remove = true}
+		end
+	end
+}
+
+-- Get the leftmost corrupted Joker, if any.
+---@return integer
+---@return Card|nil
+local function get_leftmost_corrupted_joker()
+	for i,card in ipairs(G.jokers.cards) do
+		if card.config.center.rarity == "ovn_corrupted" then
+			return i, card
+		end
+	end
+	return -1, nil
+end
+
+SMODS.Joker {
+	key = 'purifier',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult_gain,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			mult_gain = 10,
+			mult = 0
+		}
+	},
+
+	--[[
+	atlas = "notcorrupted",
+	pos = { x=1, y=0 },
+	]]
+
+	rarity = 2,
+	cost = 5,
+
+	calculate = function (self, card, context)
+		if context.setting_blind then
+			local _, leftmost = get_leftmost_corrupted_joker()
+			if leftmost then
+				Ovn_f.purify_joker(leftmost)
+				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}
+			end
+		end
+
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'radiant_joker',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.extra_chips,
+			card.ability.extra.chip_increase
+		}}
+	end,
+	config = {
+		extra = {
+			extra_chips = 5,
+			chip_increase = 1,
+		}
+	},
+
+	atlas = "opticenhance_atlas",
+	pos = { x=3, y=0 },
+
+	rarity = 2,
+	cost = 6,
+
+	add_to_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_radiant" then
+				playing_card.ability.extra.bonus_chips = (
+					playing_card.ability.extra.bonus_chips
+					+ card.ability.extra.extra_chips
+				)
+			end
+		end
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		if from_debuff then return end
+		for _,playing_card in ipairs(G.playing_cards) do
+			if playing_card.config.center.key == "m_ovn_radiant" then
+				playing_card.ability.extra.bonus_chips = (
+					playing_card.ability.extra.bonus_chips
+					- card.ability.extra.extra_chips
+				)
+			end
+		end
+	end,
+	calculate = function (self, card, context)
+		if (
+			context.individual
+			and context.other_card.config.center.key == "m_ovn_radiant"
+			and context.cardarea == G.play
+		) then
+			card.ability.extra.extra_chips = card.ability.extra.extra_chips + card.ability.extra.chip_increase
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.CHIPS,
+				message_card = card
+			}
+		end
+	end
+	-- Additional functionality found in "set_ability", Radiant enhancement register
 }
 
 ----
@@ -291,9 +621,9 @@ SMODS.Voucher {
 SMODS.Joker {
 	key = 'darkjoker',
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.chips } }
+		return { vars = { card.ability.extra.mult } }
 	end,
-	config = { extra = { chips = 50 } },
+	config = { extra = { mult = 2 } },
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 0 },
@@ -303,9 +633,9 @@ SMODS.Joker {
 	cost = 3,
 
 	calculate = function(self, card, context)
-		if context.joker_main then
+		if context.individual and context.cardarea == G.play then
 			return {
-				chips = card.ability.extra.chips,
+				mult = card.ability.extra.mult
 			}
 		end
 	end
@@ -407,6 +737,7 @@ SMODS.Joker {
 			if to_big(G.GAME.current_round.hands_played) > to_big(0) and to_big(G.GAME.chips/G.GAME.blind.chips) < to_big(1) then
 				G.STATE = G.STATES.GAME_OVER
 				G.STATE_COMPLETE = false
+				G.GAME.yolo = false
 				return nil, true
 			end
 
@@ -779,7 +1110,11 @@ SMODS.Joker {
 			}
 		end
 
-		if context.ovn_corruption_occurred and context.ovn_corruption_type == "Joker" then
+		if (
+			context.ovn_corruption_occurred
+			and context.ovn_corruption_type == "Joker"
+			and not context.blueprint
+		) then
 			card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.xmult_increase
 			return {
 				message = localize{
@@ -866,7 +1201,7 @@ SMODS.Joker {
 	key = 'collapsing_world',
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
-			card.ability.extra.mult_set[card.ability.extra.ovn_former_form] or 3,
+			card.ability.extra.mult_set[card.ability.ovn_former_form or "j_mystic_summit"],
 			card.ability.extra.mult
 		}}
 	end,
@@ -881,7 +1216,7 @@ SMODS.Joker {
 	},
 
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	pos = {x=0, y=4},
 
 	rarity = 'ovn_corrupted',
 	cost = 7,
@@ -990,4 +1325,283 @@ SMODS.Joker {
 			end)
 		end
 	end
+}
+
+SMODS.Joker {
+	key = 'infinitesimal',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.joker_slots,
+			card.ability.extra.mult_gain,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			joker_slots = 1,
+			mult_gain = 2,
+			mult = 0,
+		},
+	},
+
+	atlas = 'corrupted',
+	pos = {x=1, y=3},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	add_to_deck = function(self, card, fron_debuff)
+		G.jokers:change_size(card.ability.extra.joker_slots)
+	end,
+	remove_from_deck = function(self, card, fron_debuff)
+		G.jokers:change_size(-card.ability.extra.joker_slots)
+	end,
+	calculate = function(self, card, context)
+		if (
+			context.individual
+			and context.cardarea == G.play
+			and context.other_card.base.value == "3"
+			and not context.blueprint
+		) then
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+			return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+                message_card = card
+            }
+		end
+
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'migraine',
+	atlas = 'corrupted',
+	pos = {x=2, y=3},
+	rarity = 'ovn_corrupted',
+	cost = 6
+	-- Functionality implemented in "Migraine makes all standard pack cards Optics" Lovely patch 
+}
+
+SMODS.Joker {
+	key = 'database',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.chips_per,
+			card.ability.extra.chips_per*(G.GAME.cumulative_unique_joker_count or 0)
+		}}
+	end,
+	config = {
+		extra = {
+			chips_per = 10
+		},
+	},
+
+	atlas = 'corrupted',
+	pos = {x=3, y=3},
+
+	rarity = 'ovn_corrupted',
+	cost = 6,
+
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				chips = card.ability.extra.chips_per*G.GAME.cumulative_unique_joker_count
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'cigarette_card',
+	loc_vars = function(self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult
+		}}
+	end,
+	config = {
+		extra = {
+			xmult = 1.5
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=3},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	calculate = function(self, card, context)
+		if context.other_joker and context.other_joker.config.center.rarity == "ovn_corrupted" then
+			return {
+				xmult = card.ability.extra.xmult,
+				message_card = context.other_joker
+			}
+		end
+	end,
+	-- Additional functionality implemented in
+	-- "Cigarette Card makes all Uncommons Miasma" Lovely patch 
+}
+
+SMODS.Joker {
+	key = 'library_of_babel',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult_set[card.ability.ovn_former_form or "j_todo_list"],
+			card.ability.extra.last_played_threshold,
+			card.ability.extra.xmult
+		}}
+	end,
+	config = {
+		extra = {
+			xmult_set = {
+				j_todo_list = 0.2,
+				j_card_sharp = 0.3,
+				j_obelisk = 0.4
+			},
+			xmult = 1,
+			last_played_threshold = 3
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	add_to_deck = function(self, card, context)
+		Ovn_f.set_random_former_form(card)
+	end,
+	calculate = function (self, card, context)
+		if context.before then
+			local hand = context.scoring_name
+			if G.GAME.hands_last_played[hand] >= card.ability.extra.last_played_threshold then
+				card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_set[card.ability.ovn_former_form]
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}
+			end
+		end
+
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'bottled_ship_of_theseus',
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 10,
+
+	calculate = function (self, card, context)
+		if context.remove_playing_cards and not context.blueprint then
+			for _,removed_card in ipairs(context.removed) do
+				if removed_card.config.center.key ~= "m_glass" then
+					local rank = removed_card.base.value
+					local suit = removed_card.base.suit
+					add_simple_event(nil, nil, function ()
+						SMODS.add_card { -- Random enhanced 3 of Clubs
+							set = "Enhanced",
+							rank = rank,
+							suit = suit,
+							enhancement = "m_glass"
+						}
+					end)
+				end
+			end
+		end
+	end
+}
+
+-- MAJOR BUG: Description does not update regardless if values changed
+SMODS.Joker {
+	key = 'nexus_point',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.xmult,
+			card.ability.extra.xmult_gain
+		}}
+	end,
+	config = {
+		extra = {
+			xmult_gain = 0.2,
+			xmult = 1.1,
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 7,
+
+	calculate = function (self, card, context)
+		if (
+			context.ovn_corrupted_from
+			and context.ovn_former_form_key == "j_ovn_nexus_point"
+		) then
+			local former_ability = context.ovn_former_form_ability
+			add_simple_event("after", 0.1, function ()
+				card.ability.extra.xmult_gain = former_ability.extra.xmult_gain
+				card.ability.extra.xmult = former_ability.extra.xmult + card.ability.extra.xmult_gain
+				SMODS.calculate_effect({
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					message_card = card
+				}, card)
+			end)
+		end
+
+		if context.individual and context.cardarea == G.play then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'event_horizon',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.chips,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			chips = 0,
+			mult = 0,
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=4, y=0},
+
+	rarity = 'ovn_corrupted',
+	cost = 7,
+
+	calculate = function (self, card, context)
+		if context.joker_main then
+			return {
+				chips = card.ability.extra.chips,
+				mult  = card.ability.extra.mult
+			}
+		end
+	end
+	-- Additional funcitonality in level_up_hand hook
 }

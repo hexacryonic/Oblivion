@@ -29,7 +29,31 @@ return {
 		text = {
 			"{C:attention}Retrigger{} all scoring cards",
 			"{C:attention}#1#{} time while held in hand",
-			"{C:mult}Cannot be played{}",
+			"{S:1.1,C:red,E:2}Cannot be played{}",
 		}
 	},
+	m_ovn_crystal = {
+		name = 'Crystal Card',
+		text = {
+			"{S:1.1,C:red,E:2}Never scores",
+			"{C:planet}Levels up {}played {C:attention}Poker Hand",
+			"{C:red}Shatters {}after being",
+			"played {C:attention}#1# {}times"
+		}
+	},
+	m_ovn_radiant = {
+		name = 'Radiant Card',
+		text = {
+			"While held in hand,",
+			"{C:attention}scoring {}cards get bonus {C:chips}chips",
+			"equal to {C:attention}this card's {C:chips}chip {}value"
+		}
+	},
+	m_ovn_dynamo = {
+		name = 'Dynamo Card',
+		text = {
+			"If this card is {C:attention}played {}and {C:attention}unscoring,",
+			"scored cards give {C:mult}+#1# {}Mult"
+		}
+	}
 }

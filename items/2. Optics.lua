@@ -267,13 +267,6 @@ SMODS.Consumable{
 
 ----
 
-local function corruption_dissolve(card)
-	add_simple_event('after', 0.1, function()
-		play_sound("tarot1")
-		card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-	end)
-end
-
 SMODS.Enhancement{
 	key = "ice",
 	loc_vars = function(self, info_queue, card)
@@ -301,12 +294,30 @@ SMODS.Enhancement{
 			return { x_mult = c_extra.current_x_mult }
 		end
 
-		if (context.after and c_extra.is_melting) then
+		if context.after and c_extra.is_melting then
 			c_extra.current_x_mult = c_extra.current_x_mult - c_extra.x_mult_loss
 			c_extra.is_melting = false
+
+			if c_extra.current_x_mult > 1 then
+				SMODS.calculate_context{
+					ovn_ice_degraded = true,
+					other_card = card,
+					ovn_ice_xmult = c_extra.current_x_mult
+				}
+			end
 		end
 
-		if c_extra.current_x_mult <= 1 then corruption_dissolve(card) end
+		if (
+			context.destroy_card == card
+			and context.cardarea == G.play
+			and c_extra.current_x_mult <= (1 + card.ability.extra.x_mult_loss)
+		) then
+			card.ice_melted = true
+			add_simple_event(nil, nil, function()
+				play_sound("tarot1")
+			end)
+			return {remove = true}
+		end
 	end,
 }
 
@@ -422,6 +433,111 @@ SMODS.Enhancement{
 		end
 	end,
 	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+}
+
+SMODS.Enhancement{
+	key = "crystal",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.plays_left }}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 1, y = 1 },
+	in_pool = function() return false end,
+	config = {extra = {plays_left = 3}},
+
+	never_scores = true,
+
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_crystal_jokers = SMODS.find_card('j_ovn_crystal_joker')
+		for _,crystal_joker in ipairs(all_crystal_jokers) do
+			card.ability.extra.plays_left = (
+				card.ability.extra.plays_left
+				+ crystal_joker.ability.extra.extra_plays
+			)
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.before and context.cardarea == "unscored" then
+			card.ability.extra.plays_left = card.ability.extra.plays_left - 1
+			return {
+				level_up = true,
+				message = localize('k_level_up_ex')
+			}
+		end
+
+		if (
+			context.destroy_card == card
+			and context.cardarea == "unscored"
+			and card.ability.extra.plays_left <= 0
+		) then
+			add_simple_event(nil, nil, function ()
+				play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
+			end)
+			return {remove = true}
+		end
+	end,
+	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+}
+
+SMODS.Enhancement{
+	key = "radiant",
+	config = {extra = {bonus_chips = 0}},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 3, y = 0 },
+	in_pool = function() return false end,
+
+
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_radiant_jokers = SMODS.find_card('j_ovn_radiant_joker')
+		for _,radiant_joker in ipairs(all_radiant_jokers) do
+			card.ability.extra.bonus_chips = (
+				card.ability.extra.bonus_chips
+				+ radiant_joker.ability.extra.extra_chips
+			)
+		end
+	end,
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == G.hand then
+			local card_chip = card.base.nominal + card.ability.extra.bonus_chips
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.bonus = other_card.ability.bonus + card_chip
+				add_simple_event(nil, nil, function ()
+					other_card:juice_up()
+				end)
+			end
+		end
+	end
+}
+
+SMODS.Enhancement{
+	key = 'dynamo',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {mult = 7}
+	},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 0, y = 1 },
+	in_pool = function() return false end,
+
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult + card.ability.extra.mult
+			end
+		end
+		if context.after and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult - card.ability.extra.mult
+			end
+		end
+	end
 }
 
 ----

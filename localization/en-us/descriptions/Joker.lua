@@ -1,3 +1,8 @@
+local function corrupted_from(text)
+	local format = "{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}%s{}"
+	return format:format(text)
+end
+
 return {
 	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
 	j_ovn_instabilitytooltip = {
@@ -15,11 +20,81 @@ return {
 			"when sold"
 		}
 	},
+	j_ovn_ovn = {
+		name = 'ovn',
+		text = {
+			"When {C:attention}Boss Blind defeated,",
+			"make the leftmost {C:attention}Joker {C:dark_edition}Miasma",
+			'{C:inactive,s:0.8}"Why do they call it oven when you of in',
+			'{C:inactive,s:0.8}the cold Joker of out hot eat the Joker"'
+		}
+	},
+	j_ovn_ice_joker = {
+		name = 'Ice Joker',
+		text = {
+			"This Joker gains {X:mult,C:white}+X#1# {} Mult",
+			"when an {C:attention}Ice Card {}degrades",
+			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
+			"This gain increases by {C:attention}+#3#",
+			"when an {C:attention}Ice Card {}fully melts"
+		}
+	},
+	j_ovn_pure_visage = {
+		name = "Pure Visage",
+		text = {
+			"Once per round, press",
+			"{C:attention}side button {}to {C:ovn_corrupted}corrupt {}this Joker"
+		}
+	},
+	-- Corrupt Visage goes here for immediate viewing after Pure Visage
+	j_ovn_corrupt_visage = {
+		name = "Corrupt Visage",
+		text = {
+			"Once per round, press",
+			"{C:attention}side button {}to {C:blue}purify {}this Joker"
+		}
+	},
+	j_ovn_crystal_joker = {
+		name = "Crystal Joker",
+		text = {
+			"{C:attention}Crystal Cards {}last",
+			"for {C:attention}+#1# {}extra hands"
+		}
+	},
+	j_ovn_trolley_problem = {
+		name = "Trolley Problem",
+		text = {
+			'{C:attention}Unscoring {}cards in',
+			'{C:attention}"of a Kind" {}hands',
+			'are {C:red}destroyed'
+		}
+	},
+	j_ovn_purifier = {
+		name = "Purifier",
+		text = {
+			"When Blind is selected,",
+			"the {C:attention}leftmost {C:ovn_corrupted}Corrupted {}Joker",
+			"is {C:blue}purified {}to give this card {C:red}+#1# {}Mult",
+			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
+		}
+	},
+	j_ovn_radiant_joker = {
+		name = "Radiant Joker",
+		text = {
+			"{C:attention}Radiant {}Cards give scoring",
+			"cards {C:chips}+#1# {}more extra Chips",
+			"Increase this by {C:chips}+#2# {}when",
+			"a {C:attention}Radiant {}Card is scored"
+		}
+	},
+
+	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
 		name = 'Parallel Joker',
 		text = {
-			"{C:chips}+#1#{} Chips",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Joker{}"
+			"Played cards give",
+			"{C:mult}+#1#{} Mult when scored",
+			corrupted_from("Joker"),
 		}
 	},
 	j_ovn_lucasseries = {
@@ -28,7 +103,7 @@ return {
 			"Each played",
 			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
 			"gives {X:mult,C:white} X#1# {} Mult when scored",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Fibonacci{}"
+			corrupted_from("Fibonacci"),
 		}
 	},
 	j_ovn_perpendicular = {
@@ -36,7 +111,7 @@ return {
 		text = {
 			"Scored cards earn {C:attention}$#1#{} if another",
 			"card of its {C:attention}same rank{} is held in hand",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Reserved Parking{}"
+			corrupted_from("Reserved Parking"),
 		}
 	},
 	j_ovn_yolo = {
@@ -47,7 +122,7 @@ return {
 			"{s:0.3} {}",
 			"{C:chips}-a fucktillion{} Hands",
 			"when hand played",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Acrobat{}"
+			corrupted_from("Acrobat"),
 		}
 	},
 	j_ovn_supplydrop = {
@@ -66,7 +141,7 @@ return {
 
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
 			"{s:0.2} {}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gift Card{}"
+			corrupted_from("Gift Card"),
 		}
 	},
 	j_ovn_pmo = {
@@ -74,7 +149,7 @@ return {
 		text = {
 			"Effects that would target",
 			"{C:attention}any face card{} target {C:attention}Aces{} instead",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Pareidolia{}",
+			corrupted_from("Pareidolia"),
 			"{s:0.3} {}",
 			"{C:inactive,s:0.8}Code by Airtoum{}"
 		}
@@ -84,7 +159,7 @@ return {
 		text = {
 			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
 			"banish or destroy their counterparts",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Showman{}"
+			corrupted_from("Showman"),
 		}
 	},
 	j_ovn_airstrike = {
@@ -94,7 +169,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult every hand played",
 			"When scored, {C:attention}10{}s give their stockpiled Mult",
 			"and reset their stockpile after the hand",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Walkie Talkie{}",
+			corrupted_from("Walkie Talkie"),
 			"{s:0.3} {}",
 			"{C:inactive,s:0.8}Art by Andromeda{}"
 		}
@@ -105,7 +180,7 @@ return {
 			"{C:mult}+#1#{} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Droll Joker{}",
+			corrupted_from("Droll Joker"),
 		}
 	},
 	j_ovn_insightful = {
@@ -114,7 +189,7 @@ return {
 			"{C:chips}+#1#{} Chips if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Crafty Joker{}",
+			corrupted_from("Crafty Joker"),
 		}
 	},
 	j_ovn_breach = {
@@ -123,7 +198,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}The Tribe{}",
+			corrupted_from("The Tribe"),
 		}
 	},
 	j_ovn_prideful = {
@@ -141,7 +216,7 @@ return {
 			"{C:green}#2# in #3#{} chance this",
 			"card is destroyed",
 			"at end of round",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Cavendish{}",
+			corrupted_from("Cavendish"),
 		}
 	},
 	j_ovn_apartfalling = {
@@ -149,8 +224,8 @@ return {
 		text = {
 			"This Joker gains {X:mult,C:white} X#2# {} Mult",
 			"whenever a Joker {C:ovn_corrupted}corrupts{}",
-			"{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Hologram{}",
+			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive} Mult)",
+			corrupted_from("Hologram"),
 		}
 	},
 	j_ovn_aeon = {
@@ -159,7 +234,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult",
 			"{C:attention}Cavendish {}is no longer extinct",
 			"and can be obtained multiple times",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Gros Michel{}",
+			corrupted_from("Gros Michel"),
 		}
 	},
 	j_ovn_spiral_of_addiction = {
@@ -170,7 +245,7 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Drunkard{}",
+			corrupted_from("Drunkard"),
 		}
 	},
 	j_ovn_collapsing_world = {
@@ -180,8 +255,8 @@ return {
 			"discarded in the {C:attention}final Discard",
 			"of the round are {C:red}destroyed,",
 			"then this Joker gains {C:mult}+#1# {}Mult",
-			"{C:inactive}(Currently {C:mult}X#2#{C:inactive})",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Mystic Summit or Erosion{}",
+			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
+			corrupted_from("Mystic Summit or Erosion"),
 		}
 	},
 	j_ovn_master_of_puppets = {
@@ -190,7 +265,80 @@ return {
 			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
 			"a random {C:attention}Jack {}in your deck is given",
 			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
-			"{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}Hit the Road{}"
+			corrupted_from("Hit the Road"),
+		}
+	},
+	j_ovn_infinitesimal = {
+		name = "Infinitesimal Joker",
+		text = {
+			"{C:dark_edition}+#1#{} Joker slot",
+			"This Joker gains {C:mult}+#2# {}Mult",
+			"when a {C:attention}3 {}is scored",
+			"{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)",
+			corrupted_from("Wee Joker"),
+		}
+	},
+	j_ovn_migraine = {
+		name = "Migraine",
+		text = {
+			"{C:attention}Standard Packs {}only",
+			"contain modified {C:ovn_optic}Optic {}cards",
+			corrupted_from("Hallucination"),
+		}
+	},
+	j_ovn_database = {
+		name = "Database",
+		text = {
+			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
+			"obtained cumulatively over the run",
+			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
+			corrupted_from("Abstract Joker"),
+		}
+	},
+	j_ovn_cigarette_card = {
+		name = "Cigarette Card",
+		text = {
+			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
+			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
+			corrupted_from("Baseball Card"),
+		}
+	},
+	j_ovn_library_of_babel = {
+		name = "Library of Babel",
+		text = {
+			"This Joker gains {X:mult,C:white}X#1# {} Mult",
+			"when played poker hand hasn't been",
+			"played within the {C:attention}last #2# {}hands",
+			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
+			corrupted_from("To-Do List, Card Sharp, or Obelisk")
+		}
+	},
+	j_ovn_bottled_ship_of_theseus = {
+		name = "Bottled Ship of Theseus",
+		text = {
+			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
+			"create a {C:attention}Glass Card {}of its rank and suit",
+			corrupted_from("Trolley Problem")
+		}
+	},
+	j_ovn_nexus_point = {
+		name = "Nexus Point",
+		text = {
+			"This Joker can be {C:ovn_corrupted}repeatedly corrupted",
+			"Scored cards give {X:mult,C:white}X1.1 {} Mult",
+			"Increases by {X:mult,C:white}X0.2 {} each time this Joker",
+			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
+			corrupted_from("Purifier or Nexus Point")
+		}
+	},
+	j_ovn_event_horizon = {
+		name = "Event Horizon",
+		text = {
+			"{C:red}Hands no longer level up",
+			"Instead, this Joker gains half of",
+			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
+			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
+			corrupted_from("Supernova or Constellation")
 		}
 	}
 }

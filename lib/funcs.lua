@@ -64,6 +64,7 @@ Ovn_f.corrupt_joker = function(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.corruptingJoker = true
+		local ability = card.ability
 
         play_sound("ovn_abyss")
         card:start_dissolve({G.C.RARITY['ovn_corrupted']})
@@ -76,11 +77,11 @@ Ovn_f.corrupt_joker = function(card)
 		}
         corrupted_card:juice_up(0.3, 0.5)
 
-        if not corrupted_card.ability.extra then corrupted_card.ability.extra = {} end
-        corrupted_card.ability.extra.ovn_former_form = card_key
+		corrupted_card.ability.ovn_former_form = card_key
 		corrupted_card:calculate_joker{
 			ovn_corrupted_from = true,
-			ovn_former_form_key = card_key
+			ovn_former_form_key = card_key,
+			ovn_former_form_ability = ability
 		}
 		SMODS.calculate_context({
 			ovn_corruption_occurred = true,
@@ -93,24 +94,22 @@ Ovn_f.corrupt_joker = function(card)
     end)
 end
 
--- Sets a random former form of a (corrupted) card/
+-- Sets a random former form of a (corrupted) card if not set./
 ---@param card Card
 ---@return nil|string
 Ovn_f.set_random_former_form = function(card)
-	if card.ability.extra and card.ability.extra.ovn_former_form then return end
+	if card.ability.ovn_former_form then return end
 	local card_key = card.config.center.key
-
-	card.ability.extra = card.ability.extra or {}
 
 	local pure_form_options = Oblivion.purity_map[card_key]
 	if not pure_form_options then return end
 	if type(pure_form_options) == "string" then
-		card.ability.extra.ovn_former_form = pure_form_options
+		card.ability.ovn_former_form = pure_form_options
 		return pure_form_options
 	end
 
 	local former_form = pseudorandom_element(pure_form_options, "ovn_former_form")
-	card.ability.extra.ovn_former_form = former_form
+	card.ability.ovn_former_form = former_form
 	return former_form
 end
 
@@ -131,6 +130,8 @@ Ovn_f.is_corruptbanished = function(card_key)
 	-- In pool if Joker is not even corruptible
 	local corrupt_key = Oblivion.corruption_map[card_key]
 	if not corrupt_key then return false end
+	-- Do not destroy if self-corruptible
+	if corrupt_key == card_key then return false end
 
 	-- In pool if Joker's corrupt variant is not hled
 	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
@@ -149,8 +150,7 @@ Ovn_f.purify_joker = function(card)
 	local card_key = card.config.center.key
 	local pmap_entry = Oblivion.purity_map[card_key]
 	local pure_card_key = (
-		card.ability.extra
-		and card.ability.extra.ovn_former_form
+		card.ability.ovn_former_form
 		or (
 			type(pmap_entry) == "table"
 			and pseudorandom_element(pmap_entry, pseudoseed("purifyJoker"))
@@ -160,6 +160,7 @@ Ovn_f.purify_joker = function(card)
 
     add_simple_event('after', 0.4, function()
         G.GAME.purifyingJoker = true
+		local ability = card.ability
 
         play_sound("ovn_pure")
         card:start_dissolve({G.C.MONEY})
@@ -169,6 +170,18 @@ Ovn_f.purify_joker = function(card)
         purified_card:add_to_deck()
         G.jokers:emplace(purified_card)
         purified_card:juice_up(0.3, 0.5)
+
+		purified_card:calculate_joker{
+			ovn_purified_from = true,
+			ovn_former_form_key = card_key,
+			ovn_former_form_ability = ability
+		}
+		SMODS.calculate_context({
+			ovn_purification_occurred = true,
+			ovn_purification_type = "Joker",
+			ovn_former_form_key = card_key,
+			ovn_purified_card = purified_card
+		})
     end)
 	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
 end
@@ -239,6 +252,8 @@ end
 ---@return nil
 Ovn_f.change_instability = function(amount)
 	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
+	local instability_max = 2
+	if G.GAME.instability >= instability_max then return end
 	add_simple_event('after', 0.5, function ()
 		if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
 			if amount < 0 then
@@ -375,7 +390,95 @@ end
 
 ----
 
+-- Temporarily changes hand size, just for the round.
+---@param amount integer
+---@return nil
 Ovn_f.temp_handsize_change = function(amount)
 	G.hand:change_size(amount)
 	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
+end
+
+----
+
+-- Sets a guaranteed modifier (enhancement, seal, edition) on a card,\
+-- if it doesn't have one already.
+---@param card Card
+---@param card_index number
+---@return nil
+Ovn_f.guaranteed_modifier = function(card, card_index)
+	if ( -- skip if card already has modifier
+		next(SMODS.get_enhancements(card) --[[@as table]])
+		or card.seal
+		or card.edition
+	) then return end
+
+	card_index = card_index or ""
+	-- 1 = enhancement
+	-- 2 = seal
+	-- 3 = edition
+	local modifier_weights = {1, 1, 1, 2, 2, 3}
+	local function seedkey(input)
+		return (
+			"ovn_guaranteed_modifier"
+			.. (input and ("_" .. input) or "")
+			.. card_index
+		)
+	end
+
+	-- Set the first modifier applied
+	local selected_modifier = pseudorandom_element(modifier_weights, seedkey("modweight"))
+	if selected_modifier == 1 then
+		local enhancement = SMODS.poll_enhancement{
+			guaranteed = true,
+			type_key = seedkey("enhancement")
+		}
+		if enhancement then card:set_ability(enhancement) end
+	elseif selected_modifier == 2 then
+		card:set_seal(SMODS.poll_seal{
+			guaranteed = true,
+			type_key = seedkey("seal")
+		})
+	elseif selected_modifier == 3 then
+		card:set_edition(poll_edition(
+			seedkey("edition"),
+			nil, true, true
+		))
+	end
+
+	-- Set the rest of the modifiers, but only if chance is struck
+	if selected_modifier ~= 1 then
+		local enhancement = SMODS.poll_enhancement{
+			key = seedkey("enhancement_2_chance"),
+			type_key = seedkey("enhancement_2")
+		}
+		if enhancement then card:set_ability(enhancement) end
+	end
+	if selected_modifier ~= 2 then
+		card:set_seal(SMODS.poll_seal{
+			key = seedkey("seal_2_chance"),
+			type_key = seedkey("seal_2")
+		})
+	end
+	if selected_modifier ~= 3 then
+		card:set_edition(poll_edition(
+			seedkey("edition_2"),
+			nil, true, false, {
+				"e_polychrome",
+				"e_holo",
+				"e_foil"
+			}
+		))
+	end
+end
+
+----
+
+-- Updates the hands last-played tracker.
+---@param scoring_name string|nil
+---@return nil
+Ovn_f.update_hands_last_played = function(scoring_name)
+	for key,count in pairs(G.GAME.hands_last_played) do
+		G.GAME.hands_last_played[key] = count + 1
+	end
+	G.GAME.hands_last_played[scoring_name] = 0
 end

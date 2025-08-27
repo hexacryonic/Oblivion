@@ -114,9 +114,9 @@ SMODS.Back{
 
 		if G.GAME.round_resets.blind_states.Boss == 'Defeated' and not G.GAME.cy_gaveantemoney then
 			add_simple_event(nil, nil, function()
-				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25))
+				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25 - G.GAME.cy_handcost))
 				delay(0.75)
-				Ovn_f.ease_discard_cost(math.floor(G.GAME.cy_discardcost * 1.25))
+				Ovn_f.ease_discard_cost(math.floor(G.GAME.cy_discardcost * 1.25 - G.GAME.cy_discardcost))
 				delay(1)
 				ease_dollars(G.GAME.cy_dollarsperante)
 			end)

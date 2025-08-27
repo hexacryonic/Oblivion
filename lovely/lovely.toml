@@ -68,7 +68,13 @@ if initial then self.base.original_value = self.base.value end
 '''
 position = "after"
 payload = '''
-if self.base.suit == 'ovn_Optics' then self.ability.bonus = self.base.nominal end
+self.ability.bonus = self.ability.bonus - (self.ability.ovn_optics_bonus or 0)
+if self.base.suit == 'ovn_Optics' then
+  self.ability.ovn_optics_bonus = self.base.nominal
+  self.ability.bonus = self.ability.bonus + self.ability.ovn_optics_bonus
+else
+  self.ability.ovn_optics_bonus = 0
+end
 '''
 match_indent = true
 
@@ -222,7 +228,6 @@ position = 'at'
 payload = '''if name ~= "ovn_instability" then
   update_hand_text({delay = 0}, {[name] = parameter.default_value})
 end'''
-match_indent = true
 
 [[patches]]
 [patches.pattern]
@@ -248,4 +253,48 @@ position = 'after'
 payload = '''if name ~= "ovn_instability" then
   update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})
 end'''
+
+# Migraine makes all standard pack cards Optics
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)"
+position = "after"
+payload = '''if Ovn_f.has_joker('j_ovn_migraine') and (card.ability.set == "Default" or card.ability.set == "Enhanced") then
+  card:change_suit('ovn_Optics')
+  Ovn_f.guaranteed_modifier(card, i)
+end'''
+match_indent = true
+
+# Cigarette Card makes all Uncommons Miasma
+# (This patch disables specifying editions in the above condition)
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = "if t.edition then _card:set_edition(t.edition) end"
+position = "at"
+payload = '''if Ovn_f.has_joker('j_ovn_cigarette_card') and _card.config.center.rarity == 2 then
+else
+  if t.edition then _card:set_edition(t.edition) end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not SMODS.bypass_create_card_edition and not card.edition then"
+position = "before"
+payload = '''if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 then
+  card:set_edition("e_ovn_miasma")
+end'''
+match_indent = true
+
+# Update last-played-hand tracker
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})"
+position = "after"
+payload = "Ovn_f.update_hands_last_played(text)"
 match_indent = true

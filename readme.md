@@ -63,7 +63,8 @@ This context is used on the newly created (corrupted) Joker after a previous Jok
 if context.ovn_corrupted_from then
 {
     ovn_corrupted_from = true,
-    ovn_former_form_key = card_key
+    ovn_former_form_key = card_key,
+    ovn_former_form_ability = table
 }
 ```
 
@@ -78,11 +79,42 @@ if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
 }
 ```
 
+This context is used on the newly created (purified) Joker after a previous Joker was purified. It is sent by `Ovn_f.purify_joker`.
+```lua
+if context.ovn_purified_from then
+{
+    ovn_purified_from = true,
+    ovn_former_form_key = card_key,
+    ovn_former_form_ability = table
+}
+```
+
+This context is used when Joker corruption occurs. It is sent by `Ovn_f.corrupt_joker`.
+```lua
+if context.ovn_purification_occurred and ovn_purification_type == "Joker" then
+{
+    ovn_purification_occurred = true,
+    ovn_purification_type = "Joker",
+    ovn_former_form_key = card_key,
+    ovn_purified_card = card
+}
+```
+
 This context is used when a run is started or loaded. It is sent by the `Game.start_run` hook.
 ```lua
 if context.ovn_run_started then
 {
     ovn_run_started = true,
     -- Recommended to check G.STATE as well
+}
+```
+
+This context is used when an Ice card degrades. It is sent by the Ice enhancement register.
+```lua
+if context.ovn_ice_degraded then
+{
+    ovn_ice_degraded = true,
+    other_card = ice_card,
+    ovn_ice_xmult = number
 }
 ```
