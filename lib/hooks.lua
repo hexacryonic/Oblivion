@@ -67,23 +67,30 @@ end
 
 ----
 
+local card_changesuit_hook = Card.change_suit
+function Card:change_suit(new_suit)
+	local transmute_type = "none"
+	-- Non-Optics -> Optics - Corrupt enhancement
+	if (
+		self.base.suit ~= "ovn_Optics"
+		and new_suit == "ovn_Optics"
+	) then transmute_type = "corrupt"
+	-- Optics -> Non-Optics - Purify enhancement
+	elseif (
+		self.base.suit == "ovn_Optics"
+		and new_suit ~= "ovn_Optics"
+	) then transmute_type = "purify"
+	end
+	card_changesuit_hook(self, new_suit)
+	if transmute_type ~= "none" then
+		Ovn_f[transmute_type .. "_enhancement"](self)
+	end
+end
+
+----
+
 local cardupd8_hook = Card.update
 function Card:update(dt)
-	if G.STAGE == G.STAGES.RUN then
-		-- required to preserve enhancements in Collection
-		if self.area == G.hand or self.area == G.pack_cards then
-			local card_suit = self.base.suit
-			if card_suit == 'ovn_Optics' then
-				if not G.GAME.ovn_has_ocular then
-					G.GAME.ovn_has_ocular = true
-				end
-				Ovn_f.corrupt_enhancement(self)
-			else
-				Ovn_f.purify_enhancement(self)
-			end
-		end
-	end
-
 	cardupd8_hook(self, dt)
 
 	if G.STATE == G.STATES.SELECTING_HAND then
