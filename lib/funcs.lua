@@ -253,7 +253,7 @@ end
 Ovn_f.change_instability = function(amount)
 	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	local instability_max = 2
-	if G.GAME.instability >= instability_max then return end
+	if G.GAME.ovn_instability >= instability_max then return end
 	add_simple_event('after', 0.5, function ()
 		if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
 			if amount < 0 then
@@ -272,7 +272,7 @@ end
 ---@return nil
 Ovn_f.corruption_instability = function(factor)
 	factor = factor or 1
-	local mod = G.GAME.corrupmod or 0
+	local mod = G.GAME.corrumod or 0
 	Ovn_f.change_instability(mod*factor)
 end
 

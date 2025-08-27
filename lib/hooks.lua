@@ -287,7 +287,6 @@ SMODS.Consumable:take_ownership('black_hole', {
 				level_up_hand(card, k, true)
 			end
 		else
-			update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize('k_all_hands'),chips = '...', mult = '...', inst = ((G.GAME and G.GAME.instability) or 1), level=''})
 			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
 				play_sound('tarot1')
 				card:juice_up(0.8, 0.5)
@@ -309,7 +308,6 @@ SMODS.Consumable:take_ownership('black_hole', {
 			for k, v in pairs(G.GAME.hands) do
 				level_up_hand(card, k, true)
 			end
-			update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, inst = ((G.GAME and G.GAME.instability) or 1), handname = '', level = ''})
 		end
 	end
 }, true)

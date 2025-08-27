@@ -228,6 +228,7 @@ position = 'at'
 payload = '''if name ~= "ovn_instability" then
   update_hand_text({delay = 0}, {[name] = parameter.default_value})
 end'''
+match_indent = true
 
 [[patches]]
 [patches.pattern]
@@ -253,6 +254,7 @@ position = 'after'
 payload = '''if name ~= "ovn_instability" then
   update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})
 end'''
+match_indent = true
 
 # Migraine makes all standard pack cards Optics
 [[patches]]

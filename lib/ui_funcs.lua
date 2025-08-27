@@ -132,18 +132,3 @@ end
 
 G.C.INST = HEX('04248F')
 G.C.UI_INST = G.C.INST
-
--- Update Instability UI text.\
--- Primarily used in Corrupt Plasma Deck.
----@param e any
----@return nil
-G.FUNCS.hand_inst_UI_set = function(e)
-	-- == used in create_UIBox_HUD
-	local new_inst_text = number_format(((G.GAME and G.GAME.instability) or 1))
-	if new_inst_text ~= G.GAME.current_round.current_hand.inst_text then
-		G.GAME.current_round.current_hand.inst_text = new_inst_text
-		e.config.object.scale = scale_number(G.GAME.current_round.current_hand.inst, 0.69, 1000)
-		e.config.object:update_text()
-		if not G.TAROT_INTERRUPT_PULSE then G.FUNCS.text_super_juice(e, math.max(0,math.floor(math.log10(type(G.GAME.current_round.current_hand.inst) == 'number' and G.GAME.current_round.current_hand.inst or 1)))) end
-	end
-end
