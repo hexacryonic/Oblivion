@@ -250,19 +250,20 @@ end
 -- Changes Instability on Corrupt Plasma Deck, else does nothing.
 ---@param amount number
 ---@return nil
-Ovn_f.increase_instability = function(amount)
-	if not G.GAME.in_corrupt_plasma or amount == 0 or amount == nil then return end
-
+Ovn_f.change_instability = function(amount)
+	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	local instability_max = 2
 	if G.GAME.instability >= instability_max then return end
-
 	add_simple_event('after', 0.5, function ()
-		if amount < 0 then
-			play_sound("ovn_decrement", 1, 0.8)
-		elseif amount > 0 then
-			play_sound("ovn_increment", 1, 0.9)
+		if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
+			if amount < 0 then
+				play_sound("ovn_decrement", 1, 0.8)
+			elseif amount > 0 then
+				play_sound("ovn_increment", 1, 0.9)
+			end
 		end
-		G.GAME.instability = math.min(G.GAME.instability + amount, instability_max)
+		G.GAME.ovn_instability = G.GAME.ovn_instability + amount
+		update_hand_text({delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
 	end)
 end
 
@@ -270,18 +271,18 @@ end
 ---@param factor? integer
 ---@return nil
 Ovn_f.corruption_instability = function(factor)
-	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.corrumod or 0)*(factor or 1))
-	end
+	factor = factor or 1
+	local mod = G.GAME.corrupmod or 0
+	Ovn_f.change_instability(mod*factor)
 end
 
 -- This increase of instability is used when a playing card of Optics is obtained.
 ---@param factor? integer
 ---@return nil
 Ovn_f.optic_instability = function(factor)
-	if G.GAME.in_corrupt_plasma then
-		Ovn_f.increase_instability((G.GAME.opticmod or 0)*(factor or 1))
-	end
+	factor = factor or 1
+	local mod = G.GAME.opticmod or 0
+	Ovn_f.change_instability(mod*factor)
 end
 
 ----

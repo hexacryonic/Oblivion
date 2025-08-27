@@ -103,72 +103,6 @@ end
 
 ----
 
--- Add Instability to UI (thanks math)
-local function hud_ui_c_plasma(ret)
-	local hand_UI = ret.nodes[1].nodes[1].nodes[4].nodes[1].nodes[2].nodes
-	-- Cleanly remove existing DynaText (prevent memory leaks)
-	hand_UI[1].nodes[1].config.object:remove()
-	hand_UI[1].nodes[2].config.object:remove()
-	hand_UI[3].nodes[1].config.object:remove()
-	hand_UI[3].nodes[3].config.object:remove()
-
-	local jtml_stylesheet = {
-		[".deco_text"] = {align = "center-middle"},
-		[".deco_text__text"] = {scale = 0.5, colour = G.C.RARITY['ovn_corrupted'], shadow = true},
-		[".score_area"] = {
-			align = "center-middle",
-			minimumWidth = 1.2,
-			minimumHeight = 0.7,
-			roundness = 0.1,
-			emboss = 0.05
-		},
-		[".score_area__flame"] = {width = 0, height = 0},
-	}
-
-	local function quick_dynatext(type)
-		return DynaText {
-			string = {
-				{ref_table = G.GAME.current_round.current_hand, ref_value = type .. "_text"}
-			},
-			colours = {G.C.UI.TEXT_LIGHT},
-			font = G.LANGUAGES['en-us'].font,
-			shadow = true,
-			float = true,
-			scale = 0.3*2.3
-		}
-	end
-
-	local function quick_deco_text(text, color)
-		local decotxt_jtml =
-		{"column", class="deco_text", {
-			{"text", class="deco_text__text", text=text, language=G.LANGUAGES['en-us'],}
-		}}
-		if color then decotxt_jtml[2][1].style={colour = color} end
-		return Ovn_f.jtml_to_uiboxdef(decotxt_jtml, jtml_stylesheet)
-	end
-
-	local function quick_score_area(type, fillcolor)
-		local type2 = type == "chip" and "chips" or type
-		local scorearea_jtml =
-		{"column", id="hand_"..type.."_area", class="score_area", style={fillColour = fillcolor}, {
-			{"object", id="flame_"..type2, class="score_area__flame", ondraw="flame_handler", norole=true, object=Moveable(0,0,0,0)},
-			{"object", id="hand_"..type2, class="score_area__text", ondraw="hand_"..type.."_UI_set", object=quick_dynatext(type)},
-		}}
-		return Ovn_f.jtml_to_uiboxdef(scorearea_jtml, jtml_stylesheet)
-	end
-
-	local hand_ui_jtml = {
-		quick_deco_text("("),
-		quick_score_area("chip", G.C.UI_CHIPS),
-		quick_deco_text("X", G.C.UI_MULT),
-		quick_score_area("mult", G.C.UI_MULT),
-		quick_deco_text(")"),
-		quick_deco_text("^"),
-		quick_score_area("inst", G.C.UI_INST),
-	}
-	ret.nodes[1].nodes[1].nodes[4].nodes[1].nodes[2].nodes = hand_ui_jtml
-end
-
 local function hud_ui_c_yellow(ret)
 	local handdiscard_UI = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes[1].nodes
 
@@ -208,9 +142,7 @@ end
 local cuih = create_UIBox_HUD
 function create_UIBox_HUD()
 	local ret = cuih()
-	if G.GAME.in_corrupt_plasma then
-		hud_ui_c_plasma(ret)
-	elseif G.GAME.in_corrupt_yellow then
+	if G.GAME.in_corrupt_yellow then
 		hud_ui_c_yellow(ret)
 	end
 	return ret
@@ -348,8 +280,8 @@ function G.FUNCS.can_play(e)
 		G.GAME.ovn_cghost_first_hand_drawn ~= nil
 		and not G.GAME.ovn_cghost_first_hand_drawn
 	) then
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
 	else
 		canplay_hook(e)
 	end
@@ -361,12 +293,88 @@ function G.FUNCS.can_discard(e)
 		G.GAME.ovn_cghost_first_hand_drawn ~= nil
 		and not G.GAME.ovn_cghost_first_hand_drawn
 	) then
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
 	else
 		candiscard_hook(e)
 	end
 end
+
+----
+
+local function quasi_operator(scale, text, colour)
+	return
+	{n=G.UIT.C, config={align = "cm"}, nodes={
+		{n=G.UIT.T, config={text = text, lang = G.LANGUAGES['en-us'], scale = scale, colour = colour or G.C.WHITE, shadow = true}},
+	}}
+end
+
+local function chips_container(scale, w, h)
+	return
+	{n=G.UIT.C, config={align = 'cm', id = 'hand_chips_container'}, nodes = {
+		SMODS.GUI.score_container({
+			type = 'chips',
+			align = 'cm',
+			scale = scale,
+			w = w, h = h
+		})
+	}}
+end
+
+local function mult_container(scale, w, h)
+	return
+	{n=G.UIT.C, config={align = 'cm', id = 'hand_mult_container'}, nodes = {
+		SMODS.GUI.score_container {
+			type = 'mult',
+			align = 'cm',
+			scale = scale,
+			w = w, h = h
+		}
+	}}
+end
+
+local function instability_container(scale, w, h)
+	return
+	{n=G.UIT.C, config={align = 'cm', id = 'instability_container'}, nodes = {
+		SMODS.GUI.score_container {
+			type = 'ovn_instability',
+			align = 'cm',
+			colour = G.C.RARITY['ovn_corrupted'],
+			scale = scale,
+			w = w, h = h
+		}
+	}}
+end
+
+-- Instability hooking
+local handchipscontainer_hook = SMODS.GUI.hand_chips_container
+function SMODS.GUI.hand_chips_container(scale)
+	if getmetatable(G.GAME.current_scoring_calculation).__index == SMODS.Scoring_Calculations["ovn_instable"] then
+		-- sincerest apologies for these magic numbers
+		-- division occurs here to anticipate scale changes
+
+		scale = scale/0.4 -- 0.4 is default scale in score_container, taken to be actual value of scale
+		local w = 1.2*scale -- 1.2 is defined width in OG code for instability UI
+		local h = 0.7*scale -- 0.7 is defined height in OG code
+		 -- 2.3 is text scale multiplier for score_container
+		local text_scale = 0.69*scale/2.3 -- 0.69 is size of value text in OG code
+		local operator_scale = 0.5*scale -- 0.5 is size of operator text in OG code
+
+		return
+		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.05}, nodes={
+			quasi_operator(operator_scale, "(", G.C.RARITY['ovn_corrupted']),
+			chips_container(text_scale, w, h),
+			quasi_operator(operator_scale, "X", G.C.UI_MULT),
+			mult_container(text_scale, w, h),
+			quasi_operator(operator_scale, ")", G.C.RARITY['ovn_corrupted']),
+			quasi_operator(operator_scale, "^", G.C.RARITY['ovn_corrupted']),
+			instability_container(text_scale, w, h)
+		}}
+	end
+	return handchipscontainer_hook(scale)
+end
+
+----
 
 local canselect_hook = G.FUNCS.can_select_card
 function G.FUNCS.can_select_card(e)

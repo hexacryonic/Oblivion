@@ -209,6 +209,7 @@ function Game:start_run(args)
 		})
 	end)
 	startrun_hook(self, args)
+	G.GAME.ovn_instability = 1
 	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
 	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
 	if not G.GAME.hands_last_played then
@@ -217,6 +218,12 @@ function Game:start_run(args)
 			G.GAME.hands_last_played[key] = 0
 		end
 	end
+end
+
+local getscoringparam_hook = SMODS.get_scoring_parameter
+function SMODS.get_scoring_parameter(key, flames)
+    if key == "ovn_instability" then return G.GAME.ovn_instability end
+    return getscoringparam_hook(key, flames)
 end
 
 ----

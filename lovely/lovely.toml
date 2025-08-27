@@ -209,6 +209,51 @@ G.GAME.current_round.temp_handsize_change = 0
 '''
 match_indent = true
 
+# Instability is not changed when hand is parsed
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})"
+position = 'at'
+payload = '''if name ~= "ovn_instability" then
+  update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "update_hand_text({delay = 0}, {[name] = parameter.default_value})"
+position = 'at'
+payload = '''if name ~= "ovn_instability" then
+  update_hand_text({delay = 0}, {[name] = parameter.default_value})
+end'''
+
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
+    parameter.current = G.GAME.hands[text][name] or parameter.default_value
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
+end'''
+position = 'at'
+payload = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
+  if name ~= "ovn_instability" then
+    parameter.current = G.GAME.hands[text][name] or parameter.default_value
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
+  end
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})"
+position = 'after'
+payload = '''if name ~= "ovn_instability" then
+  update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})
+end'''
+
 # Migraine makes all standard pack cards Optics
 [[patches]]
 [patches.pattern]
