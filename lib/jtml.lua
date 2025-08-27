@@ -291,5 +291,4 @@ local function generate_uibox_definition(jtml, stylesheet)
 	return uibox_table
 end
 
--- Put function on global scope to use it anywhere
--- global_function = generate_uibox_definition
+Ovn_f.jtml_to_uiboxdef = generate_uibox_definition
