@@ -21,7 +21,7 @@ SMODS.current_mod.description_loc_vars = function()
 	}
 end
 
-local function load_directory(folder_name)
+function Ovn_f.load_directory(folder_name)
 	local mod_path = Oblivion.mod_path
 	local files = NFS.getDirectoryItems(mod_path .. folder_name)
 	for _,file_name in ipairs(files) do
@@ -33,9 +33,9 @@ local function load_directory(folder_name)
 	end
 end
 
-load_directory("lib")
-load_directory("load-assets")
-load_directory("items")
+Ovn_f.load_directory("lib")
+Ovn_f.load_directory("load-assets")
+Ovn_f.load_directory("items")
 
 -- Mapping this way so other mods can add define_corruption if it's nonexistent
 -- and thus define their own corruptions

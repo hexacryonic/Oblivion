@@ -1,3 +1,6 @@
+----------------
+-- Corrupt World
+----------------
 local function corrupt_world_deck_cards()
 	local cards = {}
 

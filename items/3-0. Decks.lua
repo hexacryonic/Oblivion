@@ -1,8 +1,42 @@
+--------------------------
+-- Supplementary functions
+--------------------------
 local add_simple_event = Ovn_f.add_simple_event
+to_big = to_big or function(x)
+	return x
+end
 local function achievement_get(key)
 	return SMODS.Achievements["ach_ovn_" .. key].earned
 end
 
+----------------
+
+--------------
+-- Ocular Deck
+--------------
+SMODS.Back{
+	key = "ocular",
+	pos = { x = 0, y = 0 },
+	atlas = "deck_atlas",
+
+	apply = function(self)
+		G.GAME.ovn_has_ocular = true
+		add_simple_event('immediate', nil, function()
+			local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
+			for _,rank in ipairs(ranks) do
+				local card_key = ('ovn_O_%s'):format(rank)
+				local card_front = G.P_CARDS[card_key]
+				create_playing_card({front = card_front}, G.deck)
+			end
+		end)
+	end,
+}
+
+----------------
+
+-------------------
+-- Corrupt Red Deck
+-------------------
 SMODS.Back{
 	key = "c_red",
 
@@ -45,6 +79,9 @@ SMODS.Back{
 	end,
 }
 
+--------------------
+-- Corrupt Blue Deck
+--------------------
 SMODS.Back{
 	key = "c_blue",
 
@@ -62,13 +99,16 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		G.GAME.round_resets.hands = G.GAME.current_round.hands_left
+		G.GAME.round_resets.hands = G.GAME.current_round.hands_left --[[@as integer]]
 		if G.GAME.round_resets.blind_states.Boss == 'Defeated' then
 			G.GAME.round_resets.hands = G.GAME.round_resets.hands + 3
 		end
 	end,
 }
 
+----------------------
+-- Corrupt Yellow Deck
+----------------------
 SMODS.Back{
 	key = "c_yellow",
 
@@ -135,6 +175,9 @@ SMODS.Back{
 	end,
 }
 
+---------------------
+-- Corrupt Ghost Deck
+---------------------
 SMODS.Back{
 	key = "c_ghost",
 	config = { spectral_rate = 6 },
@@ -275,6 +318,9 @@ SMODS.Back{
 	end,
 }
 
+-----------------------
+-- Corrupt Painted Deck
+-----------------------
 SMODS.Back{
 	key = "c_painted",
 
@@ -307,6 +353,9 @@ SMODS.Back{
 	end,
 }
 
+----------------------
+-- Corrupt Plasma Deck
+----------------------
 -- Dummy Joker used solely to hold the Instability tooltip
 SMODS.Joker {
 	key = "instabilitytooltip",
@@ -315,71 +364,6 @@ SMODS.Joker {
 	discovered = false,
 	check_for_unlock = function() return false end,
 	in_pool = function() return false end,
-}
-
--- Values are dummy; to change instability, use Ovn_f.change_instability
-SMODS.Scoring_Parameter {
-	key = 'instability',
-	default_value = 1,
-	colour = G.C.RARITY['ovn_corrupted'],
-	flame_handler = function(self)
-		return {
-			id = 'flame_'..self.key, 
-			arg_tab = self.key..'_flames',
-			colour = G.C.RARITY['ovn_corrupted'],
-			accent = self.lick
-		}
-	end,
-
-	level_up_hand = function() end,
-	modify = function() end,
-}
-
-SMODS.Scoring_Calculation {
-	key = "instable",
-	func = function(self, chips, mult, flames)
-		local instability = G.GAME.ovn_instability
-		---@diagnostic disable-next-line: redundant-return-value
-		return (chips * mult) ^ instability
-	end,
-	replace_ui = function (self)
-		local function op(text, scale, colour)
-			return
-			{n=G.UIT.C, config={align = "cm"}, nodes={
-				{n=G.UIT.T, config={text = text, lang = G.LANGUAGES['en-us'], scale = scale, colour = colour or G.C.WHITE, shadow = true}},
-			}}
-		end
-
-		local function container(type, id, scale, w, h, colour)
-			return
-			{n=G.UIT.C, config={align = 'cm', id = id}, nodes = {
-				SMODS.GUI.score_container({
-					type = type,
-					align = 'cm',
-					scale = scale,
-					w = w, h = h,
-					colour = colour
-				})
-			}}
-		end
-
-		local w = 1.2
-		local h = 0.7
-		local text_scale = 0.69/2.3
-		local op_scale = 0.5
-
-		return
-		---@diagnostic disable-next-line: redundant-return-value
-		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.05}, nodes={
-			op("(", op_scale, G.C.RARITY['ovn_corrupted']),
-			container("chips", "hand_chips_container", text_scale, w, h),
-			op("X", op_scale, G.C.UI_MULT),
-			container("mult", "hand_mult_container", text_scale, w, h),
-			op(")", op_scale, G.C.RARITY['ovn_corrupted']),
-			op("^", op_scale, G.C.RARITY['ovn_corrupted']),
-			container("ovn_instability", "instability_container", text_scale, w, h, G.C.RARITY['ovn_corrupted']),
-		}}
-	end
 }
 
 SMODS.Back{

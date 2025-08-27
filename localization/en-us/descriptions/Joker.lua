@@ -29,6 +29,15 @@ return {
 			'{C:inactive,s:0.8}the cold Joker of out hot eat the Joker"'
 		}
 	},
+	j_ovn_radiant_joker = {
+		name = "Radiant Joker",
+		text = {
+			"{C:attention}Radiant {}Cards give scoring",
+			"cards {C:chips}+#1# {}more extra Chips",
+			"Increase this by {C:chips}+#2# {}when",
+			"a {C:attention}Radiant {}Card is scored"
+		}
+	},
 	j_ovn_ice_joker = {
 		name = 'Ice Joker',
 		text = {
@@ -37,6 +46,13 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
 			"This gain increases by {C:attention}+#3#",
 			"when an {C:attention}Ice Card {}fully melts"
+		}
+	},
+	j_ovn_crystal_joker = {
+		name = "Crystal Joker",
+		text = {
+			"{C:attention}Crystal Cards {}last",
+			"for {C:attention}+#1# {}extra hands"
 		}
 	},
 	j_ovn_pure_visage = {
@@ -52,13 +68,6 @@ return {
 		text = {
 			"Once per round, press",
 			"{C:attention}side button {}to {C:blue}purify {}this Joker"
-		}
-	},
-	j_ovn_crystal_joker = {
-		name = "Crystal Joker",
-		text = {
-			"{C:attention}Crystal Cards {}last",
-			"for {C:attention}+#1# {}extra hands"
 		}
 	},
 	j_ovn_trolley_problem = {
@@ -78,15 +87,6 @@ return {
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		}
 	},
-	j_ovn_radiant_joker = {
-		name = "Radiant Joker",
-		text = {
-			"{C:attention}Radiant {}Cards give scoring",
-			"cards {C:chips}+#1# {}more extra Chips",
-			"Increase this by {C:chips}+#2# {}when",
-			"a {C:attention}Radiant {}Card is scored"
-		}
-	},
 
 	-- CORRUPTED JOKERS
 	j_ovn_darkjoker = {
@@ -97,81 +97,12 @@ return {
 			corrupted_from("Joker"),
 		}
 	},
-	j_ovn_lucasseries = {
-		name = 'Lucas Series',
+	j_ovn_prideful = {
+		name = 'Prideful Joker',
 		text = {
-			"Each played",
-			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
-			"gives {X:mult,C:white} X#1# {} Mult when scored",
-			corrupted_from("Fibonacci"),
-		}
-	},
-	j_ovn_perpendicular = {
-		name = 'Perpendicular Parking',
-		text = {
-			"Scored cards earn {C:attention}$#1#{} if another",
-			"card of its {C:attention}same rank{} is held in hand",
-			corrupted_from("Reserved Parking"),
-		}
-	},
-	j_ovn_yolo = {
-		name = 'Fuck It, We Ball',
-		text = {
-			"Each played card gives",
-			"{X:mult,C:white} X#1# {} Mult when scored",
-			"{s:0.3} {}",
-			"{C:chips}-a fucktillion{} Hands",
-			"when hand played",
-			corrupted_from("Acrobat"),
-		}
-	},
-	j_ovn_supplydrop = {
-		name = 'Supply Drop',
-		text = {
-			"Sell this Joker to {C:attention}store{} the",
-			"Joker to its left, if its rarity",
-			"is not higher than {C:red}Rare{}",
-			"{s:0.3} {}",
-
-			"When this Joker is sold",
-			"again, even between runs,",
-			"create the stored Joker",
-			"and remove it from storage",
-			"{s:0.3} {}",
-
-			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
-			"{s:0.2} {}",
-			corrupted_from("Gift Card"),
-		}
-	},
-	j_ovn_pmo = {
-		name = 'Prosopometamorphopsia',
-		text = {
-			"Effects that would target",
-			"{C:attention}any face card{} target {C:attention}Aces{} instead",
-			corrupted_from("Pareidolia"),
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Code by Airtoum{}"
-		}
-	},
-	j_ovn_showneverends = {
-		name = 'THE SHOW NEVER ENDS',
-		text = {
-			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
-			"banish or destroy their counterparts",
-			corrupted_from("Showman"),
-		}
-	},
-	j_ovn_airstrike = {
-		name = 'Air Strike',
-		text = {
-			"Held or unscoring {C:attention}10{}s stockpile",
-			"{X:mult,C:white} X#1# {} Mult every hand played",
-			"When scored, {C:attention}10{}s give their stockpiled Mult",
-			"and reset their stockpile after the hand",
-			corrupted_from("Walkie Talkie"),
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Art by Andromeda{}"
+			"Played cards with {C:ovn_optic}Optic{} suit",
+			"give {C:mult}+#1#{} Mult when scored",
+			"{C:inactive,s:0.8}Corrupted from the{} {C:attention,s:0.8}Sinful Jokers{}"
 		}
 	},
 	j_ovn_bombastic = {
@@ -192,21 +123,72 @@ return {
 			corrupted_from("Crafty Joker"),
 		}
 	},
-	j_ovn_breach = {
-		name = 'The Breach',
+	j_ovn_collapsing_world = {
+		name = "Edge of a Collapsing World",
 		text = {
-			"{X:mult,C:white} X#1# {} Mult if played",
-			"hand contains",
-			"a {C:attention}Spectrum{}",
-			corrupted_from("The Tribe"),
+			"The {C:attention}rightmost and leftmost {}cards",
+			"discarded in the {C:attention}final Discard",
+			"of the round are {C:red}destroyed,",
+			"then this Joker gains {C:mult}+#1# {}Mult",
+			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
+			corrupted_from("Mystic Summit or Erosion"),
 		}
 	},
-	j_ovn_prideful = {
-		name = 'Prideful Joker',
+	j_ovn_lucasseries = {
+		name = 'Lucas Series',
 		text = {
-			"Played cards with {C:ovn_optic}Optic{} suit",
-			"give {C:mult}+#1#{} Mult when scored",
-			"{C:inactive,s:0.8}Corrupted from the{} {C:attention,s:0.8}Sinful Jokers{}"
+			"Each played",
+			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
+			"gives {X:mult,C:white} X#1# {} Mult when scored",
+			corrupted_from("Fibonacci"),
+		}
+	},
+	j_ovn_database = {
+		name = "Database",
+		text = {
+			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
+			"obtained cumulatively over the run",
+			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
+			corrupted_from("Abstract Joker"),
+		}
+	},
+	j_ovn_pmo = {
+		name = 'Prosopometamorphopsia',
+		text = {
+			"Effects that would target",
+			"{C:attention}any face card{} target {C:attention}Aces{} instead",
+			corrupted_from("Pareidolia"),
+			"{s:0.3} {}",
+			"{C:inactive,s:0.8}Code by Airtoum{}"
+		}
+	},
+	j_ovn_aeon = {
+		name = 'Aeon Cavendish',
+		text = {
+			"{X:mult,C:white} X#1# {} Mult",
+			"{C:attention}Cavendish {}is no longer extinct",
+			"and can be obtained multiple times",
+			corrupted_from("Gros Michel"),
+		}
+	},
+	j_ovn_event_horizon = {
+		name = "Event Horizon",
+		text = {
+			"{C:red}Hands no longer level up",
+			"Instead, this Joker gains half of",
+			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
+			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
+			corrupted_from("Supernova or Constellation")
+		}
+	},
+	j_ovn_library_of_babel = {
+		name = "Library of Babel",
+		text = {
+			"This Joker gains {X:mult,C:white}X#1# {} Mult",
+			"when played poker hand hasn't been",
+			"played within the {C:attention}last #2# {}hands",
+			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
+			corrupted_from("To-Do List, Card Sharp, or Obelisk")
 		}
 	},
 	j_ovn_cultivar = {
@@ -228,13 +210,47 @@ return {
 			corrupted_from("Hologram"),
 		}
 	},
-	j_ovn_aeon = {
-		name = 'Aeon Cavendish',
+	j_ovn_philosophers_stone = {
+		name = "Philosopher's Stone",
 		text = {
-			"{X:mult,C:white} X#1# {} Mult",
-			"{C:attention}Cavendish {}is no longer extinct",
-			"and can be obtained multiple times",
-			corrupted_from("Gros Michel"),
+			"After playing, each {C:attention}numbered {}card",
+			"has a {C:green}#1# in #2# {}chance to have",
+			"their enhancement {C:attention}transmuted"
+		}
+	},
+	j_ovn_supplydrop = {
+		name = 'Supply Drop',
+		text = {
+			"Sell this Joker to {C:attention}store{} the",
+			"Joker to its left, if its rarity",
+			"is not higher than {C:red}Rare{}",
+			"{s:0.3} {}",
+
+			"When this Joker is sold",
+			"again, even between runs,",
+			"create the stored Joker",
+			"and remove it from storage",
+			"{s:0.3} {}",
+
+			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
+			"{s:0.2} {}",
+			corrupted_from("Gift Card"),
+		}
+	},
+	j_ovn_perpendicular = {
+		name = 'Perpendicular Parking',
+		text = {
+			"Scored cards earn {C:attention}$#1#{} if another",
+			"card of its {C:attention}same rank{} is held in hand",
+			corrupted_from("Reserved Parking"),
+		}
+	},
+	j_ovn_migraine = {
+		name = "Migraine",
+		text = {
+			"{C:attention}Standard Packs {}only",
+			"contain modified {C:ovn_optic}Optic {}cards",
+			corrupted_from("Hallucination"),
 		}
 	},
 	j_ovn_spiral_of_addiction = {
@@ -248,24 +264,43 @@ return {
 			corrupted_from("Drunkard"),
 		}
 	},
-	j_ovn_collapsing_world = {
-		name = "Edge of a Collapsing World",
+	j_ovn_cigarette_card = {
+		name = "Cigarette Card",
 		text = {
-			"The {C:attention}rightmost and leftmost {}cards",
-			"discarded in the {C:attention}final Discard",
-			"of the round are {C:red}destroyed,",
-			"then this Joker gains {C:mult}+#1# {}Mult",
-			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
-			corrupted_from("Mystic Summit or Erosion"),
+			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
+			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
+			corrupted_from("Baseball Card"),
 		}
 	},
-	j_ovn_master_of_puppets = {
-		name = "Master of Puppets",
+	j_ovn_airstrike = {
+		name = 'Air Strike',
 		text = {
-			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
-			"a random {C:attention}Jack {}in your deck is given",
-			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
-			corrupted_from("Hit the Road"),
+			"Held or unscoring {C:attention}10{}s stockpile",
+			"{X:mult,C:white} X#1# {} Mult every hand played",
+			"When scored, {C:attention}10{}s give their stockpiled Mult",
+			"and reset their stockpile after the hand",
+			corrupted_from("Walkie Talkie"),
+			"{s:0.3} {}",
+			"{C:inactive,s:0.8}Art by Andromeda{}"
+		}
+	},
+	j_ovn_yolo = {
+		name = 'Fuck It, We Ball',
+		text = {
+			"Each played card gives",
+			"{X:mult,C:white} X#1# {} Mult when scored",
+			"{s:0.3} {}",
+			"{C:chips}-a fucktillion{} Hands",
+			"when hand played",
+			corrupted_from("Acrobat"),
+		}
+	},
+	j_ovn_showneverends = {
+		name = 'THE SHOW NEVER ENDS',
+		text = {
+			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
+			"banish or destroy their counterparts",
+			corrupted_from("Showman"),
 		}
 	},
 	j_ovn_infinitesimal = {
@@ -278,39 +313,22 @@ return {
 			corrupted_from("Wee Joker"),
 		}
 	},
-	j_ovn_migraine = {
-		name = "Migraine",
+	j_ovn_master_of_puppets = {
+		name = "Master of Puppets",
 		text = {
-			"{C:attention}Standard Packs {}only",
-			"contain modified {C:ovn_optic}Optic {}cards",
-			corrupted_from("Hallucination"),
+			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
+			"a random {C:attention}Jack {}in your deck is given",
+			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
+			corrupted_from("Hit the Road"),
 		}
 	},
-	j_ovn_database = {
-		name = "Database",
+	j_ovn_breach = {
+		name = 'The Breach',
 		text = {
-			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
-			"obtained cumulatively over the run",
-			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
-			corrupted_from("Abstract Joker"),
-		}
-	},
-	j_ovn_cigarette_card = {
-		name = "Cigarette Card",
-		text = {
-			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
-			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
-			corrupted_from("Baseball Card"),
-		}
-	},
-	j_ovn_library_of_babel = {
-		name = "Library of Babel",
-		text = {
-			"This Joker gains {X:mult,C:white}X#1# {} Mult",
-			"when played poker hand hasn't been",
-			"played within the {C:attention}last #2# {}hands",
-			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
-			corrupted_from("To-Do List, Card Sharp, or Obelisk")
+			"{X:mult,C:white} X#1# {} Mult if played",
+			"hand contains",
+			"a {C:attention}Spectrum{}",
+			corrupted_from("The Tribe"),
 		}
 	},
 	j_ovn_bottled_ship_of_theseus = {
@@ -331,22 +349,4 @@ return {
 			corrupted_from("Purifier or Nexus Point")
 		}
 	},
-	j_ovn_event_horizon = {
-		name = "Event Horizon",
-		text = {
-			"{C:red}Hands no longer level up",
-			"Instead, this Joker gains half of",
-			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
-			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
-			corrupted_from("Supernova or Constellation")
-		}
-	},
-	j_ovn_philosophers_stone = {
-		name = "Philosopher's Stone",
-		text = {
-			"After playing, each {C:attention}numbered {}card",
-			"has a {C:green}#1# in #2# {}chance to have",
-			"their enhancement {C:attention}transmuted"
-		}
-	}
 }

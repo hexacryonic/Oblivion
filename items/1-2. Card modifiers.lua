@@ -1,0 +1,418 @@
+--------------------------
+-- Supplementary functions
+--------------------------
+local add_simple_event = Ovn_f.add_simple_event
+to_big = to_big or function(x)
+	return x
+end
+
+local function change_rank(card, new_rank)
+	local new_code = ({
+		Diamonds = 'D_',
+		Spades   = 'S_',
+		Clubs    = 'C_',
+		Hearts   = 'H_',
+		ovn_Optics = 'ovn_O_'
+	})[card.base.suit]
+
+	local new_val = ({
+		Ace    = 'A',
+		King   = 'K',
+		Queen  = 'Q',
+		Jack   = 'J',
+		['10'] = 'T'
+	})[new_rank] or new_rank
+
+	local new_card_key = new_code .. new_val
+	local new_card = G.P_CARDS[new_card_key]
+
+	card:flip()
+	card:set_base(new_card)
+	G.GAME.blind:debuff_card(card)
+	card:flip()
+end
+
+----------------
+
+---------------
+-- ENHANCEMENT
+-- Radiant Card
+---------------
+SMODS.Enhancement{
+	key = "radiant",
+	config = {extra = {bonus_chips = 0}},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 3, y = 0 },
+	in_pool = function() return false end,
+
+
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_radiant_jokers = SMODS.find_card('j_ovn_radiant_joker')
+		for _,radiant_joker in ipairs(all_radiant_jokers) do
+			card.ability.extra.bonus_chips = (
+				card.ability.extra.bonus_chips
+				+ radiant_joker.ability.extra.extra_chips
+			)
+		end
+	end,
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == G.hand then
+			local card_chip = card.base.nominal + card.ability.extra.bonus_chips
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.bonus = other_card.ability.bonus + card_chip
+				add_simple_event(nil, nil, function ()
+					other_card:juice_up()
+				end)
+			end
+		end
+	end
+}
+
+---------------
+-- ENHANCEMENT
+-- Dynamo Card
+---------------
+SMODS.Enhancement{
+	key = 'dynamo',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {mult = 7}
+	},
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 0, y = 1 },
+	in_pool = function() return false end,
+
+	calculate = function (self, card, context)
+		if context.before and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult + card.ability.extra.mult
+			end
+		end
+		if context.after and context.cardarea == 'unscored' then
+			for _,other_card in ipairs(context.scoring_hand) do
+				other_card.ability.mult = other_card.ability.mult - card.ability.extra.mult
+			end
+		end
+	end
+}
+
+---------------
+-- ENHANCEMENT
+-- Coordinate Card
+---------------
+SMODS.Enhancement{
+	key = "coord",
+	loc_vars = function(self, info_queue, card)
+		return { }
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 2, y = 1 },
+	in_pool = function() return false end,
+	config = { },
+
+	calculate = function(self, card, context)
+		if context.modify_scoring_hand or context.check then
+			local card_table = G.hand.cards
+			local card_index = -1
+
+			for i,hand_card in ipairs(card_table) do
+				if hand_card == card then card_index = i end
+			end
+
+			if card_index > 1 then
+				local other_card_value = card_table[card_index - 1].base.value
+				if card.base.value == other_card_value then return end
+				change_rank(card, other_card_value)
+			end
+		end
+	end,
+}
+
+---------------
+-- ENHANCEMENT
+-- Ice Card
+---------------
+SMODS.Enhancement{
+	key = "ice",
+	loc_vars = function(self, info_queue, card)
+		local item = card and card.ability or self.config
+		return {vars = {
+			item.extra.x_mult_loss,
+			item.extra.current_x_mult
+		}}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 0, y = 0 },
+	in_pool = function() return false end,
+	config = {extra = {
+		x_mult_loss = 0.1,
+		current_x_mult = 2,
+		is_melting = false
+	}},
+
+	calculate = function(self,card,context)
+		local c_extra = card.ability.extra
+
+		if context.cardarea == G.play and context.main_scoring then
+			c_extra.is_melting = true
+			return { x_mult = c_extra.current_x_mult }
+		end
+
+		if context.after and c_extra.is_melting then
+			c_extra.current_x_mult = c_extra.current_x_mult - c_extra.x_mult_loss
+			c_extra.is_melting = false
+
+			if c_extra.current_x_mult > 1 then
+				SMODS.calculate_context{
+					ovn_ice_degraded = true,
+					other_card = card,
+					ovn_ice_xmult = c_extra.current_x_mult
+				}
+			end
+		end
+
+		if (
+			context.destroy_card == card
+			and context.cardarea == G.play
+			and c_extra.current_x_mult <= (1 + card.ability.extra.x_mult_loss)
+		) then
+			card.ice_melted = true
+			add_simple_event(nil, nil, function()
+				play_sound("tarot1")
+			end)
+			return {remove = true}
+		end
+	end,
+}
+
+---------------
+-- ENHANCEMENT
+-- Unobtainium Card
+---------------
+SMODS.Enhancement{
+	key = "unob",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.repetitions }}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 2, y = 0 },
+	in_pool = function() return false end,
+	config = {extra = {repetitions = 1}},
+
+	calculate = function(self, card, context)
+		-- Custom context
+		if (
+			context.ovn_repetition_from_playing_card
+			and card.area == G.hand
+			and context.other_card.area == G.play
+		) then
+			return {repetitions = card.ability.extra.repetitions}
+		end
+	end,
+	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+}
+
+---------------
+-- ENHANCEMENT
+-- Crystal Card
+---------------
+SMODS.Enhancement{
+	key = "crystal",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.plays_left }}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 1, y = 1 },
+	in_pool = function() return false end,
+	config = {extra = {plays_left = 3}},
+
+	never_scores = true,
+
+	set_ability = function (self, card, initial, delay_sprites)
+		local all_crystal_jokers = SMODS.find_card('j_ovn_crystal_joker')
+		for _,crystal_joker in ipairs(all_crystal_jokers) do
+			card.ability.extra.plays_left = (
+				card.ability.extra.plays_left
+				+ crystal_joker.ability.extra.extra_plays
+			)
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.before and context.cardarea == "unscored" then
+			card.ability.extra.plays_left = card.ability.extra.plays_left - 1
+			return {
+				level_up = true,
+				message = localize('k_level_up_ex')
+			}
+		end
+
+		if (
+			context.destroy_card == card
+			and context.cardarea == "unscored"
+			and card.ability.extra.plays_left <= 0
+		) then
+			add_simple_event(nil, nil, function ()
+				play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
+			end)
+			return {remove = true}
+		end
+	end,
+	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+}
+
+---------------
+-- ENHANCEMENT
+-- Tungsten Card
+---------------
+SMODS.Enhancement{
+	key = "dense",
+	loc_vars = function(self, info_queue, card)
+		local item = card and card.ability or self.config
+		return {vars = {
+			item.extra.tungsten_handsize_mod,
+			item.extra.holdingthis
+		}}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 1, y = 0 },
+	in_pool = function() return false end,
+	config = {extra = {tungsten_handsize_mod = 1, holdingthis = 0}},
+
+	update = function(self, card, dt)
+		if card.area then
+			if (card.area == G.hand) and not (card.debuff) and (card.ability.extra.holdingthis) == 0 then
+				G.hand:change_size(-self.config.extra.tungsten_handsize_mod)
+				card.ability.extra.holdingthis = 1
+			elseif card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
+				G.hand:change_size(self.config.extra.tungsten_handsize_mod)
+				card.ability.extra.holdingthis = 0
+			end
+		end
+	end,
+
+	calculate = function(self,card,context)
+		if context.cardarea == G.play and context.before then
+			G.hand:change_size(card.ability.extra.tungsten_handsize_mod)
+			G.GAME.round_resets.temp_handsize = (G.GAME.round_resets.temp_handsize or 0) + math.floor(card.ability.extra.tungsten_handsize_mod)
+		end
+	end,
+}
+
+----------------
+
+--------------
+-- SEAL
+-- Indigo Seal
+--------------
+
+SMODS.Seal {
+	key = 'indigo',
+	badge_colour = HEX('252fe3'),
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+
+	calculate = function(self, card, context)
+		if (
+			context.ovn_corruption_occurred
+			and context.ovn_corruption_type == "Joker"
+			and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
+			and card.area == G.hand
+		) then
+			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+			add_simple_event('before', 0, function ()
+				SMODS.add_card({ set = 'Spectral' })
+				card:juice_up(0.3, 0.5)
+				G.GAME.consumeable_buffer = 0
+			end)
+		end
+	end
+}
+
+----------------
+
+----------
+-- EDITION
+-- Miasma
+----------
+SMODS.Edition {
+	key = "miasma",
+	config = { retriggers = 3 },
+	loc_vars = function(self, info_queue, center)
+		local retriggers = (
+			center
+			and center.edition
+			and center.edition.retriggers
+			or self.config.retriggers
+		)
+		return { vars = { retriggers } }
+	end,
+
+	shader = 'miasma',
+	disable_shadow = true,
+	disable_base_shader = true,
+	apply_to_float = true,
+
+	in_shop = false,
+	weight = 8,
+	extra_cost = 4,
+	sound = {
+		sound = "ovn_e_miasma",
+		per = 1,
+		vol = 0.4,
+	},
+
+	calculate = function(self, card, context)
+		if context.other_card == card and (
+			-- Repeat playing cards
+			(context.repetition and context.cardarea == G.play)
+			-- or retrigger Jokers
+			or (context.retrigger_joker_check and not context.retrigger_joker)
+		) then return { repetitions = self.config.retriggers } end
+
+		-- Either corrupt or kill Joker
+		if context.after and context.cardarea == G.jokers then
+			-- Card is corruptable, proceed to corrupt
+			if Ovn_f.joker_is_corruptible(card.config.center.key) then
+				Ovn_f.corrupt_joker(card)
+				Ovn_f.corruption_instability(1)
+
+			-- Card cannot be corrupted, self-destruct
+			else
+				add_simple_event('after', 0.0, function ()
+					play_sound("ovn_optic", nil, 0.2)
+					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+				end)
+			end
+		end
+
+		-- Either corrupt or kill playing card
+		if context.after and context.cardarea == G.play then
+			-- Editioned playing card is already optics, self-destruct
+			if card.base.suit == 'ovn_Optics' then
+				add_simple_event('after', 0.1, function ()
+					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
+				end)
+
+			-- Editioned playing card not optics, proceed to corrupt
+			else
+				add_simple_event('after', 0.1, function ()
+					card:set_edition(nil)
+					card:change_suit('ovn_Optics')
+				end)
+				Ovn_f.optic_instability(#G.hand.highlighted)
+			end
+		end
+	end,
+}
