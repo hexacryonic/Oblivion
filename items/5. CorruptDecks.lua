@@ -339,7 +339,46 @@ SMODS.Scoring_Calculation {
 	key = "instable",
 	func = function(self, chips, mult, flames)
 		local instability = G.GAME.ovn_instability
+		---@diagnostic disable-next-line: redundant-return-value
 		return (chips * mult) ^ instability
+	end,
+	replace_ui = function (self)
+		local function op(text, scale, colour)
+			return
+			{n=G.UIT.C, config={align = "cm"}, nodes={
+				{n=G.UIT.T, config={text = text, lang = G.LANGUAGES['en-us'], scale = scale, colour = colour or G.C.WHITE, shadow = true}},
+			}}
+		end
+
+		local function container(type, id, scale, w, h, colour)
+			return
+			{n=G.UIT.C, config={align = 'cm', id = id}, nodes = {
+				SMODS.GUI.score_container({
+					type = type,
+					align = 'cm',
+					scale = scale,
+					w = w, h = h,
+					colour = colour
+				})
+			}}
+		end
+
+		local w = 1.2
+		local h = 0.7
+		local text_scale = 0.69/2.3
+		local op_scale = 0.5
+
+		return
+		---@diagnostic disable-next-line: redundant-return-value
+		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.05}, nodes={
+			op("(", op_scale, G.C.RARITY['ovn_corrupted']),
+			container("chips", "hand_chips_container", text_scale, w, h),
+			op("X", op_scale, G.C.UI_MULT),
+			container("mult", "hand_mult_container", text_scale, w, h),
+			op(")", op_scale, G.C.RARITY['ovn_corrupted']),
+			op("^", op_scale, G.C.RARITY['ovn_corrupted']),
+			container("ovn_instability", "instability_container", text_scale, w, h, G.C.RARITY['ovn_corrupted']),
+		}}
 	end
 }
 

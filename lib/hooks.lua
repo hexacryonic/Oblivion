@@ -209,7 +209,7 @@ function Game:start_run(args)
 		})
 	end)
 	startrun_hook(self, args)
-	G.GAME.ovn_instability = 1
+	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
 	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
 	if not G.GAME.hands_last_played then
