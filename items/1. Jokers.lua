@@ -1501,7 +1501,6 @@ SMODS.Joker {
 	end
 }
 
--- MAJOR BUG: Description does not update regardless if values changed
 SMODS.Joker {
 	key = 'nexus_point',
 	loc_vars = function (self, info_queue, card)
@@ -1528,11 +1527,7 @@ SMODS.Joker {
 			context.ovn_corrupted_from
 			and context.ovn_former_form_key == "j_ovn_nexus_point"
 		) then
-			local former_ability = context.ovn_former_form_ability
-			card.ability.extra.xmult_gain = former_ability.extra.xmult_gain
-			card.ability.extra.xmult = former_ability.extra.xmult
 			simple_scale(card, "xmult", "xmult_gain", G.C.RED)
-			print("Nexus Point XMult: " .. card.ability.extra.xmult)
 		end
 
 		if context.individual and context.cardarea == G.play then

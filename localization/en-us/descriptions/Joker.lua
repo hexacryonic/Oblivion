@@ -325,8 +325,8 @@ return {
 		name = "Nexus Point",
 		text = {
 			"This Joker can be {C:ovn_corrupted}repeatedly corrupted",
-			"Scored cards give {X:mult,C:white}X1.1 {} Mult",
-			"Increases by {X:mult,C:white}X0.2 {} each time this Joker",
+			"Scored cards give {X:mult,C:white}X#1# {} Mult",
+			"Increases by {X:mult,C:white}X#2# {} each time this Joker",
 			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
 			corrupted_from("Purifier or Nexus Point")
 		}
