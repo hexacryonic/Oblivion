@@ -244,7 +244,7 @@ local function generate_uibox_definition(jtml, stylesheet)
 		and not jtml[2]
 		and jtml.n
 		and jtml.config
-	) then return jtml end
+	) then return jtml --[[@as Balatro.UIBoxDefinition]] end
 	local uibox_table = {config = {}}
 	stylesheet = stylesheet or {}
 
