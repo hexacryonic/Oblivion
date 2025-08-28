@@ -82,11 +82,21 @@ local loc =  {
 			ovn_citrine_mark_seal = {
 				name = "Mark of Citrine",
 				text = {
-					"When scored,",
+					"When scored:",
 					"Gain {C:yellow}$#1# {}per card",
 					"in {C:attention}deck {}with a {C:attention}Seal",
 					"Gain {C:yellow}$#2# {}per card",
 					"in {C:attention}deck {}with a {C:ovn_corrupted}Mark,",
+					"then {S:1.1,C:red,E:2}self-destructs"
+				}
+			},
+			ovn_iolite_mark_seal = {
+				name = "Mark of Iolite",
+				text = {
+					"When held in hand",
+					"and using a {C:spectral}Spectral {}card,",
+					"create a {C:dark_edition}Negative {}copy",
+					"of that {C:spectral}Spectral {}card,",
 					"then {S:1.1,C:red,E:2}self-destructs"
 				}
 			},
@@ -224,6 +234,7 @@ local loc =  {
 			ovn_ruby_mark_seal = "Mark of Ruby",
 			ovn_sapphire_mark_seal = "Mark of Sapphire",
 			ovn_citrine_mark_seal = "Mark of Citrine",
+			ovn_iolite_mark_seal = "Mark of Iolite",
 		},
 		dictionary = {
 			stored = "Stored!",

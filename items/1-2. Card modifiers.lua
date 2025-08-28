@@ -478,6 +478,31 @@ SMODS.Seal {
 	end
 }
 
+-----------------
+-- SEAL
+-- Mark of Iolite
+-----------------
+SMODS.Seal {
+	key = 'iolite_mark',
+	badge_colour = darken(HEX('252fe3'), 0.1),
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+
+	calculate = function (self, card, context)
+		if context.using_consumeable and context.cardarea == G.hand then
+			local consumable_key = context.consumeable.config.center.key
+			add_simple_event(nil, nil, function ()
+				SMODS.add_card{
+					key = consumable_key,
+					edition = "e_negative"
+				}
+				SMODS.destroy_cards(card)
+			end)
+		end
+	end
+}
+
 ----------------
 
 ----------
