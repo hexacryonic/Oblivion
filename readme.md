@@ -69,7 +69,7 @@ if context.ovn_repetition_from_playing_card then
 }
 ```
 
-This context is used on the newly created (corrupted) Joker after a previous Joker was corrupted. It is sent by `Ovn_f.corrupt_joker`.
+This context is used on the newly transformed (corrupted) Joker after a previous Joker was corrupted. It is sent by `Ovn_f.corrupt_joker`.
 ```lua
 if context.ovn_corrupted_from then
 {
@@ -90,7 +90,7 @@ if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
 }
 ```
 
-This context is used on the newly created (purified) Joker after a previous Joker was purified. It is sent by `Ovn_f.purify_joker`.
+This context is used on the newly transformed (purified) Joker after a previous Joker was purified. It is sent by `Ovn_f.purify_joker`.
 ```lua
 if context.ovn_purified_from then
 {
@@ -100,7 +100,7 @@ if context.ovn_purified_from then
 }
 ```
 
-This context is used when Joker corruption occurs. It is sent by `Ovn_f.corrupt_joker`.
+This context is used when Joker purification occurs. It is sent by `Ovn_f.purify_joker`.
 ```lua
 if context.ovn_purification_occurred and ovn_purification_type == "Joker" then
 {
