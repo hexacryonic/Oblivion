@@ -87,18 +87,16 @@ target = "functions/common_events.lua"
 pattern = "for _, v in ipairs(info_queue) do"
 position = "before"
 payload = '''
-for j_key in pairs(Oblivion.corruption_map) do
-  if _c.key == j_key and Ovn_f.joker_is_corruptible(j_key) then
-    table.insert(info_queue, {
-      key = 'ovn_corruptible',
-      set = 'Other',
-      vars = { localize {
-        type = "name_text",
-        set = "Joker",
-        key = _c.key
-      } }
-    })
-  end
+if Ovn_f.joker_is_corruptible(_c.key) and _c.discovered then
+  table.insert(info_queue, {
+    key = 'ovn_corruptible',
+    set = 'Other',
+    vars = { localize {
+      type = "name_text",
+      set = "Joker",
+      key = _c.key
+    } }
+  })
 end
 
 if card and card.base and card.base.suit == "ovn_Optics" then
