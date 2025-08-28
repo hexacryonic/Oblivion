@@ -549,7 +549,10 @@ SMODS.Joker {
 		local stored_joker = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
 
 		if stored_joker then
-			table.insert(info_queue, G.P_CENTERS[stored_joker])
+			-- Preventing recursion
+			if stored_joker ~= "j_ovn_supplydrop" then
+				table.insert(info_queue, G.P_CENTERS[stored_joker])
+			end
 			stored = localize{
 				type = "name_text",
 				set = "Joker",
@@ -571,7 +574,8 @@ SMODS.Joker {
 
 	calculate = function(self, card, context)
 		if context.selling_self and not context.retrigger_joker and not context.blueprint then
-			if not G.PROFILES[G.SETTINGS.profile].ovn_supply_drop then
+			local save_file = G.PROFILES[G.SETTINGS.profile]
+			if not save_file.ovn_supply_drop then
 				local card_index
 				for i = 2, #G.jokers.cards do
 					if G.jokers.cards[i] == card then
@@ -590,36 +594,29 @@ SMODS.Joker {
 					or left_joker_rarity == "ovn_corrupted"
 				) then return end
 
-				local save_file = G.PROFILES[G.SETTINGS.profile]
-				if not save_file.ovn_supply_drop then
-					local left_joker_key = left_joker.config.center.key
-					local left_joker_edition = left_joker.edition and left_joker.edition.key
-					local left_joker_stickers = {}
-					for sticker_key in pairs(SMODS.Stickers) do
-						if left_joker.ability[sticker_key] then
-							table.insert(left_joker_stickers, sticker_key)
-						end
+				local left_joker_key = left_joker.config.center.key
+				local left_joker_edition = left_joker.edition and left_joker.edition.key
+				local left_joker_stickers = {}
+				for sticker_key in pairs(SMODS.Stickers) do
+					if left_joker.ability[sticker_key] then
+						table.insert(left_joker_stickers, sticker_key)
 					end
-
-					save_file.ovn_supply_drop = left_joker_key
-					save_file.ovn_supply_drop_edition = left_joker_edition
-					save_file.ovn_supply_drop_sticker = left_joker_stickers
-
-					add_simple_event('after', 0.1, function ()
-						left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
-					end)
-					card_eval_status_text(
-						card,
-						"extra",
-						nil,
-						nil,
-						nil,
-						{ message = localize("stored"), colour = G.C.DARK_EDITION }
-					)
 				end
-			else
-				local save_file = G.PROFILES[G.SETTINGS.profile]
 
+				save_file.ovn_supply_drop = left_joker_key
+				save_file.ovn_supply_drop_edition = left_joker_edition
+				save_file.ovn_supply_drop_sticker = left_joker_stickers
+				check_for_unlock{type="poopshit"}
+
+				add_simple_event('after', 0.1, function ()
+					left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
+				end)
+
+				return {
+					message = localize("stored"),
+					colour = G.C.DARK_EDITION
+				}
+			else
 				local stored_joker_key = save_file.ovn_supply_drop
 				local stored_joker_edition = save_file.ovn_supply_drop_edition
 				local stored_joker_sticker = save_file.ovn_supply_drop_sticker
@@ -632,15 +629,13 @@ SMODS.Joker {
 					stickers = stored_joker_sticker
 				}
 
-				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop = nil
-				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop_edition = nil
-				G.PROFILES[G.SETTINGS.profile].ovn_supply_drop_sticker = nil
+				save_file.ovn_supply_drop = nil
+				save_file.ovn_supply_drop_edition = nil
+				save_file.ovn_supply_drop_sticker = nil
 
 				return {
-					card_eval_status_text(stored_card, "extra", nil, nil, nil, {
-						message = localize("empty"),
-						colour = G.C.DARK_EDITION,
-					}),
+					message = localize("empty"),
+					colour = G.C.DARK_EDITION
 				}
 			end
 		end

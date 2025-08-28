@@ -219,7 +219,17 @@ SMODS.Achievement{
 
 -- decoherent deity, order = 17
 -- abyssal absolution, order = 18
--- autocannibalism, order = 19
+
+-- why doesnt this work sobbing rn
+--[[SMODS.Achievement{
+	key = "autocannibalism",
+	order = 19,
+	unlock_condition = function (self, args)
+		if args.type == 'poopshit' then
+			return G.PROFILES[G.SETTINGS.profile].ovn_supply_drop == "j_ovn_supplydrop"
+		end
+	end
+}]]
 
 SMODS.Achievement{
 	key = "ace_combat",
