@@ -606,7 +606,7 @@ SMODS.Joker {
 				save_file.ovn_supply_drop = left_joker_key
 				save_file.ovn_supply_drop_edition = left_joker_edition
 				save_file.ovn_supply_drop_sticker = left_joker_stickers
-				check_for_unlock{type="poopshit"}
+				check_for_unlock{type="ovn_sell_supply_drop"}
 
 				add_simple_event('after', 0.1, function ()
 					left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
@@ -806,16 +806,21 @@ SMODS.Joker {
 
 	calculate = function (self, card, context)
 		if context.individual and context.other_card.base.value == '10' then
-			local c_ability = context.other_card.ability
+			local c_ability = context.other_card.ability --[[@as table]]
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
 				SMODS.scale_card(context.other_card, {
-					ref_table = context.other_card.ability,
+					ref_table = c_ability,
 					ref_value = "perma_x_mult",
 					scalar_table = card.ability.extra,
 					scalar_value = "xmult",
 					colour = G.C.MULT
 				})
 			elseif context.cardarea == G.play then
+				-- displayed mult is 1 + perma_x_mult
+				-- hence this check is X1 less than the required X5
+				if c_ability.perma_x_mult >= 4 then
+					check_for_unlock{type="ovn_airstrike_release"}
+				end
 				c_ability.perma_x_mult = 0
 			end
 		end

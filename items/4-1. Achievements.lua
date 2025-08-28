@@ -5,6 +5,9 @@ local cdeck_cond = function(deck, stake)
 	return current_deck == deck and current_stake >= stake
 end
 
+----------
+-- Red Rum
+----------
 SMODS.Achievement{
 	key = "red_rum",
 	order = 1,
@@ -19,6 +22,9 @@ SMODS.Achievement{
 	end
 }
 
+-------------
+-- Blue Blitz
+-------------
 SMODS.Achievement{
 	key = "blue_blitz",
 	order = 2,
@@ -34,6 +40,9 @@ SMODS.Achievement{
 	end
 }
 
+------------------
+-- Yellow Yearlong
+------------------
 SMODS.Achievement{
 	key = "yellow_yearlong",
 	order = 3,
@@ -48,6 +57,9 @@ SMODS.Achievement{
 	end
 }
 
+----------------------
+-- Groundless Greenery
+----------------------
 SMODS.Achievement{
 	key = "groundless_greenery",
 	order = 4,
@@ -65,6 +77,9 @@ SMODS.Achievement{
 	end
 }
 
+--------------------
+-- Bleakest Blackout
+--------------------
 SMODS.Achievement{
 	key = "bleakest_blackout",
 	order = 5,
@@ -79,6 +94,9 @@ SMODS.Achievement{
 	end
 }
 
+----------------
+-- Magic Malaise
+----------------
 SMODS.Achievement{
 	key = "magic_malaise",
 	order = 6,
@@ -97,6 +115,9 @@ SMODS.Achievement{
 	end
 }
 
+-----------------
+-- Negated Nebula
+-----------------
 SMODS.Achievement{
 	key = "negated_nebula",
 	order = 7,
@@ -115,6 +136,9 @@ SMODS.Achievement{
 	end
 }
 
+---------------
+-- Ghostly Gall
+---------------
 SMODS.Achievement{
 	key = "ghostly_gall",
 	order = 8,
@@ -137,6 +161,9 @@ SMODS.Achievement{
 -- checkered changeling, order = 10
 -- zodiac zenith, order = 11
 
+------------------
+-- Painted Paladin
+------------------
 SMODS.Achievement{
 	key = "painted_paladin",
 	order = 12,
@@ -151,6 +178,9 @@ SMODS.Achievement{
 	end
 }
 
+------------------------
+-- Anticipated Anaglyphs
+------------------------
 SMODS.Achievement{
 	key = "anticipated_anaglyphs",
 	order = 13,
@@ -170,6 +200,9 @@ SMODS.Achievement{
 	end
 }
 
+----------------
+-- Plasma Plight
+----------------
 SMODS.Achievement{
 	key = "plasma_plight",
 	order = 14,
@@ -185,6 +218,9 @@ SMODS.Achievement{
 	end
 }
 
+-------------------
+-- Erratic Eruption
+-------------------
 SMODS.Achievement{
 	key = "erratic_eruption",
 	order = 15,
@@ -198,6 +234,9 @@ SMODS.Achievement{
 	end
 }
 
+------------------
+-- Ocular Overseer
+------------------
 SMODS.Achievement{
 	key = "ocular_overseer",
 	order = 16,
@@ -220,17 +259,22 @@ SMODS.Achievement{
 -- decoherent deity, order = 17
 -- abyssal absolution, order = 18
 
--- why doesnt this work sobbing rn
---[[SMODS.Achievement{
+------------------
+-- Autocannibalism
+------------------
+SMODS.Achievement{
 	key = "autocannibalism",
 	order = 19,
 	unlock_condition = function (self, args)
-		if args.type == 'poopshit' then
+		if args.type == 'ovn_sell_supply_drop' then
 			return G.PROFILES[G.SETTINGS.profile].ovn_supply_drop == "j_ovn_supplydrop"
 		end
 	end
-}]]
+}
 
+-------------
+-- Ace Combat
+-------------
 SMODS.Achievement{
 	key = "ace_combat",
 	order = 20,
@@ -241,7 +285,45 @@ SMODS.Achievement{
 	end
 }
 
--- singular strike, order = 20
--- exposed nerve, order = 21
--- do it first, order = 22
--- bananas, order = 23
+--------------------------------------
+-- Super Spectre Singular Strike Salvo
+--------------------------------------
+SMODS.Achievement{
+	key = "singular_strike",
+	order = 21,
+	unlock_condition = function (self, args)
+		if args.type == 'ovn_airstrike_release' then
+			return true
+		end
+		return false
+	end
+}
+
+---------------------------
+-- Yanking an Exposed Nerve
+---------------------------
+SMODS.Achievement{
+	key = "exposed_nerve",
+	order = 22,
+	unlock_condition = function (self, args)
+		if args.type == 'hand' then
+			local has_optics = false
+			for _,other_card in ipairs(args.scoring_hand) do
+				if other_card.base.suit == "ovn_Optics" then
+					has_optics = true
+					break
+				end
+			end
+			return (
+				args.disp_text == 'Straight Flush'
+				and has_optics
+				and G.GAME.blind.key == "bl_ovn_nerve"
+				and G.GAME.blind.disabled
+			)
+		end
+	end
+}
+
+-- exposed nerve, order = 22
+-- do it first, order = 23
+-- bananas, order = 24
