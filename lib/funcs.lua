@@ -206,16 +206,32 @@ end
 
 ----
 
--- Transmutes a playing card's regular enhancement into its corrupted variant.
+-- Transmutes a playing card's regular modifiers into their corrupted variants.
 ---@param card Card
 ---@return nil
-Ovn_f.corrupt_enhancement = function(card)
+Ovn_f.corrupt_modifiers = function(card)
+	local transmuted = false
+
 	local enhancement_key = card.config.center.key
 	local cenh = Oblivion.enhancement_corrupt
 	local new_enhancement = cenh[enhancement_key]
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
-		add_simple_event('after', 0.1, function()
+		transmuted = true
+	end
+
+	local seal_key = card.seal
+	if seal_key then
+		local cseal = Oblivion.seal_corrupt
+		local new_seal = cseal[seal_key]
+		if new_seal then
+			card:set_seal(new_seal)
+			transmuted = true
+		end
+	end
+
+	if transmuted then
+		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 		end)
@@ -224,16 +240,32 @@ end
 
 ----
 
--- Transmutes a playing card's corrupted enhancement into its regular variant.
+-- Transmutes a playing card's corrupted modifiers into their regular variants.
 ---@param card Card
 ---@return nil
-Ovn_f.purify_enhancement = function(card)
+Ovn_f.purify_modifiers = function(card)
+	local transmuted = false
+
 	local enhancement_key = card.config.center.key
 	local penh = Oblivion.enhancement_purify
 	local new_enhancement = penh[enhancement_key]
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
-		add_simple_event('after', 0.1, function()
+		transmuted = true
+	end
+
+	local seal_key = card.seal
+	if seal_key then
+		local pseal = Oblivion.seal_purify
+		local new_seal = pseal[seal_key]
+		if new_seal then
+			card:set_seal(new_seal)
+			transmuted = true
+		end
+	end
+
+	if transmuted then
+		add_simple_event('immediate', nil, function()
 			play_sound('ovn_pure', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 		end)

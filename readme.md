@@ -19,7 +19,7 @@ Mods may define corruptible Jokers by adding entries to the table `Oblivion.corr
 Oblivion.corruption_map[initial_joker_key] = corrupted_joker_key
 ```
 
-A purity map is automatically generated. Note that a single Joker can only corrupt into one corrupted Joker.
+The purity map `Oblivion.purity_map` is automatically generated. Note that a single Joker can only corrupt into one corrupted Joker.
 
 Additionally, a corruption condition can be defined by adding an entry to the table `Oblivion.corruption_condtion`:
 
@@ -36,7 +36,16 @@ Mods may define the corrupted enhancement that enhancements on Optics cards tran
 Oblivion.enhancement_corrupt[initial_enhancement_key] = corrupted_enhancement_key
 ```
 
-A purity map is automatically generated. Note that a single enhancement can only corrupt into one corrupted enhancement.
+The purity map `Oblivion.enhancement_purify` is automatically generated. Note that a single enhancement can only corrupt into one corrupted enhancement.
+
+### Corruptible seals
+Mods may define the corrupted seal that seals on Optics cards transmute into, by adding entries to the table `Oblivion.seal_corrupt`:
+
+```lua
+Oblivion.seal_corrupt[initial_seal_key] = corrupted_seal_key
+```
+
+The purity map `Oblivion.seal_purify` is automatically generated. Note that a single seal can only corrupt into one corrupted seal.
 
 ### Corrupted Ghost Deck logic
 Mods may define how Spectral cards are intended to be used by the Corrupted Ghost Deck. It is highly recommended that "ultra-rare" Spectral cards (e.g. The Soul, Black Hole) are not defined.

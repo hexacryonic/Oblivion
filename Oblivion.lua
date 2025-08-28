@@ -93,6 +93,14 @@ cenh["m_stone"] = "m_ovn_crystal"
 cenh["m_bonus"] = "m_ovn_radiant"
 cenh["m_mult"]  = "m_ovn_dynamo"
 
+if not Oblivion.seal_corrupt then Oblivion.seal_corrupt = {} end
+local cseal         = Oblivion.seal_corrupt
+cseal["Red"]        = "ovn_ruby_mark"
+cseal["Blue"]       = "ovn_sapphire_mark"
+cseal["Purple"]     = "ovn_amethyst_mark"
+cseal["Gold"]       = "ovn_citrine_mark"
+cseal["ovn_indigo"] = "ovn_iolite_mark"
+
 -- Generates immediately after the game finishes loading
 G.E_MANAGER:add_event(Event {
 	blocking = false,
@@ -119,9 +127,19 @@ G.E_MANAGER:add_event(Event {
 		local penh = Oblivion.enhancement_purify
 		for pure_key,corrupt_key in pairs(Oblivion.enhancement_corrupt) do
 			if not G.P_CENTERS[corrupt_key] then
-				print("[OBLIVION] Purity mapping: Joker " .. corrupt_key .. " does not exist!")
+				print("[OBLIVION] Purity mapping: Enhancement " .. corrupt_key .. " does not exist!")
 			end
 			penh[corrupt_key] = pure_key
+		end
+
+		-- Corrupt to Pure Seals
+		Oblivion.seal_purify = {}
+		local pseal = Oblivion.seal_purify
+		for pure_key,corrupt_key in pairs(Oblivion.seal_corrupt) do
+			if not SMODS.Seals[corrupt_key] then
+				print("[OBLIVION] Purity mapping: Seal " .. corrupt_key .. " does not exist!")
+			end
+			pseal[corrupt_key] = pure_key
 		end
 
 		-- Purity map entries map to either a string (only pure form) or a list of strings (list of pure forms)

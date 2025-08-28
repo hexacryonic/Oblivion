@@ -478,6 +478,39 @@ SMODS.Seal {
 	end
 }
 
+-------------------
+-- SEAL
+-- Mark of Amethyst
+-------------------
+SMODS.Seal {
+	key = 'amethyst_mark',
+	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, { key = 'c_fool', set = 'Tarot' })
+		return { vars = {
+			localize { type = 'name_text', key = 'c_fool', set = 'Tarot' }
+		}}
+	end,
+	badge_colour = darken(G.C.PURPLE, 0.1),
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+
+	calculate = function (self, card, context)
+		if context.main_scoring and context.cardarea == G.play then
+			add_simple_event(nil, nil, function ()
+				SMODS.add_card{
+					key = "c_fool",
+					edition = "e_negative"
+				}
+			end)
+		end
+
+		if context.destroy_card == card and context.cardarea == G.play then
+			return {remove = true}
+		end
+	end
+}
+
 -----------------
 -- SEAL
 -- Mark of Iolite

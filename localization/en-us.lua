@@ -90,6 +90,14 @@ local loc =  {
 					"then {S:1.1,C:red,E:2}self-destructs"
 				}
 			},
+			ovn_amethyst_mark_seal = {
+				name = "Mark of Amethyst",
+				text = {
+					"When scored, create a",
+					"{C:spectral}Negative {C:attention}#1#",
+					"then {S:1.1,C:red,E:2}self-destructs"
+				}
+			},
 			ovn_iolite_mark_seal = {
 				name = "Mark of Iolite",
 				text = {
@@ -234,6 +242,7 @@ local loc =  {
 			ovn_ruby_mark_seal = "Mark of Ruby",
 			ovn_sapphire_mark_seal = "Mark of Sapphire",
 			ovn_citrine_mark_seal = "Mark of Citrine",
+			ovn_amethyst_mark_seal = "Mark of Amethyst",
 			ovn_iolite_mark_seal = "Mark of Iolite",
 		},
 		dictionary = {
