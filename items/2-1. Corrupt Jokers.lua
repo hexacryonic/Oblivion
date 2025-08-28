@@ -809,7 +809,7 @@ SMODS.Joker {
 			local c_ability = context.other_card.ability
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
 				SMODS.scale_card(context.other_card, {
-					ref_table = context.other_card,
+					ref_table = context.other_card.ability,
 					ref_value = "perma_x_mult",
 					scalar_table = card.ability.extra,
 					scalar_value = "xmult",
