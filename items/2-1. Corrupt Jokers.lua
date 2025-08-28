@@ -301,6 +301,9 @@ SMODS.Joker {
 	cost = 8,
 
 	calculate = function(self, card, context)
+		if context.ovn_corrupted_from then
+			check_for_unlock{type="ovn_natural_aeon"}
+		end
 		if context.joker_main then
 			return {
 				xmult = card.ability.extra.Xmult

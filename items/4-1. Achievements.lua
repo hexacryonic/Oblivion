@@ -324,6 +324,16 @@ SMODS.Achievement{
 	end
 }
 
--- exposed nerve, order = 22
 -- do it first, order = 23
 -- bananas, order = 24
+
+--------------------------------
+-- This Entire Quest Was Bananas
+--------------------------------
+SMODS.Achievement{
+	key = "bananas",
+	order = 24,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_natural_aeon')
+	end
+}
