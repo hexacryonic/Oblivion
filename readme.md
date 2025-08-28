@@ -58,9 +58,20 @@ Oblivion.spectral_logic[spectral_key] = {
 (Additional note regarding Corrupted Ghost Deck: Card selection by the player is disabled while the consumable is being used.)
 
 ## Contexts
-This context is used on the newly created (corrupted) Joker after a previous Joker was corrupted. It is sent by `Ovn_f.corrupt_joker`.
+This context is used on the newly created (corrupted) Joker after a previous Joker was corrupted. It is sent during the main scoring loop, received by enhancements, seals, editions, and stickers, and defined by the `SMODS.calculate_repetitions` hook.
 ```lua
 if context.ovn_corrupted_from then
+{
+    other_card = card
+    cardarea = G.play --[[etc.]],
+    scoring_hand = scoring_hand,
+    ovn_repetition_from_playing_card = true,
+}
+```
+
+This context is used on the newly created (corrupted) Joker after a previous Joker was corrupted. It is sent by `Ovn_f.corrupt_joker`.
+```lua
+if context.ovn_repetition_from_playing_card then
 {
     ovn_corrupted_from = true,
     ovn_former_form_key = card_key,

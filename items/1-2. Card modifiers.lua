@@ -315,7 +315,6 @@ SMODS.Enhancement{
 -- SEAL
 -- Indigo Seal
 --------------
-
 SMODS.Seal {
 	key = 'indigo',
 	badge_colour = HEX('252fe3'),
@@ -336,6 +335,43 @@ SMODS.Seal {
 				card:juice_up(0.3, 0.5)
 				G.GAME.consumeable_buffer = 0
 			end)
+		end
+	end
+}
+
+---------------
+-- SEAL
+-- Mark of Ruby
+---------------
+SMODS.Seal {
+	key = 'ruby_mark',
+	config = { extra = {retriggers = 2} },
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			self.config.extra.retriggers
+		}}
+	end,
+	badge_colour = darken(G.C.RED, 0.1),
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+	never_scores = true,
+
+	calculate = function (self, card, context)
+		-- Custom context
+		if (
+			context.ovn_repetition_from_playing_card
+			and context.cardarea == 'unscored'
+			and context.other_card.area == G.play
+		) then
+			return {repetitions = self.config.extra.retriggers}
+		end
+
+		if (
+			context.destroy_card == card
+			and context.cardarea == 'unscored'
+		) then
+			return {remove = true}
 		end
 	end
 }

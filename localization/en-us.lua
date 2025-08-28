@@ -62,6 +62,14 @@ local loc =  {
                     "{C:inactive}(Must have room)",
 				}
 			},
+			ovn_ruby_mark_seal = {
+				name = "Mark of Ruby",
+				text = {
+					"All cards retrigger #1# times",
+					"{S:1.1,C:red,E:2}Never scores",
+					"{S:1.1,C:red,E:2}self-destructs"
+				}
+			},
 			p_ovn_wicked_normal_1 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal
@@ -192,7 +200,8 @@ local loc =  {
 			ovn_miasma = "Miasma",
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
-			ovn_indigo_seal = "Indigo Seal"
+			ovn_indigo_seal = "Indigo Seal",
+			ovn_ruby_mark_seal = "Mark of Ruby",
 		},
 		dictionary = {
 			stored = "Stored!",

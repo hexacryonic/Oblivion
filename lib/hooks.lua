@@ -167,20 +167,43 @@ SMODS.calculate_repetitions = function(card, context, reps)
 	for _,area in ipairs(SMODS.get_card_areas('playing_cards')) do
 		for _,area_card  in ipairs(area.cards or {}) do
 			if area_card ~= card then
-				local eval = area_card:calculate_enhancement {
+				local cardarea = area
+				if area == G.play then
+					cardarea = SMODS.in_scoring(area_card, context.scoring_hand) and G.play or 'unscored'
+				end
+
+				local evals = {}
+				local context = {
 					other_card = card,
-					cardarea = card.area,
+					cardarea = cardarea,
 					scoring_hand = context.scoring_hand,
 					ovn_repetition_from_playing_card = true,
 				}
 
-				if eval and eval.repetitions then
-					for _ = 1, eval.repetitions do
-						eval.card = eval.card or card
-						eval.message = eval.message or (not eval.remove_default_message and localize('k_again_ex'))
-						reps[#reps + 1] = { key = eval }
+				if area_card.ability.set == 'Enhanced' then
+					evals.enhancement = area_card:calculate_enhancement(context)
+				end
+				if area_card.seal then
+					evals.seal = area_card:calculate_seal(context)
+				end
+				if area_card.edition then
+					evals.edition = area_card:calculate_edition(context)
+				end
+				for _,k in ipairs(SMODS.Sticker.obj_buffer) do
+					local v = SMODS.Stickers[k]
+					area_card[v] = area_card:calculate_sticker(context, k)
+				end
+
+				for _,eval in pairs(evals) do
+					if eval and eval.repetitions then
+						for _ = 1, eval.repetitions do
+							eval.card = eval.card or card
+							eval.message = eval.message or (not eval.remove_default_message and localize('k_again_ex'))
+							reps[#reps + 1] = { key = eval }
+						end
 					end
 				end
+				----
 			end
 		end
 	end
