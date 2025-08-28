@@ -173,7 +173,7 @@ SMODS.calculate_repetitions = function(card, context, reps)
 				end
 
 				local evals = {}
-				local context = {
+				local area_card_context = {
 					other_card = card,
 					cardarea = cardarea,
 					scoring_hand = context.scoring_hand,
@@ -181,17 +181,17 @@ SMODS.calculate_repetitions = function(card, context, reps)
 				}
 
 				if area_card.ability.set == 'Enhanced' then
-					evals.enhancement = area_card:calculate_enhancement(context)
+					evals.enhancement = area_card:calculate_enhancement(area_card_context)
 				end
 				if area_card.seal then
-					evals.seal = area_card:calculate_seal(context)
+					evals.seal = area_card:calculate_seal(area_card_context)
 				end
 				if area_card.edition then
-					evals.edition = area_card:calculate_edition(context)
+					evals.edition = area_card:calculate_edition(area_card_context)
 				end
 				for _,k in ipairs(SMODS.Sticker.obj_buffer) do
 					local v = SMODS.Stickers[k]
-					area_card[v] = area_card:calculate_sticker(context, k)
+					area_card[v] = area_card:calculate_sticker(area_card_context, k)
 				end
 
 				for _,eval in pairs(evals) do
