@@ -412,7 +412,67 @@ SMODS.Seal {
 			update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(context.scoring_name, 'poker_hands'),chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
 		end
 
-		if context.destroy_card == card and #context.scoring_hand == 1 then
+		if (
+			context.destroy_card == card
+			and context.cardarea == G.play
+			and #context.scoring_hand == 1
+		) then
+			return {remove = true}
+		end
+	end
+}
+
+------------------
+-- SEAL
+-- Mark of Citrine
+------------------
+SMODS.Seal {
+	key = 'citrine_mark',
+	config = { extra = {
+		seal_cash = 1,
+		mark_cash = 3
+	}},
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			self.config.extra.seal_cash,
+			self.config.extra.mark_cash,
+		}}
+	end,
+	badge_colour = darken(G.C.GOLD, 0.1),
+
+	atlas = "seals_atlas",
+	pos = {x=0, y=0},
+
+	calculate = function (self, card, context)
+		if context.main_scoring and context.cardarea == G.play then
+			local count_seals = 0
+			local count_marks = 0
+			local marks = {
+				ovn_ruby_mark = true,
+				ovn_sapphire_mark = true,
+				ovn_amethyst_mark = true,
+				ovn_citrine_mark = true,
+				ovn_iolite_mark = true,
+			}
+
+			for _,other_card in ipairs(G.playing_cards) do
+				if other_card.seal then
+					if marks[other_card.seal] then count_marks = count_marks + 1
+					else count_seals = count_seals + 1
+					end
+				end
+			end
+
+
+			return {
+				dollars = (
+					count_seals*self.config.extra.seal_cash
+					+ count_marks*self.config.extra.mark_cash
+				)
+			}
+		end
+
+		if context.destroy_card == card and context.cardarea == G.play then
 			return {remove = true}
 		end
 	end

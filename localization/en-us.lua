@@ -79,6 +79,17 @@ local loc =  {
 					"then {S:1.1,C:red,E:2}self-destructs"
 				}
 			},
+			ovn_citrine_mark_seal = {
+				name = "Mark of Citrine",
+				text = {
+					"When scored,",
+					"Gain {C:yellow}$#1# {}per card",
+					"in {C:attention}deck {}with a {C:attention}Seal",
+					"Gain {C:yellow}$#2# {}per card",
+					"in {C:attention}deck {}with a {C:ovn_corrupted}Mark,",
+					"then {S:1.1,C:red,E:2}self-destructs"
+				}
+			},
 			p_ovn_wicked_normal_1 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal
@@ -212,6 +223,7 @@ local loc =  {
 			ovn_indigo_seal = "Indigo Seal",
 			ovn_ruby_mark_seal = "Mark of Ruby",
 			ovn_sapphire_mark_seal = "Mark of Sapphire",
+			ovn_citrine_mark_seal = "Mark of Citrine",
 		},
 		dictionary = {
 			stored = "Stored!",
