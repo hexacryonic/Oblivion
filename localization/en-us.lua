@@ -83,9 +83,9 @@ local loc =  {
 				name = "Mark of Citrine",
 				text = {
 					"When scored:",
-					"Gain {C:yellow}$#1# {}per card",
+					"Gain {C:money}$#1# {}per card",
 					"in {C:attention}deck {}with a {C:attention}Seal",
-					"Gain {C:yellow}$#2# {}per card",
+					"Gain {C:money}$#2# {}per card",
 					"in {C:attention}deck {}with a {C:ovn_corrupted}Mark,",
 					"then {S:1.1,C:red,E:2}self-destructs"
 				}

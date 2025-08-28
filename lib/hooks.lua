@@ -284,6 +284,31 @@ function Card:add_to_deck(from_debuff)
 	end
 end
 
+local cardsetability_hook = Card.set_ability
+function Card:set_ability(center, initial, delay_sprites)
+	cardsetability_hook(self, center, initial, delay_sprites)
+	if (
+		self.config.card
+		and self.config.card.suit == "ovn_Optics"
+		and Oblivion.enhancement_corrupt[self.config.center.key]
+	) then
+		Ovn_f.corrupt_modifiers(self)
+	end
+end
+
+local cardsetseal_hook = Card.set_seal
+function Card:set_seal(_seal, silent, immediate)
+	cardsetseal_hook(self, _seal, silent, immediate)
+	if (
+		self.config.card
+		and self.config.card.suit == "ovn_Optics"
+		and self.seal
+		and Oblivion.seal_corrupt[self.seal]
+	) then
+		Ovn_f.corrupt_modifiers(self)
+	end
+end
+
 ----
 
 SMODS.Consumable:take_ownership('black_hole', {
@@ -407,3 +432,97 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
 	end
 	return card
 end
+
+----
+
+-- This hook is for never_scores behavior change
+local gethighest_hook = get_highest
+function get_highest(hand)
+	local has_never_scores = false
+	for _,card in ipairs(hand) do
+		if SMODS.never_scores(card) then
+			has_never_scores = true
+			break
+		end
+	end
+	-- Since this hook is for never_scores support,
+	-- a lack of such does not require special calculation.
+	if not has_never_scores then return gethighest_hook(hand) end
+
+	local highest = nil
+	for _,card in ipairs(hand) do
+		if (
+			not SMODS.never_scores(card)
+			and (
+				not highest
+				or card:get_nominal() > highest:get_nominal()
+			)
+		) then highest = card end
+	end
+
+	-- For cases where all played cards never score,
+	-- we still need something to send back.
+	-- Without this hook, a never-scoring card can still be
+	-- the highest card, even if it never scores
+	-- hence this fallback.
+	if not highest then return gethighest_hook(hand) end
+
+	if #hand > 0 then return {{highest}} else return {} end
+end
+
+----
+
+-- all of this code taken from SMODS game_object.lua
+-- and then modified a little bit for instability support
+
+-- TODO wait for them to put this in utils.lua
+local function juice_flip(used_tarot)
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = 0.4,
+		func = function()
+			play_sound('tarot1')
+			used_tarot:juice_up(0.3, 0.5)
+			return true
+		end
+	}))
+	for i = 1, #G.hand.cards do
+		local percent = 1.15 - (i - 0.999) / (#G.hand.cards - 0.998) * 0.3
+		G.E_MANAGER:add_event(Event({
+			trigger = 'after',
+			delay = 0.15,
+			func = function()
+				G.hand.cards[i]:flip(); play_sound('card1', percent); G.hand.cards[i]:juice_up(0.3, 0.3); return true
+			end
+		}))
+	end
+end
+
+SMODS.Consumable:take_ownership('sigil', {
+	use = function(self, card, area, copier)
+		local used_tarot = copier or card
+		juice_flip(used_tarot)
+		local _suit = pseudorandom_element(SMODS.Suits, pseudoseed('sigil'))
+		for i = 1, #G.hand.cards do
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					local _card = G.hand.cards[i]
+					assert(SMODS.change_base(_card, _suit.key))
+					return true
+				end
+			}))
+		end
+		for i = 1, #G.hand.cards do
+			local percent = 0.85 + (i - 0.999) / (#G.hand.cards - 0.998) * 0.3
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.15,
+				func = function()
+					G.hand.cards[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.cards[i]:juice_up(0.3, 0.3); return true
+				end
+			}))
+		end
+		delay(0.5)
+		if _suit.key == "ovn_Optics" then Ovn_f.optic_instability(#G.hand.cards) end
+	end
+})

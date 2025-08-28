@@ -355,6 +355,7 @@ SMODS.Seal {
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
+	in_pool = function() return false end,
 	never_scores = true,
 
 	calculate = function (self, card, context)
@@ -386,6 +387,7 @@ SMODS.Seal {
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
+	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
 		if (
@@ -393,7 +395,17 @@ SMODS.Seal {
 			and context.cardarea == G.play
 			and #context.full_hand == 1
 		) then
-			update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+			update_hand_text({
+				sound = 'button',
+				volume = 0.7,
+				pitch = 1.1,
+				delay = 0
+			}, {
+				mult = 0,
+				chips = 0,
+				handname = '',
+				level = ''
+			})
 
 			local poker_hand_results = evaluate_poker_hand(G.hand.cards)
 			local detected_hands = {}
@@ -404,12 +416,31 @@ SMODS.Seal {
 				-- Sort from lowest to highest
 				return SMODS.PokerHands[a].order > SMODS.PokerHands[b].order
 			end)
-			print(detected_hands)
 			for _,hand_name in ipairs(detected_hands) do
-				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(hand_name, 'poker_hands'),chips = G.GAME.hands[hand_name].chips, mult = G.GAME.hands[hand_name].mult, level=G.GAME.hands[hand_name].level})
+				update_hand_text({
+					sound = 'button',
+					volume = 0.7,
+					pitch = 0.8,
+					delay = 0.3
+				}, {
+					handname = localize(hand_name, 'poker_hands'),
+					chips = G.GAME.hands[hand_name].chips,
+					mult  = G.GAME.hands[hand_name].mult,
+					level = G.GAME.hands[hand_name].level
+				})
 				level_up_hand(card, hand_name)
 			end
-			update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(context.scoring_name, 'poker_hands'),chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
+			update_hand_text({
+				sound = 'button',
+				volume = 0.7,
+				pitch = 0.8,
+				delay = 0.3
+			}, {
+				handname = localize(context.scoring_name, 'poker_hands'),
+				chips = G.GAME.hands[context.scoring_name].chips,
+				mult  = G.GAME.hands[context.scoring_name].mult,
+				level = G.GAME.hands[context.scoring_name].level
+			})
 		end
 
 		if (
@@ -442,6 +473,7 @@ SMODS.Seal {
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
+	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
 		if context.main_scoring and context.cardarea == G.play then
@@ -494,6 +526,7 @@ SMODS.Seal {
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
+	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
 		if context.main_scoring and context.cardarea == G.play then
@@ -521,9 +554,11 @@ SMODS.Seal {
 
 	atlas = "seals_atlas",
 	pos = {x=0, y=0},
+	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
 		if context.using_consumeable and context.cardarea == G.hand then
+			if context.conseable.ability.set ~= "Spectral" then return end
 			local consumable_key = context.consumeable.config.center.key
 			add_simple_event(nil, nil, function ()
 				SMODS.add_card{
