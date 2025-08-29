@@ -71,7 +71,6 @@ SMODS.Consumable {
 		Ovn_f.corrupt_joker(selected_card)
 
 		G.GAME.justcorrupted = nil
-		Ovn_f.corruption_instability(1)
 	end,
 }
 

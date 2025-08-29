@@ -156,9 +156,22 @@ SMODS.Scoring_Parameter {
 			accent = self.lick
 		}
 	end,
-
 	level_up_hand = function() end,
-	modify = function() end,
+	modify = function(self, amount)
+		if amount == 0 then return end
+
+		G.GAME.ovn_instability = G.GAME.ovn_instability or 1
+		local instability_max = 2
+		if G.GAME.ovn_instability >= instability_max then return end
+
+		if amount < 0 then
+			play_sound("ovn_decrement", 1, 0.8)
+		elseif amount > 0 then
+			play_sound("ovn_increment", 1, 0.9)
+		end
+		G.GAME.ovn_instability = G.GAME.ovn_instability + amount
+		update_hand_text({delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
+	end,
 }
 
 -------------------

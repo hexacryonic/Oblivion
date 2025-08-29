@@ -123,21 +123,6 @@ function ease_hands_played(mod, instant)
 	end
 end
 
--- Hook to change background colour on Corrupt Decks
-local easebgcolblind_hook = ease_background_colour_blind
-function ease_background_colour_blind(state, blind_override)
-    local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')
-    local blindname = (blindname == '' and 'Small Blind' or blindname)
-
-	if G.GAME.in_corrupt and G.GAME.won then
-		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
-	elseif G.GAME.in_corrupt and (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') then
-		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
-	else
-		easebgcolblind_hook(state, blind_override)
-	end
-end
-
 
 ---------------------
 ---- CARD OBJECT ----
@@ -296,20 +281,10 @@ function Card:change_suit(new_suit)
 end
 
 -- Hook for:
----- Increasing Instability after obtaining Optic cards
 ---- Counting unique Jokers
 local card_addtodeck_hook = Card.add_to_deck
 function Card:add_to_deck(from_debuff)
 	card_addtodeck_hook(self, from_debuff)
-	if (
-		not from_debuff
-		and self.config.card
-		and self.config.card.suit == "ovn_Optics"
-		and G.GAME.in_corrupt_plasma
-	) then
-		Ovn_f.optic_instability(1)
-	end
-
 	if self.ability.set == "Joker" then
 		if not G.GAME.cumulative_unique_jokers[self.config.center.key] then
 			G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count + 1
@@ -478,6 +453,25 @@ local smods_getscoringparam_hook = SMODS.get_scoring_parameter
 function SMODS.get_scoring_parameter(key, flames)
     if key == "ovn_instability" then return G.GAME.ovn_instability end
     return smods_getscoringparam_hook(key, flames)
+end
+
+-- Hook for increasing Instability when obtaining corrupted Jokers/Optic cards
+local smods_calccontext = SMODS.calculate_context
+function SMODS.calculate_context(context, return_table, no_resolve)
+	if context.card_added and context.card.config.center.rarity == "ovn_corrupted" then
+		Ovn_f.corruption_instability(1)
+		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
+	elseif context.playing_card_added then
+		local optic_count = 0
+		for _,playing_card in ipairs(context.cards) do
+			if playing_card.base and playing_card.base.suit == "ovn_Optics" then
+				optic_count = optic_count + 1
+			end
+		end
+		Ovn_f.optic_instability(optic_count)
+		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
+	end
+	return smods_calccontext(context, return_table, no_resolve)
 end
 
 

@@ -617,7 +617,6 @@ SMODS.Edition {
 			-- Card is corruptable, proceed to corrupt
 			if Ovn_f.joker_is_corruptible(card.config.center.key) then
 				Ovn_f.corrupt_joker(card)
-				Ovn_f.corruption_instability(1)
 
 			-- Card cannot be corrupted, self-destruct
 			else

@@ -327,10 +327,6 @@ SMODS.Joker {
 	cost = 4,
 
 	calculate = function(self, card, context)
-		if context.ovn_corrupted_from then
-			Ovn_f.corruption_instability(1)
-		end
-
 		if context.joker_main then
 			return {
 				xmult = card.ability.extra.xmult
