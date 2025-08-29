@@ -1,4 +1,20 @@
-local b_uibox_hook_c_red = function()
+-- lib/ui_hooks.lua
+-- These functions append certain behaviors onto existing UI functions
+-- to easily add/conditionally replace new UI features
+
+-- 1. SUPPLEMENTARY FUNCTIONS
+-- 2. UI DEFINITION HOOKS
+-- 3. UI FUNCTION HOOKS
+
+
+
+---------------------------------
+---- SUPPLEMENTARY FUNCTIONS ----
+---------------------------------
+
+-- Generates the UIBox definition for Corrupted Red Deck play/discard buttons.
+---@return Balatro.UIBoxDefinition
+local uiboxbuttons_hook_c_red = function()
 	-- This is NOT based on the regular functions/UI_definitions.lua
 	-- It is instead based on the Lovely dump of functions/UI_definitions.lua with Steamodded installed
 	local text_scale = 0.45
@@ -95,14 +111,10 @@ local b_uibox_hook_c_red = function()
 
 	return Ovn_f.jtml_to_uiboxdef(jtml, jtml_stylesheet)
 end
-local b_uibox_hook = create_UIBox_buttons
-function create_UIBox_buttons()
-	if G.GAME.in_corrupt_red then return b_uibox_hook_c_red() end
-	return b_uibox_hook()
-end
 
-----
-
+-- On Corrupt Yellow Deck, replaces the hand/discard count display with a hand/discard COST display.
+---@param ret any
+---@return nil
 local function hud_ui_c_yellow(ret)
 	local handdiscard_UI = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes[1].nodes
 
@@ -139,131 +151,125 @@ local function hud_ui_c_yellow(ret)
 	}
 end
 
-local cuih = create_UIBox_HUD
+-- Generates the UIBox definition for Pure Visage switch/sell buttons.
+---@return Balatro.UIBoxDefinition
+local function uidef_usesellbtn_hook_pure_visage()
+	local button_jtml_stylesheet = {
+		[".button"] = {
+			align = "center-right",
+			padding = 0.1,
+			roundness = 0.08,
+			minWidth = 1.25,
+			hover = true,
+			shadow = true,
+			fillColour = G.C.UI.BACKGROUND_INACTIVE,
+			onePress = true,
+		},
+		[".button-toptext"] = {
+			colour = G.C.UI.TEXT_LIGHT,
+			scale = 0.4,
+			shadow = true
+		},
+		["button-btmtext1"] = {
+			colour = G.C.WHITE,
+			shadow = true,
+			scale = 0.4
+		},
+		["button-btmtext2"] = {
+			colour = G.C.WHITE,
+			shadow = true,
+			scale = 0.55
+		},
+	}
+	local sell_button =
+	{"column", style={align="center-right"}, {
+		{"column", reftable=card, class="button", onclick="sell_card", ondraw="can_sell_card", {
+			{"box", style={width=0.1, height=0.6}},
+			{"column", style={align="top-middle"}, {
+				{"row", style={align="center-middle", maxWidth=1.25}, {
+					{"text", class="button-toptext", text=localize("b_sell")}
+				}},
+				-- no idea why jtml for this doesnt work so here
+				{n=G.UIT.R, config={align = "cm"}, nodes={
+					{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
+					{n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+				}}
+			}}
+		}}
+	}}
+	local switch_button =
+	{"column", style={align="center-right"}, {
+		{"column", reftable=card, class="button", onclick="transmute_card", ondraw="can_transmute", {
+			{"box", style={width=0.2, height=0.6}},
+			{"column", style={align="center-middle"}, {
+				{"row", style={align="center-middle", maxWidth=1.25}, {
+					{"text", class="button-toptext", text="Switch"}
+				}},
+			}}
+		}}
+	}}
+
+	local function button_row(jtml)
+		return {"row", style={align="center-left"}, {jtml}}
+	end
+
+	local container =
+	{"root", style={padding=0, fillColour=G.C.CLEAR}, {
+		{"column", style={padding=0, align="center-left"}, {
+			button_row(switch_button),
+			-- spacing
+			{"row", style={minHeight=0.1, fillColour=G.C.CLEAR}},
+			button_row(sell_button),
+		}}
+	}}
+
+	return Ovn_f.jtml_to_uiboxdef(container, button_jtml_stylesheet)
+end
+
+
+
+-----------------------------
+---- UI DEFINITION HOOKS ----
+-----------------------------
+
+-- Hook to enable Corrupt Red Deck's effect
+local uiboxbuttons_hook = create_UIBox_buttons
+function create_UIBox_buttons()
+	if G.GAME.in_corrupt_red then return uiboxbuttons_hook_c_red() end
+	return uiboxbuttons_hook()
+end
+
+-- Hook to enable Corrupt Yellow Deck's displays
+local uiboxhud_hood = create_UIBox_HUD
 function create_UIBox_HUD()
-	local ret = cuih()
+	local ret = uiboxhud_hood()
 	if G.GAME.in_corrupt_yellow then
 		hud_ui_c_yellow(ret)
 	end
 	return ret
 end
 
-local easediscard_hook = ease_discard
-function ease_discard(mod, instant, silent)
-	if not G.GAME.in_corrupt_yellow then
-		easediscard_hook(mod, instant, silent)
-	end
-end
 
-local easehand_hook = ease_hands_played
-function ease_hands_played(mod, instant)
-	if not G.GAME.in_corrupt_yellow then
-		easehand_hook(mod, instant)
-	end
-end
 
-----
+---------------------------
+---- UI FUNCTION HOOKS ----
+---------------------------
 
-function G.FUNCS.transmute_card(e)
-	local card = e.config.ref_table
-	if card.config.center.key == "j_ovn_pure_visage" then
-		Ovn_f.corrupt_joker(card)
-	end
-end
-
-function G.FUNCS.can_transmute(e)
-	local card = e.config.ref_table
-	if card.ability.extra.on_cooldown <= 0 then
-		e.config.colour = G.C.GREEN
-		e.config.button = "transmute_card"
-	else
-		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-		e.config.button = nil
-	end
-end
-
-local usesellbuttons_hook = G.UIDEF.use_and_sell_buttons
+-- Hook to insert an additional button for Pure Visage
+local uidef_usesellbtn_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
-	if card.area ~= G.jokers then return usesellbuttons_hook(card) end
+	if card.area ~= G.jokers then return uidef_usesellbtn_hook(card) end
 	if card.config.center.key == "j_ovn_pure_visage" then
-		local button_jtml_stylesheet = {
-			[".button"] = {
-				align = "center-right",
-				padding = 0.1,
-				roundness = 0.08,
-				minWidth = 1.25,
-				hover = true,
-				shadow = true,
-				fillColour = G.C.UI.BACKGROUND_INACTIVE,
-				onePress = true,
-			},
-			[".button-toptext"] = {
-				colour = G.C.UI.TEXT_LIGHT,
-				scale = 0.4,
-				shadow = true
-			},
-			["button-btmtext1"] = {
-				colour = G.C.WHITE,
-				shadow = true,
-				scale = 0.4
-			},
-			["button-btmtext2"] = {
-				colour = G.C.WHITE,
-				shadow = true,
-				scale = 0.55
-			},
-		}
-		local sell_button =
-		{"column", style={align="center-right"}, {
-			{"column", reftable=card, class="button", onclick="sell_card", ondraw="can_sell_card", {
-				{"box", style={width=0.1, height=0.6}},
-				{"column", style={align="top-middle"}, {
-					{"row", style={align="center-middle", maxWidth=1.25}, {
-						{"text", class="button-toptext", text=localize("b_sell")}
-					}},
-					-- no idea why jtml for this doesnt work so here
-					{n=G.UIT.R, config={align = "cm"}, nodes={
-						{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
-						{n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
-					}}
-				}}
-			}}
-		}}
-		local switch_button =
-		{"column", style={align="center-right"}, {
-			{"column", reftable=card, class="button", onclick="transmute_card", ondraw="can_transmute", {
-				{"box", style={width=0.2, height=0.6}},
-				{"column", style={align="center-middle"}, {
-					{"row", style={align="center-middle", maxWidth=1.25}, {
-						{"text", class="button-toptext", text="Switch"}
-					}},
-				}}
-			}}
-		}}
-
-		local function button_row(jtml)
-			return {"row", style={align="center-left"}, {jtml}}
-		end
-
-		local container =
-		{"root", style={padding=0, fillColour=G.C.CLEAR}, {
-			{"column", style={padding=0, align="center-left"}, {
-				button_row(switch_button),
-				-- spacing
-				{"row", style={minHeight=0.1, fillColour=G.C.CLEAR}},
-				button_row(sell_button),
-			}}
-		}}
-
-		return Ovn_f.jtml_to_uiboxdef(container, button_jtml_stylesheet)
+		return uidef_usesellbtn_hook_pure_visage()
 	end
 
-	return usesellbuttons_hook(card)
+	return uidef_usesellbtn_hook(card)
 end
 
-----
-
-local canplay_hook = G.FUNCS.can_play
+-- Hook to prevent playing if:
+---- An Unobtainium card is selected
+---- The first hand of the round is being drawn on Corrupt Ghost Deck
+local funcs_canplay_hook = G.FUNCS.can_play
 function G.FUNCS.can_play(e)
 	local has_unob = false
 	for _,selected_card in ipairs(G.hand.highlighted) do
@@ -281,11 +287,12 @@ function G.FUNCS.can_play(e)
 		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 		e.config.button = nil
 	else
-		canplay_hook(e)
+		funcs_canplay_hook(e)
 	end
 end
 
-local candiscard_hook = G.FUNCS.can_discard
+-- Hook to prevent discarding if the first hand of the round is being drawn on Corrupt Ghost Deck
+local funcs_candiscard_hook = G.FUNCS.can_discard
 function G.FUNCS.can_discard(e)
 	if (
 		G.GAME.ovn_cghost_first_hand_drawn ~= nil
@@ -294,6 +301,6 @@ function G.FUNCS.can_discard(e)
 		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 		e.config.button = nil
 	else
-		candiscard_hook(e)
+		funcs_candiscard_hook(e)
 	end
 end

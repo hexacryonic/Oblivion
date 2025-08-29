@@ -1,3 +1,20 @@
+-- lib/funcs.lua
+-- These commonly called functions are used across the mod
+
+-- 1. INTERNAL FUNCTIONS
+-- 2. JOKER TRANSMUTATION
+-- 3. JOKER TRANSMUTATION STATES
+-- 4. MODIFIER TRANSMUTATION
+-- 5. INSTABILITY
+-- 6. CORRUPT YELLOW DECK VALUES
+-- 7. MISCELLANEOUS
+
+
+
+----------------------------
+---- INTERNAL FUNCTIONS ----
+----------------------------
+
 -- Compiles all localization present in the directory <lang>, usually the name of the localization folder.\
 -- I.e. on en-us.lua, <lang> = "en-us", load files in the directory \en-us.
 ---@param loc_table table
@@ -25,8 +42,6 @@ function Ovn_f.compile_localization(loc_table, lang)
 	end
 end
 
-----
-
 -- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
 -- Event function will always return true, so "return true" is not required.\
 -- Consequently, do not use this function if the event function needs to return a non-true value\
@@ -44,18 +59,13 @@ Ovn_f.add_simple_event = function(trigger, delay, func)
 end
 local add_simple_event = Ovn_f.add_simple_event
 
-----
 
--- Determines whether the player is holding the Joker of specified card key.
----@param card_key string
----@return boolean
-Ovn_f.has_joker = function(card_key)
-	return next(SMODS.find_card(card_key)) and true or false
-end
 
-----
+-----------------------------
+---- JOKER TRANSMUTATION ----
+-----------------------------
 
--- Transforms a Joker into its corrupted variant.
+-- Transmutes a Joker into its corrupted variant.
 ---@param card Card
 ---@return nil
 Ovn_f.corrupt_joker = function(card)
@@ -90,56 +100,7 @@ Ovn_f.corrupt_joker = function(card)
     end)
 end
 
--- Sets a random former form of a (corrupted) card if not set./
----@param card Card
----@return nil|string
-Ovn_f.set_random_former_form = function(card)
-	if card.ability.ovn_former_form then return end
-	local card_key = card.config.center.key
-
-	local pure_form_options = Oblivion.purity_map[card_key]
-	if not pure_form_options then return end
-	if type(pure_form_options) == "string" then
-		card.ability.ovn_former_form = pure_form_options
-		return pure_form_options
-	end
-
-	local former_form = pseudorandom_element(pure_form_options, "ovn_former_form")
-	card.ability.ovn_former_form = former_form
-	return former_form
-end
-
-----
-
--- Determines if a Joker should be out of all pools\
--- due to its corrupted variant being present.
----@param card_key string
----@return boolean
-Ovn_f.is_corruptbanished = function(card_key)
-	-- Do not continue if purification is occurring
-	if G.GAME.purifyingJoker then return false end
-
-	-- In pool if showneverends is held
-	local has_tsne = Ovn_f.has_joker('j_ovn_showneverends')
-	if has_tsne then return false end
-
-	-- In pool if Joker is not even corruptible
-	local corrupt_key = Oblivion.corruption_map[card_key]
-	if not corrupt_key then return false end
-	-- Do not destroy if self-corruptible
-	if corrupt_key == card_key then return false end
-
-	-- In pool if Joker's corrupt variant is not hled
-	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
-	if not has_corrupt_joker then return false end
-
-	-- DIE
-	return true
-end
-
-----
-
--- Transforms a Joker into its pure variant.
+-- Transmutes a Joker into its pure variant.
 ---@param card Card
 ---@return nil
 Ovn_f.purify_joker = function(card)
@@ -180,7 +141,11 @@ Ovn_f.purify_joker = function(card)
 	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
 end
 
-----
+
+
+------------------------------------
+---- JOKER TRANSMUTATION STATES ----
+------------------------------------
 
 -- Determines whether a Joker is corruptible based on its defined corruption conditions.
 ---@param card_key string
@@ -194,8 +159,6 @@ Ovn_f.joker_is_corruptible = function(card_key)
 	return condition_func()
 end
 
-----
-
 -- Determines whether a Joker is purifiable.
 ---@param card_key string
 ---@return boolean
@@ -203,7 +166,56 @@ Ovn_f.joker_is_purifiable = function(card_key)
 	return Oblivion.purity_map[card_key] and true or false
 end
 
-----
+-- Sets a random former form of a (corrupted) card if not set./
+---@param card Card
+---@return nil|string
+Ovn_f.set_random_former_form = function(card)
+	if card.ability.ovn_former_form then return end
+	local card_key = card.config.center.key
+
+	local pure_form_options = Oblivion.purity_map[card_key]
+	if not pure_form_options then return end
+	if type(pure_form_options) == "string" then
+		card.ability.ovn_former_form = pure_form_options
+		return pure_form_options
+	end
+
+	local former_form = pseudorandom_element(pure_form_options, "ovn_former_form")
+	card.ability.ovn_former_form = former_form
+	return former_form
+end
+
+-- Determines if a Joker should be out of all pools\
+-- due to its corrupted variant being present.
+---@param card_key string
+---@return boolean
+Ovn_f.is_corruptbanished = function(card_key)
+	-- Do not continue if purification is occurring
+	if G.GAME.purifyingJoker then return false end
+
+	-- In pool if showneverends is held
+	local has_tsne = Ovn_f.has_joker('j_ovn_showneverends')
+	if has_tsne then return false end
+
+	-- In pool if Joker is not even corruptible
+	local corrupt_key = Oblivion.corruption_map[card_key]
+	if not corrupt_key then return false end
+	-- Do not destroy if self-corruptible
+	if corrupt_key == card_key then return false end
+
+	-- In pool if Joker's corrupt variant is not hled
+	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
+	if not has_corrupt_joker then return false end
+
+	-- DIE
+	return true
+end
+
+
+
+--------------------------------
+---- MODIFIER TRANSMUTATION ----
+--------------------------------
 
 -- Transmutes a playing card's regular modifiers into their corrupted variants.
 ---@param card Card
@@ -237,8 +249,6 @@ Ovn_f.corrupt_modifiers = function(card)
 	end
 end
 
-----
-
 -- Transmutes a playing card's corrupted modifiers into their regular variants.
 ---@param card Card
 ---@return nil
@@ -271,7 +281,11 @@ Ovn_f.purify_modifiers = function(card)
 	end
 end
 
-----
+
+
+---------------------
+---- INSTABILITY ----
+---------------------
 
 -- Changes Instability on Corrupt Plasma Deck, else does nothing.
 ---@param amount number
@@ -311,7 +325,11 @@ Ovn_f.optic_instability = function(factor)
 	Ovn_f.change_instability(mod*factor)
 end
 
-----
+
+
+------------------------------------
+---- CORRUPT YELLOW DECK VALUES ----
+------------------------------------
 
 -- In Corrupt Yellow Deck, increases the hand cost with corresponding animations.
 ---@param amount number
@@ -414,7 +432,18 @@ Ovn_f.ease_discard_cost = function(amount, instant)
 	end
 end
 
-----
+
+
+-----------------------
+---- MISCELLANEOUS ----
+-----------------------
+
+-- Determines whether the player is holding the Joker of specified card key.
+---@param card_key string
+---@return boolean
+Ovn_f.has_joker = function(card_key)
+	return next(SMODS.find_card(card_key)) and true or false
+end
 
 -- Temporarily changes hand size, just for the round.
 ---@param amount integer
@@ -423,8 +452,6 @@ Ovn_f.temp_handsize_change = function(amount)
 	G.hand:change_size(amount)
 	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
 end
-
-----
 
 -- Sets a guaranteed modifier (enhancement, seal, edition) on a card,\
 -- if it doesn't have one already.
