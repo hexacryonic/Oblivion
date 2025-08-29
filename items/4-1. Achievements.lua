@@ -159,7 +159,25 @@ SMODS.Achievement{
 
 -- absolved abandoment, order = 9
 -- checkered changeling, order = 10
--- zodiac zenith, order = 11
+
+----------------
+-- Zodiac Zenith
+----------------
+SMODS.Achievement{
+	key = "zodiac_zenith",
+	order = 11,
+	unlock_condition = function (self, args)
+		if args.type == 'win' then
+			local unique_tarotplanet_count = 0
+			for _,consumable_info in pairs(G.GAME.consumeable_usage) do
+				if consumable_info.set == "Tarot" or consumable_info.set == "Planet" then
+					unique_tarotplanet_count = unique_tarotplanet_count + 1
+					if unique_tarotplanet_count == 20 then return true end
+				end
+			end
+		end
+	end
+}
 
 ------------------
 -- Painted Paladin
@@ -325,7 +343,6 @@ SMODS.Achievement{
 }
 
 -- do it first, order = 23
--- bananas, order = 24
 
 --------------------------------
 -- This Entire Quest Was Bananas
