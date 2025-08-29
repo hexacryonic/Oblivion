@@ -138,6 +138,7 @@ end
 booster_wicked_normal(1)
 booster_wicked_normal(2)
 booster_wicked_normal(3)
+booster_wicked_normal(4)
 
 --------------------
 -- SCORING PARAMETER
