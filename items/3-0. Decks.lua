@@ -133,26 +133,23 @@ SMODS.Back{
 			hands_cost = "$" .. G.GAME.cy_handcost,
 			discard_cost = "$" .. G.GAME.cy_discardcost
 		}
-		G.GAME.cy_gaveantemoney = false
-		ease_dollars(G.GAME.cy_dollarsperante)
-		G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
-		add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
+
+		add_simple_event(nil, nil, function ()
+			ease_dollars(G.GAME.cy_dollarsperante)
+		end)
 	end,
 
 	calculate = function(self, card, context)
 		if context.before then
 			ease_dollars(-G.GAME.cy_handcost)
-			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - G.GAME.cy_handcost
-			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
+			delay(0.2)
 		end
 
 		if context.pre_discard then
 			ease_dollars(-G.GAME.cy_discardcost)
-			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - G.GAME.cy_discardcost
-			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
 		end
 
-		if G.GAME.round_resets.blind_states.Boss == 'Defeated' and not G.GAME.cy_gaveantemoney then
+		if context.beat_boss then
 			add_simple_event(nil, nil, function()
 				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25 - G.GAME.cy_handcost))
 				delay(0.75)
@@ -160,17 +157,11 @@ SMODS.Back{
 				delay(1)
 				ease_dollars(G.GAME.cy_dollarsperante)
 			end)
-			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + G.GAME.cy_dollarsperante
-			add_simple_event(nil, nil, function () G.GAME.dollar_buffer = 0 end)
-			G.GAME.cy_gaveantemoney = true
-		end
-
-		if context.starting_shop then
-			G.GAME.cy_gaveantemoney = false
 		end
 
 		if G.GAME.dollars >= (math.floor(G.GAME.dollars) + math.floor(G.GAME.dollars)) then
-			G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false
+			G.STATE = G.STATES.GAME_OVER
+			G.STATE_COMPLETE = false
 		end
 	end,
 }

@@ -3,23 +3,7 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# Turn Jimbo into THE SHOW NEVER ENDS
-[[patches]]
-[patches.pattern]
-target = "card_character.lua"
-pattern = 'self.children.card = Card(self.T.x, self.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, args.center or G.P_CENTERS.j_joker, {bypass_discovery_center = true})'
-position = "at"
-payload = 'self.children.card = Card(self.T.x, self.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, args.center or G.P_CENTERS.j_ovn_showneverends, {bypass_discovery_center = true})'
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "card_character.lua"
-pattern = 'colours = {G.C.RED, G.C.BLUE, G.C.ORANGE},'
-position = "at"
-payload = '''colours = {G.C.RARITY['ovn_corrupted'], G.C.BLUE, G.C.PURPLE},'''
-match_indent = true
-
+# Replace title Ace of Spades with Optics of Spades
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -30,6 +14,7 @@ local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*S
 '''
 match_indent = true
 
+# Replace colors of title splash background
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -40,7 +25,7 @@ payload = '''
 '''
 match_indent = true
 
-
+# Replace intro Jimbo with a random corrupted Joker
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -78,9 +63,7 @@ end
 '''
 match_indent = true
 
-# ----
-
-# Show tooltips
+# Show tooltips for Joker corruptibility and Optics effect
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
@@ -105,50 +88,6 @@ if card and card.base and card.base.suit == "ovn_Optics" then
     set = 'Other',
   })
 end
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/button_callbacks.lua"
-pattern = '''if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-else
-    e.config.colour = G.C.BLUE
-    e.config.button = 'play_cards_from_highlighted'
-end'''
-position = "after"
-payload = '''
-if #G.hand.highlighted >= 1 then
-  for i=1, #G.hand.highlighted do
-    if G.hand.highlighted[i].config.center.key == 'm_ovn_unob' then
-      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-      e.config.button = nil
-    end
-  end
-end
-'''
-match_indent = true
-
-# Corrupt background
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = '''elseif G.GAME.won then
-    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
-elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
-    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
-'''
-position = "at"
-payload = '''elseif G.GAME.won and G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
-elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
-elseif G.GAME.won and not G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
-elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
 '''
 match_indent = true
 
@@ -297,4 +236,17 @@ target = "functions/state_events.lua"
 pattern = "SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})"
 position = "after"
 payload = "Ovn_f.update_hands_last_played(text)"
+match_indent = true
+
+# Fix for corrupt bg not appearing on run load
+# might need to put "is_corrupt" as Back property
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if not saveTable then ease_background_colour_blind(G.STATE, 'Small Blind')"
+position = "before"
+payload = '''
+local get_the_fucking_back = saveTable and saveTable.BACK.name or (args.challenge and args.challenge.deck and args.challenge.deck.type) or (self.GAME.viewed_back and self.GAME.viewed_back.name) or self.GAME.selected_back and self.GAME.selected_back.name or 'Red Deck'
+if get_the_fucking_back:match('b_ovn_c_') then self.GAME.in_corrupt = true end
+'''
 match_indent = true

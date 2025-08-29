@@ -123,6 +123,20 @@ function ease_hands_played(mod, instant)
 	end
 end
 
+-- Hook to change background colour on Corrupt Decks
+local easebgcolblind_hook = ease_background_colour_blind
+function ease_background_colour_blind(state, blind_override)
+    local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')
+    local blindname = (blindname == '' and 'Small Blind' or blindname)
+
+	if G.GAME.in_corrupt and G.GAME.won then
+		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
+	elseif G.GAME.in_corrupt and (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') then
+		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
+	else
+		easebgcolblind_hook(state, blind_override)
+	end
+end
 
 
 ---------------------
@@ -592,3 +606,29 @@ SMODS.Consumable:take_ownership('sigil', {
 		if _suit.key == "ovn_Optics" then Ovn_f.optic_instability(#G.hand.cards) end
 	end
 }, true)
+
+-- Ownership of all default JimboQuips to use THE SHOW NEVER ENDS
+for i=1,10 do
+	SMODS.JimboQuip:take_ownership('lq_' .. i, {
+		extra = {
+			center = 'j_ovn_showneverends',
+			materialize_colours = {
+				G.C.RARITY['ovn_corrupted'],
+				G.C.BLUE,
+				G.C.PURPLE
+			}
+		}
+	})
+end
+for i=1,7 do
+	SMODS.JimboQuip:take_ownership('wq_' .. i, {
+		extra = {
+			center = 'j_ovn_showneverends',
+			materialize_colours = {
+				G.C.RARITY['ovn_corrupted'],
+				G.C.BLUE,
+				G.C.PURPLE
+			}
+		}
+	})
+end
