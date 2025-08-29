@@ -124,6 +124,7 @@ function ease_hands_played(mod, instant)
 end
 
 
+
 ---------------------
 ---- CARD OBJECT ----
 ---------------------
@@ -220,7 +221,7 @@ function Card:update(dt)
 			return true
 		end
 	end
-	
+
 	-- Destroy card if it is corruptbanished
 	if self.area == G.jokers then
 		local card_key = self.config.center.key

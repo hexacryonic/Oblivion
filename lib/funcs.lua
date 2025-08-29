@@ -75,7 +75,7 @@ Ovn_f.corrupt_joker = function(card)
 
 	G.GAME.corruptingJoker = true
 	local ability = card.ability
-	
+
 	if corrupted_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[corrupted_card_key], false, true)
 	end
