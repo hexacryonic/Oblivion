@@ -238,6 +238,27 @@ position = "after"
 payload = "Ovn_f.update_hands_last_played(text)"
 match_indent = true
 
+# Corrupt background
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''elseif G.GAME.won then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+position = "at"
+payload = '''elseif G.GAME.won and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
+elseif G.GAME.won and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+match_indent = true
+
 # Fix for corrupt bg not appearing on run load
 # might need to put "is_corrupt" as Back property
 [[patches]]
