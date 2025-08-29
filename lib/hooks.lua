@@ -591,4 +591,4 @@ SMODS.Consumable:take_ownership('sigil', {
 		delay(0.5)
 		if _suit.key == "ovn_Optics" then Ovn_f.optic_instability(#G.hand.cards) end
 	end
-})
+}, true)
