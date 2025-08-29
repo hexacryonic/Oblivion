@@ -152,8 +152,9 @@ local function hud_ui_c_yellow(ret)
 end
 
 -- Generates the UIBox definition for Pure Visage switch/sell buttons.
+---@param card Card
 ---@return Balatro.UIBoxDefinition
-local function uidef_usesellbtn_hook_pure_visage()
+local function uidef_usesellbtn_hook_pure_visage(card)
 	local button_jtml_stylesheet = {
 		[".button"] = {
 			align = "center-right",
@@ -260,7 +261,7 @@ local uidef_usesellbtn_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
 	if card.area ~= G.jokers then return uidef_usesellbtn_hook(card) end
 	if card.config.center.key == "j_ovn_pure_visage" then
-		return uidef_usesellbtn_hook_pure_visage()
+		return uidef_usesellbtn_hook_pure_visage(card)
 	end
 
 	return uidef_usesellbtn_hook(card)
