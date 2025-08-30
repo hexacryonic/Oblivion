@@ -558,7 +558,7 @@ SMODS.Seal {
 
 	calculate = function (self, card, context)
 		if context.using_consumeable and context.cardarea == G.hand then
-			if context.conseable.ability.set ~= "Spectral" then return end
+			if context.consumeable.ability.set ~= "Spectral" then return end
 			local consumable_key = context.consumeable.config.center.key
 			add_simple_event(nil, nil, function ()
 				SMODS.add_card{
