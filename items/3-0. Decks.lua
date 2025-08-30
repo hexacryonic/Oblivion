@@ -149,7 +149,11 @@ SMODS.Back{
 			ease_dollars(-G.GAME.cy_discardcost)
 		end
 
-		if context.beat_boss then
+		if context.starting_shop then
+			G.GAME.gave_money = false
+		end
+
+		if context.beat_boss and not G.GAME.gave_money then
 			add_simple_event(nil, nil, function()
 				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25 - G.GAME.cy_handcost))
 				delay(0.75)
@@ -157,6 +161,7 @@ SMODS.Back{
 				delay(1)
 				ease_dollars(G.GAME.cy_dollarsperante)
 			end)
+			G.GAME.gave_money = true
 		end
 
 		if G.GAME.dollars >= (math.floor(G.GAME.dollars) + math.floor(G.GAME.dollars)) then
