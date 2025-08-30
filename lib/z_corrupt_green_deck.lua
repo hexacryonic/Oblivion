@@ -198,9 +198,10 @@ end
 local card_setability_hook = Card.set_ability
 function Card:set_ability(center, initial, delay_sprites)
 	card_setability_hook(self, center, initial, delay_sprites)
-	if not initial then
+	if G.GAME.in_corrupt_green then
 		self.ability.ovn_proper_cost = nil
 		self.ability.ovn_proper_sell = nil
+		self:set_cost()
 	end
 end
 

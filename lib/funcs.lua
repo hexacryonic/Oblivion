@@ -78,12 +78,6 @@ Ovn_f.corrupt_joker = function(card)
 
 	if corrupted_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[corrupted_card_key], false, true)
-		-- Corrupt Green Deck compatibility
-		if G.GAME.in_corrupt_green then
-			card.ability.ovn_proper_cost = nil
-			card.ability.ovn_proper_sell = nil
-			card:set_cost()
-		end
 	end
     add_simple_event(nil, nil, function()
         play_sound("ovn_abyss")
@@ -127,12 +121,6 @@ Ovn_f.purify_joker = function(card)
 
 	if pure_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[pure_card_key])
-		-- Corrupt Green Deck compatibility
-		if G.GAME.in_corrupt_green then
-			card.ability.ovn_proper_cost = nil
-			card.ability.ovn_proper_sell = nil
-			card:set_cost()
-		end
 	end
     add_simple_event(nil, nil, function()
         play_sound("ovn_pure")
