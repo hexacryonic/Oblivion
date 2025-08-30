@@ -365,14 +365,16 @@ function Game:start_run(args)
 			G.GAME.hands_last_played[key] = 0
 		end
 	end
-	add_simple_event(nil, nil, function ()
-		for _,joker_card in ipairs(G.jokers.cards) do
-			Ovn_f.set_complex_cost_labels(joker_card)
-		end
-		for _,cnsm_card in ipairs(G.consumeables.cards) do
-			Ovn_f.set_complex_cost_labels(cnsm_card)
-		end
-	end)
+	if G.GAME.in_corrupt_green then
+		add_simple_event(nil, nil, function ()
+			for _,joker_card in ipairs(G.jokers.cards) do
+				Ovn_f.set_complex_cost_labels(joker_card)
+			end
+			for _,cnsm_card in ipairs(G.consumeables.cards) do
+				Ovn_f.set_complex_cost_labels(cnsm_card)
+			end
+		end)
+	end
 end
 
 

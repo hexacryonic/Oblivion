@@ -58,7 +58,7 @@ match_indent = true
 target = "game.lua"
 pattern = "create_shop_card_ui(v)" # Multi-target
 position = "before"
-payload = "Ovn_f.set_complex_cost_labels(v)"
+payload = "if G.GAME.in_corrupt_green then Ovn_f.set_complex_cost_labels(v) end"
 match_indent = true
 
 # Spend complex money when buying in Corrupt Green Deck
