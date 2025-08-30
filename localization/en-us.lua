@@ -110,7 +110,8 @@ local loc =  {
 			},
 			p_ovn_wicked_normal_1 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
-			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal
+			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal,
+			p_ovn_wicked_normal_4 = macro.p_ovn_wicked_normal,
 		},
 
 		Blind = {
@@ -143,9 +144,13 @@ local loc =  {
 			e_ovn_miasma = {
 				name = "Miasma",
 				text = {
-					"{C:attention}Retriggers{} in scoring thrice,",
+					"{C:attention}Retriggers{} thrice,",
 					"then {C:ovn_corrupted}corrupts{} if possible,",
-					"otherwise {S:1.1,C:red,E:2}self-destructs{}"
+					"otherwise {S:1.1,C:red,E:2}self-destructs{}",
+					"{s:0.3} {}",
+					"{C:ovn_corrupted}Corrupt {}Jokers or {C:ovn_corrupted}Optic",
+					"cards {C:attention}retrigger {}once",
+					"and do {C:attention}not {}self-destruct"
 				}
 			}
 		},
