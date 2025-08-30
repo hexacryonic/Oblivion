@@ -223,7 +223,8 @@ return {
 		text = {
 			"After playing, each {C:attention}numbered {}card",
 			"has a {C:green}#1# in #2# {}chance to have",
-			"their enhancement {C:attention}transmuted"
+			"their enhancement {C:attention}transmuted",
+			corrupted_from("Midas Mask"),
 		}
 	},
 	j_ovn_supplydrop = {
