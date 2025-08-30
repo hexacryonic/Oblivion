@@ -579,15 +579,17 @@ SMODS.Seal {
 ----------
 SMODS.Edition {
 	key = "miasma",
-	config = { retriggers = 3 },
+	config = {
+		extra = {
+			retriggers = 3,
+			corrupt_retriggers = 1
+		}
+	},
 	loc_vars = function(self, info_queue, center)
-		local retriggers = (
-			center
-			and center.edition
-			and center.edition.retriggers
-			or self.config.retriggers
-		)
-		return { vars = { retriggers } }
+		return { vars = {
+			self.config.extra.retriggers,
+			self.config.extra.corrupt_retriggers,
+		}}
 	end,
 
 	shader = 'miasma',
@@ -606,17 +608,30 @@ SMODS.Edition {
 
 	calculate = function(self, card, context)
 		if context.other_card == card and (
-			-- Repeat playing cards
-			(context.repetition and context.cardarea == G.play)
-			-- or retrigger Jokers
-			or (context.retrigger_joker_check and not context.retrigger_joker)
-		) then return { repetitions = self.config.retriggers } end
+			context.repetition -- Repeat playing cards
+			or context.retrigger_joker_check -- or retrigger Jokers
+		) then
+			local repetitions = self.config.extra.retriggers
+			if (
+				(card.base and card.base.suit == 'ovn_Optics')
+				or Ovn_f.joker_is_purifiable(card.config.center.key)
+			) then
+				repetitions = self.config.extra.corrupt_retriggers
+			end
+			return { repetitions = repetitions }
+		end
 
-		-- Either corrupt or kill Joker
+		-- Either corrupt or kill Joker, or do nothing if Joker is corrupt
 		if context.after and context.cardarea == G.jokers then
 			-- Card is corruptable, proceed to corrupt
 			if Ovn_f.joker_is_corruptible(card.config.center.key) then
-				Ovn_f.corrupt_joker(card)
+				add_simple_event('after', 0.1, function ()
+					Ovn_f.corrupt_joker(card)
+					card:set_edition(nil)
+				end)
+
+			elseif Ovn_f.joker_is_purifiable(card.config.center.key) then
+				-- nothing :P
 
 			-- Card cannot be corrupted, self-destruct
 			else
@@ -627,16 +642,10 @@ SMODS.Edition {
 			end
 		end
 
-		-- Either corrupt or kill playing card
+		-- Corrupt non-Optic cards
 		if context.after and context.cardarea == G.play then
 			-- Editioned playing card is already optics, self-destruct
-			if card.base.suit == 'ovn_Optics' then
-				add_simple_event('after', 0.1, function ()
-					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
-				end)
-
-			-- Editioned playing card not optics, proceed to corrupt
-			else
+			if card.base.suit ~= 'ovn_Optics' then
 				add_simple_event('after', 0.1, function ()
 					card:set_edition(nil)
 					card:change_suit('ovn_Optics')
