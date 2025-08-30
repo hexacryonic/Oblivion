@@ -7,7 +7,7 @@
 -- 4. MODIFIER TRANSMUTATION
 -- 5. INSTABILITY
 -- 6. CORRUPT YELLOW DECK VALUES
--- 7. MISCELLANEOUS
+-- 8. MISCELLANEOUS
 
 
 
@@ -78,6 +78,12 @@ Ovn_f.corrupt_joker = function(card)
 
 	if corrupted_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[corrupted_card_key], false, true)
+		-- Corrupt Green Deck compatibility
+		if G.GAME.in_corrupt_green then
+			card.ability.ovn_proper_cost = nil
+			card.ability.ovn_proper_sell = nil
+			card:set_cost()
+		end
 	end
     add_simple_event(nil, nil, function()
         play_sound("ovn_abyss")
@@ -121,6 +127,12 @@ Ovn_f.purify_joker = function(card)
 
 	if pure_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[pure_card_key])
+		-- Corrupt Green Deck compatibility
+		if G.GAME.in_corrupt_green then
+			card.ability.ovn_proper_cost = nil
+			card.ability.ovn_proper_sell = nil
+			card:set_cost()
+		end
 	end
     add_simple_event(nil, nil, function()
         play_sound("ovn_pure")
@@ -419,139 +431,6 @@ Ovn_f.ease_discard_cost = function(amount, instant)
 		add_simple_event('immediate', nil, function()
 			_mod(amount)
 		end)
-	end
-end
-
-
-
------------------------------------
----- CORRUPT GREEN DECK VALUES ----
------------------------------------
-
--- Formats a complex number a+bi.\
--- Either one parameters (table - {a,b})\
--- or two parameters (a, b).
----@param a number|table
----@param b? number
----@return string
-Ovn_f.format_complex_number = function(a,b)
-	if type(a) == 'table' and not b then
-		b = a[2]
-		a = a[1]
-	end
-	if a == 0 and b == 0 then return "0" end
-	if b == 0 then return tostring(a) end
-	if a == 0 then return b .. "i" end
-
-	-- When converting to string, the negative b already has a negative sign
-	-- hence no need to specify here
-	local operator = b < 0 and "" or "+"
-	return a .. operator .. b .. "i"
-end
-
--- Formats a complex number to show it on the ease_complex_dollars attention text.
----@param mod number
----@param mod_i number
----@return string
-local function format_complex_change(mod, mod_i)
-	local dol = localize('$')
-	if mod < 0 and mod_i < 0 then
-		return "-" .. dol .. Ovn_f.format_complex_number(-mod, -mod_i)
-	end
-
-	if mod < 0 and mod_i == 0 then
-		return "-" .. dol .. -mod
-	end
-
-	if mod_i < 0 and mod == 0 then
-		return "-" .. dol .. -mod_i .. "i"
-	end
-
-	return "+" .. dol .. Ovn_f.format_complex_number(mod, mod_i)
-end
-
----@param a number
----@return number
-local function round(a) return math.floor(a+0.5) end
--- Sets a card's complex cost and sell cost.
-Ovn_f.set_complex_costs = function(card)
-	if card.cost then
-		card.complex_cost_label = Ovn_f.format_complex_number(Ovn_f.get_complex_cost(card.cost))
-	end
-	if card.sell_cost then
-		card.complex_sell_label = Ovn_f.format_complex_number(Ovn_f.get_complex_cost(card.sell_cost))
-	end
-end
-
--- Get the complex version of a card's cost.
----@param regular_cost number
----@return number
----@return number
-Ovn_f.get_complex_cost = function(regular_cost)
-	-- x -> a + bi, where a = 2/3x, b = 1/3x
-	return round(2*regular_cost/3), round(regular_cost/3)
-end
-
--- Changes dollars by a complex amount.
----@param mod number
----@param mod_i number
----@param instant? boolean
----@return nil
-Ovn_f.ease_complex_dollars = function(mod, mod_i, instant)
-	local function _mod()
-		local dollar_UI = G.HUD:get_UIE_by_ID('dollar_text_UI') --[[@as UIElement]]
-		mod = mod or 0
-		mod_i = mod_i or 0
-
-		local text = format_complex_change(mod, mod_i)
-
-		local col = G.C.MONEY
-		if (
-			(mod < 0 and mod_i < 0)
-			or (mod < 0 and mod_i == 0)
-			or (mod_i < 0 and mod == 0)
-		) then
-			col = G.C.RED
-		elseif (
-			(mod < 0 and mod_i > 0)
-			or (mod_i < 0 and mod > 0)
-		) then
-			col = G.C.GREEN
-		end
-
-		-- Ease from current dollars to new number of dollars
-		G.GAME.dollars = G.GAME.dollars + mod
-		G.GAME.dollars_i = G.GAME.dollars_i + mod_i
-		G.GAME.dollars_complex = Ovn_f.format_complex_number(G.GAME.dollars, G.GAME.dollars_i)
-		-- career stat stuff ig
-		if mod >= 0 then
-			inc_career_stat('c_dollars_earned', mod)
-		end
-
-		-- check unlock stuff
-		check_and_set_high_score('most_money', G.GAME.dollars)
-        check_for_unlock({type = 'money'})
-
-		-- Update UI
-		dollar_UI.config.object:update()
-		G.HUD:recalculate()
-
-		-- Popup text
-		attention_text{
-			text = text,
-			scale = 0.8,
-			hold = 0.7,
-			cover = dollar_UI.parent,
-			cover_colour = col,
-			align = 'cm'
-		}
-		play_sound('coin1')
-	end
-
-	if instant then
-		_mod(mod, mod_i)
-	else
-		add_simple_event('immediate', nil, function() _mod(mod, mod_i) end)
 	end
 end
 
