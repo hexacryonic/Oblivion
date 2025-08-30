@@ -495,8 +495,9 @@ SMODS.Joker {
 			context.ovn_corruption_occurred
 			and context.ovn_corruption_type == "Joker"
 			and not context.blueprint
+			and context.ovn_corrupted_card ~= card
 		) then
-			simple_scale(card, "xmult", "xmult_increase", G.C.MULT, "a_xmult")
+			simple_scale(card, "x_mult", "xmult_increase", G.C.MULT, "a_xmult")
 		end
 	end
 }
