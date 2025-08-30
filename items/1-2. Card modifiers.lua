@@ -588,7 +588,8 @@ SMODS.Edition {
 	loc_vars = function (self, info_queue, card)
 		local key = "e_ovn_miasma"
 
-		if (
+		if not (card and card.config and card.config.center) then
+		elseif (
 			card.base and card.base.suit == 'ovn_Optics'
 			or Ovn_f.joker_is_purifiable(card.config.center.key)
 		) then
