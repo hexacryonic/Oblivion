@@ -152,6 +152,31 @@ local loc =  {
 					"cards {C:attention}retrigger {}once",
 					"and do {C:attention}not {}self-destruct"
 				}
+			},
+			e_ovn_miasma_corrupted = {
+				name = "Miasma",
+				text = {"{C:attention}Retriggers{} once"}
+			},
+			e_ovn_miasma_playing_card = {
+				name = "Miasma",
+				text = {
+					"{C:attention}Retriggers{} thrice,",
+					"then {C:ovn_corrupted}corrupts{} into {C:ovn_optic}Optics",
+				}
+			},
+			e_ovn_miasma_corruptible_joker = {
+				name = "Miasma",
+				text = {
+					"{C:attention}Retriggers{} thrice,",
+					"then {C:ovn_corrupted}corrupts{}",
+				}
+			},
+			e_ovn_miasma_destroy = {
+				name = "Miasma",
+				text = {
+					"{C:attention}Retriggers{} thrice,",
+					"then {S:1.1,C:red,E:2}self-destructs{}",
+				}
 			}
 		},
 
@@ -175,7 +200,7 @@ local loc =  {
 				text = {
 					"{C:ovn_corrupted}Corrupts{} up to",
 					"{C:attention}#1#{} selected cards",
-					"to {C:ovn_optic}Optics{}"
+					"to {C:ovn_optic}Optics"
 				}
 			}
 		},

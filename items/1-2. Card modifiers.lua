@@ -585,11 +585,23 @@ SMODS.Edition {
 			corrupt_retriggers = 1
 		}
 	},
-	loc_vars = function(self, info_queue, center)
-		return { vars = {
-			self.config.extra.retriggers,
-			self.config.extra.corrupt_retriggers,
-		}}
+	loc_vars = function (self, info_queue, card)
+		local key = "e_ovn_miasma"
+
+		if (
+			card.base and card.base.suit == 'ovn_Optics'
+			or Ovn_f.joker_is_purifiable(card.config.center.key)
+		) then
+			key = "e_ovn_miasma_corrupted"
+		elseif card.base.suit then
+			key = "e_ovn_miasma_playing_card"
+		elseif Ovn_f.joker_is_corruptible(card.config.center.key) then
+			key = "e_ovn_miasma_corruptible_joker"
+		elseif card.area == G.jokers then
+			key = "e_ovn_miasma_destroy"
+		end
+
+		return {key = key}
 	end,
 
 	shader = 'miasma',
