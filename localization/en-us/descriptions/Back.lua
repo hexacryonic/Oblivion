@@ -52,6 +52,22 @@ return {
 			"with at least {C:money}$365 {}in bank",
 		}
 	},
+	b_ovn_c_green = {
+		name = 'Corrupt Green Deck',
+		text = {
+			"At end of each Round:",
+			"{C:money}$1{s:0.85} per remaining {C:blue}Hand",
+			"{C:money}$2i{s:0.85} per remaining {C:red}Discard",
+			"{s:0.3} {}",
+			"Shop prices are {C:green}complex",
+		},
+		unlock = {
+			"On {C:attention}Green {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win with {C:attention}Seed Money",
+			"and {C:attention}Money Tree",
+		}
+	},
 	b_ovn_c_ghost = {
 		name = 'Corrupt Ghost Deck',
 		text = {

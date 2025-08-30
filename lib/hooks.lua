@@ -14,6 +14,8 @@
 ---- GLOBAL FUNCTIONS ----
 --------------------------
 
+local add_simple_event = Ovn_f.add_simple_event
+
 -- Hook for Event Horizon effect
 local lvluphand_hook = level_up_hand
 function level_up_hand(card, hand, instant, amount)
@@ -120,6 +122,16 @@ local easehand_hook = ease_hands_played
 function ease_hands_played(mod, instant)
 	if not G.GAME.in_corrupt_yellow then
 		easehand_hook(mod, instant)
+	end
+end
+
+-- Hook to use ease_complex_dollars on Corrupt Green Deck
+local easedollars_hook = ease_dollars
+function ease_dollars(mod, instant)
+	if not G.GAME.in_corrupt_green then
+		easedollars_hook(mod, instant)
+	else
+		Ovn_f.ease_complex_dollars(mod, 0, instant)
 	end
 end
 
@@ -321,6 +333,13 @@ function Card:set_seal(_seal, silent, immediate)
 	end
 end
 
+-- Hook for complex costs (visual, Corrupt Green Deck)
+local card_setcost_hook = Card.set_cost
+function Card:set_cost()
+	card_setcost_hook(self)
+	Ovn_f.set_complex_costs(self)
+end
+
 
 
 ---------------------
@@ -335,6 +354,7 @@ end
 ------ cumulative_unique_joker_count INTEGER
 ------ cumulative_unique_jokers { STRING: BOOLEAN }
 ------ hands_last_played { STRING: INTEGER }
+---- Setting complex costs (display) for all cards
 local startrun_hook = Game.start_run
 function Game:start_run(args)
 	-- For use in C-Ghost deck
@@ -362,6 +382,14 @@ function Game:start_run(args)
 			G.GAME.hands_last_played[key] = 0
 		end
 	end
+	add_simple_event(nil, nil, function ()
+		for _,joker_card in ipairs(G.jokers.cards) do
+			Ovn_f.set_complex_costs(joker_card)
+		end
+		for _,cnsm_card in ipairs(G.consumeables.cards) do
+			Ovn_f.set_complex_costs(cnsm_card)
+		end
+	end)
 end
 
 

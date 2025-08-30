@@ -172,6 +172,32 @@ SMODS.Back{
 }
 
 ---------------------
+-- Corrupt Green Deck
+---------------------
+SMODS.Back{
+	key = "c_green",
+
+	atlas = "cdeck_atlas",
+	pos = { x = 3, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = function (self, args)
+		if achievement_get("groundless_greenery") then return true end
+	end,
+
+	apply = function (self)
+		G.GAME.in_corrupt = true
+		G.GAME.in_corrupt_green = true
+
+		G.GAME.dollars_i = 0
+		G.GAME.dollars_complex = tostring(G.GAME.dollars)
+		Ovn_f.ease_complex_dollars(0,0)
+		G.GAME.modifiers.money_per_hand = 1
+		G.GAME.modifiers.money_per_discard = 2 -- i
+	end
+}
+
+---------------------
 -- Corrupt Ghost Deck
 ---------------------
 SMODS.Back{

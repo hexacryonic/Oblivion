@@ -12,6 +12,8 @@
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
 
+local add_simple_event = Ovn_f.add_simple_event
+
 -- Generates the UIBox definition for Corrupted Red Deck play/discard buttons.
 ---@return Balatro.UIBoxDefinition
 local uiboxbuttons_hook_c_red = function()
@@ -151,6 +153,32 @@ local function hud_ui_c_yellow(ret)
 	}
 end
 
+-- On Corrupt Yellow Deck, replaces the hand/discard count display with a hand/discard COST display.
+---@param ret any
+---@return nil
+local function hud_ui_c_green(ret)
+	local scale = 0.4
+	local dollars_txt = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes[3].nodes[1].nodes[1].nodes[1].nodes[1]
+	dollars_txt.config.object:remove()
+	dollars_txt.config.object = DynaText{
+		string = {{
+			ref_table = G.GAME,
+			ref_value = 'dollars_complex',
+			prefix = localize('$')
+		}},
+		scale_function = function ()
+			return scale_number(G.GAME.dollars, 2.2 * scale, 99999, 1000000)
+		end,
+		maxw = 1.35,
+		colours = {G.C.MONEY},
+		font = G.LANGUAGES['en-us'].font,
+		shadow = true,
+		spacing = 2,
+		bump = true,
+		scale = 2.2*scale
+	}
+end
+
 -- Generates the UIBox definition for Pure Visage switch/sell buttons.
 ---@param card Card
 ---@return Balatro.UIBoxDefinition
@@ -193,7 +221,7 @@ local function uidef_usesellbtn_hook_pure_visage(card)
 				-- no idea why jtml for this doesnt work so here
 				{n=G.UIT.R, config={align = "cm"}, nodes={
 					{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
-					{n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+					{n=G.UIT.T, config={ref_table = card, ref_value = G.GAME.in_corrupt_green and 'complex_sell_label' or 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
 				}}
 			}}
 		}}
@@ -241,11 +269,13 @@ function create_UIBox_buttons()
 end
 
 -- Hook to enable Corrupt Yellow Deck's displays
-local uiboxhud_hood = create_UIBox_HUD
+local uiboxhud_hook = create_UIBox_HUD
 function create_UIBox_HUD()
-	local ret = uiboxhud_hood()
+	local ret = uiboxhud_hook()
 	if G.GAME.in_corrupt_yellow then
 		hud_ui_c_yellow(ret)
+	elseif G.GAME.in_corrupt_green then
+		hud_ui_c_green(ret)
 	end
 	return ret
 end
@@ -303,5 +333,248 @@ function G.FUNCS.can_discard(e)
 		e.config.button = nil
 	else
 		funcs_candiscard_hook(e)
+	end
+end
+
+-- Hook to include complex evaluation rows
+local funcs_evalround_hook = G.FUNCS.evaluate_round
+G.FUNCS.evaluate_round = function()
+	if not G.GAME.in_corrupt_green then
+		funcs_evalround_hook()
+		return
+	end
+
+	total_cashout_rows = 0
+	local pitch = 0.95
+	local dollars = 0
+	local dollars_i = 0
+
+	-- Blind reward
+	if G.GAME.chips - G.GAME.blind.chips >= 0 then
+		add_round_eval_row({dollars = G.GAME.blind.dollars, name='blind1', pitch = pitch})
+		pitch = pitch + 0.06
+		dollars = dollars + G.GAME.blind.dollars
+	else
+		-- Saved by Mr. Bones
+		add_round_eval_row({dollars = 0, name='blind1', pitch = pitch, saved = true})
+		pitch = pitch + 0.06
+	end
+
+	-- Visual stuff
+	local delay_1 = 1.3*math.min(G.GAME.blind.dollars+2, 7)/2*0.15 + 0.5
+	add_simple_event('before', delay_1, function ()
+		G.GAME.blind:defeat()
+	end)
+	delay(0.2)
+	add_simple_event(nil, nil, function ()
+		ease_background_colour_blind(G.STATES.ROUND_EVAL, '')
+	end)
+
+	-- Send contexts
+	SMODS.calculate_context{round_eval = true}
+	G.GAME.selected_back:trigger_effect({context = 'eval'})
+
+	-- $1 per hands left
+	local hands_left = G.GAME.current_round.hands_left
+	if hands_left > 0 then
+		local hands_reward = hands_left*(G.GAME.modifiers.money_per_hand or 1)
+		add_round_eval_row({dollars = hands_reward, disp = hands_left, bonus = true, name='hands', pitch = pitch})
+		pitch = pitch + 0.06
+		dollars = dollars + hands_reward
+	end
+
+	-- $2i per discards left
+	local discards_left = G.GAME.current_round.discards_left
+	if discards_left > 0 then
+		local discards_reward = discards_left*(G.GAME.modifiers.money_per_discard)
+		Ovn_f.add_complex_roundeval_row({dollars = discards_reward, disp = discards_left, bonus = true, name='discards', pitch = pitch})
+		pitch = pitch + 0.06
+		dollars_i = dollars_i + discards_reward
+	end
+
+	-- Get dollar bonus per Joker
+	local i = 0
+	for _, area in ipairs(SMODS.get_card_areas('jokers')) do
+		for _, _card in ipairs(area.cards) do
+			local ret = _card:calculate_dollar_bonus()
+
+			-- TARGET: calc_dollar_bonus per card
+			if ret then
+				i = i+1
+				add_round_eval_row({dollars = ret, bonus = true, name='joker'..i, pitch = pitch, card = _card})
+				pitch = pitch + 0.06
+				dollars = dollars + ret
+			end
+		end
+	end
+	-- Get dollar bonus per tag
+	for i = 1, #G.GAME.tags do
+		local ret = G.GAME.tags[i]:apply_to_run({type = 'eval'})
+		if ret then
+			add_round_eval_row({dollars = ret.dollars, bonus = true, name='tag'..i, pitch = pitch, condition = ret.condition, pos = ret.pos, tag = ret.tag})
+			pitch = pitch + 0.06
+			dollars = dollars + ret.dollars
+		end
+	end
+
+	-- Evaluate interest
+	if G.GAME.dollars >= 5 then
+		local interest = G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
+		add_round_eval_row({bonus = true, name='interest', pitch = pitch, dollars = interest})
+		pitch = pitch + 0.06
+		if not G.GAME.seeded or SMODS.config.seeded_unlocks then
+			local career_stats = G.PROFILES[G.SETTINGS.profile].career_stats
+			if interest == G.GAME.interest_amount*G.GAME.interest_cap/5 then
+				career_stats.c_round_interest_cap_streak = career_stats.c_round_interest_cap_streak + 1
+			else
+				career_stats.c_round_interest_cap_streak = 0
+			end
+		end
+		check_for_unlock({type = 'interest_streak'})
+		dollars = dollars + interest
+	end
+
+	-- Evaluate complex interest
+	if G.GAME.dollars_i >= 5 then
+		local interest_i = math.min(math.floor(G.GAME.dollars_i/5), G.GAME.interest_cap/5)
+		Ovn_f.add_complex_roundeval_row({bonus = true, name = 'interest', pitch = pitch, dollars = interest_i})
+		pitch = pitch + 0.06
+		dollars_i = dollars_i + interest_i
+	end
+
+	pitch = pitch + 0.06
+
+	if total_cashout_rows > 7 then
+		local total_hidden = total_cashout_rows - 7
+		add_simple_event('before', 0.38, function ()
+			local hidden = {n=G.UIT.R, config={align = "cm"}, nodes={
+				{n=G.UIT.O, config={object = DynaText({
+					string = {localize{type = 'variable', key = 'cashout_hidden', vars = {total_hidden}}}, 
+					colours = {G.C.WHITE}, shadow = true, float = false, 
+					scale = 0.45,
+					font = G.LANGUAGES['en-us'].font, pop_in = 0
+				})}}
+			}}
+
+			G.round_eval:add_child(hidden, G.round_eval:get_UIE_by_ID('bonus_round_eval'))
+		end)
+	end
+	Ovn_f.add_cashout_button({name = 'bottom', dollars = dollars, dollars_i = dollars_i})
+end
+
+-- Hook to determine if a complex cost can be bought (Corrupt Green Deck)
+local funcs_canbuy_hook = G.FUNCS.can_buy
+G.FUNCS.can_buy = function(e)
+	if G.GAME.in_corrupt_green then
+		local cost, cost_i = Ovn_f.get_complex_cost(e.config.ref_table.cost)
+		local cost_gt_dollars = (
+			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
+			or (cost_i > G.GAME.dollars_i)
+		)
+
+		if (
+			cost_gt_dollars
+			and cost > 0
+			and cost_i > 0
+		) then
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        	e.config.button = nil
+		else
+			e.config.colour = G.C.ORANGE
+        	e.config.button = 'buy_from_shop'
+		end
+
+		if e.config.ref_parent and e.config.ref_parent.children.buy_and_use then
+			if e.config.ref_parent.children.buy_and_use.states.visible then
+				e.UIBox.alignment.offset.y = -0.6
+			else
+				e.UIBox.alignment.offset.y = 0
+			end
+		end
+	else
+		funcs_canbuy_hook(e)
+	end
+end
+
+-- Hook to determine if a complex cost can be bought-then-used (Corrupt Green Deck)
+local funcs_canbuyuse_hook = G.FUNCS.can_buy_and_use
+G.FUNCS.can_buy_and_use = function(e)
+	if G.GAME.in_corrupt_green then
+		local cost, cost_i = Ovn_f.get_complex_cost(e.config.ref_table.cost)
+		local cost_gt_dollars = (
+			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
+			or (cost_i > G.GAME.dollars_i)
+		)
+		local can_use = e.config.ref_table:can_use_consumeable()
+
+		if (
+			cost_gt_dollars
+			and cost > 0
+			and cost_i > 0
+		) or not can_use then
+			e.UIBox.states.visible = false
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+			e.config.button = nil
+		else
+			if e.config.ref_table.highlighted then
+				e.UIBox.states.visible = true
+			end
+			e.config.colour = G.C.SECONDARY_SET.Voucher
+			e.config.button = 'buy_from_shop'
+		end
+	else
+		funcs_canbuyuse_hook(e)
+	end
+end
+
+-- Hook to determine if a complex cost can be opened (booster packs) (Corrupt Green Deck)
+local funcs_canopen_hook = G.FUNCS.can_open
+G.FUNCS.can_open = function(e)
+	if G.GAME.in_corrupt_green then
+		local cost, cost_i = Ovn_f.get_complex_cost(e.config.ref_table.cost)
+		local cost_gt_dollars = (
+			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
+			or (cost_i > G.GAME.dollars_i)
+		)
+
+		if (
+			cost_gt_dollars
+			and cost > 0
+			and cost_i > 0
+		) then
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+			e.config.button = nil
+		else
+			e.config.colour = G.C.GREEN
+			e.config.button = 'use_card'
+		end
+	else
+		funcs_canopen_hook(e)
+	end
+end
+
+-- Hook to determine if a complex cost can be redeemed (vouchers) (Corrupt Green Deck)
+local funcs_canredeem_hook = G.FUNCS.can_redeem
+G.FUNCS.can_redeem = function(e)
+	if G.GAME.in_corrupt_green then
+		local cost, cost_i = Ovn_f.get_complex_cost(e.config.ref_table.cost)
+		local cost_gt_dollars = (
+			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
+			or (cost_i > G.GAME.dollars_i)
+		)
+
+		if (
+			cost_gt_dollars
+			and cost > 0
+			and cost_i > 0
+		) then
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+			e.config.button = nil
+		else
+			e.config.colour = G.C.GREEN
+			e.config.button = 'use_card'
+		end
+	else
+		funcs_canredeem_hook(e)
 	end
 end

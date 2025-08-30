@@ -10,6 +10,8 @@
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
 
+local add_simple_event = Ovn_f.add_simple_event
+
 -- Form a list of held but unselected playing cards, for datcarding.
 ---@return table
 local function get_cards_to_discard()
@@ -172,3 +174,113 @@ end
 -- will move somewhere else later idk
 G.C.INST = HEX('04248F')
 G.C.UI_INST = G.C.INST
+
+Ovn_f.add_complex_roundeval_row = function(config)
+	config = config or {}
+	local width = G.round_eval.T.w - 0.51
+	local dollars = config.dollars or 1
+	local dollars_txt = (dollars ~= 1 and dollars or "") .. "i"
+	local scale = 0.9
+
+	add_simple_event('after', 0.5, function ()
+		local left_text = {}
+		if config.name == 'discards' then
+			table.insert(left_text, {n=G.UIT.T, config={
+				text = config.disp,
+				scale = 0.8*scale,
+				colour = G.C.RED,
+				shadow = true,
+				juice = true
+			}})
+			table.insert(left_text, {n=G.UIT.O, config={
+				object = DynaText({
+					string = {" "..localize{
+						type = 'variable',
+						key = 'remaining_discard_money_i',
+						vars = {(G.GAME.modifiers.money_per_discard or 0) ~= 1 and (G.GAME.modifiers.money_per_discard or 0) or ""}
+					}},
+					colours = {G.C.UI.TEXT_LIGHT},
+					shadow = true,
+					pop_in = 0,
+					scale = 0.4*scale,
+					silent = true
+				})
+			}})
+
+		elseif config.name == 'interest' then
+			table.insert(left_text, {n=G.UIT.T, config={
+				text = dollars_txt,
+				scale = 0.8*scale,
+				colour = G.C.MONEY,
+				shadow = true,
+				juice = true
+			}})
+			table.insert(left_text,{n=G.UIT.O, config={
+				object = DynaText({
+					string = {" "..localize{
+						type = 'variable',
+						key = 'interest_i',
+						vars = {G.GAME.interest_amount, 5, G.GAME.interest_amount*G.GAME.interest_cap/5}
+					}},
+					colours = {G.C.UI.TEXT_LIGHT},
+					shadow = true,
+					pop_in = 0,
+					scale = 0.4*scale,
+					silent = true
+				})
+			}})
+		end
+
+		local full_row = {n=G.UIT.R, config={align = "cm", minw = 5}, nodes={
+			{n=G.UIT.C, config={padding = 0, minw = width*0.55, align = "cl"}, nodes=left_text},
+			{n=G.UIT.C, config={padding = 0, minw = width*0.45, align = "cr"}, nodes={{n=G.UIT.C, config={align = "cm", id = 'dollar_'..config.name..'_i'},nodes={}}}}
+		}}
+		G.round_eval:add_child(full_row, G.round_eval:get_UIE_by_ID(config.bonus and 'bonus_round_eval' or 'base_round_eval'))
+		play_sound('cancel', config.pitch or 1)
+		play_sound('highlight1',( 1.5*config.pitch) or 1, 0.2)
+	end)
+
+	local dollar_row = 0
+	add_simple_event('before', 0.38, function ()
+		G.round_eval:add_child(
+			{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(dollar_row+1)..'_'..config.name}, nodes={
+				{n=G.UIT.O, config={object = DynaText({string = {localize('$')..dollars_txt}, colours = {G.C.MONEY}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
+			}},
+			G.round_eval:get_UIE_by_ID('dollar_'..config.name..'_i')
+		)
+		play_sound('coin3', 0.9+0.2*math.random(), 0.7)
+		play_sound('coin6', 1.3, 0.8)
+	end)
+end
+
+Ovn_f.add_cashout_button = function(config)
+	config = config or {}
+	local width = G.round_eval.T.w - 0.51
+	local dollars = config.dollars
+	local dollars_i = config.dollars_i
+	local dollars_txt = Ovn_f.format_complex_number(dollars, dollars_i)
+	local scale = 0.9
+
+	delay(0.4)
+	add_simple_event('before', 0.5, function ()
+		UIBox{
+			definition =
+			{n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
+				{n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+					{n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+					{n=G.UIT.T, config={text = localize('$')..dollars_txt, scale = 1.2*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+				}},
+			}},
+			config = {
+				align = 'tmi',
+				offset ={x=0,y=0.4},
+				major = G.round_eval
+			}
+		}
+		G.GAME.current_round.dollars = config.dollars
+		G.GAME.current_round.dollars_i = config.dollars_i
+
+		play_sound('coin6', config.pitch or 1)
+		G.VIBRATION = G.VIBRATION + 1
+	end)
+end
