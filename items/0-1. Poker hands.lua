@@ -22,7 +22,7 @@ SMODS.PokerHandPart{ -- Spectrum base (yoink)
 		end
 
 		if (
-            num_suits = (5 - has_wild)
+            num_suits = 5 - has_wild
             and has_wild >= 1
 			and G.GAME.hands["ovn_Spectrum"].played > 0
 		) then
