@@ -3,7 +3,15 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# Change cash-out easing on Corrupt Green Deck
+# lovely/corrupt_green_deck.toml
+# Corrupt Green Deck-specific changes
+# In particular these changes are for complex cost support.
+
+# ----
+
+# function G.FUNCS.cash_out
+
+# If on Corrupt Green Deck, then ease_dollars -> Ovn_f.ease_complex_dollars
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"
@@ -18,6 +26,7 @@ end
 '''
 match_indent = true
 
+# Record previous round complex dollars
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"
@@ -26,41 +35,9 @@ position = "after"
 payload = "G.GAME.previous_round.dollars_i = G.GAME.dollars_i"
 match_indent = true
 
-# Display complex cost in Corrupt Green Deck
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = '''
-local t1 = {
-    n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
-        {n=G.UIT.R, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
-          {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card, ref_value = 'cost'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
-        }}
-    }}
-'''
-position = "after"
-payload = '''
-if G.GAME.in_corrupt_green then
-  t1.nodes[1].nodes[1].config.object:remove()
-  t1 = {
-      n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
-          {n=G.UIT.R, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
-            {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card.ability, ref_value = 'complex_cost_label'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
-          }}
-      }}
-end
-'''
-match_indent = true
+# ----
 
-# Fix for loading shop cards not displaying complex costs in Corrupt Green Deck
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = "create_shop_card_ui(v)" # Multi-target
-position = "before"
-payload = "if G.GAME.in_corrupt_green then Ovn_f.set_complex_cost_labels(v) end"
-match_indent = true
-
+# function G.FUNCS.buy_from_shop
 # Spend complex money when buying in Corrupt Green Deck
 [[patches]]
 [patches.pattern]
@@ -81,9 +58,11 @@ else
   Ovn_f.ease_complex_dollars(-cost, -cost_i or 0)
 end
 '''
-
 match_indent = true
 
+# ----
+
+# function G.UIDEF.use_and_sell_buttons
 # Sell button displays complex cost on Corrupt Green Deck
 [[patches]]
 [patches.pattern]
@@ -125,6 +104,51 @@ end
 '''
 match_indent = true
 
+# ----
+
+# function create_shop_card_ui
+# Shop items display complex cost in Corrupt Green Deck
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+local t1 = {
+    n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
+        {n=G.UIT.R, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
+          {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card, ref_value = 'cost'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
+        }}
+    }}
+'''
+position = "after"
+payload = '''
+if G.GAME.in_corrupt_green then
+  t1.nodes[1].nodes[1].config.object:remove()
+  t1 = {
+      n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
+          {n=G.UIT.R, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
+            {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card.ability, ref_value = 'complex_cost_label'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
+          }}
+      }}
+end
+'''
+match_indent = true
+
+# ----
+
+# function Game:update_shop
+# pattern is MULTI-TARGET
+# Fix for loading shop cards not displaying complex costs in Corrupt Green Deck
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "create_shop_card_ui(v)"
+position = "before"
+payload = "if G.GAME.in_corrupt_green then Ovn_f.set_complex_cost_labels(v) end"
+match_indent = true
+
+# ----
+
+# function Card:sell_card
 # Sell button eases complex dollars on Corrupt Green Deck
 [[patches]]
 [patches.pattern]
@@ -141,6 +165,11 @@ end
 '''
 match_indent = true
 
+# ----
+
+# function Card:open
+# function Card:redeem
+# pattern is MULTI-TARGET
 # Redeeming Vouchers/opening booster packs eases complex dollars on Corrupt Green Deck
 [[patches]]
 [patches.pattern]

@@ -3,28 +3,35 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
+# ----
+
+# function Game:main_menu
 # Replace title Ace of Spades with Optics of Spades
 [[patches]]
 [patches.pattern]
 target = "game.lua"
 pattern = "local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.S_A, G.P_CENTERS.c_base)"
 position = "at"
-payload = '''
-local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS['ovn_O'..'_'..'A'], G.P_CENTERS.c_base)
-'''
+payload = "local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS['ovn_O_A'], G.P_CENTERS.c_base)"
 match_indent = true
 
+# ----
+
+# function Game:main_menu
+# function Game:demo_cta (defunct)
+# pattern is MULT-TARGET
 # Replace colors of title splash background
 [[patches]]
 [patches.pattern]
 target = "game.lua"
 pattern = "{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},"
 position = "at"
-payload = '''
-{name = 'colour_1', ref_table = G.C, ref_value = 'PURPLE'},
-'''
+payload = "{name = 'colour_1', ref_table = G.C, ref_value = 'PURPLE'},"
 match_indent = true
 
+# ----
+
+# function Game:splash_screen
 # Replace intro Jimbo with a random corrupted Joker
 [[patches]]
 [patches.pattern]
@@ -44,6 +51,33 @@ SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CA
 '''
 match_indent = true
 
+# ----
+
+# function ease_background_colour_blind
+# Corrupt background
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''elseif G.GAME.won then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+position = "at"
+payload = '''elseif G.GAME.won and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
+elseif G.GAME.won and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+match_indent = true
+
+# ----
+
+# function Card:set_base
 # Optics' base chips are doubled
 [[patches]]
 [patches.pattern]
@@ -63,6 +97,9 @@ end
 '''
 match_indent = true
 
+# ----
+
+# function generate_card_ui
 # Show tooltips for Joker corruptibility and Optics effect
 [[patches]]
 [patches.pattern]
@@ -91,6 +128,9 @@ end
 '''
 match_indent = true
 
+# ----
+
+# function get_current_pool
 # Joker banishing, inspired by Cryptid
 [[patches]]
 [patches.pattern]
@@ -103,7 +143,10 @@ if v.key == 'j_cavendish' and Ovn_f.has_joker('j_ovn_aeon') then add = true end
 '''
 match_indent = true
 
-# Implementation of temporary hand size decreases
+# ----
+
+# function new_round
+# Variable for temporary hand size change set on round start
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
@@ -112,6 +155,10 @@ position = "after"
 payload = "G.GAME.current_round.temp_handsize_change = 0"
 match_indent = true
 
+# ----
+
+# function end_round
+# Temporary hand size change undone
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
@@ -123,63 +170,9 @@ G.GAME.current_round.temp_handsize_change = 0
 '''
 match_indent = true
 
-# Instability is not changed when hand is parsed
-[[patches]]
-[patches.pattern]
-target = "cardarea.lua"
-pattern = "update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})"
-position = 'at'
-payload = '''if name ~= "ovn_instability" then
-  update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})
-end'''
-match_indent = true
+# ----
 
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = "update_hand_text({delay = 0}, {[name] = parameter.default_value})"
-position = 'at'
-payload = '''if name ~= "ovn_instability" then
-  update_hand_text({delay = 0}, {[name] = parameter.default_value})
-end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = 'cardarea.lua'
-pattern = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
-    parameter.current = G.GAME.hands[text][name] or parameter.default_value
-    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
-end'''
-position = 'at'
-payload = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
-  if name ~= "ovn_instability" then
-    parameter.current = G.GAME.hands[text][name] or parameter.default_value
-    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
-  end
-end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = 'cardarea.lua'
-pattern = "update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})"
-position = 'after'
-payload = '''if name ~= "ovn_instability" then
-  update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})
-end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = "parameter.current = parameter.default_value"
-position = 'at'
-payload = '''if name ~= "ovn_instability" then
-  parameter.current = parameter.default_value
-end'''
-match_indent = true
-
+# function Card:open
 # Migraine makes all standard pack cards Optics
 [[patches]]
 [patches.pattern]
@@ -192,8 +185,11 @@ payload = '''if Ovn_f.has_joker('j_ovn_migraine') and (card.ability.set == "Defa
 end'''
 match_indent = true
 
-# Cigarette Card makes all Uncommons Miasma
-# (This patch disables specifying editions in the above condition)
+# ----
+
+# In Steamodded:
+# function SMODS.create_card
+# If holding Cigarette Card, prevent Uncommon Jokers from spawning with any other edition
 [[patches]]
 [patches.pattern]
 target = '''=[SMODS _ "src/utils.lua"]'''
@@ -206,6 +202,10 @@ end
 '''
 match_indent = true
 
+# ----
+
+# function create_card
+# If holding Cigarette Card, Uncommon Jokers spawn with Miasma
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
@@ -216,6 +216,9 @@ payload = '''if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.r
 end'''
 match_indent = true
 
+# ----
+
+# function G.FUNCS.evaluate_play
 # Update last-played-hand tracker
 [[patches]]
 [patches.pattern]
@@ -225,27 +228,9 @@ position = "after"
 payload = "Ovn_f.update_hands_last_played(text)"
 match_indent = true
 
-# Corrupt background
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = '''elseif G.GAME.won then
-    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
-elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
-    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
-'''
-position = "at"
-payload = '''elseif G.GAME.won and G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
-elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
-elseif G.GAME.won and not G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
-elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
-    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
-'''
-match_indent = true
+# ----
 
+# function Game:start_run
 # Fix for corrupt bg not appearing on run load
 # might need to put "is_corrupt" as Back property
 [[patches]]
@@ -259,8 +244,10 @@ if get_the_fucking_back:match('b_ovn_c_') then self.GAME.in_corrupt = true end
 '''
 match_indent = true
 
-# Fix for corrupt bg not appearing on run load
-# might need to put "is_corrupt" as Back property
+# ----
+
+# function G.FUNCS.evaluate_play
+# Note whether specific hands are played in a round
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"

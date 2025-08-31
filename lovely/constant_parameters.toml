@@ -1,0 +1,85 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/constant_parameters.toml
+# "parameters" refer to scoring parameters
+# All of these changes enable Instability to not change when the hand is being evaluated.
+
+[vars] # To change which parameter to exclude, change this conditional
+parameter_conditional = 'name ~= "ovn_instability"'
+
+# ----
+
+# All following patches target function CardArea:parse_highlighted
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})"
+position = 'at'
+payload = '''
+if {{lovely:parameter_conditional}} then
+  update_hand_text({immediate = true, nopulse = true, delay = 0}, {[name] = parameter.default_value})
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
+    parameter.current = G.GAME.hands[text][name] or parameter.default_value
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
+end'''
+position = 'at'
+payload = '''
+for name, parameter in pairs(SMODS.Scoring_Parameters) do
+  if {{lovely:parameter_conditional}} then
+    parameter.current = G.GAME.hands[text][name] or parameter.default_value
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
+  end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})"
+position = 'at'
+payload = '''
+if {{lovely:parameter_conditional}} then
+  update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = '?'})
+end
+'''
+match_indent = true
+
+# ----
+
+# All following patches target function G.FUNCS.evaluate_play
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "update_hand_text({delay = 0}, {[name] = parameter.default_value})"
+position = 'at'
+payload = '''
+if {{lovely:parameter_conditional}} then
+  update_hand_text({delay = 0}, {[name] = parameter.default_value})
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "parameter.current = parameter.default_value"
+position = 'at'
+payload = '''
+if {{lovely:parameter_conditional}} then
+  parameter.current = parameter.default_value
+end
+'''
+match_indent = true
