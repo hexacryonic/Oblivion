@@ -270,7 +270,7 @@ payload = '''
 if disp_text == "Royal Flush" then
   G.GAME.current_round.played_royal_flush = true
 end
-if next(poker_hands["ovn_Straight Spectrum"] then
+if next(poker_hands["ovn_Straight Spectrum"]) then
   G.GAME.current_round.played_straight_spec = true
 end
 '''
