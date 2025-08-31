@@ -335,3 +335,10 @@ function G.FUNCS.can_discard(e)
 		funcs_candiscard_hook(e)
 	end
 end
+
+local funcs_cashout_hook = G.FUNCS.cash_out
+function G.FUNCS.cash_out(e)
+	funcs_cashout_hook(e)
+	G.GAME.current_round.played_royal_flush = false
+	G.GAME.current_round.played_straight_spec = false
+end

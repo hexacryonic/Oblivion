@@ -157,8 +157,31 @@ SMODS.Achievement{
 	end
 }
 
--- absolved abandoment, order = 9
--- checkered changeling, order = 10
+----------------
+-- Absolved Abandonment
+----------------
+SMODS.Achievement{
+	key = "absolved_abandonment",
+	order = 9,
+	unlock_condition = function (self, args)
+		if args.type == 'win' and cdeck_cond("b_abandoned") then
+			return G.GAME.current_round.played_royal_flush
+		end
+	end
+}
+
+-----------------------
+-- Absolved Abandonment
+-----------------------
+SMODS.Achievement{
+	key = "checkered_changeling",
+	order = 10,
+	unlock_condition = function (self, args)
+		if args.type == 'win' and cdeck_cond("b_checkered") then
+			return G.GAME.current_round.played_straight_spec
+		end
+	end
+}
 
 ----------------
 -- Zodiac Zenith
@@ -167,7 +190,7 @@ SMODS.Achievement{
 	key = "zodiac_zenith",
 	order = 11,
 	unlock_condition = function (self, args)
-		if args.type == 'win' then
+		if args.type == 'win' and cdeck_cond("b_zodiac") then
 			local unique_tarotplanet_count = 0
 			for _,consumable_info in pairs(G.GAME.consumeable_usage) do
 				if consumable_info.set == "Tarot" or consumable_info.set == "Planet" then
