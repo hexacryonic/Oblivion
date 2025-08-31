@@ -298,7 +298,7 @@ SMODS.Back{
 					set = 'Spectral',
 					key = selected_spec,
 					area = G.ovn_ghostspec,
-					edition = 'e_negative'
+                    edition = 'e_ovn_miasma'
 				}
 
 				-- god-awful requirement of timings

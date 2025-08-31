@@ -84,7 +84,7 @@ SMODS.Consumable {
 	key = "perception",
 	cost = 2,
 	atlas = "abyss_atlas",
-	config = {max_highlighted = 2, suit_conv = 'ovn_Optics'},
+    config = {max_highlighted = 3, suit_conv = 'ovn_Optics'},
 	loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 	pos = {x=1, y=0},
 

@@ -365,9 +365,9 @@ SMODS.Joker {
 	config = {
 		extra = {
 			xmult_set = {
-				j_todo_list = 0.2,
-				j_card_sharp = 0.3,
-				j_obelisk = 0.4
+                j_todo_list = 0.1,
+                j_card_sharp = 0.15,
+                j_obelisk = 0.2
 			},
 			xmult = 1,
 			last_played_threshold = 3
