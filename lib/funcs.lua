@@ -42,21 +42,6 @@ function Ovn_f.compile_localization(loc_table, lang)
 	end
 end
 
--- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value\
--- or if other parameters such as blocking require specification.
----@param trigger string | nil
----@param delay number | nil
----@param func function
----@return nil
-Ovn_f.add_simple_event = function(trigger, delay, func)
-	G.E_MANAGER:add_event(Event {
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
 local add_simple_event = Ovn_f.add_simple_event
 
 

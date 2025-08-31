@@ -13,6 +13,24 @@ Oblivion.mod_path = tostring(SMODS.current_mod.path)
 -- Function object
 Ovn_f = {}
 
+-- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
+-- Event function will always return true, so "return true" is not required.\
+-- Consequently, do not use this function if the event function needs to return a non-true value\
+-- or if other parameters such as blocking require specification.
+---@param trigger string | nil
+---@param delay number | nil
+---@param func function
+---@return nil
+Ovn_f.add_simple_event = function(trigger, delay, func)
+	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
+	G.E_MANAGER:add_event(Event {
+		trigger = trigger,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
+
+-- Sets description box styling
 SMODS.current_mod.description_loc_vars = function()
 	return {
 		background_colour = G.C.CLEAR,
@@ -21,6 +39,9 @@ SMODS.current_mod.description_loc_vars = function()
 	}
 end
 
+-- Loads all Lua files in a directory.
+---@param folder_name string
+---@return nil
 function Ovn_f.load_directory(folder_name)
 	local mod_path = Oblivion.mod_path
 	local files = NFS.getDirectoryItems(mod_path .. folder_name)
