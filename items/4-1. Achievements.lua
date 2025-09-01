@@ -307,8 +307,11 @@ SMODS.Achievement{
 	key = "autocannibalism",
 	order = 19,
 	unlock_condition = function (self, args)
-		if args.type == 'ovn_sell_supply_drop' then
-			return G.PROFILES[G.SETTINGS.profile].ovn_supply_drop == "j_ovn_supplydrop"
+		if (
+			args.type == 'ovn_sell_supply_drop'
+			and G.PROFILES[G.SETTINGS.profile].ovn_supply_drop == "j_ovn_supplydrop"
+		) then
+			return true
 		end
 	end
 }
