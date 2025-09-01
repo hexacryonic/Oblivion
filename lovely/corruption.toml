@@ -1,0 +1,73 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/corruption.toml
+# Changes specific to Optic cards and Corrupt Jokers
+
+# ----
+
+# function Card:set_base
+# Optics' base chips are doubled
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if initial then self.base.original_value = self.base.value end"
+position = "after"
+payload = '''
+self.ability.bonus = self.ability.bonus - (self.ability.ovn_optics_bonus or 0)
+if self.base.suit == 'ovn_Optics' then
+  self.ability.ovn_optics_bonus = self.base.nominal
+  self.ability.bonus = self.ability.bonus + self.ability.ovn_optics_bonus
+else
+  self.ability.ovn_optics_bonus = 0
+end
+'''
+match_indent = true
+
+# ----
+
+# function generate_card_ui
+# Show tooltips for Joker corruptibility and Optics effect
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "for _, v in ipairs(info_queue) do"
+position = "before"
+payload = '''
+if Ovn_f.joker_is_corruptible(_c.key) and _c.discovered then
+  table.insert(info_queue, {
+    key = 'ovn_corruptible',
+    set = 'Other',
+    vars = { localize {
+      type = "name_text",
+      set = "Joker",
+      key = _c.key
+    } }
+  })
+end
+
+if card and card.base and card.base.suit == "ovn_Optics" then
+  table.insert(info_queue, {
+    key = 'ovn_opticinfo',
+    set = 'Other',
+  })
+end
+'''
+match_indent = true
+
+# ----
+
+# function get_current_pool
+# Joker banishing, inspired by Cryptid
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if v.yes_pool_flag and not G.GAME.pool_flags[v.yes_pool_flag] then add = nil end"
+position = "after"
+payload = '''
+if Ovn_f.is_corruptbanished(v.key) then add = nil end
+if v.key == 'j_cavendish' and Ovn_f.has_joker('j_ovn_aeon') then add = true end
+'''
+match_indent = true

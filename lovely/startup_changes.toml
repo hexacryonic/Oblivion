@@ -1,0 +1,95 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/startup_changes.toml
+# Changes specific to start-up, main menu, and background of Corrupt Decks
+
+# ----
+
+# function Game:splash_screen
+# Replace intro Jimbo with a random corrupted Joker
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
+position = "at"
+payload = '''
+local replace = {}
+for _, v in pairs(Oblivion.corruption_map) do
+  if G.P_CENTERS[v] then replace[#replace + 1] = v end
+end
+local option = math.random(#replace)
+local chosen_option = replace[option]
+SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[chosen_option],{bypass_discovery_center = true, bypass_discovery_ui = true})
+'''
+match_indent = true
+
+# ----
+
+# function Game:main_menu
+# Replace title Ace of Spades with Optics of Spades
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.S_A, G.P_CENTERS.c_base)"
+position = "at"
+payload = "local replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS['ovn_O_A'], G.P_CENTERS.c_base)"
+match_indent = true
+
+# ----
+
+# function Game:main_menu
+# function Game:demo_cta (defunct)
+# pattern is MULT-TARGET
+# Replace colors of title splash background
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},"
+position = "at"
+payload = "{name = 'colour_1', ref_table = G.C, ref_value = 'PURPLE'},"
+match_indent = true
+
+# ----
+
+# function ease_background_colour_blind
+# Corrupt background
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+elseif G.GAME.won then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '' then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+position = "at"
+payload = '''
+elseif G.GAME.won and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt2, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupt1, contrast = 1}
+elseif G.GAME.won and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND.won, contrast = 1}
+elseif (blindname == 'Small Blind' or blindname == 'Big Blind' or blindname == '') and not G.GAME.in_corrupt then
+    ease_background_colour{new_colour = G.C.BLIND['Small'], contrast = 1}
+'''
+match_indent = true
+
+# ----
+
+# function Game:start_run
+# Fix for corrupt bg not appearing on run load
+# might need to put "is_corrupt" as Back property
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if not saveTable then ease_background_colour_blind(G.STATE, 'Small Blind')"
+position = "before"
+payload = '''
+local get_the_fucking_back = saveTable and saveTable.BACK.name or (args.challenge and args.challenge.deck and args.challenge.deck.type) or (self.GAME.viewed_back and self.GAME.viewed_back.name) or self.GAME.selected_back and self.GAME.selected_back.name or 'Red Deck'
+if get_the_fucking_back:match('b_ovn_c_') then self.GAME.in_corrupt = true end
+'''
+match_indent = true

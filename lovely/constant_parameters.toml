@@ -29,10 +29,12 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = 'cardarea.lua'
-pattern = '''for name, parameter in pairs(SMODS.Scoring_Parameters) do
+pattern = '''
+for name, parameter in pairs(SMODS.Scoring_Parameters) do
     parameter.current = G.GAME.hands[text][name] or parameter.default_value
     update_hand_text({immediate = true, nopulse = nil, delay = 0}, {[name] = parameter.current})
-end'''
+end
+'''
 position = 'at'
 payload = '''
 for name, parameter in pairs(SMODS.Scoring_Parameters) do

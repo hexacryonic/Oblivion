@@ -1,0 +1,56 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/joker_effects.toml
+# Implementation of some Joker effects
+
+# ----
+
+# function Card:open
+# [[Migraine]] makes all standard pack cards Optics
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)"
+position = "after"
+payload = '''if Ovn_f.has_joker('j_ovn_migraine') and (card.ability.set == "Default" or card.ability.set == "Enhanced") then
+  card:change_suit('ovn_Optics')
+  Ovn_f.guaranteed_modifier(card, i)
+end'''
+match_indent = true
+
+# ----
+
+# In Steamodded:
+# function SMODS.create_card
+# If holding [[Cigarette Card]], prevent Uncommon Jokers from spawning with any other edition
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = "if t.edition then _card:set_edition(t.edition) end"
+position = "at"
+payload = '''
+if Ovn_f.has_joker('j_ovn_cigarette_card') and _card.config.center.rarity == 2 then
+else
+  if t.edition then _card:set_edition(t.edition) end
+end
+'''
+match_indent = true
+
+# ----
+
+# function create_card
+# If holding [[Cigarette Card]], Uncommon Jokers spawn with Miasma
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not SMODS.bypass_create_card_edition and not card.edition then"
+position = "before"
+payload = '''
+if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 then
+  card:set_edition("e_ovn_miasma")
+end
+'''
+match_indent = true

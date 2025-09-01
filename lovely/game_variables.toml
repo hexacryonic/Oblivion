@@ -1,0 +1,66 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/game_variables.toml
+# Addition of new game variables
+
+# ----
+
+# function new_round
+# Variable for temporary hand size change set on round start
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.GAME.current_round.used_packs = {}"
+position = "after"
+payload = "G.GAME.current_round.temp_handsize_change = 0"
+match_indent = true
+
+# ----
+
+# function end_round
+# Temporary hand size change undone at end of the round
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "reset_idol_card()"
+position = "before"
+payload = '''
+G.hand:change_size(-G.GAME.current_round.temp_handsize_change)
+G.GAME.current_round.temp_handsize_change = 0
+'''
+match_indent = true
+
+# ----
+
+# function G.FUNCS.evaluate_play
+# Update last-played-hand tracker
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})"
+position = "after"
+payload = "Ovn_f.update_hands_last_played(text)"
+match_indent = true
+
+# ----
+
+# function G.FUNCS.evaluate_play
+# Note whether specific hands are played in a round
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "local text,disp_text,poker_hands,scoring_hand,non_loc_disp_text = G.FUNCS.get_poker_hand_info(G.play.cards)"
+position = "after"
+payload = '''
+if disp_text == "Royal Flush" then
+  G.GAME.current_round.played_royal_flush = true
+end
+if next(poker_hands["ovn_Straight Spectrum"]) then
+  G.GAME.current_round.played_straight_spec = true
+end
+'''
+match_indent = true
+
