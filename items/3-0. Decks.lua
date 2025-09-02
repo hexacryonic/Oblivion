@@ -341,6 +341,41 @@ SMODS.Back{
 }
 
 -----------------------
+-- Corrupt Abandoned Deck
+-----------------------
+SMODS.Back{
+    key = "c_abandoned",
+
+	atlas = "cdeck_atlas",
+    pos = { x = 3, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = function (self, args)
+        if achievement_get("absolved_abandonment") then return true end
+	end,
+
+	apply = function (self)
+		G.GAME.in_corrupt = true
+
+		add_simple_event('immediate', nil, function()
+            for i = 1, #G.deck.cards do
+                G.deck.cards[i]:start_dissolve()
+            end
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+            add_tag(Tag("tag_standard"))
+		end)
+    end,
+}
+
+-----------------------
 -- Corrupt Painted Deck
 -----------------------
 SMODS.Back{

@@ -83,6 +83,19 @@ return {
 			"any {C:spectral}Spectral {}cards,"
 		}
 	},
+	b_ovn_c_abandoned = {
+		name = 'Corrupt Abandoned Deck',
+		text = {
+			"Starting deck has {C:attention}no cards{}",
+			"Start run with {C:attention}10 Standard Tags"
+		},
+		unlock = {
+			"On {C:attention}Abandoned {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"whilst having played a {C:attention}Royal Flush{}",
+			"during a {C:attention}Showdown Boss Blind"
+		}
+	},
 	b_ovn_c_painted = {
 		name = 'Corrupt Painted Deck',
 		text = {

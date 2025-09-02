@@ -63,4 +63,3 @@ if next(poker_hands["ovn_Straight Spectrum"]) then
 end
 '''
 match_indent = true
-
