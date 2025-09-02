@@ -620,7 +620,7 @@ for i=1,10 do
 	SMODS.JimboQuip:take_ownership('lq_' .. i, {
 		extra = {
 			center = 'j_ovn_showneverends',
-			materialize_colours = {
+			particle_colours = {
 				G.C.RARITY['ovn_corrupted'],
 				G.C.BLUE,
 				G.C.PURPLE
@@ -632,7 +632,7 @@ for i=1,7 do
 	SMODS.JimboQuip:take_ownership('wq_' .. i, {
 		extra = {
 			center = 'j_ovn_showneverends',
-			materialize_colours = {
+			particle_colours = {
 				G.C.RARITY['ovn_corrupted'],
 				G.C.BLUE,
 				G.C.PURPLE
