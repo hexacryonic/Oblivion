@@ -361,16 +361,9 @@ SMODS.Back{
             for i = 1, #G.deck.cards do
                 G.deck.cards[i]:start_dissolve()
             end
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
-            add_tag(Tag("tag_standard"))
+			for _ = 1, 10 do
+				add_tag(Tag("tag_standard"))
+			end
 		end)
     end,
 }
