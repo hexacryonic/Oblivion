@@ -26,7 +26,7 @@ target = "functions/button_callbacks.lua"
 pattern = "ease_dollars(G.GAME.current_round.dollars)"
 position = "at"
 payload = '''
-if not G.GAME.in_corrupt_green then
+if not Ovn_f.on_deck('c_green') then
   ease_dollars(G.GAME.current_round.dollars)
 else
   Ovn_f.ease_complex_dollars(G.GAME.current_round.dollars, G.GAME.current_round.dollars_i)
@@ -72,7 +72,7 @@ sell = {n=G.UIT.C, config={align = "cr"}, nodes={
 '''
 position = "after"
 payload = '''
-if G.GAME.in_corrupt_green then
+if Ovn_f.on_deck('c_green') then
   sell = {n=G.UIT.C, config={align = "cr"}, nodes={
     {n=G.UIT.C, config={ref_table = card, align = "cr",padding = 0.1, r=0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card'}, nodes={
       {n=G.UIT.B, config = {w=0.1,h=0.6}},
@@ -108,7 +108,7 @@ local t1 = {
 '''
 position = "after"
 payload = '''
-if G.GAME.in_corrupt_green then
+if Ovn_f.on_deck('c_green') then
   t1.nodes[1].nodes[1].config.object:remove()
   t1 = {
       n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
@@ -130,7 +130,7 @@ match_indent = true
 target = "game.lua"
 pattern = "create_shop_card_ui(v)"
 position = "before"
-payload = "if G.GAME.in_corrupt_green then Ovn_f.set_complex_cost_labels(v) end"
+payload = "if Ovn_f.on_deck('c_green') then Ovn_f.set_complex_cost_labels(v) end"
 match_indent = true
 
 
@@ -151,7 +151,7 @@ end
 '''
 position = "at"
 payload = '''
-if not G.GAME.in_corrupt_green then
+if not Ovn_f.on_deck('c_green') then
   if c1.cost ~= 0 then
     ease_dollars(-c1.cost)
   end
@@ -172,7 +172,7 @@ target = "card.lua"
 pattern = "ease_dollars(self.sell_cost)"
 position = "at"
 payload = '''
-if G.GAME.in_corrupt_green then
+if Ovn_f.on_deck('c_green') then
   local sell_cost, sell_i = Ovn_f.get_complex_sell_cost(self)
   Ovn_f.ease_complex_dollars(sell_cost, sell_i)
 else
@@ -193,7 +193,7 @@ target = "card.lua"
 pattern = "ease_dollars(-self.cost)"
 position = "at"
 payload = '''
-if G.GAME.in_corrupt_green then
+if Ovn_f.on_deck('c_green') then
   local cost, cost_i = Ovn_f.get_complex_cost(self)
   Ovn_f.ease_complex_dollars(-cost, -cost_i)
 else

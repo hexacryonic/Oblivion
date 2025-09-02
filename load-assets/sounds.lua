@@ -66,7 +66,7 @@ SMODS.Sound({
 	select_music_track = function()
 		return (
 			G.GAME
-			and G.GAME.in_corrupt
+			and Ovn_f.deck_is_corrupt()
 			and not G.shop
 			and not G.booster_pack
 			and not G.booster_pack_sparkles
@@ -85,7 +85,7 @@ SMODS.Sound({
 	select_music_track = function()
 		return (
 			G.GAME
-			and G.GAME.in_corrupt
+			and Ovn_f.deck_is_corrupt()
 			and G.shop
 			and not G.shop.REMOVED
 			and not G.booster_pack
@@ -104,7 +104,7 @@ SMODS.Sound({
 	select_music_track = function()
 		return (
 			G.GAME
-			and G.GAME.in_corrupt
+			and Ovn_f.deck_is_corrupt()
 			and G.booster_pack
 			and not G.booster_pack.REMOVED
 			and not G.booster_pack_meteors
@@ -120,7 +120,7 @@ SMODS.Sound({
 
 	select_music_track = function()
 		return G.GAME and (
-			G.GAME.in_corrupt
+			Ovn_f.deck_is_corrupt()
 			and G.booster_pack_meteors
 			and not G.booster_pack_meteors.REMOVED
 			and not G.booster_pack_sparkles
@@ -136,7 +136,7 @@ SMODS.Sound({
 
 	select_music_track = function()
 		return G.GAME and (
-			G.GAME.in_corrupt
+			Ovn_f.deck_is_corrupt()
 			and G.GAME.blind
 			and G.GAME.blind.boss
 		)

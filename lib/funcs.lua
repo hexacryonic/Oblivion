@@ -2,11 +2,12 @@
 -- These commonly called functions are used across the mod
 
 -- 1. INTERNAL FUNCTIONS
--- 2. JOKER TRANSMUTATION
--- 3. JOKER TRANSMUTATION STATES
--- 4. MODIFIER TRANSMUTATION
--- 5. INSTABILITY
--- 6. CORRUPT YELLOW DECK VALUES
+-- 2. DECK PROPERTIES
+-- 3. JOKER TRANSMUTATION
+-- 4. JOKER TRANSMUTATION STATES
+-- 5. MODIFIER TRANSMUTATION
+-- 6. INSTABILITY
+-- 7. CORRUPT YELLOW DECK VALUES
 -- 8. MISCELLANEOUS
 
 
@@ -43,6 +44,33 @@ function Ovn_f.compile_localization(loc_table, lang)
 end
 
 local add_simple_event = Ovn_f.add_simple_event
+
+
+
+-------------------------
+---- DECK PROPERTIES ----
+-------------------------
+
+-- Checks if the current Deck is corrupt.
+---@return boolean
+Ovn_f.deck_is_corrupt = function ()
+	return G.GAME.selected_back and G.GAME.selected_back.effect.center.ovn_corrupt_deck or false
+end
+
+-- Checks if the current Deck is that of a specified key. Do not include prefixes.\
+-- If mod_prefix is exactly false, then no mod prefix is inserted.
+---@param deck_key string
+---@param mod_prefix? string|false
+---@return boolean
+Ovn_f.on_deck = function (deck_key, mod_prefix)
+	local prefix = "b_ovn_"
+	if mod_prefix == false then
+		prefix = "b_"
+	elseif type(mod_prefix) == 'string' then
+		prefix = "b_" .. mod_prefix .. "_"
+	end
+	return G.GAME.selected_back and (G.GAME.selected_back.effect.center.key == (prefix .. deck_key)) or false
+end
 
 
 
@@ -312,7 +340,7 @@ end
 ---@return nil
 Ovn_f.ease_hand_cost = function(amount, instant)
 	-- Primarily used in C-Yellow Deck
-	if not G.GAME.in_corrupt_yellow then return end
+	if not Ovn_f.on_deck('c_yellow') then return end
 	local _mod = function(mod)
 		local hand_UI = G.HUD:get_UIE_by_ID('hand_UI_count')
 		if not hand_UI then
@@ -362,7 +390,7 @@ end
 ---@param instant boolean?
 ---@return nil
 Ovn_f.ease_discard_cost = function(amount, instant)
-	if not G.GAME.in_corrupt_yellow then return end
+	if not Ovn_f.on_deck('c_yellow') then return end
 	local _mod = function(mod)
 		local discard_UI = G.HUD:get_UIE_by_ID('discard_UI_count')
 		if not discard_UI then

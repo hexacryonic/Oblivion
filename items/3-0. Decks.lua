@@ -39,6 +39,7 @@ SMODS.Back{
 -------------------
 SMODS.Back{
 	key = "c_red",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 0, y = 0 },
@@ -49,8 +50,6 @@ SMODS.Back{
 	end,
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
-		G.GAME.in_corrupt_red = true
 		G.GAME.starting_params.discards = G.GAME.starting_params.discards + 1
 	end,
 
@@ -84,6 +83,7 @@ SMODS.Back{
 --------------------
 SMODS.Back{
 	key = "c_blue",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 0 },
@@ -94,7 +94,6 @@ SMODS.Back{
 	end,
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
 		G.GAME.starting_params.hands = G.GAME.starting_params.hands + 2
 	end,
 
@@ -111,6 +110,7 @@ SMODS.Back{
 ----------------------
 SMODS.Back{
 	key = "c_yellow",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 2, y = 0 },
@@ -121,8 +121,6 @@ SMODS.Back{
 	end,
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
-		G.GAME.in_corrupt_yellow = true
 		G.GAME.cy_dollarsperante = 120
 		G.GAME.cy_handcost = 10
 		G.GAME.cy_discardcost = 5
@@ -176,6 +174,7 @@ SMODS.Back{
 ---------------------
 SMODS.Back{
 	key = "c_green",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 3, y = 0 },
@@ -186,9 +185,6 @@ SMODS.Back{
 	end,
 
 	apply = function (self)
-		G.GAME.in_corrupt = true
-		G.GAME.in_corrupt_green = true
-
 		G.GAME.dollars_i = 0
 		G.GAME.dollars_complex = tostring(G.GAME.dollars)
 		Ovn_f.ease_complex_dollars(0,0)
@@ -202,6 +198,7 @@ SMODS.Back{
 ---------------------
 SMODS.Back{
 	key = "c_ghost",
+	ovn_corrupt_deck = true,
 	config = { spectral_rate = 6 },
 
 	atlas = "cdeck_atlas",
@@ -213,7 +210,6 @@ SMODS.Back{
 	end,
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
 		G.GAME.ovn_cghost = true
 		G.GAME.ovn_cghost_first_hand_drawn = true
 		G.GAME.ovn_cghost_ghostspec = nil
@@ -345,6 +341,7 @@ SMODS.Back{
 -----------------------
 SMODS.Back{
     key = "c_abandoned",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
     pos = { x = 3, y = 1 },
@@ -355,8 +352,6 @@ SMODS.Back{
 	end,
 
 	apply = function (self)
-		G.GAME.in_corrupt = true
-
 		add_simple_event('immediate', nil, function()
             for i = 1, #G.deck.cards do
                 G.deck.cards[i]:start_dissolve()
@@ -373,6 +368,7 @@ SMODS.Back{
 -----------------------
 SMODS.Back{
 	key = "c_painted",
+	ovn_corrupt_deck = true,
 
 	atlas = "cdeck_atlas",
 	pos = { x = 1, y = 2 },
@@ -383,7 +379,6 @@ SMODS.Back{
 	end,
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
 		G.GAME.joker_rate = 0
 		G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots - math.huge
 		G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size + 5
@@ -418,6 +413,7 @@ SMODS.Joker {
 
 SMODS.Back{
 	key = "c_plasma",
+	ovn_corrupt_deck = true,
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
 			localize { type = 'name_text', key = 'j_ovn_instabilitytooltip', set = 'Joker' },
@@ -441,7 +437,6 @@ SMODS.Back{
 	},
 
 	apply = function(self)
-		G.GAME.in_corrupt = true
 		G.GAME.corrumod = 0.2
 		G.GAME.opticmod = 0.025
 		SMODS.set_scoring_calculation("ovn_instable")

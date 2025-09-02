@@ -221,7 +221,7 @@ local function uidef_usesellbtn_hook_pure_visage(card)
 				-- no idea why jtml for this doesnt work so here
 				{n=G.UIT.R, config={align = "cm"}, nodes={
 					{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
-					{n=G.UIT.T, config={ref_table = G.GAME.in_corrupt_green and card.ability or card, ref_value = G.GAME.in_corrupt_green and 'complex_sell_label' or 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+					{n=G.UIT.T, config={ref_table = Ovn_f.on_deck('c_green') and card.ability or card, ref_value = Ovn_f.on_deck('c_green') and 'complex_sell_label' or 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
 				}}
 			}}
 		}}
@@ -264,7 +264,7 @@ end
 -- Hook to enable Corrupt Red Deck's effect
 local uiboxbuttons_hook = create_UIBox_buttons
 function create_UIBox_buttons()
-	if G.GAME.in_corrupt_red then return uiboxbuttons_hook_c_red() end
+	if Ovn_f.on_deck('c_red') then return uiboxbuttons_hook_c_red() end
 	return uiboxbuttons_hook()
 end
 
@@ -272,9 +272,9 @@ end
 local uiboxhud_hook = create_UIBox_HUD
 function create_UIBox_HUD()
 	local ret = uiboxhud_hook()
-	if G.GAME.in_corrupt_yellow then
+	if Ovn_f.on_deck('c_yellow') then
 		hud_ui_c_yellow(ret)
-	elseif G.GAME.in_corrupt_green then
+	elseif Ovn_f.on_deck('c_green') then
 		hud_ui_c_green(ret)
 	end
 	return ret

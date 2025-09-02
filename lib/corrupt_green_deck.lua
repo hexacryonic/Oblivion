@@ -160,7 +160,7 @@ end
 -- Hook to use ease_complex_dollars on Corrupt Green Deck
 local easedollars_hook = ease_dollars
 function ease_dollars(mod, instant)
-	if not G.GAME.in_corrupt_green then
+	if not Ovn_f.on_deck('c_green') then
 		easedollars_hook(mod, instant)
 	else
 		Ovn_f.ease_complex_dollars(mod, 0, instant)
@@ -171,7 +171,7 @@ end
 local card_setcost_hook = Card.set_cost
 function Card:set_cost()
 	card_setcost_hook(self)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
 		if self.ability.ovn_proper_cost then
 			-- self.cost was changed without initialization
 			local delta_cost = self.cost - self.ability.ovn_proper_cost
@@ -198,7 +198,7 @@ end
 local card_setability_hook = Card.set_ability
 function Card:set_ability(center, initial, delay_sprites)
 	card_setability_hook(self, center, initial, delay_sprites)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
 		self.ability.ovn_proper_cost = nil
 		self.ability.ovn_proper_sell = nil
 		self:set_cost()
@@ -330,7 +330,7 @@ end
 -- Hook to include complex evaluation rows
 local funcs_evalround_hook = G.FUNCS.evaluate_round
 G.FUNCS.evaluate_round = function()
-	if not G.GAME.in_corrupt_green then
+	if not Ovn_f.on_deck('c_green') then
 		funcs_evalround_hook()
 		return
 	end
@@ -456,7 +456,7 @@ end
 -- Hook to determine if a complex cost can be bought (Corrupt Green Deck)
 local funcs_canbuy_hook = G.FUNCS.can_buy
 G.FUNCS.can_buy = function(e)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
@@ -491,7 +491,7 @@ end
 -- Hook to determine if a complex cost can be bought-then-used (Corrupt Green Deck)
 local funcs_canbuyuse_hook = G.FUNCS.can_buy_and_use
 G.FUNCS.can_buy_and_use = function(e)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
@@ -523,7 +523,7 @@ end
 -- Hook to determine if a complex cost can be opened (booster packs) (Corrupt Green Deck)
 local funcs_canopen_hook = G.FUNCS.can_open
 G.FUNCS.can_open = function(e)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
@@ -550,7 +550,7 @@ end
 -- Hook to determine if a complex cost can be redeemed (vouchers) (Corrupt Green Deck)
 local funcs_canredeem_hook = G.FUNCS.can_redeem
 G.FUNCS.can_redeem = function(e)
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (

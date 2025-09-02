@@ -112,7 +112,7 @@ end
 -- Hook to disable DISCARD easing on Corrupt Yellow Deck
 local easediscard_hook = ease_discard
 function ease_discard(mod, instant, silent)
-	if not G.GAME.in_corrupt_yellow then
+	if not Ovn_f.on_deck('c_yellow') then
 		easediscard_hook(mod, instant, silent)
 	end
 end
@@ -120,7 +120,7 @@ end
 -- Hook to disable HAND easing on Corrupt Yellow Deck
 local easehand_hook = ease_hands_played
 function ease_hands_played(mod, instant)
-	if not G.GAME.in_corrupt_yellow then
+	if not Ovn_f.on_deck('c_yellow') then
 		easehand_hook(mod, instant)
 	end
 end
@@ -365,7 +365,7 @@ function Game:start_run(args)
 			G.GAME.hands_last_played[key] = 0
 		end
 	end
-	if G.GAME.in_corrupt_green then
+	if Ovn_f.on_deck('c_green') then
 		add_simple_event(nil, nil, function ()
 			for _,joker_card in ipairs(G.jokers.cards) do
 				Ovn_f.set_complex_cost_labels(joker_card)
