@@ -1,6 +1,17 @@
 -- lib/corrupt_green_deck.lua
 -- Yeah, the utter complexity of game changes for this deck warrants
 -- the existence of this individual file
+
+-- Other files associated with Corrupt Green Deck:
+---- items/3-0. Decks.lua           - Corrupt Green Deck register
+---- lib/hooks.lua                  - function Game:start_run
+---- lovely/corrupt_green_deck.toml - Primarily for complex dollars support
+
+-- 1. FUNCTIONS
+-- 2. HOOKS
+-- 3. UI FUNCTIONS
+-- 4. UI HOOKS
+
 local add_simple_event = Ovn_f.add_simple_event
 
 
@@ -20,13 +31,13 @@ Ovn_f.format_complex_number = function(a,b)
 		b = a[2]
 		a = a[1]
 	end
-	if a == 0 and b == 0 then return "0" end
-	if b == 0 then return tostring(a) end
-	if a == 0 then return b .. "i" end
+	if to_big(a) == to_big(0) and to_big(b) == to_big(0) then return "0" end
+	if to_big(b) == to_big(0) then return tostring(a) end
+	if to_big(a) == to_big(0) then return b .. "i" end
 
 	-- When converting to string, the negative b already has a negative sign
 	-- hence no need to specify here
-	local operator = b < 0 and "" or "+"
+	local operator = to_big(b) < to_big(0) and "" or "+"
 	return a .. operator .. b .. "i"
 end
 
@@ -36,15 +47,15 @@ end
 ---@return string
 local function format_complex_change(mod, mod_i)
 	local dol = localize('$')
-	if mod < 0 and mod_i < 0 then
+	if to_big(mod) < to_big(0) and to_big(mod_i) < to_big(0) then
 		return "-" .. dol .. Ovn_f.format_complex_number(-mod, -mod_i)
 	end
 
-	if mod < 0 and mod_i == 0 then
+	if to_big(mod) < to_big(0) and to_big(mod_i) == to_big(0) then
 		return "-" .. dol .. -mod
 	end
 
-	if mod_i < 0 and mod == 0 then
+	if to_big(mod_i) < to_big(0) and to_big(mod) == to_big(0) then
 		return "-" .. dol .. -mod_i .. "i"
 	end
 
@@ -103,14 +114,14 @@ Ovn_f.ease_complex_dollars = function(mod, mod_i, instant)
 
 		local col = G.C.MONEY
 		if (
-			(mod < 0 and mod_i < 0)
-			or (mod < 0 and mod_i == 0)
-			or (mod_i < 0 and mod == 0)
+			(to_big(mod) < to_big(0) and to_big(mod_i) < to_big(0))
+			or (to_big(mod) < to_big(0) and to_big(mod_i) == to_big(0))
+			or (to_big(mod_i) < to_big(0) and to_big(mod) == to_big(0))
 		) then
 			col = G.C.RED
 		elseif (
-			(mod < 0 and mod_i > 0)
-			or (mod_i < 0 and mod > 0)
+			(to_big(mod) < to_big(0) and to_big(mod_i) > to_big(0))
+			or (to_big(mod_i) < to_big(0) and to_big(mod) > to_big(0))
 		) then
 			col = G.C.GREEN
 		end
@@ -120,7 +131,7 @@ Ovn_f.ease_complex_dollars = function(mod, mod_i, instant)
 		G.GAME.dollars_i = G.GAME.dollars_i + mod_i
 		G.GAME.dollars_complex = Ovn_f.format_complex_number(G.GAME.dollars, G.GAME.dollars_i)
 		-- career stat stuff ig
-		if mod >= 0 then
+		if to_big(mod) >= to_big(0) then
 			inc_career_stat('c_dollars_earned', mod)
 		end
 
@@ -367,7 +378,7 @@ G.FUNCS.evaluate_round = function()
 
 	-- $1 per hands left
 	local hands_left = G.GAME.current_round.hands_left
-	if hands_left > 0 then
+	if to_big(hands_left) > to_big(0) then
 		local hands_reward = hands_left*(G.GAME.modifiers.money_per_hand or 1)
 		add_round_eval_row({dollars = hands_reward, disp = hands_left, bonus = true, name='hands', pitch = pitch})
 		pitch = pitch + 0.06
@@ -376,7 +387,7 @@ G.FUNCS.evaluate_round = function()
 
 	-- $2i per discards left
 	local discards_left = G.GAME.current_round.discards_left
-	if discards_left > 0 then
+	if to_big(discards_left) > to_big(0) then
 		local discards_reward = discards_left*(G.GAME.modifiers.money_per_discard)
 		Ovn_f.add_complex_roundeval_row({dollars = discards_reward, disp = discards_left, bonus = true, name='discards', pitch = pitch})
 		pitch = pitch + 0.06
@@ -409,13 +420,13 @@ G.FUNCS.evaluate_round = function()
 	end
 
 	-- Evaluate interest
-	if G.GAME.dollars >= 5 then
+	if to_big(G.GAME.dollars) >= to_big(5) then
 		local interest = G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
 		add_round_eval_row({bonus = true, name='interest', pitch = pitch, dollars = interest})
 		pitch = pitch + 0.06
 		if not G.GAME.seeded or SMODS.config.seeded_unlocks then
 			local career_stats = G.PROFILES[G.SETTINGS.profile].career_stats
-			if interest == G.GAME.interest_amount*G.GAME.interest_cap/5 then
+			if to_big(interest) == to_big(G.GAME.interest_amount*G.GAME.interest_cap/5) then
 				career_stats.c_round_interest_cap_streak = career_stats.c_round_interest_cap_streak + 1
 			else
 				career_stats.c_round_interest_cap_streak = 0
@@ -426,7 +437,7 @@ G.FUNCS.evaluate_round = function()
 	end
 
 	-- Evaluate complex interest
-	if G.GAME.dollars_i >= 5 then
+	if to_big(G.GAME.dollars_i) >= to_big(5) then
 		local interest_i = math.min(math.floor(G.GAME.dollars_i/5), G.GAME.interest_cap/5)
 		Ovn_f.add_complex_roundeval_row({bonus = true, name = 'interest', pitch = pitch, dollars = interest_i})
 		pitch = pitch + 0.06
@@ -460,14 +471,14 @@ G.FUNCS.can_buy = function(e)
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
-			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
-			or (cost_i > G.GAME.dollars_i)
+			(to_big(cost) > to_big(G.GAME.dollars - G.GAME.bankrupt_at))
+			or (to_big(cost_i) > to_big(G.GAME.dollars_i))
 		)
 
 		if (
 			cost_gt_dollars
-			and cost > 0
-			and cost_i > 0
+			and to_big(cost) > to_big(0)
+			and to_big(cost_i) > to_big(0)
 		) then
 			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         	e.config.button = nil
@@ -495,15 +506,15 @@ G.FUNCS.can_buy_and_use = function(e)
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
-			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
-			or (cost_i > G.GAME.dollars_i)
+			(to_big(cost) > to_big(G.GAME.dollars - G.GAME.bankrupt_at))
+			or (to_big(cost_i) > to_big(G.GAME.dollars_i))
 		)
 		local can_use = e.config.ref_table:can_use_consumeable()
 
 		if (
 			cost_gt_dollars
-			and cost > 0
-			and cost_i > 0
+			and to_big(cost) > to_big(0)
+			and to_big(cost_i) > to_big(0)
 		) or not can_use then
 			e.UIBox.states.visible = false
 			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
@@ -527,14 +538,14 @@ G.FUNCS.can_open = function(e)
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
-			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
-			or (cost_i > G.GAME.dollars_i)
+			(to_big(cost) > to_big(G.GAME.dollars - G.GAME.bankrupt_at))
+			or (to_big(cost_i) > to_big(G.GAME.dollars_i))
 		)
 
 		if (
 			cost_gt_dollars
-			and cost > 0
-			and cost_i > 0
+			and to_big(cost) > to_big(0)
+			and to_big(cost_i) > to_big(0)
 		) then
 			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 			e.config.button = nil
@@ -554,14 +565,14 @@ G.FUNCS.can_redeem = function(e)
         local card = e.config.ref_table
 		local cost, cost_i = Ovn_f.get_complex_cost(card)
 		local cost_gt_dollars = (
-			(cost > G.GAME.dollars - G.GAME.bankrupt_at)
-			or (cost_i > G.GAME.dollars_i)
+			(to_big(cost) > to_big(G.GAME.dollars - G.GAME.bankrupt_at))
+			or (to_big(cost_i) > to_big(G.GAME.dollars_i))
 		)
 
 		if (
 			cost_gt_dollars
-			and cost > 0
-			and cost_i > 0
+			and to_big(cost) > to_big(0)
+			and to_big(cost_i) > to_big(0)
 		) then
 			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 			e.config.button = nil

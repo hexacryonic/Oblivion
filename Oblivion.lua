@@ -8,6 +8,11 @@ SMODS.current_mod.optional_features = {
 	}
 }
 
+-- talisman compat
+to_big = to_big or function(x)
+	return x
+end
+
 if not Oblivion then Oblivion = {} end
 Oblivion.mod_path = tostring(SMODS.current_mod.path)
 -- Function object
