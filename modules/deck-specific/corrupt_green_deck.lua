@@ -5,6 +5,7 @@
 -- Other files associated with Corrupt Green Deck:
 ---- items/3-0. Decks.lua           - Corrupt Green Deck register
 ---- lib/hooks.lua                  - function Game:start_run
+---- lib/ui_hooks.lua               - function create_UIBox_HUD
 ---- lovely/corrupt_green_deck.toml - Primarily for complex dollars support
 
 -- 1. FUNCTIONS
@@ -222,6 +223,9 @@ end
 ---- UI FUNCTIONS ----
 ----------------------
 
+-- Adds a round evaluation row for complex values.
+---@param config table
+---@return nil
 Ovn_f.add_complex_roundeval_row = function(config)
 	config = config or {}
 	local width = G.round_eval.T.w - 0.51
@@ -300,6 +304,9 @@ Ovn_f.add_complex_roundeval_row = function(config)
 	end)
 end
 
+-- Adds the cashout button, which has a complex value.
+---@param config table
+---@return nil
 Ovn_f.add_complex_cashout_button = function(config)
 	config = config or {}
 	local width = G.round_eval.T.w - 0.51

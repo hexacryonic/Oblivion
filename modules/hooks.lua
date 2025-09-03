@@ -109,22 +109,6 @@ function get_highest(hand)
 	if #hand > 0 then return {{highest}} else return {} end
 end
 
--- Hook to disable DISCARD easing on Corrupt Yellow Deck
-local easediscard_hook = ease_discard
-function ease_discard(mod, instant, silent)
-	if not Ovn_f.on_deck('c_yellow') then
-		easediscard_hook(mod, instant, silent)
-	end
-end
-
--- Hook to disable HAND easing on Corrupt Yellow Deck
-local easehand_hook = ease_hands_played
-function ease_hands_played(mod, instant)
-	if not Ovn_f.on_deck('c_yellow') then
-		easehand_hook(mod, instant)
-	end
-end
-
 
 
 ---------------------

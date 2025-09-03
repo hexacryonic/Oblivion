@@ -12,8 +12,6 @@
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
 
-local add_simple_event = Ovn_f.add_simple_event
-
 -- Generates the UIBox definition for Corrupted Red Deck play/discard buttons.
 ---@return Balatro.UIBoxDefinition
 local uiboxbuttons_hook_c_red = function()
@@ -153,7 +151,7 @@ local function hud_ui_c_yellow(ret)
 	}
 end
 
--- On Corrupt Yellow Deck, replaces the hand/discard count display with a hand/discard COST display.
+-- On Corrupt Green Deck, replaces the dollar display with a complex dollar display.
 ---@param ret any
 ---@return nil
 local function hud_ui_c_green(ret)
@@ -268,7 +266,9 @@ function create_UIBox_buttons()
 	return uiboxbuttons_hook()
 end
 
--- Hook to enable Corrupt Yellow Deck's displays
+-- Hook to:
+---- enable Corrupt Yellow Deck's hand/discard cost display
+---- enable Corrupt Green Deck's complex dollar display
 local uiboxhud_hook = create_UIBox_HUD
 function create_UIBox_HUD()
 	local ret = uiboxhud_hook()

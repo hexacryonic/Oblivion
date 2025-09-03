@@ -7,14 +7,15 @@
 -- 4. JOKER TRANSMUTATION STATES
 -- 5. MODIFIER TRANSMUTATION
 -- 6. INSTABILITY
--- 7. CORRUPT YELLOW DECK VALUES
--- 8. MISCELLANEOUS
+-- 7. MISCELLANEOUS
 
 
 
 ----------------------------
 ---- INTERNAL FUNCTIONS ----
 ----------------------------
+
+local add_simple_event = Ovn_f.add_simple_event
 
 -- Compiles all localization present in the directory <lang>, usually the name of the localization folder.\
 -- I.e. on en-us.lua, <lang> = "en-us", load files in the directory \en-us.
@@ -42,8 +43,6 @@ function Ovn_f.compile_localization(loc_table, lang)
 		end
 	end
 end
-
-local add_simple_event = Ovn_f.add_simple_event
 
 
 
@@ -326,113 +325,6 @@ Ovn_f.optic_instability = function(factor)
 	factor = factor or 1
 	local mod = G.GAME.opticmod or 0
 	Ovn_f.change_instability(mod*factor)
-end
-
-
-
-------------------------------------
----- CORRUPT YELLOW DECK VALUES ----
-------------------------------------
-
--- In Corrupt Yellow Deck, increases the hand cost with corresponding animations.
----@param amount number
----@param instant boolean?
----@return nil
-Ovn_f.ease_hand_cost = function(amount, instant)
-	-- Primarily used in C-Yellow Deck
-	if not Ovn_f.on_deck('c_yellow') then return end
-	local _mod = function(mod)
-		local hand_UI = G.HUD:get_UIE_by_ID('hand_UI_count')
-		if not hand_UI then
-			print("[OVN_F] ease_hand_cost - hand_UI_count not found")
-			return
-		end
-
-		mod = mod or 0
-		local text = '+'
-		local col = G.C.MONEY
-		if mod < 0 then
-			text = ''
-			col = G.C.RED
-		end
-
-		--Ease from current chips to the new number of chips
-		G.GAME.cy_handcost = G.GAME.cy_handcost + mod
-		G.GAME.c_yellow_current_round.hands_cost =  "$" .. G.GAME.cy_handcost
-		hand_UI.config.object:update()
-		G.HUD:recalculate()
-
-		--Popup text next to the chips in UI showing number of chips gained/lost
-		attention_text({
-			text = text..mod,
-			scale = 0.8,
-			hold = 0.7,
-			cover = hand_UI.parent,
-			cover_colour = col,
-			align = 'cm',
-		})
-
-		--Play a chip sound
-		play_sound('coin6')
-	end
-
-	if instant then
-		_mod(amount)
-	else
-		add_simple_event('immediate', nil, function()
-			_mod(amount)
-		end)
-	end
-end
-
--- In Corrupt Yellow Deck, increases the discard cost with corresponding animations.
----@param amount number
----@param instant boolean?
----@return nil
-Ovn_f.ease_discard_cost = function(amount, instant)
-	if not Ovn_f.on_deck('c_yellow') then return end
-	local _mod = function(mod)
-		local discard_UI = G.HUD:get_UIE_by_ID('discard_UI_count')
-		if not discard_UI then
-			print("[OVN_F] ease_discard_cost - discard_UI_count not found")
-			return
-		end
-
-		mod = mod or 0
-		local text = '+'
-		local col = G.C.MONEY
-		if mod < 0 then
-			text = ''
-			col = G.C.RED
-		end
-
-		--Ease from current chips to the new number of chips
-		G.GAME.cy_discardcost = G.GAME.cy_discardcost + mod
-		G.GAME.c_yellow_current_round.discard_cost =  "$" .. G.GAME.cy_discardcost
-		discard_UI.config.object:update()
-		G.HUD:recalculate()
-
-		--Popup text next to the chips in UI showing number of chips gained/lost
-		attention_text({
-			text = text..mod,
-			scale = 0.8,
-			hold = 0.7,
-			cover = discard_UI.parent,
-			cover_colour = col,
-			align = 'cm',
-		})
-
-		--Play a chip sound
-		play_sound('coin6')
-	end
-
-	if instant then
-		_mod(amount)
-	else
-		add_simple_event('immediate', nil, function()
-			_mod(amount)
-		end)
-	end
 end
 
 

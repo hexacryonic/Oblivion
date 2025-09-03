@@ -51,15 +51,17 @@ function Ovn_f.load_directory(folder_name)
 	local mod_path = Oblivion.mod_path
 	local files = NFS.getDirectoryItems(mod_path .. folder_name)
 	for _,file_name in ipairs(files) do
-		print("[OBLIVION] Loading file " .. file_name)
-		local file_format = ("%s/%s")
-		local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
-		if err then error(err) end --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
-		if file_func then file_func() end
+		if file_name:match(".lua$") then
+			print("[OBLIVION] Loading file " .. file_name)
+			local file_format = ("%s/%s")
+			local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
+			if err then error(err) end --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
+			if file_func then file_func() end
+		end
 	end
 end
 
-Ovn_f.load_directory("lib")
+Ovn_f.load_directory("modules")
 Ovn_f.load_directory("load-assets")
 Ovn_f.load_directory("items")
 
