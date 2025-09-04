@@ -87,7 +87,7 @@ return {
 		name = 'Corrupt Abandoned Deck',
 		text = {
 			"Starting deck has {C:attention}no cards{}",
-			"Start with {C:attention}10 Standard Tags"
+			"Start with {C:attention}#1# {C:attention,T:tag_standard}#2#s"
 		},
 		unlock = {
 			"On {C:attention}Abandoned {}Deck with",

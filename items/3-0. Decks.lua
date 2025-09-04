@@ -342,6 +342,13 @@ SMODS.Back{
 SMODS.Back{
     key = "c_abandoned",
 	ovn_corrupt_deck = true,
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			self.config.tag_count,
+			localize { type = 'name_text', key = 'tag_standard', set = 'Tag' }
+		}}
+	end,
+	config = { tag_count = 10 },
 
 	atlas = "cdeck_atlas",
     pos = { x = 3, y = 1 },
@@ -356,7 +363,7 @@ SMODS.Back{
             for i = 1, #G.deck.cards do
                 G.deck.cards[i]:start_dissolve()
             end
-			for _ = 1, 10 do
+			for _ = 1, self.config.tag_count do
 				add_tag(Tag("tag_standard"))
 			end
 		end)
