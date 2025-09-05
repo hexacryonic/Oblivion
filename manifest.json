@@ -1,0 +1,9 @@
+{
+	"meta-comment": "This manifest is for Thunderstore or r2modman to recognize the zip of this repository as an installable mod.",
+
+	"name": "Oblivion",
+	"version_number": "0.0.0",
+	"website_url": "https://github.com/hexacryonic/Oblivion",
+	"description": "An expansion to Balatro themed around an otherworldly corruption.",
+	"author": "HexaCryonic, Oinite12"
+}
