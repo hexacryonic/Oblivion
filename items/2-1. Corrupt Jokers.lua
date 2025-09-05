@@ -344,7 +344,7 @@ SMODS.Joker {
 			}
 		end
 	end
-	-- Additional funcitonality in level_up_hand hook
+	-- Additional funcitonality in level_up_hand hook and Black Hole ownership
 }
 
 -------------------

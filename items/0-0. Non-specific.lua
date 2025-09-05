@@ -140,6 +140,8 @@ booster_wicked_normal(2)
 booster_wicked_normal(3)
 booster_wicked_normal(4)
 
+Oblivion.play_instability_noise = true
+
 --------------------
 -- SCORING PARAMETER
 -- Instability
@@ -165,13 +167,19 @@ SMODS.Scoring_Parameter {
 		local instability_max = 2
 		if G.GAME.ovn_instability >= instability_max then return end
 
-		if amount < 0 then
-			play_sound("ovn_decrement", 1, 0.8)
-		elseif amount > 0 then
-			play_sound("ovn_increment", 1, 0.9)
+		if Oblivion.play_instability_noise then
+			if amount < 0 then
+				play_sound("ovn_decrement", 1, 0.8)
+			elseif amount > 0 then
+				play_sound("ovn_increment", 1, 0.9)
+			end
+			-- Prevention of sound spam (often occurs with consumables)
+			if G.STATE == G.STATES.PLAY_TAROT then
+				Oblivion.play_instability_noise = false
+			end
 		end
+
 		G.GAME.ovn_instability = G.GAME.ovn_instability + amount
-		update_hand_text({delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
 	end,
 }
 

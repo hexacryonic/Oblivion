@@ -424,7 +424,7 @@ SMODS.calculate_repetitions = function(card, context, reps)
 				if area_card.edition then
 					evals.edition = area_card:calculate_edition(area_card_context)
 				end
-				for _,k in ipairs(SMODS.Sticker.obj_buffer) do
+				for _,k in ipairs(SMODS.Sticker.obj_buffer --[[@as string[] ]]) do
 					local v = SMODS.Stickers[k]
 					area_card[v] = area_card:calculate_sticker(area_card_context, k)
 				end
@@ -451,25 +451,6 @@ local smods_getscoringparam_hook = SMODS.get_scoring_parameter
 function SMODS.get_scoring_parameter(key, flames)
     if key == "ovn_instability" then return G.GAME.ovn_instability end
     return smods_getscoringparam_hook(key, flames)
-end
-
--- Hook for increasing Instability when obtaining corrupted Jokers/Optic cards
-local smods_calccontext = SMODS.calculate_context
-function SMODS.calculate_context(context, return_table, no_resolve)
-	if context.card_added and context.card.config.center.rarity == "ovn_corrupted" then
-		Ovn_f.corruption_instability(1)
-		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
-	elseif context.playing_card_added then
-		local optic_count = 0
-		for _,playing_card in ipairs(context.cards) do
-			if playing_card.base and playing_card.base.suit == "ovn_Optics" then
-				optic_count = optic_count + 1
-			end
-		end
-		Ovn_f.optic_instability(optic_count)
-		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
-	end
-	return smods_calccontext(context, return_table, no_resolve)
 end
 
 
@@ -512,8 +493,8 @@ SMODS.Consumable:take_ownership('black_hole', {
 				end
 				delay(1.3/speed)
 			end
-			for k, v in pairs(G.GAME.hands) do
-				level_up_hand(card, k, true)
+			for hand_key in pairs(G.GAME.hands) do
+				level_up_hand(card, hand_key, true)
 			end
 		else
 			update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize('k_all_hands'),chips = '...', mult = '...', level=''})
@@ -540,62 +521,6 @@ SMODS.Consumable:take_ownership('black_hole', {
 			end
         	update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
 		end
-	end
-}, true)
-
--- Supplementary function
--- TODO wait for them to put this in utils.lua
-local function juice_flip(used_tarot)
-	G.E_MANAGER:add_event(Event({
-		trigger = 'after',
-		delay = 0.4,
-		func = function()
-			play_sound('tarot1')
-			used_tarot:juice_up(0.3, 0.5)
-			return true
-		end
-	}))
-	for i = 1, #G.hand.cards do
-		local percent = 1.15 - (i - 0.999) / (#G.hand.cards - 0.998) * 0.3
-		G.E_MANAGER:add_event(Event({
-			trigger = 'after',
-			delay = 0.15,
-			func = function()
-				G.hand.cards[i]:flip(); play_sound('card1', percent); G.hand.cards[i]:juice_up(0.3, 0.3); return true
-			end
-		}))
-	end
-end
-
--- Ownership of Sigil for Instability increase
-SMODS.Consumable:take_ownership('sigil', {
-	-- all of this code taken from SMODS game_object.lua
-	-- and then modified a little bit for instability support
-	use = function(self, card, area, copier)
-		local used_tarot = copier or card
-		juice_flip(used_tarot)
-		local _suit = pseudorandom_element(SMODS.Suits, pseudoseed('sigil'))
-		for i = 1, #G.hand.cards do
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					local _card = G.hand.cards[i]
-					assert(SMODS.change_base(_card, _suit.key))
-					return true
-				end
-			}))
-		end
-		for i = 1, #G.hand.cards do
-			local percent = 0.85 + (i - 0.999) / (#G.hand.cards - 0.998) * 0.3
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.15,
-				func = function()
-					G.hand.cards[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.cards[i]:juice_up(0.3, 0.3); return true
-				end
-			}))
-		end
-		delay(0.5)
-		if _suit.key == "ovn_Optics" then Ovn_f.optic_instability(#G.hand.cards) end
 	end
 }, true)
 

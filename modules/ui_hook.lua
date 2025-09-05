@@ -336,9 +336,19 @@ function G.FUNCS.can_discard(e)
 	end
 end
 
+-- Hook to reset played hand status for the round
 local funcs_cashout_hook = G.FUNCS.cash_out
 function G.FUNCS.cash_out(e)
 	funcs_cashout_hook(e)
 	G.GAME.current_round.played_royal_flush = false
 	G.GAME.current_round.played_straight_spec = false
+end
+
+-- Hook to reset instability volume after using a consumable (often the object used in mass-suit change)
+-- (See 0-0 SCORING PARAMETER Instability - Oblivion.play_instability_noise == false if G.STATE == G.STATES.PLAY_TAROT;
+-- The state is set as such in G.FUNCS.use_card)
+local funcs_usecard_hook = G.FUNCS.use_card
+G.FUNCS.use_card = function(e, mute, nosave)
+	funcs_usecard_hook(e, mute, nosave)
+	Oblivion.play_instability_noise = true
 end

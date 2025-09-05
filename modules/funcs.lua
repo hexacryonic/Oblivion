@@ -306,6 +306,7 @@ Ovn_f.change_instability = function(amount)
 	add_simple_event(nil, nil, function ()
 		delay(0.25)
 		SMODS.Scoring_Parameters.ovn_instability:modify(amount)
+		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})
 	end)
 end
 

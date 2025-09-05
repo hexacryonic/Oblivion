@@ -657,13 +657,11 @@ SMODS.Edition {
 
 		-- Corrupt non-Optic cards
 		if context.after and context.cardarea == G.play then
-			-- Editioned playing card is already optics, self-destruct
 			if card.base.suit ~= 'ovn_Optics' then
 				add_simple_event('after', 0.1, function ()
 					card:set_edition(nil)
 					card:change_suit('ovn_Optics')
 				end)
-				Ovn_f.optic_instability(#G.hand.highlighted)
 			end
 		end
 	end,

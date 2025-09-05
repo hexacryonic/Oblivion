@@ -121,8 +121,6 @@ SMODS.Consumable {
 				highlighted_card:juice_up(0.3, 0.3)
 			end)
 		end
-
-		Ovn_f.optic_instability(#all_highlighted_cards)
 		add_simple_event('after', 0.2, function() G.hand:unhighlight_all() end)
 
 		delay(0.5)
