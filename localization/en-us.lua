@@ -157,6 +157,13 @@ local loc =  {
 				name = "Miasma",
 				text = {"{C:attention}Retriggers{} once"}
 			},
+			e_ovn_miasma_recursive_corrupt = {
+				name = "Miasma",
+				text = {
+					"{C:attention}Retriggers{} once,",
+					"then {C:ovn_corrupted}corrupts{}",
+				}
+			},
 			e_ovn_miasma_playing_card = {
 				name = "Miasma",
 				text = {

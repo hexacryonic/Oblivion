@@ -591,9 +591,13 @@ SMODS.Edition {
 		if not (card and card.config and card.config.center) then
 		elseif (
 			card.base and card.base.suit == 'ovn_Optics'
-			or Ovn_f.joker_is_purifiable(card.config.center.key)
+			or card.config.center.rarity == 'ovn_corrupted'
 		) then
-			key = "e_ovn_miasma_corrupted"
+			if Ovn_f.joker_is_corruptible(card.config.center.key) then
+				key = "e_ovn_miasma_recursive_corrupt"
+			else
+				key = "e_ovn_miasma_corrupted"
+			end
 		elseif card.base.suit then
 			key = "e_ovn_miasma_playing_card"
 		elseif Ovn_f.joker_is_corruptible(card.config.center.key) then
@@ -627,7 +631,7 @@ SMODS.Edition {
 			local repetitions = self.config.extra.retriggers
 			if (
 				(card.base and card.base.suit == 'ovn_Optics')
-				or Ovn_f.joker_is_purifiable(card.config.center.key)
+				or card.config.center.rarity == 'ovn_corrupted'
 			) then
 				repetitions = self.config.extra.corrupt_retriggers
 			end
@@ -643,7 +647,7 @@ SMODS.Edition {
 					card:set_edition(nil)
 				end)
 
-			elseif Ovn_f.joker_is_purifiable(card.config.center.key) then
+			elseif card.config.center.rarity == 'ovn_corrupted' then
 				-- nothing :P
 
 			-- Card cannot be corrupted, self-destruct
