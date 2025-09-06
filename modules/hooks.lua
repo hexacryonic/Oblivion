@@ -35,7 +35,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..mult,
+						message = "+"..(mult/2),
 						colour = G.C.MULT,
 						instant = true
 					})
@@ -46,7 +46,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..chips,
+						message = "+"..(chips/2),
 						colour = G.C.CHIPS,
 						instant = true
 					})
