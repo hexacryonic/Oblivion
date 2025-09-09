@@ -344,7 +344,7 @@ SMODS.Enhancement{
 			local message = localize('ovn_ion_zap')
 
 			if SMODS.pseudorandom_probability(card, 'ovn_ion', card.ability.extra.numerator, card.ability.extra.denominator) then
-				-- If holding Ion Joker, give chips to it instead of changing blind size
+				-- If holding Ion Joker, give chips to it instead of changing blind requirement
 				if Ovn_f.has_joker('j_ovn_ion_joker') then
 					return { func = function ()
 						local card_chips = card.base.nominal*2
@@ -360,6 +360,8 @@ SMODS.Enhancement{
 						end
 					end }
 				end
+
+				-- If not holding Ion Joker, increase blind requirement
 				blind_mod = card.ability.extra.blind_increase
 				sfx = "ovn_ion_backfire"
 				colour = G.C.RED
