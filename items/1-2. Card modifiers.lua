@@ -303,8 +303,7 @@ SMODS.Enhancement{
 
 	calculate = function(self,card,context)
 		if context.cardarea == G.play and context.before then
-			G.hand:change_size(card.ability.extra.tungsten_handsize_mod)
-			G.GAME.round_resets.temp_handsize = (G.GAME.round_resets.temp_handsize or 0) + math.floor(card.ability.extra.tungsten_handsize_mod)
+			Ovn_f.temp_handsize_change(card.ability.extra.tungsten_handsize_mod)
 		end
 	end,
 }
@@ -317,7 +316,7 @@ SMODS.Enhancement{
 	key = "ion",
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
-		local numerator, denominator = SMODS.get_probability_vars(card, item.extra.numerator, item.extra.denominator, 'ovn_ion')
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, item.extra.odds, 'ovn_ion')
 		return {vars = {
 			item.extra.blind_decrease*100,
 			numerator,
@@ -330,8 +329,7 @@ SMODS.Enhancement{
 	pos = { x = 3, y = 1 },
 	in_pool = function() return false end,
 	config = {extra = {
-		numerator = 1,
-		denominator = 10,
+		odds = 10,
 		blind_increase = 0.05, -- The 1 in 10 you don't want to hit
 		blind_decrease = 0.03, -- The 9 in 10 you want to hit
 	}},
@@ -343,20 +341,25 @@ SMODS.Enhancement{
 			local colour = G.C.BLUE
 			local message = localize('ovn_ion_zap')
 
-			if SMODS.pseudorandom_probability(card, 'ovn_ion', card.ability.extra.numerator, card.ability.extra.denominator) then
+			if SMODS.pseudorandom_probability(card, 'ovn_ion', 1, card.ability.extra.odds) then
 				-- If holding Ion Joker, give chips to it instead of changing blind requirement
 				if Ovn_f.has_joker('j_ovn_ion_joker') then
 					return { func = function ()
 						local card_chips = card.base.nominal*2
 						if card.base.suit == 'ovn_Optics' then card_chips = card_chips*2 end
+						local temp_table = {card_chips = card_chips}
 
 						for _,ion_joker in ipairs(SMODS.find_card('j_ovn_ion_joker')) do
-							ion_joker.ability.extra.chips = ion_joker.ability.extra.chips + card_chips
-							SMODS.calculate_effect({
-								message = "+"..card_chips,
-								colour = G.C.CHIPS,
-								message_card = ion_joker
-							}, card)
+							SMODS.scale_card(ion_joker, {
+								ref_table = ion_joker.ability.extra,
+								ref_value = 'chips',
+								scalar_table = temp_table,
+								scalar_value = 'card_chips',
+								scaling_message = {
+									message = "+"..card_chips,
+									colour = G.C.CHIPS
+								}
+							})
 						end
 					end }
 				end

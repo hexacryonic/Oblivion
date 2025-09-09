@@ -362,7 +362,7 @@ end
 ---@return nil
 Ovn_f.temp_handsize_change = function(amount)
 	G.hand:change_size(amount)
-	G.GAME.current_round.temp_handsize_change = G.GAME.current_round.temp_handsize_change + amount
+	G.GAME.round_resets.temp_handsize = (G.GAME.round_resets.temp_handsize or 0) + math.floor(amount)
 end
 
 -- Sets a guaranteed modifier (enhancement, seal, edition) on a card,\

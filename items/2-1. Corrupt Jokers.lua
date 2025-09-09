@@ -402,13 +402,17 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'cultivar',
 	loc_vars = function(self, info_queue, card)
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'ovn_ion')
 		return {vars = {
 			card.ability.extra.Xmult,
-			G.GAME.probabilities.normal or 1,
-			card.ability.extra.odds
+			numerator,
+			denominator
 		}}
 	end,
-	config = { extra = { Xmult = 4, odds = 4 } },
+	config = { extra = {
+		Xmult = 4,
+		odds = 4
+	}},
 
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
@@ -424,8 +428,9 @@ SMODS.Joker {
 		end
 
 		if context.end_of_round and context.game_over == false and not context.repetition and not context.blueprint then
-			local extinct_odds = G.GAME.probabilities.normal / card.ability.extra.odds
-			if pseudorandom('cultivar') >= extinct_odds then return { message = 'Safe!' } end
+			if not SMODS.pseudorandom_probability(card, 'cultivar', 1, card.ability.extra.odds) then
+				return { message = 'Safe!' }
+			end
 
 			-- Odd is hit
 			add_simple_event(nil, nil, function ()

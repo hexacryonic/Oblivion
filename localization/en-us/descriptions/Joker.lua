@@ -58,7 +58,7 @@ return {
 	j_ovn_ion_joker = {
 		name = "Ion Joker",
 		text = {
-			"Instead of increasing",
+			"Instead of {C:red}increasing",
 			"blind requirement,",
 			"{C:attention}Ion {}Cards add {C:attention}double {}their",
 			"{C:chips}chip {}values to this Joker",

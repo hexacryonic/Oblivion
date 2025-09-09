@@ -8,33 +8,6 @@ priority = 0
 
 # ----
 
-# function new_round
-# Variable for temporary hand size change set on round start
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = "G.GAME.current_round.used_packs = {}"
-position = "after"
-payload = "G.GAME.current_round.temp_handsize_change = 0"
-match_indent = true
-
-# ----
-
-# function end_round
-# Temporary hand size change undone at end of the round
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = "reset_idol_card()"
-position = "before"
-payload = '''
-G.hand:change_size(-G.GAME.current_round.temp_handsize_change)
-G.GAME.current_round.temp_handsize_change = 0
-'''
-match_indent = true
-
-# ----
-
 # function G.FUNCS.evaluate_play
 # Update last-played-hand tracker
 [[patches]]
