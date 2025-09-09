@@ -265,6 +265,35 @@ SMODS.Joker {
 	-- Additional functionality found in "set_ability", Crystal enhancement register
 }
 
+------------
+-- Ion Joker
+------------
+SMODS.Joker {
+	key = 'ion_joker',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.chips
+		}}
+	end,
+	config = {
+		extra = {
+			chips = 0
+		}
+	},
+
+	-- placeholder
+	atlas = "opticenhance_atlas",
+	pos = { x=3, y=1 },
+
+	rarity = 2,
+	cost = 6,
+
+	calculate = function (self, card, context)
+		if context.joker_main then return {chips = card.ability.extra.chips} end
+	end
+	-- Additional functionality found in "calculate", Ion enhancement register
+}
+
 --------------
 -- Pure Visage
 --------------

@@ -55,6 +55,16 @@ return {
 			"for {C:attention}+#1# {}extra hands"
 		}
 	},
+	j_ovn_ion_joker = {
+		name = "Ion Joker",
+		text = {
+			"Instead of increasing",
+			"blind requirement,",
+			"{C:attention}Ion {}Cards add {C:attention}double {}their",
+			"{C:chips}chip {}values to this Joker",
+			"{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)"
+		}
+	},
 	j_ovn_pure_visage = {
 		name = "Pure Visage",
 		text = {

@@ -334,6 +334,22 @@ end
 ---- MISCELLANEOUS ----
 -----------------------
 
+-- Changes blind requirement.
+---@param mod number
+---@return nil
+Ovn_f.ease_blind_requirement = function(mod)
+	if not G.GAME.blind.in_blind then return end
+	add_simple_event('immediate', nil, function ()
+		local blind_req_UI = G.HUD_blind:get_UIE_by_ID('HUD_blind_count') --[[@as UIElement]]
+		mod = mod or 0
+
+		G.GAME.blind.chips = G.GAME.blind.chips + mod
+		G.GAME.blind.chip_text = G.GAME.blind.chips
+		G.HUD_blind:recalculate()
+		blind_req_UI:juice_up()
+	end)
+end
+
 -- Determines whether the player is holding the Joker of specified card key.
 ---@param card_key string
 ---@return boolean

@@ -121,6 +121,7 @@ cenh["m_wild"]  = "m_ovn_coord"
 cenh["m_stone"] = "m_ovn_crystal"
 cenh["m_bonus"] = "m_ovn_radiant"
 cenh["m_mult"]  = "m_ovn_dynamo"
+cenh["m_lucky"] = "m_ovn_ion"
 
 if not Oblivion.seal_corrupt then Oblivion.seal_corrupt = {} end
 local cseal         = Oblivion.seal_corrupt

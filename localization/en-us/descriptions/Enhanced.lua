@@ -56,4 +56,12 @@ return {
 			"{C:inactive,s:0.8}(Overdraws when first visible){}"
 		}
 	},
+	m_ovn_ion = {
+		name = 'Ion Card',
+		text = {
+			"{C:green}-#1#%{} blind requirement",
+			"{C:green}#2# in #3# {}chance for",
+			"{C:red}+#4#% {}blind requirement instead"
+		}
+	}
 }

@@ -309,6 +309,75 @@ SMODS.Enhancement{
 	end,
 }
 
+--------------
+-- ENHANCEMENT
+-- Ion Card
+--------------
+SMODS.Enhancement{
+	key = "ion",
+	loc_vars = function(self, info_queue, card)
+		local item = card and card.ability or self.config --[[@as any]]
+		local numerator, denominator = SMODS.get_probability_vars(card, item.extra.numerator, item.extra.denominator, 'ovn_ion')
+		return {vars = {
+			item.extra.blind_decrease*100,
+			numerator,
+			denominator,
+			item.extra.blind_increase*100
+		}}
+	end,
+
+	atlas = "opticenhance_atlas",
+	pos = { x = 3, y = 1 },
+	in_pool = function() return false end,
+	config = {extra = {
+		numerator = 1,
+		denominator = 10,
+		blind_increase = 0.05, -- The 1 in 10 you don't want to hit
+		blind_decrease = 0.03, -- The 9 in 10 you want to hit
+	}},
+
+	calculate = function(self, card, context)
+		if context.main_scoring and context.cardarea == G.play then
+			local blind_mod = -card.ability.extra.blind_decrease
+			local sfx = "ovn_ion_zap"
+			local colour = G.C.BLUE
+			local message = localize('ovn_ion_zap')
+
+			if SMODS.pseudorandom_probability(card, 'ovn_ion', card.ability.extra.numerator, card.ability.extra.denominator) then
+				-- If holding Ion Joker, give chips to it instead of changing blind size
+				if Ovn_f.has_joker('j_ovn_ion_joker') then
+					return { func = function ()
+						local card_chips = card.base.nominal*2
+						if card.base.suit == 'ovn_Optics' then card_chips = card_chips*2 end
+
+						for _,ion_joker in ipairs(SMODS.find_card('j_ovn_ion_joker')) do
+							ion_joker.ability.extra.chips = ion_joker.ability.extra.chips + card_chips
+							SMODS.calculate_effect({
+								message = "+"..card_chips,
+								colour = G.C.CHIPS,
+								message_card = ion_joker
+							}, card)
+						end
+					end }
+				end
+				blind_mod = card.ability.extra.blind_increase
+				sfx = "ovn_ion_backfire"
+				colour = G.C.RED
+				message = localize('ovn_ion_misfire')
+			end
+
+			return { func = function ()
+				Ovn_f.ease_blind_requirement(G.GAME.blind.chips*blind_mod)
+				SMODS.calculate_effect({
+					message = message,
+					colour = colour,
+					sound = sfx
+				}, card)
+			end }
+		end
+	end,
+}
+
 ----------------
 
 --------------

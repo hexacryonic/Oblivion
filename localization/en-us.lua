@@ -288,6 +288,8 @@ local loc =  {
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
 			k_ovn_wicked_pack = "Wicked Pack",
+			ovn_ion_zap = "Zap!",
+			ovn_ion_misfire = "...",
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",

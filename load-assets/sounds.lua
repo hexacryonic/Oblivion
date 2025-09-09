@@ -1,15 +1,17 @@
 local soundbytes = {
 	-- true means path is <key>.ogg ("ditto case")
 	-- <string> means path is <string>.ogg
-	abyss      = true,
-	optic      = true,
-	pure       = true,
-	e_miasma   = true,
-	insecurity = true,
-	tres       = true,
-	recall     = true,
-	decrement  = "powerdecrement",
-	increment  = "powerincrement"
+	abyss        = true,
+	optic        = true,
+	pure         = true,
+	e_miasma     = true,
+	insecurity   = true,
+	tres         = true,
+	recall       = true,
+	decrement    = "powerdecrement",
+	increment    = "powerincrement",
+	ion_backfire = "ionBackfire",
+	ion_zap      = "ionZap"
 }
 
 for key, path in pairs(soundbytes) do
