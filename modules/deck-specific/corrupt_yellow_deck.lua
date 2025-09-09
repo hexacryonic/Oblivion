@@ -9,6 +9,8 @@
 -- 1. FUNCTIONS
 -- 2. HOOKS
 
+local add_simple_event = Ovn_f.add_simple_event
+
 
 
 -------------------

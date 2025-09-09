@@ -142,7 +142,7 @@ SMODS.Enhancement{
 SMODS.Enhancement{
 	key = "ice",
 	loc_vars = function(self, info_queue, card)
-		local item = card and card.ability or self.config
+		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
 			item.extra.x_mult_loss,
 			item.extra.current_x_mult
@@ -277,7 +277,7 @@ SMODS.Enhancement{
 SMODS.Enhancement{
 	key = "dense",
 	loc_vars = function(self, info_queue, card)
-		local item = card and card.ability or self.config
+		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
 			item.extra.tungsten_handsize_mod,
 			item.extra.holdingthis
