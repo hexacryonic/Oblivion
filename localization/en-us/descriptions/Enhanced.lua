@@ -51,7 +51,7 @@ return {
 		text = {
 			"{C:attention}-#1#{} hand size",
 			"while held in hand",
-			"{C:attention}+#1#{} hand size",
+			"{C:attention}+#2#{} hand size",
 			"this round when played",
 		}
 	},

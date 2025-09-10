@@ -279,8 +279,8 @@ SMODS.Enhancement {
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
+			-item.card_limit,
 			item.extra.handsize_mod,
-			item.extra.holdingthis
 		}}
 	end,
 
