@@ -274,12 +274,12 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Tungsten Card
 ---------------
-SMODS.Enhancement{
+SMODS.Enhancement {
 	key = "dense",
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
-			item.extra.tungsten_handsize_mod,
+			item.extra.handsize_mod,
 			item.extra.holdingthis
 		}}
 	end,
@@ -287,23 +287,26 @@ SMODS.Enhancement{
 	atlas = "opticenhance_atlas",
 	pos = { x = 1, y = 0 },
 	in_pool = function() return false end,
-	config = {extra = {tungsten_handsize_mod = 1, holdingthis = 0}},
-
-	update = function(self, card, dt)
-		if card.area then
-			if (card.area == G.hand) and not (card.debuff) and (card.ability.extra.holdingthis) == 0 then
-				G.hand:change_size(-self.config.extra.tungsten_handsize_mod)
-				card.ability.extra.holdingthis = 1
-			elseif card.area ~= G.hand and card.ability.extra.holdingthis == 1 then
-				G.hand:change_size(self.config.extra.tungsten_handsize_mod)
-				card.ability.extra.holdingthis = 0
-			end
-		end
-	end,
+	config = {
+		card_limit = -1,
+		extra = {
+			handsize_mod = 1,
+		}
+	},
 
 	calculate = function(self,card,context)
-		if context.cardarea == G.play and context.before then
-			Ovn_f.temp_handsize_change(card.ability.extra.tungsten_handsize_mod)
+		if context.cardarea == G.play and context.main_scoring then
+			return { func = function ()
+				Ovn_f.temp_handsize_change(card.ability.extra.handsize_mod)
+				SMODS.calculate_effect({
+					message = localize {
+						type = 'variable',
+						key = 'a_handsize',
+						vars = { card.ability.extra.handsize_mod }
+					},
+					colour = G.C.BLUE,
+				}, card)
+			end }
 		end
 	end,
 }

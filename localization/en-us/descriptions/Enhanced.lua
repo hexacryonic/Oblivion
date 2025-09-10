@@ -53,7 +53,6 @@ return {
 			"while held in hand",
 			"{C:attention}+#1#{} hand size",
 			"this round when played",
-			"{C:inactive,s:0.8}(Overdraws when first visible){}"
 		}
 	},
 	m_ovn_ion = {
