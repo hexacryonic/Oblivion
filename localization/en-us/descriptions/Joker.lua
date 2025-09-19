@@ -199,6 +199,15 @@ return {
 			corrupted_from("Supernova or Constellation")
 		}
 	},
+	j_ovn_sludge = {
+		name = "Sludge",
+		text = {
+			"{C:attention}+1 {}hand size",
+			"{C:red}Played cards never score",
+			"Cards held in hand now score",
+			corrupted_from("Splash")
+		}
+	},
 	j_ovn_library_of_babel = {
 		name = "Library of Babel",
 		text = {

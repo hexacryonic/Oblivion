@@ -213,7 +213,10 @@ SMODS.Enhancement{
 		if (
 			context.ovn_repetition_from_playing_card
 			and card.area == G.hand
-			and context.other_card.area == G.play
+			and (
+				context.other_card.area == G.play
+				or (Ovn_f.has_joker('j_ovn_sludge') and context.other_card.area == G.hand)
+			)
 		) then
 			return {repetitions = card.ability.extra.repetitions}
 		end

@@ -453,6 +453,32 @@ function SMODS.get_scoring_parameter(key, flames)
     return smods_getscoringparam_hook(key, flames)
 end
 
+-- Hook to stop played cards from scoring if Sludge is held
+local smods_neverscores_hook = SMODS.never_scores
+function SMODS.never_scores(...)
+	if Ovn_f.has_joker('j_ovn_sludge') then return true end
+	return smods_neverscores_hook(...)
+end
+
+-- Hook to score cards held in hand if Sludge is held
+-- Credits to Somethingcom515 on Balatro Discord server
+local smods_scorecard_hook = SMODS.score_card
+function SMODS.score_card(card, context)
+    if (
+		not card.config.center.never_scores
+		and not G.scorehand
+		and Ovn_f.has_joker('j_ovn_sludge')
+		and context.cardarea == G.hand
+	) then
+        G.scorehand = true
+        context.cardarea = G.play
+        SMODS.score_card(card, context)
+        context.cardarea = G.hand
+        G.scorehand = nil
+    end
+    return smods_scorecard_hook(card, context)
+end
+
 
 
 --------------------------

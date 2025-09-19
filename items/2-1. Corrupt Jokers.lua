@@ -347,6 +347,38 @@ SMODS.Joker {
 	-- Additional funcitonality in level_up_hand hook and Black Hole ownership
 }
 
+---------
+-- Sludge
+---------
+SMODS.Joker {
+	key = 'sludge',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.hand_size
+		}}
+	end,
+	config = {
+		extra = {
+			hand_size = 1
+		}
+	},
+
+	atlas = 'corrupted',
+	pos = {x=1, y=4},
+
+	rarity = 'ovn_corrupted',
+	cost = 5,
+
+	
+    add_to_deck = function(self, card, from_debuff)
+        G.hand:change_size(card.ability.extra.hand_size)
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.hand:change_size(-card.ability.extra.hand_size)
+    end
+	-- Additional funcitonality in G.FUNCS.get_poker_hand_info hook
+}
+
 -------------------
 -- Library of Babel
 -------------------
