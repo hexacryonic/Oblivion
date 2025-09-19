@@ -183,31 +183,10 @@ function Card:is_face()
 	return card_isface_hook(self)
 end
 
--- Hook for:
----- Losing if all held cards are Unobtainium
----- Corruptbanish destruction
+-- Hook for corruptbanish destruction
 local card_upd8_hook = Card.update
 function Card:update(dt)
 	card_upd8_hook(self, dt)
-
-	-- If all held cards are Unobtainium, lose the run
-	-- Todo: move to something like game:update since card_count^2 checks
-	if G.STATE == G.STATES.SELECTING_HAND then
-		local unob_tally = 0
-
-		for _,card in ipairs(G.hand.cards) do
-			if card.config.center.key == 'm_ovn_unob' then
-				unob_tally = unob_tally + 1
-			end
-		end
-
-		if unob_tally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
-			check_for_unlock{type="ovn_lol_lmao_even"}
-			G.STATE = G.STATES.GAME_OVER
-			G.STATE_COMPLETE = false
-			return true
-		end
-	end
 
 	-- Destroy card if it is corruptbanished
 	if self.area == G.jokers then
@@ -309,7 +288,7 @@ end
 ------ cumulative_unique_jokers { STRING: BOOLEAN }
 ------ hands_last_played { STRING: INTEGER }
 ---- Setting complex costs (display) for all cards (Corrupt Green Deck)
-local startrun_hook = Game.start_run
+local game_startrun_hook = Game.start_run
 function Game:start_run(args)
 	Ovn_f.add_simple_event(nil, nil, function()
 		-- C-Ghost anti-cheese :P
@@ -317,7 +296,7 @@ function Game:start_run(args)
 			ovn_run_started = true
 		})
 	end)
-	startrun_hook(self, args)
+	game_startrun_hook(self, args)
 	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
 	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
@@ -336,6 +315,30 @@ function Game:start_run(args)
 				Ovn_f.set_complex_cost_labels(cnsm_card)
 			end
 		end)
+	end
+end
+
+-- Hook for losing if all held cards are Unobtainium
+local game_upd8_hook = Game.update
+function Game:update(dt)
+	game_upd8_hook(self, dt)
+
+	-- If all held cards are Unobtainium, lose the run
+	if G.STATE == G.STATES.SELECTING_HAND then
+		local unob_tally = 0
+
+		for _,card in ipairs(G.hand.cards) do
+			if card.config.center.key == 'm_ovn_unob' then
+				unob_tally = unob_tally + 1
+			end
+		end
+
+		if unob_tally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
+			check_for_unlock{type="ovn_lol_lmao_even"}
+			G.STATE = G.STATES.GAME_OVER
+			G.STATE_COMPLETE = false
+			return true
+		end
 	end
 end
 

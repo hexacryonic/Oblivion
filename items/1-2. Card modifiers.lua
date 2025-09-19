@@ -221,7 +221,9 @@ SMODS.Enhancement{
 			return {repetitions = card.ability.extra.repetitions}
 		end
 	end,
-	-- Additional functionality present in lib/ui_hook.lua, G.FUNCS.can_play
+	-- Additional functionality present in:
+	---- lib/ui_hook.lua, G.FUNCS.can_play
+	---- lib/hooks.lua, Game:update
 }
 
 ---------------
