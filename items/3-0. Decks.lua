@@ -216,11 +216,22 @@ SMODS.Back{
 	end,
 
 	calculate = function(self, card, context)
-		if (
-			context.first_hand_drawn
-			or (context.ovn_run_started and G.STATE == G.STATES.SELECTING_HAND)
+		if context.setting_blind then
+			G.GAME.ovn_cghost_first_hand_drawn = false
+		end
+
+		if context.first_hand_drawn or (
+			not G.GAME.ovn_cghost_first_hand_drawn
+			and context.ovn_run_started
+			and G.STATE == G.STATES.SELECTING_HAND
 		) then
-			Ovn_f.activate_ghostly_adversary()
+			add_simple_event(nil, nil, function ()
+				Ovn_f.activate_ghostly_adversary()
+			end)
+
+			add_simple_event(nil, nil, function ()
+				G.GAME.ovn_cghost_first_hand_drawn = true
+			end)
 		end
 	end,
 }

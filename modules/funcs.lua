@@ -453,14 +453,13 @@ end
 ---@return nil
 Ovn_f.activate_ghostly_adversary = function()
 	-- Select a Spectral card
-	local speclogic = Oblivion.spectral_logic
 	local selected_spec
 
 	-- Ghostspec was not saved - grab one and save
 	if not G.GAME.ovn_cghost_ghostspec then
 		-- Determine which Spectral cards can actually be used
 		local valid_specs = {}
-		for spec_key, spec_info in pairs(speclogic) do
+		for spec_key, spec_info in pairs(Oblivion.spectral_logic) do
 			if spec_info.usable() and not (
 				next(SMODS.find_card(spec_key))
 				and not Ovn_f.has_joker('j_ring_master') -- Showman
@@ -491,11 +490,11 @@ Ovn_f.activate_ghostly_adversary = function()
 	----
 
 	-- Select playing cards, if needed
-	local logic = speclogic[selected_spec]
+	local selected_logic = Oblivion.spectral_logic[selected_spec]
 	local selected_cards = {}
-	local select_areas = logic.select_area()
+	local select_areas = selected_logic.select_area()
 
-	if logic.select > 0 and #select_areas > 0 and logic.card_point_calc then
+	if selected_logic.select > 0 and #select_areas > 0 and selected_logic.card_point_calc then
 		-- card_points indexes point_list in a sorted manner
 		local point_list = {}
 		local card_points = {} -- key number, value cards
@@ -503,7 +502,7 @@ Ovn_f.activate_ghostly_adversary = function()
 		-- Calculate each card's point value
 		for _,area in ipairs(select_areas) do
 			for _,area_card in ipairs(area.cards) do
-				local area_card_point = logic.card_point_calc(area_card)
+				local area_card_point = selected_logic.card_point_calc(area_card)
 				if not card_points[area_card_point] then
 					card_points[area_card_point] = {}
 				end
@@ -514,13 +513,13 @@ Ovn_f.activate_ghostly_adversary = function()
 
 		-- Time to select cards
 		table.sort(point_list)
-		local select_count = logic.select
+		local select_count = selected_logic.select
 		while select_count > 0 do
 			local max_point = point_list[#point_list]
 			local point_cards = card_points[max_point]
 
 			-- Save pseudorandom values since rerolled between sessions
-			local pseudo_index = logic.select - select_count + 1
+			local pseudo_index = selected_logic.select - select_count + 1
 			local pseudolist = G.GAME.ovn_cghost_pseudorandom
 			pseudolist[pseudo_index] = pseudolist[pseudo_index] or pseudoseed('c_ghost_pick')
 
@@ -561,6 +560,7 @@ Ovn_f.activate_ghostly_adversary = function()
 						area:unhighlight_all()
 					end
 
+					-- Finishing point
 					add_simple_event('after', 2.5 - shorten, function()
 						G.CONTROLLER.locks.use = false
 						G.STATE = G.STATES.SELECTING_HAND
