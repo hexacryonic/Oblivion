@@ -447,3 +447,140 @@ Ovn_f.update_hands_last_played = function(scoring_name)
 		G.GAME.hands_last_played[scoring_name] = 0
 	end
 end
+
+-- When called, the game itself plays a random Spectral card in an adversarial manner.
+-- Only works on Corrupt Ghost Deck.
+---@return nil
+Ovn_f.activate_ghostly_adversary = function()
+	-- Select a Spectral card
+	local speclogic = Oblivion.spectral_logic
+	local selected_spec
+
+	-- Ghostspec was not saved - grab one and save
+	if not G.GAME.ovn_cghost_ghostspec then
+		-- Determine which Spectral cards can actually be used
+		local valid_specs = {}
+		for spec_key, spec_info in pairs(speclogic) do
+			if spec_info.usable() and not (
+				next(SMODS.find_card(spec_key))
+				and not Ovn_f.has_joker('j_ring_master') -- Showman
+			) then
+				table.insert(valid_specs, spec_key)
+			end
+		end
+
+		-- If no Spectral card can be used (for some god forsaken reason)
+		-- then don't even bother continuing
+		if #valid_specs == 0 then
+			G.GAME.ovn_cghost_ghostspec = nil
+			G.GAME.ovn_cghost_pseudorandom = {}
+			save_run()
+			return
+		end
+
+		-- Select the Spectral card
+		selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
+		G.GAME.ovn_cghost_ghostspec = selected_spec
+
+	-- Ghostspec was saved - use it
+	else
+		print('N I C E   T R Y ,   P L A Y E R .')
+		selected_spec = G.GAME.ovn_cghost_ghostspec
+	end
+
+	----
+
+	-- Select playing cards, if needed
+	local logic = speclogic[selected_spec]
+	local selected_cards = {}
+	local select_areas = logic.select_area()
+
+	if logic.select > 0 and #select_areas > 0 and logic.card_point_calc then
+		-- card_points indexes point_list in a sorted manner
+		local point_list = {}
+		local card_points = {} -- key number, value cards
+
+		-- Calculate each card's point value
+		for _,area in ipairs(select_areas) do
+			for _,area_card in ipairs(area.cards) do
+				local area_card_point = logic.card_point_calc(area_card)
+				if not card_points[area_card_point] then
+					card_points[area_card_point] = {}
+				end
+				table.insert(point_list, area_card_point)
+				table.insert(card_points[area_card_point], area_card)
+			end
+		end
+
+		-- Time to select cards
+		table.sort(point_list)
+		local select_count = logic.select
+		while select_count > 0 do
+			local max_point = point_list[#point_list]
+			local point_cards = card_points[max_point]
+
+			-- Save pseudorandom values since rerolled between sessions
+			local pseudo_index = logic.select - select_count + 1
+			local pseudolist = G.GAME.ovn_cghost_pseudorandom
+			pseudolist[pseudo_index] = pseudolist[pseudo_index] or pseudoseed('c_ghost_pick')
+
+			-- Select card
+			local random_card,i = pseudorandom_element(point_cards, pseudolist[pseudo_index])
+			table.insert(selected_cards, random_card)
+
+			table.remove(point_cards, i)
+			point_list[#point_list] = nil
+			select_count = select_count - 1
+		end
+	end
+
+	----
+
+	-- Run animations
+	add_simple_event(nil, nil, function()
+		G.CONTROLLER.locks.use = true -- Prevents interaction
+		G.STATE = G.STATES.PLAY_TAROT -- Move cards like when consumable is being used
+		local spectral = SMODS.add_card{
+			set = 'Spectral',
+			key = selected_spec,
+			area = G.play,
+			edition = 'e_ovn_miasma'
+		}
+
+		-- god-awful requirement of timings
+		-- to prevent premature deselection crashing everything
+		local function use_event(is_selectcards)
+			local shorten = is_selectcards and 0 or 0.75
+
+			add_simple_event('after', 1.5 - shorten, function()
+				spectral:use_consumeable()
+
+				add_simple_event('after', 2 - shorten, function()
+					SMODS.destroy_cards(spectral)
+					for _,area in ipairs(select_areas) do
+						area:unhighlight_all()
+					end
+
+					add_simple_event('after', 2.5 - shorten, function()
+						G.CONTROLLER.locks.use = false
+						G.STATE = G.STATES.SELECTING_HAND
+						G.GAME.ovn_cghost_ghostspec = nil
+						G.GAME.ovn_cghost_pseudorandom = {}
+						save_run()
+					end)
+				end)
+			end)
+		end
+
+		if #selected_cards > 0 then
+			add_simple_event('after', 1, function()
+				for _,selected_card in ipairs(selected_cards) do
+					selected_card.area:add_to_highlighted(selected_card)
+				end
+				use_event(true)
+			end)
+		else
+			use_event(false)
+		end
+	end)
+end

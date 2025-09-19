@@ -297,9 +297,7 @@ function G.UIDEF.use_and_sell_buttons(card)
 	return uidef_usesellbtn_hook(card)
 end
 
--- Hook to prevent playing if:
----- An Unobtainium card is selected
----- The first hand of the round is being drawn on Corrupt Ghost Deck
+-- Hook to prevent playing if an Unobtainium card is selected
 local funcs_canplay_hook = G.FUNCS.can_play
 function G.FUNCS.can_play(e)
 	local has_unob = false
@@ -310,30 +308,7 @@ function G.FUNCS.can_play(e)
 			break
 		end
 	end
-
-	if has_unob or (
-		G.GAME.ovn_cghost_first_hand_drawn ~= nil
-		and not G.GAME.ovn_cghost_first_hand_drawn
-	) then
-		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-		e.config.button = nil
-	else
-		funcs_canplay_hook(e)
-	end
-end
-
--- Hook to prevent discarding if the first hand of the round is being drawn on Corrupt Ghost Deck
-local funcs_candiscard_hook = G.FUNCS.can_discard
-function G.FUNCS.can_discard(e)
-	if (
-		G.GAME.ovn_cghost_first_hand_drawn ~= nil
-		and not G.GAME.ovn_cghost_first_hand_drawn
-	) then
-		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-		e.config.button = nil
-	else
-		funcs_candiscard_hook(e)
-	end
+	funcs_canplay_hook(e)
 end
 
 -- Hook to reset played hand status for the round

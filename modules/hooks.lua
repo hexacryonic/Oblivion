@@ -228,19 +228,6 @@ function Card:update(dt)
 	end
 end
 
--- Hook for no-click if first hand is being drawn on Corrupt Ghost Deck (prevent unexpected behaviors)
-local card_click_hook = Card.click
-function Card:click()
-	-- Prevent card selection on C-Ghost Deck draw
-	if G.GAME.ovn_cghost_first_hand_drawn ~= nil then
-		if G.GAME.ovn_cghost_first_hand_drawn then
-			card_click_hook(self)
-		end
-	else
-		card_click_hook(self)
-	end
-end
-
 -- Hook to transmute modifiers on cards with changed suits
 local card_changesuit_hook = Card.change_suit
 function Card:change_suit(new_suit)
@@ -315,7 +302,6 @@ end
 ---------------------
 
 -- Hook for:
----- Creating the Ghost Spectral cardarea
 ---- context.ovn_run_started
 ---- G.GAME values:
 ------ ovn_instability NUMBER
@@ -325,15 +311,6 @@ end
 ---- Setting complex costs (display) for all cards (Corrupt Green Deck)
 local startrun_hook = Game.start_run
 function Game:start_run(args)
-	-- For use in C-Ghost deck
-	self.ovn_ghostspec = CardArea(
-		G.ROOM.T.x + 9,
-		G.ROOM.T.y*1.1,
-		G.CARD_W*1.1,
-		1.05*G.CARD_H,
-		{card_limit = 1, type = 'consumeable', highlight_limit = 0}
-	)
-	G.ovn_ghostspec = self.ovn_ghostspec
 	Ovn_f.add_simple_event(nil, nil, function()
 		-- C-Ghost anti-cheese :P
 		SMODS.calculate_context({
