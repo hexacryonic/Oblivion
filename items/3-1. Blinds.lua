@@ -97,12 +97,12 @@ SMODS.Blind({
 SMODS.Blind({
 	key = 'stygian',
 	loc_vars = function(self, info_queue, card)
-		return { }
+		return { vars = {self.config.stygian_cslmod} }
 	end,
 	collection_loc_vars = function(self)
 		return { }
 	end,
-	config = { },
+	config = { stygian_cslmod = 0 },
 	boss = {min = 8, max = 10, showdown = true},
 	boss_colour = HEX('1538af'),
 
@@ -113,17 +113,33 @@ SMODS.Blind({
 	mult = 2,
 
 	set_blind = function(self, reset, silent)
-		for _,playing_card in pairs(G.playing_cards) do
-			if playing_card.config.center ~= G.P_CENTERS.c_base then
-				playing_card:change_suit('ovn_Optics')
+		for i = 1, #G.jokers.cards do
+			if G.jokers.cards[i].config.center.rarity == "ovn_corrupted" then
+				self.config.stygian_cslmod = self.config.stygian_cslmod + 1
 			end
 		end
-		corrupt_all_jokers()
+		if self.config.stygian_cslmod > 4 then self.config.stygian_cslmod = 4 end
+		SMODS.change_play_limit(-self.config.stygian_cslmod)
+		SMODS.change_discard_limit(-self.config.stygian_cslmod)
+		G.hand.config.highlighted_limit = G.hand.config.highlighted_limit - self.config.stygian_cslmod
+	end,
+
+	defeat = function(self, silent)
+		SMODS.change_play_limit(self.config.stygian_cslmod)
+		SMODS.change_discard_limit(self.config.stygian_cslmod)
+		self.config.stygian_cslmod = 0
+	end,
+
+	disable = function(self, silent)
+		SMODS.change_play_limit(self.config.stygian_cslmod)
+		SMODS.change_discard_limit(self.config.stygian_cslmod)
+		self.config.stygian_cslmod = 0
 	end,
 
 	in_pool = function()
-		for pure_key in pairs(Oblivion.corruption_map) do
-			if next(SMODS.find_card(pure_key)) then return true end
+		if not G.jokers then return false end
+		for i = 1, #G.jokers.cards do
+			if G.jokers.cards[i].config.center.rarity == "ovn_corrupted" then return true end
 			return false
 		end
 	end,

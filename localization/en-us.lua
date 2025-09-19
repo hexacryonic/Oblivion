@@ -133,9 +133,9 @@ local loc =  {
 			bl_ovn_stygian = {
 				name = 'Stygian Sigil',
 				text = {
-					'When entering Blind:',
-					'Corrupt all possible Jokers and',
-					'convert enhanced cards to Optics'
+					'-1 card selection limit',
+					'per Corrupted Joker owned',
+					'upon entry (min. -4)'
 				}
 			},
 		},

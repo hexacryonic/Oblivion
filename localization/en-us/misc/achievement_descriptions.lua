@@ -27,4 +27,6 @@ return {
 	["ach_ovn_exposed_nerve"]         = "Disable The Nerve, then play a Straight Flush of Optics",
 	["ach_ovn_do_it_first"]           = "While The Purity is upcoming, obtain the pure versions of currently held Corrupt Jokers, then sell all Corrupt Jokers",
 	["ach_ovn_bananas"]               = "Naturally obtain Aeon Cavendish",
+	["ach_ovn_darkweb"]               = "Have a single Database exceed 1000 chips",
+	["ach_ovn_unstoppableforce"]               = "Have your held hand full of Unobtanium Cards when you can't discard",
 }

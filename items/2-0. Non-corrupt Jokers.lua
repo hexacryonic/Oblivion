@@ -80,7 +80,7 @@ SMODS.Joker {
 ------
 SMODS.Joker {
 	key = 'ovn',
-	atlas = 'corrupted',
+    atlas = 'notcorrupted',
 	pos  = { x=4, y=0 },
 
 	blueprint_compat = false,
@@ -375,6 +375,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'trolley_problem',
+    atlas = 'notcorrupted',
+    pos  = { x=0, y=1 },
+
 	config = { extra = { valid_hands = {
 		["Three of a Kind"] = true,
 		["Four of a Kind"] = true,
@@ -425,10 +428,10 @@ SMODS.Joker {
 		}
 	},
 
-	--[[
+
 	atlas = "notcorrupted",
-	pos = { x=1, y=0 },
-	]]
+    pos = { x=3, y=0 },
+
 
 	rarity = 2,
 	cost = 5,
