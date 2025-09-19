@@ -380,3 +380,25 @@ SMODS.Achievement{
 		return (args.type == 'ovn_natural_aeon')
 	end
 }
+
+--------------------------------------
+-- Dark Web
+--------------------------------------
+SMODS.Achievement{
+	key = "darkweb",
+	order = 25,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_big_database')
+	end
+}
+
+--------------------------------------
+-- Unstoppable Force Vs. Immovable Object
+--------------------------------------
+SMODS.Achievement{
+	key = "unstoppableforce",
+	order = 26,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_lol_lmao_even')
+	end
+}

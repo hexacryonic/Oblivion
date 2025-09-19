@@ -15,9 +15,12 @@ local card_atlases = {
 	mutation_atlas     = "mutation",
 	cboosters_atlas    = "cbooster",
 	seals_atlas        = "seals",
+	marks_atlas        = "marks",
 	voucher_atlas      = "atlasvoucher",
 	skin_nd_lc         = "skinND_lc",
 	skin_nd_hc         = "skinND_hc",
+	skin_ism_lc         = "skinISM_lc",
+	skin_ism_hc         = "skinISM_hc",
 }
 
 for key, path in pairs(card_atlases) do

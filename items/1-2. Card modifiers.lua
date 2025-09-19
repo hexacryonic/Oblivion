@@ -430,7 +430,7 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.RED, 0.1),
 
-	atlas = "seals_atlas",
+    atlas = "marks_atlas",
 	pos = {x=0, y=0},
 	in_pool = function() return false end,
 	never_scores = true,
@@ -462,8 +462,8 @@ SMODS.Seal {
 	key = 'sapphire_mark',
 	badge_colour = darken(G.C.BLUE, 0.1),
 
-	atlas = "seals_atlas",
-	pos = {x=0, y=0},
+    atlas = "marks_atlas",
+    pos = {x=1, y=0},
 	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
@@ -548,8 +548,8 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.GOLD, 0.1),
 
-	atlas = "seals_atlas",
-	pos = {x=0, y=0},
+    atlas = "marks_atlas",
+    pos = {x=2, y=0},
 	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
@@ -601,8 +601,8 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.PURPLE, 0.1),
 
-	atlas = "seals_atlas",
-	pos = {x=0, y=0},
+    atlas = "marks_atlas",
+    pos = {x=3, y=0},
 	in_pool = function() return false end,
 
 	calculate = function (self, card, context)
@@ -629,8 +629,8 @@ SMODS.Seal {
 	key = 'iolite_mark',
 	badge_colour = darken(HEX('252fe3'), 0.1),
 
-	atlas = "seals_atlas",
-	pos = {x=0, y=0},
+    atlas = "marks_atlas",
+    pos = {x=4, y=0},
 	in_pool = function() return false end,
 
 	calculate = function (self, card, context)

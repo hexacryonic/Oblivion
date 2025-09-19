@@ -262,6 +262,9 @@ SMODS.Joker {
 				chips = card.ability.extra.chips_per*G.GAME.cumulative_unique_joker_count
 			}
 		end
+        if card.ability.extra.chips_per*G.GAME.cumulative_unique_joker_count >= 1000 then
+            check_for_unlock{type="ovn_big_database"}
+        end
 	end
 }
 

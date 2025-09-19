@@ -267,6 +267,36 @@ SMODS.DeckSkin{
 			display_ranks = {"King", "Queen", "Jack"},
 			atlas = "ovn_skin_nd_hc",
 			pos_style = 'collab',
+            hc_default = true,
+		},
+	}
+}
+
+-------------
+-- DECK SKIN
+-- Optics
+-- In Sound Mind
+-------------
+SMODS.DeckSkin{
+    key = 'insoundmind',
+	suit = 'ovn_Optics',
+    loc_txt = {["en-us"] = "In Sound Mind"},
+
+	palettes = {
+		{
+			key = 'lc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+            atlas = "ovn_skin_ism_lc",
+			pos_style = 'collab',
+		},
+		{
+			key = 'hc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+            atlas = "ovn_skin_ism_hc",
+			pos_style = 'collab',
+            hc_default = true,
 		},
 	}
 }

@@ -23,4 +23,6 @@ return {
 	["ach_ovn_exposed_nerve"]         = "Yanking an Exposed Nerve",
 	["ach_ovn_do_it_first"]           = "Not If I Do It First!",
 	["ach_ovn_bananas"]               = "This Entire Quest Was Bananas",
+	["ach_ovn_darkweb"]               = "Dark Web",
+	["ach_ovn_unstoppableforce"]               = "Unstoppable Force Vs. Immovable Object",
 }
