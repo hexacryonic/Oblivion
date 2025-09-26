@@ -1,7 +1,12 @@
 local function corrupted_from(text)
-	local format = "{C:inactive,s:0.8}Corrupted from{} {C:attention,s:0.8}%s{}"
+	local format = "{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}%s"
 	return format:format(text)
 end
+
+-- Description writing note:
+--   Text with background should be formatted as follows for good visual balance:
+--   {X:mult,C:white}X#1# {} Mult
+--   Note that the last node {} is surrounded by spaces on BOTH sides, not just the left
 
 return {
 	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
@@ -10,13 +15,13 @@ return {
 		text = {
 			"{C:ovn_corrupted}-0.05 {}after playing a hand",
 			"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
-			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics{} card",
+			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics {}card",
 		}
 	},
 	j_ovn_john = {
 		name = 'John Oblivion',
 		text = {
-			"Creates a {C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
+			"Creates a {C:ovn_corrupted}Corrupted {C:attention}Joker",
 			"when sold"
 		}
 	},
