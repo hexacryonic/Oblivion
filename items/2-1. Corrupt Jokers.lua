@@ -923,7 +923,7 @@ SMODS.Joker {
 
 -- Determine which values to use for Apache Tears's effect.
 ---@param card Card
----@return number, number, number, number, number
+---@return number chips, number mult, number xmult, number cash, number cash_freq
 local function determine_tear_effect(card)
 	local card_ex = card.ability.extra
 	local tracker = card_ex.track_corrupts
