@@ -95,7 +95,7 @@ if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
     ovn_corruption_occurred = true,
     ovn_corruption_type = "Joker",
     ovn_former_form_key = card_key,
-    ovn_corrupted_card = card
+    ovn_corrupted_card = card -- nil if card is destroyed due to corruption (e.g. Apache Tears absorption)
 }
 ```
 

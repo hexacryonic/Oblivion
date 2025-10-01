@@ -328,6 +328,37 @@ return {
 			corrupted_from("Acrobat"),
 		}
 	},
+	j_ovn_apache_tears = {
+		name = 'Apache Tears',
+		text = {
+			"Scored {C:ovn_optic}Optic {}cards give",
+			"{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
+			"{C:attention}Every#4# {C:ovn_optic}Optic {}cards",
+			"scored {C:inactive}(#5#) {}gives {C:money}$#6#",
+			"{s:0.3} {}",
+			"{C:attention}Pure forms {}are not banished",
+			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
+			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
+			"{s:0.3} {}",
+			"{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}Arrowhead, Bloodstone,",
+			"{C:attention,s:0.8}Onyx Agate, or Rough Gem",
+		}
+	},
+	j_ovn_apache_tears_every_card_cash = {
+		name = 'Apache Tears',
+		text = {
+			"Scored {C:ovn_optic}Optic {}cards give",
+			"{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
+			"{C:attention}Every {C:ovn_optic}Optic {}card scored gives {C:money}$#4#",
+			"{s:0.3} {}",
+			"{C:attention}Pure forms {}are not banished",
+			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
+			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
+			"{s:0.3} {}",
+			"{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}Arrowhead, Bloodstone,",
+			"{C:attention,s:0.8}Onyx Agate, or Rough Gem",
+		}
+	},
 	j_ovn_showneverends = {
 		name = 'THE SHOW NEVER ENDS',
 		text = {

@@ -19,8 +19,9 @@ local card_atlases = {
 	voucher_atlas      = "atlasvoucher",
 	skin_nd_lc         = "skinND_lc",
 	skin_nd_hc         = "skinND_hc",
-	skin_ism_lc         = "skinISM_lc",
-	skin_ism_hc         = "skinISM_hc",
+	skin_ism_lc        = "skinISM_lc",
+	skin_ism_hc        = "skinISM_hc",
+	apache_tears       = "ApacheTears",
 }
 
 for key, path in pairs(card_atlases) do
@@ -80,3 +81,24 @@ SMODS.Atlas{
 	px = 18,
 	py = 18
 }
+
+----
+
+--[[
+
+Note on ApacheTears.png
+Cards must be layed out such that each sprite corresponds
+to the following card states:
+
+---- S--- -H-- SH--
+--D- S-D- -HD- SHD-
+---C S--C -H-C SH-C
+--DC S-DC -HDC SHDC
+
+Where if a state contains:
+- S, Spades/Arrowhead is activated
+- H, Hearts/Bloodstone is activated
+- D, Diamonds/Rough Gem is activated
+- C, Clubs/Onyx Agate is activated
+
+]]

@@ -917,6 +917,132 @@ SMODS.Joker {
 	end,
 }
 
+---------------
+-- Apache Tears
+---------------
+
+-- Determine which values to use for Apache Tears's effect.
+---@param card Card
+---@return number, number, number, number, number
+local function determine_tear_effect(card)
+	local card_ex = card.ability.extra
+	local tracker = card_ex.track_corrupts
+	local full_power = (
+		tracker.j_rough_gem
+		and tracker.j_bloodstone
+		and tracker.j_arrowhead
+		and tracker.j_onyx_agate
+	)
+
+	-- Determine which index to use when referring to a value list.
+	---@param joker_key string
+	---@return number
+	local function fx_idx(joker_key)
+		if full_power then return 3
+		elseif tracker[joker_key] then return 2
+		else return 1
+		end
+	end
+
+	local chips     = card_ex.card_chips[fx_idx('j_arrowhead' )]
+	local mult      = card_ex.card_mult [fx_idx('j_onyx_agate')]
+	local xmult     = card_ex.card_xmult[fx_idx('j_bloodstone')]
+	local cash      = card_ex.card_cash [fx_idx('j_rough_gem' )]
+	local cash_freq = card_ex.cash_freq [fx_idx('j_rough_gem' )]
+
+	return chips, mult, xmult, cash, cash_freq
+end
+
+SMODS.Joker {
+	key = "apache_tears",
+	loc_vars = function (self, info_queue, card)
+		local chips, mult, xmult, cash, cash_freq = determine_tear_effect(card)
+		local card_count = cash_freq - card.ability.extra.card_count
+		local cash_freq_txt = cash_freq ~= 1 and (' ' .. cash_freq) or ''
+		-- space before cash freq strictly required
+
+		local key = "j_ovn_apache_tears"
+		local vars = {
+			chips, mult, xmult,
+			cash_freq_txt, card_count, cash,
+		}
+		-- If every card gives cash, change loc
+		if cash_freq == 1 then
+			key = "j_ovn_apache_tears_every_card_cash"
+			vars = {chips, mult, xmult, cash}
+		end
+
+		return {
+			key = key,
+			vars = vars
+		}
+	end,
+	config = {
+		extra = {
+			card_count = 0,
+			track_corrupts = {
+				j_rough_gem  = false,
+				j_bloodstone = false,
+				j_arrowhead  = false,
+				j_onyx_agate = false
+			},
+			-- [1] - regular value
+			-- [2] - corrupt value
+			-- [3] - full power value
+			--             [1]   [2]   [3]
+			card_chips = {  20 ,  50 ,  60 },
+			card_mult  = {   3 ,   7 ,   9 },
+			card_xmult = { 1.1 , 1.3 , 1.5 },
+			card_cash  = {   1 ,   1 ,   2 },
+			cash_freq  = {   3 ,   1 ,   1 }
+		}
+	},
+
+	atlas = "apache_tears",
+	pos = {x=0, y=0},
+
+	rarity = "ovn_corrupted",
+	cost = 10,
+
+	calculate = function (self, card, context)
+		if (
+			context.individual
+			and context.cardarea == G.play
+			and context.other_card:is_suit("ovn_Optics")
+		) then
+			local chips, mult, xmult, cash, cash_freq = determine_tear_effect(card)
+			card.ability.extra.card_count = card.ability.extra.card_count + 1
+
+			local do_cash = false
+			if card.ability.extra.card_count >= cash_freq then
+				card.ability.extra.card_count = 0
+				do_cash = true
+			end
+
+			return {
+				chips = chips,
+				mult = mult,
+				xmult = xmult,
+				dollars = do_cash and cash or nil
+			}
+		end
+
+		if (
+			context.ovn_corruption_occurred
+			and context.ovn_corruption_type == "Joker"
+			and context.ovn_corrupted_card ~= card
+			and card.ability.extra.track_corrupts[context.ovn_former_form_key] ~= nil
+		) then
+			local tracker = card.ability.extra.track_corrupts
+			tracker[context.ovn_former_form_key] = true
+			local x = (tracker.j_bloodstone and 2 or 0) + (tracker.j_arrowhead  and 1 or 0)
+			local y = (tracker.j_rough_gem  and 2 or 0) + (tracker.j_onyx_agate and 1 or 0)
+			card.children.center:set_sprite_pos({x = x, y = y})
+			card:juice_up()
+		end
+	end,
+}
+
 ----------------------
 -- THE SHOW NEVER ENDS
 ----------------------

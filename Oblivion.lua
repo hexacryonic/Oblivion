@@ -106,6 +106,10 @@ cmap["j_constellation"]       = "j_ovn_event_horizon"
 cmap["j_midas_mask"]          = "j_ovn_philosophers_stone"
 cmap["j_baseball"]            = "j_ovn_cigarette_card"
 cmap["j_splash"]              = "j_ovn_sludge"
+cmap["j_arrowhead"]           = "j_ovn_apache_tears"
+cmap["j_bloodstone"]          = "j_ovn_apache_tears"
+cmap["j_onyx_agate"]          = "j_ovn_apache_tears"
+cmap["j_rough_gem"]           = "j_ovn_apache_tears"
 
 if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
 Oblivion.corruption_condition["j_gros_michel"] = function()

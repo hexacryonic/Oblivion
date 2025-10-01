@@ -87,25 +87,34 @@ Ovn_f.corrupt_joker = function(card)
 
 	G.GAME.corruptingJoker = true
 	local ability = card.ability
+	local card_destroyed = false
 
-	if corrupted_card_key ~= card_key then
+	if corrupted_card_key == "j_ovn_apache_tears" and Ovn_f.has_joker("j_ovn_apache_tears") then
+		SMODS.destroy_cards(card)
+		card_destroyed = true
+	elseif corrupted_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[corrupted_card_key], false, true)
+	-- as Apache Tears "absorbs" the corrupted card instead
 	end
+
     add_simple_event(nil, nil, function()
         play_sound("ovn_abyss")
-        card:juice_up(0.3, 0.5)
 
-		card.ability.ovn_former_form = card_key
-		card:calculate_joker{
-			ovn_corrupted_from = true,
-			ovn_former_form_key = card_key,
-			ovn_former_form_ability = ability
-		}
+		if not card_destroyed then
+			card:juice_up(0.3, 0.5)
+			card.ability.ovn_former_form = card_key
+			card:calculate_joker{
+				ovn_corrupted_from = true,
+				ovn_former_form_key = card_key,
+				ovn_former_form_ability = ability
+			}
+		end
+
 		SMODS.calculate_context({
 			ovn_corruption_occurred = true,
 			ovn_corruption_type = "Joker",
 			ovn_former_form_key = card_key,
-			ovn_corrupted_card = card
+			ovn_corrupted_card = card_destroyed and nil or card
 		})
 
         G.GAME.corruptingJoker = false
@@ -215,9 +224,21 @@ Ovn_f.is_corruptbanished = function(card_key)
 	-- Do not destroy if self-corruptible
 	if corrupt_key == card_key then return false end
 
-	-- In pool if Joker's corrupt variant is not hled
+	-- In pool if Joker's corrupt variant is not held
 	local has_corrupt_joker = Ovn_f.has_joker(corrupt_key)
 	if not has_corrupt_joker then return false end
+
+	-- In pool even if Apache Tears is present, but it hasn't absorbed the Joker yet
+	local apache_absorption = false
+	if Oblivion.corruption_map[card_key] == 'j_ovn_apache_tears' then
+		for _,tear_card in ipairs(SMODS.find_card('j_ovn_apache_tears')) do
+			if tear_card.ability.extra.track_corrupts[card_key] == true then
+				apache_absorption = true
+				break
+			end
+		end
+	end
+	if not apache_absorption then return false end
 
 	-- DIE
 	return true
