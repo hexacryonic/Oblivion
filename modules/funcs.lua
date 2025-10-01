@@ -229,16 +229,16 @@ Ovn_f.is_corruptbanished = function(card_key)
 	if not has_corrupt_joker then return false end
 
 	-- In pool even if Apache Tears is present, but it hasn't absorbed the Joker yet
-	local apache_absorption = false
 	if Oblivion.corruption_map[card_key] == 'j_ovn_apache_tears' then
+		local apache_absorption = false
 		for _,tear_card in ipairs(SMODS.find_card('j_ovn_apache_tears')) do
 			if tear_card.ability.extra.track_corrupts[card_key] == true then
 				apache_absorption = true
 				break
 			end
 		end
+		if not apache_absorption then return false end
 	end
-	if not apache_absorption then return false end
 
 	-- DIE
 	return true
