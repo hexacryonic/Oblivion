@@ -1040,6 +1040,13 @@ SMODS.Joker {
 			card.children.center:set_sprite_pos({x = x, y = y})
 			card:juice_up()
 		end
+
+		if context.ovn_run_started then
+			local tracker = card.ability.extra.track_corrupts
+			local x = (tracker.j_bloodstone and 2 or 0) + (tracker.j_arrowhead  and 1 or 0)
+			local y = (tracker.j_rough_gem  and 2 or 0) + (tracker.j_onyx_agate and 1 or 0)
+			card.children.center:set_sprite_pos({x = x, y = y})
+		end
 	end,
 }
 
