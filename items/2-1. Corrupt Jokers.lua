@@ -437,7 +437,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'cultivar',
 	loc_vars = function(self, info_queue, card)
-		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'ovn_ion')
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cultivar')
 		return {vars = {
 			card.ability.extra.Xmult,
 			numerator,
