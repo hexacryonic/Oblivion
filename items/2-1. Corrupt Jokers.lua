@@ -464,7 +464,7 @@ SMODS.Joker {
 
 		if context.end_of_round and context.game_over == false and not context.repetition and not context.blueprint then
 			if not SMODS.pseudorandom_probability(card, 'cultivar', 1, card.ability.extra.odds) then
-				return { message = 'Safe!' }
+				return { message = localize('k_safe_ex') }
 			end
 
 			-- Odd is hit
@@ -490,7 +490,7 @@ SMODS.Joker {
 
 			G.GAME.pool_flags.gros_michel_extinct = false
 			G.GAME.corruptiblemichel = true
-			return { message = 'Extinct!' }
+			return { message = localize('k_extinct_ex') }
 		end
 	end,
     in_pool = function(self, args)
