@@ -1,4 +1,3 @@
--- lib/ui_hooks.lua
 -- These functions append certain behaviors onto existing UI functions
 -- to easily add/conditionally replace new UI features
 

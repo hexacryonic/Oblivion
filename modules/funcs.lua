@@ -1,4 +1,3 @@
--- lib/funcs.lua
 -- These commonly called functions are used across the mod
 
 -- 1. INTERNAL FUNCTIONS

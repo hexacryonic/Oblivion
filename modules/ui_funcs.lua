@@ -1,4 +1,3 @@
--- lib/ui_funcs.lua
 -- These functions are used by UI elements, usually those in lib/ui_hook.lua
 -- this was a bit more full before i moved deck stuff to their own files
 

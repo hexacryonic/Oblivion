@@ -1,4 +1,3 @@
--- lib/hooks.lua
 -- These functions append certain behaviors onto existing functions
 -- in a manner easier than patching
 
