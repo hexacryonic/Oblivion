@@ -300,3 +300,32 @@ SMODS.DeckSkin{
 		},
 	}
 }
+
+-------------
+-- DECK SKIN
+-- Optics
+-- Genome Guardian / Cell Command (Collectively "ACGT Series")
+-------------
+SMODS.DeckSkin{
+    key = 'acgt',
+	suit = 'ovn_Optics',
+    loc_txt = {["en-us"] = "ACGT Series"},
+
+	palettes = {
+		{
+			key = 'lc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+            atlas = "ovn_skin_acgt_lc",
+			pos_style = 'collab',
+		},
+		{
+			key = 'hc',
+			ranks = {"King", "Queen", "Jack"},
+			display_ranks = {"King", "Queen", "Jack"},
+            atlas = "ovn_skin_acgt_hc",
+			pos_style = 'collab',
+            hc_default = true,
+		},
+	}
+}
