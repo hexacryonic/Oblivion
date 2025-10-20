@@ -144,3 +144,41 @@ SMODS.Sound({
 		)
 	end,
 })
+
+SMODS.Sound({
+	key = "musicAPF",
+	path = "musicAPF.ogg",
+
+	sync = { ovn_musicAPFBlind = true },
+	pitch = 1,
+	volume = 0.6,
+
+	select_music_track = function()
+	return G.GAME and (
+		Ovn_f.has_joker('j_ovn_apartfalling')
+		and (
+			G.shop
+			or G.booster_pack
+			or not G.GAME.blind
+			or G.blind_select
+			or G.round_eval
+		)
+	)
+	end,
+})
+
+SMODS.Sound({
+	key = "musicAPFBlind",
+	path = "musicAPFBlind.ogg",
+
+	sync = { ovn_musicAPF = true },
+	pitch = 1,
+	volume = 0.5,
+
+	select_music_track = function()
+		return G.GAME and (
+			Ovn_f.has_joker('j_ovn_apartfalling')
+			and G.GAME.blind
+		)
+	end,
+})
