@@ -74,6 +74,7 @@ SMODS.Sound({
 			and not G.booster_pack_sparkles
 			and not G.booster_pack_meteors
 			and not (G.GAME.blind and G.GAME.blind.boss)
+			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
 })
@@ -93,6 +94,7 @@ SMODS.Sound({
 			and not G.booster_pack
 			and not G.booster_pack_sparkles
 			and not G.booster_pack_meteors
+			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
 })
@@ -110,6 +112,7 @@ SMODS.Sound({
 			and G.booster_pack
 			and not G.booster_pack.REMOVED
 			and not G.booster_pack_meteors
+			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
 })
@@ -126,6 +129,7 @@ SMODS.Sound({
 			and G.booster_pack_meteors
 			and not G.booster_pack_meteors.REMOVED
 			and not G.booster_pack_sparkles
+			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
 })
@@ -141,6 +145,7 @@ SMODS.Sound({
 			Ovn_f.deck_is_corrupt()
 			and G.GAME.blind
 			and G.GAME.blind.boss
+			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
 })
