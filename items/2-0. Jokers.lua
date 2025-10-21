@@ -155,6 +155,7 @@ SMODS.Joker {
 
 	rarity = 2,
 	cost = 6,
+    enhancement_gate = "m_ovn_radiant",
 
 	add_to_deck = function (self, card, from_debuff)
 		if from_debuff then return end
@@ -216,6 +217,7 @@ SMODS.Joker {
 
 	rarity = 2,
 	cost = 6,
+    enhancement_gate = "m_ovn_ice",
 
 	calculate = function(self, card, context)
 		local card_extra = card.ability.extra
@@ -259,6 +261,7 @@ SMODS.Joker {
 
 	rarity = 2,
 	cost = 6,
+    enhancement_gate = "m_ovn_crystal",
 
 	add_to_deck = function (self, card, from_debuff)
 		if from_debuff then return end
@@ -314,6 +317,7 @@ SMODS.Joker {
 
 	rarity = 2,
 	cost = 6,
+    enhancement_gate = "m_ovn_ion",
 
 	calculate = function (self, card, context)
 		if context.joker_main then return {chips = card.ability.extra.chips} end
@@ -798,7 +802,7 @@ SMODS.Joker {
 	rarity = 'ovn_corrupted',
 	cost = 5,
 
-	
+
     add_to_deck = function(self, card, from_debuff)
         G.hand:change_size(card.ability.extra.hand_size)
     end,

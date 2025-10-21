@@ -9,7 +9,6 @@ return {
 	b_ovn_c_red = {
 		name = 'Corrupt Red Deck',
 		text = {
-			"{C:mult}+1{} discard per round",
 			"When you {C:mult}discard{}, all cards",
 			"{C:attention}EXCEPT{} selected are {C:mult}discarded{}",
 			"After a hand, {C:mult}discard{} up to",
@@ -57,7 +56,7 @@ return {
 		text = {
 			"At end of each Round:",
 			"{C:money}$1{s:0.85} per remaining {C:blue}Hand",
-			"{C:money}$2i{s:0.85} per remaining {C:red}Discard",
+			"{C:green}$1i{s:0.85} per remaining {C:red}Discard",
 			"{s:0.3} {}",
 			"Shop prices are {C:green}complex",
 		},
@@ -66,6 +65,23 @@ return {
 			"{C:blue}Blue Stake {}or higher,",
 			"win with {C:attention}Seed Money",
 			"and {C:attention}Money Tree",
+		}
+	},
+	b_ovn_c_black = {
+		name = 'Corrupt Black Deck',
+		text = {
+			"{C:attention}+4{} Joker slots",
+			"{C:mult}-1{} hand, discard,",
+			"hand size, and",
+			"consumable slot",
+			"{s:0.3} {}",
+			"{C:inactive,s:0.7}(Yeah, this one's just cruel)"
+		},
+		unlock = {
+			"On {C:attention}Black {}Deck with",
+			"{C:blue}Blue Stake {}or higher,",
+			"win whilst never having more",
+			"than 4 Jokers at a time",
 		}
 	},
 	b_ovn_c_ghost = {

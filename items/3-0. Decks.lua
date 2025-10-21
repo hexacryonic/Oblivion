@@ -49,10 +49,6 @@ SMODS.Back{
 		if achievement_get("red_rum") then return true end
 	end,
 
-	apply = function(self)
-		G.GAME.starting_params.discards = G.GAME.starting_params.discards + 1
-	end,
-
 	calculate = function(self, card, context)
 		if context.after then add_simple_event(nil, nil, function ()
 			local any_selected = nil
@@ -189,7 +185,31 @@ SMODS.Back{
 		G.GAME.dollars_complex = tostring(G.GAME.dollars)
 		Ovn_f.ease_complex_dollars(0,0)
 		G.GAME.modifiers.money_per_hand = 1
-		G.GAME.modifiers.money_per_discard = 2 -- i
+        G.GAME.modifiers.money_per_discard = 1 -- i
+	end
+}
+
+---------------------
+-- Corrupt Black Deck
+---------------------
+SMODS.Back{
+    key = "c_black",
+	ovn_corrupt_deck = true,
+
+	atlas = "cdeck_atlas",
+    pos = { x = 4, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = function (self, args)
+        if achievement_get("bleakest_blackout") then return true end
+	end,
+
+	apply = function(self)
+        G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots + 4
+        G.GAME.starting_params.hands = G.GAME.starting_params.hands - 1
+        G.GAME.starting_params.discards = G.GAME.starting_params.discards - 1
+        G.GAME.starting_params.consumable_slots = G.GAME.starting_params.consumable_slots - 1
+        G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size - 1
 	end
 }
 
