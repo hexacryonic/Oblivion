@@ -3,7 +3,7 @@ SMODS.current_mod.calculate = function (self, context)
     if context.playing_card_added then
         local optics_count = 0
         for _,playing_card in ipairs(context.cards) do
-            if playing_card.base and playing_card.base.suit == "ovn_Optics" then
+            if playing_card and playing_card.base and playing_card.base.suit == "ovn_Optics" then
                 optics_count = optics_count + 1
             end
         end
