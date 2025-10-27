@@ -298,14 +298,17 @@ local loc =  {
 		},
 		challenge_names = {
 			c_ovn_corrupt_world = "Corrupt World",
+			c_ovn_corrupt_edge = "Corrupt Edge",
 		},
 		v_text = {
 			ch_c_ovn_og = { "{C:attention,s:1.5}Original Rules:{}" },
-			ch_c_ovn_new = { "{C:ovn_corrupted,s:1.5}New Rules:{}" },
+			ch_c_ovn_new = { "{C:ovn_corrupted,s:1.5}Changes:{}" },
 			ch_c_ovn_but = { "{C:ovn_corrupted,s:1.3}BUT{}" },
 			ch_c_ovn_spacer = { "{s:0.3} {}" },
 			ch_c_ovn_world_aces = { "You have an {C:attention}Ace{} of each suit" },
 			ch_c_ovn_world_pmo = { "{C:ovn_corrupted}Prosopometamorphopsia{}" },
+			ch_c_ovn_edge_foil = { "The {C:attention}Ceremonial Dagger{} is now {C:dark_edition}Foil{}" },
+			ch_c_ovn_edge_knife = { "There is no edge, only knife" },
 		},
 		suits_singular = {
 			ovn_Optics = "Optic"

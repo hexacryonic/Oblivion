@@ -1,4 +1,37 @@
 ----------------
+-- Corrupt Edge
+----------------
+SMODS.Challenge{
+    key = 'corrupt_edge',
+	rules = {
+		custom = {
+			{id = 'ovn_new'},
+			{id = 'ovn_spacer'},
+            {id = 'ovn_edge_foil'},
+			{id = 'ovn_but'},
+            {id = 'ovn_edge_knife'},
+		},
+        modifiers = { {id = 'joker_slots', value = 2} }
+	},
+	jokers = {
+        {id = 'j_ceremonial', eternal = true, pinned = true, edition = 'foil'}
+	},
+	consumeables = { },
+    vouchers = { },
+	deck = {
+		type = 'Challenge Deck'
+	},
+	restrictions = {
+		banned_cards = { },
+		banned_tags = { },
+		banned_other = {
+		}
+	}
+}
+
+
+
+----------------
 -- Corrupt World
 ----------------
 local function corrupt_world_deck_cards()
