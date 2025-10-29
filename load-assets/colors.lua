@@ -1,6 +1,9 @@
-local lc = loc_colour
+G.C.INST = HEX('04248F')
+G.C.UI_INST = G.C.INST
+
+local lc_hook = loc_colour
 function loc_colour(_c, _default)
-	if not G.ARGS.LOC_COLOURS then lc() end
+	if not G.ARGS.LOC_COLOURS then lc_hook() end
 
 	local loc_c = G.ARGS.LOC_COLOURS
 	loc_c.ovn_corrupted = G.C.RARITY['ovn_corrupted']
@@ -14,5 +17,5 @@ function loc_colour(_c, _default)
 	loc_c.ovn_optic     = G.C.SUITS.ovn_Optics
 	loc_c.ovn_indigo    = HEX('252fe3')
 
-	return lc(_c, _default)
+	return lc_hook(_c, _default)
 end

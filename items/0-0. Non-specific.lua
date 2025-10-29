@@ -272,11 +272,11 @@ SMODS.DeckSkin{
 	}
 }
 
--------------
+----------------
 -- DECK SKIN
 -- Optics
 -- In Sound Mind
--------------
+----------------
 SMODS.DeckSkin{
     key = 'insoundmind',
 	suit = 'ovn_Optics',
@@ -301,11 +301,11 @@ SMODS.DeckSkin{
 	}
 }
 
--------------
+-----------------------------------------------
 -- DECK SKIN
 -- Optics
--- Genome Guardian / Cell Command (Collectively "ACGT Series")
--------------
+-- Genome Guardian/Cell Command ("ACGT Series")
+-----------------------------------------------
 SMODS.DeckSkin{
     key = 'acgt',
 	suit = 'ovn_Optics',

@@ -30,9 +30,3 @@ function G.FUNCS.can_transmute(e)
 		e.config.button = nil
 	end
 end
-
-----
-
--- will move somewhere else later idk
-G.C.INST = HEX('04248F')
-G.C.UI_INST = G.C.INST
