@@ -136,6 +136,15 @@ cseal["Purple"]     = "ovn_amethyst_mark"
 cseal["Gold"]       = "ovn_citrine_mark"
 cseal["ovn_indigo"] = "ovn_iolite_mark"
 
+SMODS.current_mod.extra_tabs = function ()
+	return {
+		{
+			label = "Credits (WIP)",
+			tab_definition_function = Ovn_f.credits_ui
+		}
+	}
+end
+
 -- Generates immediately after the game finishes loading
 G.E_MANAGER:add_event(Event {
 	blocking = false,

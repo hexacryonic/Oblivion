@@ -290,6 +290,8 @@ local loc =  {
 			k_ovn_wicked_pack = "Wicked Pack",
 			ovn_ion_zap = "Zap!",
 			ovn_ion_misfire = "...",
+			k_primary_contributors = "Primary contributors",
+			k_additional_credits = "Additional credits",
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
@@ -340,6 +342,14 @@ local loc =  {
 			["ovn_Spectrum Five"] = {
 				"A Spectrum with all 5 cards of the same rank"
 			},
+		},
+		credits = {
+			{"Hexa", "Creator, Lead Developer"},
+			{"Oinite", "Developer"},
+			{"Lil Mr. Slipstream", "Artist"},
+		},
+		credits_additional = {
+			{"Airtoum", "Prosopometamorphopsia"}
 		}
 	},
 }
