@@ -371,6 +371,7 @@ SMODS.Back{
 
 	calculate = function(self, card, context)
 		if context.after then
+			Oblivion.play_instability_noise = true
 			Ovn_f.change_instability(-0.05)
 		end
 	end,
