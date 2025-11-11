@@ -36,28 +36,3 @@ if next(poker_hands["ovn_Straight Spectrum"]) then
 end
 '''
 match_indent = true
-
-# ----
-
-# function Card:set_ability
-# This is a temporary SMODS fix that is present in latest SMODS dev
-# and will be removed once new SMODS release is out
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''
-if self.ability and not initial then
-    self.ability.card_limit = self.ability.card_limit - (self.config.center.card_limit or 0)
-    self.ability.extra_slots_used = self.ability.extra_slots_used - (self.config.center.extra_slots_used or 0)
-    if self.area then self.area:handle_card_limit(-1 * (self.config.center.card_limit or 0), -1 * (self.config.center.extra_slots_used or 0)) end
-end
-'''
-position = "at"
-payload = '''
-if self.ability and not initial then
-    self.ability.card_limit = self.ability.card_limit - (self.config.center.config.card_limit or 0)
-    self.ability.extra_slots_used = self.ability.extra_slots_used - (self.config.center.config.extra_slots_used or 0)
-    if self.area then self.area:handle_card_limit(-1 * (self.config.center.config.card_limit or 0), -1 * (self.config.center.config.extra_slots_used or 0)) end
-end
-'''
-match_indent = true
