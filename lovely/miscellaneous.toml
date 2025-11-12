@@ -3,24 +3,8 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# lovely/joker_effects.toml
+# lovely/miscellaneous.toml
 # Implementation of some Joker effects
-
-# ----
-
-# function create_card
-# If holding [[Cigarette Card]], Uncommon Jokers spawn with Miasma
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "if not SMODS.bypass_create_card_edition and not card.edition then"
-position = "before"
-payload = '''
-if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 then
-  card:set_edition("e_ovn_miasma")
-end
-'''
-match_indent = true
 
 # ----
 
@@ -37,5 +21,29 @@ end
 position = "after"
 payload = '''
 SMODS.calculate_context{ovn_card_removed = true, card = self, from_debuff = from_debuff}
+'''
+match_indent = true
+
+# ----
+
+# function CardArea:draw
+# -inf text on Joker CardArea
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''
+local card_count = self ~= G.shop_vouchers and {n=G.UIT.R, config={align = self == G.jokers and 'cl' or self == G.hand and 'cm' or 'cr', padding = 0.03, no_fill = true}, nodes={
+    {n=G.UIT.B, config={w = 0.1,h=0.1}},
+    {n=G.UIT.T, config={ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE}},
+    {n=G.UIT.T, config={text = '/', scale = 0.3, colour = G.C.WHITE}},
+    {n=G.UIT.T, config={ref_table = self.config, ref_value = 'true_card_limit', scale = 0.3, colour = G.C.WHITE}},
+    {n=G.UIT.B, config={w = 0.1,h=0.1}}
+}} or nil
+'''
+position = "after"
+payload = '''
+if self == G.jokers and Ovn_f.on_deck("c_painted") and card_count then
+  card_count.nodes[4].config = {text='-inf', scale = 0.3, colour = G.C.WHITE}
+end
 '''
 match_indent = true
