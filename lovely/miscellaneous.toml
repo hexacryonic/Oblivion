@@ -47,3 +47,24 @@ if self == G.jokers and Ovn_f.on_deck("c_painted") and card_count then
 end
 '''
 match_indent = true
+
+# ----
+
+# In Steamodded:
+# function G.FUNCS.hand_type_UI_set
+# Increase sigfigs for instability
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/ui.lua"]'''
+pattern = '''
+local new_mult_text = number_format(G.GAME.current_round.current_hand[e.config.type] or SMODS.Scoring_Parameters[e.config.type].default_value)
+'''
+position = "after"
+payload = '''
+local num = G.GAME.current_round.current_hand[e.config.type] or SMODS.Scoring_Parameters[e.config.type].default_value
+
+if (e.config.type == "ovn_instability") and (num <= 10) and (tonumber(("%.2f"):format(num)) ~= tonumber(("%.3f"):format(num))) then
+  new_mult_text = ("%.3f"):format(num)
+end
+'''
+match_indent = true
