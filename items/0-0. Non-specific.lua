@@ -225,7 +225,7 @@ SMODS.Scoring_Calculation {
 		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.05}, nodes={
 			op("(", op_scale, G.C.RARITY['ovn_corrupted']),
 			container("chips", "hand_chips_container", text_scale, w, h),
-			op("X", op_scale, G.C.UI_MULT),
+			SMODS.GUI.operator(op_scale/2),
 			container("mult", "hand_mult_container", text_scale, w, h),
 			op(")", op_scale, G.C.RARITY['ovn_corrupted']),
 			op("^", op_scale, G.C.RARITY['ovn_corrupted']),

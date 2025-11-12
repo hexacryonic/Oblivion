@@ -287,6 +287,7 @@ end
 ------ cumulative_unique_jokers { STRING: BOOLEAN }
 ------ hands_last_played { STRING: INTEGER }
 ---- Setting complex costs (display) for all cards (Corrupt Green Deck)
+---- Setting Instable scoring calculation (Corrupt Plasma Deck)
 local game_startrun_hook = Game.start_run
 function Game:start_run(args)
 	Ovn_f.add_simple_event(nil, nil, function()
@@ -314,6 +315,9 @@ function Game:start_run(args)
 				Ovn_f.set_complex_cost_labels(cnsm_card)
 			end
 		end)
+	end
+	if Ovn_f.on_deck('c_plasma') and not args.savetext then
+		SMODS.set_scoring_calculation("ovn_instable")
 	end
 end
 

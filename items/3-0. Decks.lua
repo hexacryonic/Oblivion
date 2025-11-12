@@ -366,7 +366,7 @@ SMODS.Back{
 	apply = function(self)
 		G.GAME.corrumod = 0.2
 		G.GAME.opticmod = 0.025
-		SMODS.set_scoring_calculation("ovn_instable")
+		-- Scoring calculation set in Game:start_run hook
 	end,
 
 	calculate = function(self, card, context)
