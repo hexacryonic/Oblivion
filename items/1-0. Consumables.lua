@@ -21,6 +21,7 @@ SMODS.Consumable {
 	pos = {x=0, y=0},
 
 	cost = 2,
+	corrupts_jokers = true,
 
 	in_pool = function()
 		local held_jokers = G.jokers.cards
@@ -33,23 +34,6 @@ SMODS.Consumable {
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Parallel Tarot', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
-	end,
-
-	set_ability = function(self, card, initial, delay_sprites)
-		if G.your_collection then return end
-
-		local held_jokers = G.jokers.cards
-		for _,joker in ipairs(held_jokers) do
-			local joker_key = joker.config.center.key
-			if not Oblivion.corruption_map[joker_key] then goto continue_ovn_The_Abyss_set_ability end
-
-			local eval = function()
-				return Ovn_f.has_joker("c_ovn_abyss") and not G.RESET_JIGGLES
-			end
-			juice_card_until(joker, eval, true)
-
-			::continue_ovn_The_Abyss_set_ability::
-		end
 	end,
 
 	can_use = function(self, card)

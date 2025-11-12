@@ -138,3 +138,13 @@ if context.ovn_ice_degraded then
     ovn_ice_xmult = number
 }
 ```
+
+This context is used when a card is removed from deck via selling, destruction, or specified removal. It triggers in the same context as a card's `remove_from_deck` function.
+```lua
+if context.ovn_card_removed then
+{
+    ovn_card_removed = true,
+    card = card,
+    from_debuff = boolean
+}
+```

@@ -117,12 +117,6 @@ end
 -- Hook for PMO functionality
 local card_calcjoker_hook = Card.calculate_joker
 function Card:calculate_joker(context)
-	-- Wiggle if corruption method is found
-	if Ovn_f.joker_is_corruptible(self.key) then
-		local eval = function(card) return SMODS.find_card("c_ovn_abyss") and not G.RESET_JIGGLES end
-		juice_card_until(self, eval, true)
-	end
-
 	local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
 	local has_pareidolia = Ovn_f.has_joker('j_pareidolia')
 

@@ -38,19 +38,3 @@ else
 end
 '''
 match_indent = true
-
-# ----
-
-# function create_card
-# If holding [[Cigarette Card]], Uncommon Jokers spawn with Miasma
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "if not SMODS.bypass_create_card_edition and not card.edition then"
-position = "before"
-payload = '''
-if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 then
-  card:set_edition("e_ovn_miasma")
-end
-'''
-match_indent = true

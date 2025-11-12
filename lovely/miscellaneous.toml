@@ -1,0 +1,41 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/joker_effects.toml
+# Implementation of some Joker effects
+
+# ----
+
+# function create_card
+# If holding [[Cigarette Card]], Uncommon Jokers spawn with Miasma
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not SMODS.bypass_create_card_edition and not card.edition then"
+position = "before"
+payload = '''
+if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 then
+  card:set_edition("e_ovn_miasma")
+end
+'''
+match_indent = true
+
+# ----
+
+# function Card:remove_from_deck
+# All-encompassing "card_removed" context
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.name == 'Stuntman' then
+    G.hand:change_size(self.ability.extra.h_size)
+end
+'''
+position = "after"
+payload = '''
+SMODS.calculate_context{ovn_card_removed = true, card = self, from_debuff = from_debuff}
+'''
+match_indent = true
