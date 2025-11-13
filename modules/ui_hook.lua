@@ -285,6 +285,40 @@ end
 ---- UI FUNCTION HOOKS ----
 ---------------------------
 
+-- Hook to add additional text to card tooltips, especially those involved with Corruption
+local uidef_cardhpopup_hook = G.UIDEF.card_h_popup
+function G.UIDEF.card_h_popup(card)
+	local ret_val = uidef_cardhpopup_hook(card)
+	local name_rows = ret_val.nodes[1].nodes[1].nodes[1].nodes[1].nodes
+	local scale = 0.275
+
+	local j_locs = G.localization.descriptions.Joker
+	if (
+		card
+		and card.config.center.key
+		and j_locs[card.config.center.key]
+		and j_locs[card.config.center.key].corrupted_from
+	) then
+		local corrupted_from_list = j_locs[card.config.center.key].corrupted_from
+		local corrupted_from_row1 =
+		{n=G.UIT.R, config={align="cm"}, nodes={
+			{n=G.UIT.T, config={align="cm", colour = G.C.WHITE, text=localize('ovn_corrupted_from').." ", scale=scale, padding=0}},
+			{n=G.UIT.T, config={align="cm", colour = G.C.ORANGE, text=corrupted_from_list[1], scale=scale, padding=0}},
+		}}
+		table.insert(name_rows, corrupted_from_row1)
+
+		for i=2,#corrupted_from_list do
+			local corrupted_from_text = corrupted_from_list[i]
+			local corrupted_from_row =
+			{n=G.UIT.R, config={align="cm"}, nodes={
+				{n=G.UIT.T, config={align="cm", colour = G.C.ORANGE, text=corrupted_from_text, scale=scale, padding=0}},
+			}}
+			table.insert(name_rows, corrupted_from_row)
+		end
+	end
+	return ret_val
+end
+
 -- Hook to insert an additional button for Pure Visage
 local uidef_usesellbtn_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)

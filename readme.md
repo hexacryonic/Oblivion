@@ -66,6 +66,36 @@ Oblivion.spectral_logic[spectral_key] = {
 
 (Additional note regarding Corrupted Ghost Deck: Card selection by the player is disabled while the consumable is being used.)
 
+## Card tooltip elements
+The following card tooltip elements are added by the mod:
+- A "Corrupted from" text is displayed under the name of a Corrupted Joker. This can be added for any Joker (but most recommended for Corrupted Jokers) by adding a `corrupted_from` parameter in a Joker's localization:
+```lua
+joker_key = {
+    name = ...,
+    text = ...,
+    corrupted_from = {
+        "Something,"
+        "or other thing"
+    }
+}
+```
+- A placeholder sprite note is displayed in the Collection for cards registered with `uses_placeholder_sprite = true`:
+```lua
+SMODS.Joker {
+    uses_placeholder_sprite = true
+}
+```
+- Credits for individual cards are displayed in the Collection for cards registered with a `credits` table. This table has the following format:
+```lua
+SMODS.Joker {
+    credits = {
+        concept = "username(s)",
+        art = "username(s)",
+        code = "username(s)"
+    }
+}
+```
+
 ## Contexts
 This context is used for adding repetitions *from* playing cards with modifiers. It is sent during the main scoring loop, received by enhancements, seals, editions, and stickers, and defined by the `SMODS.calculate_repetitions` hook. (Much thanks to [Paperback](https://github.com/Balatro-Paperback/paperback) for the code for this context.)
 ```lua

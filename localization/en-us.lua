@@ -37,6 +37,27 @@ local loc =  {
 			},
 		},
 
+		DescriptionDummy = {
+			-- DescriptionDummies are used for custom UI infoqueue boxes and deck hover-text tooltips
+			dd_ovn_credits = {
+				name = "Credits",
+				text = {""},
+				-- this is just here for rapid reference
+				labels = {
+					art = "Art",
+					code = "Code"
+				}
+			},
+			dd_ovn_instability_description = {
+				name = "Instability",
+				text = {
+					"{C:ovn_corrupted}-0.05{} after playing a hand",
+					"{C:ovn_corrupted}+0.2{} when obtaining a {C:ovn_corrupted}Corrupted Joker",
+					"{C:ovn_corrupted}+0.025{} when obtaining an {C:ovn_optic}Optics {}card",
+				}
+			},
+		},
+
 		Other = {
 			ovn_corruptible = {
 				name = "Corruptible",
@@ -52,6 +73,15 @@ local loc =  {
 					'{C:ovn_corrupted}transforms{} modifiers',
 					'into {C:ovn_corrupted}unique{} versions',
 				},
+			},
+			ovn_placeholder_sprite = {
+				name = "Placeholder sprite",
+				text = {
+					"This card's sprite",
+					"is a {C:attention}placeholder{};",
+					"a proper sprite will",
+					"be created {C:blue}later."
+				}
 			},
 			ovn_indigo_seal = {
 				name = "Indigo Seal",
@@ -292,6 +322,7 @@ local loc =  {
 			ovn_ion_misfire = "...",
 			k_primary_contributors = "Primary contributors",
 			k_additional_credits = "Additional credits",
+			ovn_corrupted_from = "Corrupted from"
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",

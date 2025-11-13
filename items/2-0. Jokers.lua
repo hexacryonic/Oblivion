@@ -51,6 +51,10 @@ SMODS.Joker {
 		return { vars = { card.ability.extra.mult } }
 	end,
 	config = { extra = { mult = 2 } },
+	credits = {
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 0 },
@@ -152,6 +156,7 @@ SMODS.Joker {
 
 	atlas = "opticenhance_atlas",
 	pos = { x=3, y=0 },
+	uses_placeholder_sprite = true,
 
 	rarity = 2,
 	cost = 6,
@@ -214,6 +219,7 @@ SMODS.Joker {
 	-- placeholder
 	atlas = "opticenhance_atlas",
 	pos = { x=0, y=0 },
+	uses_placeholder_sprite = true,
 
 	rarity = 2,
 	cost = 6,
@@ -258,6 +264,7 @@ SMODS.Joker {
 	-- placeholder
 	atlas = "opticenhance_atlas",
 	pos = { x=1, y=1 },
+	uses_placeholder_sprite = true,
 
 	rarity = 2,
 	cost = 6,
@@ -314,6 +321,7 @@ SMODS.Joker {
 	-- placeholder
 	atlas = "opticenhance_atlas",
 	pos = { x=3, y=1 },
+	uses_placeholder_sprite = true,
 
 	rarity = 2,
 	cost = 6,
@@ -700,6 +708,9 @@ SMODS.Joker {
 ------------------------
 SMODS.Joker {
 	key = 'pmo',
+	credits = {
+		code = "Airtoum"
+	},
 
 	atlas = 'corrupted',
 	pos = { x = 3, y = 0 },
@@ -724,6 +735,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
+	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
 	cost = 8,
@@ -764,6 +776,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 7,
@@ -839,6 +852,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 10,
@@ -883,6 +897,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
+	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
 	cost = 7,
@@ -951,6 +966,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = { x = 4, y = 0 },
+	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
 	cost = 8,
@@ -993,6 +1009,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 8,
@@ -1190,6 +1207,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
 	cost = 6,
@@ -1278,6 +1296,9 @@ SMODS.Joker {
 		return { vars = { center.ability.extra.xmult } }
 	end,
 	config = { extra = { xmult = 0.2 } },
+	credits = {
+		art = "Andromeda",
+	},
 
 	atlas = 'corrupted',
 	pos = { x = 0, y = 2 },
@@ -1558,6 +1579,7 @@ SMODS.Joker {
 	key = 'master_of_puppets',
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 10,
@@ -1655,6 +1677,7 @@ SMODS.Joker {
 	key = 'bottled_ship_of_theseus',
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 10,
@@ -1700,6 +1723,7 @@ SMODS.Joker {
 
 	atlas = 'corrupted',
 	pos = {x=4, y=0},
+	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
 	cost = 7,

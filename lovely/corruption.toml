@@ -29,31 +29,14 @@ match_indent = true
 # ----
 
 # function generate_card_ui
-# Show tooltips for Joker corruptibility and Optics effect
+# Additional tooltips; patched function can be found in ui_hook.lua
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = "for _, v in ipairs(info_queue) do"
 position = "before"
 payload = '''
-if Ovn_f.joker_is_corruptible(_c.key) and _c.discovered then
-  table.insert(info_queue, {
-    key = 'ovn_corruptible',
-    set = 'Other',
-    vars = { localize {
-      type = "name_text",
-      set = "Joker",
-      key = _c.key
-    } }
-  })
-end
-
-if card and card.base and card.base.suit == "ovn_Optics" then
-  table.insert(info_queue, {
-    key = 'ovn_opticinfo',
-    set = 'Other',
-  })
-end
+if card or _c then Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue) end
 '''
 match_indent = true
 

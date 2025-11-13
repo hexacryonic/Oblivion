@@ -1,27 +1,14 @@
-local function corrupted_from(text)
-	local format = "{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}%s"
-	return format:format(text)
-end
-
 -- Description writing note:
 --   Text with background should be formatted as follows for good visual balance:
 --   {X:mult,C:white}X#1# {} Mult
 --   Note that the last node {} is surrounded by spaces on BOTH sides, not just the left
 
 return {
-	-- Dummy Joker; see items/5. CorruptDecks (Corrupted Plasma Deck)
-	j_ovn_instabilitytooltip = {
-		name = "Instability",
-		text = {
-			"{C:ovn_corrupted}-0.05 {}after playing a hand",
-			"{C:ovn_corrupted}+0.2 {}when obtaining a {C:ovn_corrupted}Corrupted Joker",
-			"{C:ovn_corrupted}+0.025 {}when obtaining an {C:ovn_optic}Optics {}card",
-		}
-	},
 	j_ovn_john = {
 		name = 'John Oblivion',
 		text = {
-			"Creates a {C:ovn_corrupted}Corrupted {C:attention}Joker",
+			"Creates a",
+			"{C:ovn_corrupted}Corrupted {C:attention}Joker",
 			"when sold"
 		}
 	},
@@ -73,7 +60,7 @@ return {
 	j_ovn_pure_visage = {
 		name = "Pure Visage",
 		text = {
-			"In #1# rounds,",
+			"In {C:inactive}[{C:attention}#1#{C:inactive}] {}rounds,",
 			"click {C:attention}side button {}to",
 			"{C:ovn_corrupted}corrupt {}this Joker"
 		}
@@ -90,7 +77,11 @@ return {
 		name = "Corrupt Visage",
 		text = {
 			"{X:mult,C:white}X#1# {} Mult",
-			"{C:blue}Purifies {}at end of round"
+			"{C:blue}Purifies {}at",
+			"end of round"
+		},
+		corrupted_from = {
+			"Pure Visage"
 		}
 	},
 	j_ovn_trolley_problem = {
@@ -106,7 +97,8 @@ return {
 		text = {
 			"When Blind is selected,",
 			"the {C:attention}leftmost {C:ovn_corrupted}Corrupted {}Joker",
-			"is {C:blue}purified {}to give this card {C:red}+#1# {}Mult",
+			"is {C:blue}purified {}to give",
+			"this card {C:red}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		}
 	},
@@ -116,8 +108,10 @@ return {
 		name = 'Parallel Joker',
 		text = {
 			"Played cards give",
-			"{C:mult}+#1#{} Mult when scored",
-			corrupted_from("Joker"),
+			"{C:mult}+#1#{} Mult when scored"
+		},
+		corrupted_from = {
+			"Joker"
 		}
 	},
 	j_ovn_prideful = {
@@ -125,7 +119,9 @@ return {
 		text = {
 			"Played cards with {C:ovn_optic}Optic{} suit",
 			"give {C:mult}+#1#{} Mult when scored",
-			"{C:inactive,s:0.8}Corrupted from the{} {C:attention,s:0.8}Sinful Jokers{}"
+		},
+		corrupted_from = {
+			"the Sinful Jokers"
 		}
 	},
 	j_ovn_bombastic = {
@@ -134,7 +130,9 @@ return {
 			"{C:mult}+#1#{} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("Droll Joker"),
+		},
+		corrupted_from = {
+			"Droll Joker"
 		}
 	},
 	j_ovn_insightful = {
@@ -143,7 +141,9 @@ return {
 			"{C:chips}+#1#{} Chips if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("Crafty Joker"),
+		},
+		corrupted_from = {
+			"Crafty Joker"
 		}
 	},
 	j_ovn_collapsing_world = {
@@ -154,7 +154,9 @@ return {
 			"of the round are {C:red}destroyed,",
 			"then this Joker gains {C:mult}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
-			corrupted_from("Mystic Summit or Erosion"),
+		},
+		corrupted_from = {
+			"Mystic Summit or Erosion"
 		}
 	},
 	j_ovn_lucasseries = {
@@ -163,7 +165,9 @@ return {
 			"Each played",
 			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
 			"gives {X:mult,C:white} X#1# {} Mult when scored",
-			corrupted_from("Fibonacci"),
+		},
+		corrupted_from = {
+			"Fibonacci"
 		}
 	},
 	j_ovn_database = {
@@ -172,7 +176,9 @@ return {
 			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
 			"obtained cumulatively over the run",
 			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
-			corrupted_from("Abstract Joker"),
+		},
+		corrupted_from = {
+			"Abstract Joker"
 		}
 	},
 	j_ovn_pmo = {
@@ -180,9 +186,9 @@ return {
 		text = {
 			"Effects that would target",
 			"{C:attention}any face card{} target {C:attention}Aces{} instead",
-			corrupted_from("Pareidolia"),
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Code by Airtoum{}"
+		},
+		corrupted_from = {
+			"Pareidolia"
 		}
 	},
 	j_ovn_aeon = {
@@ -191,7 +197,9 @@ return {
 			"{X:mult,C:white} X#1# {} Mult",
 			"{C:attention}Cavendish {}is no longer extinct",
 			"and can be obtained multiple times",
-			corrupted_from("Gros Michel"),
+		},
+		corrupted_from = {
+			"Gros Michel"
 		}
 	},
 	j_ovn_event_horizon = {
@@ -201,7 +209,9 @@ return {
 			"Instead, this Joker gains half of",
 			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
 			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
-			corrupted_from("Supernova or Constellation")
+		},
+		corrupted_from = {
+			"Supernova or Constellation"
 		}
 	},
 	j_ovn_sludge = {
@@ -210,7 +220,9 @@ return {
 			"{C:attention}+1 {}hand size",
 			"{C:red}Played cards never score",
 			"Cards held in hand now score",
-			corrupted_from("Splash")
+		},
+		corrupted_from = {
+			"Splash"
 		}
 	},
 	j_ovn_library_of_babel = {
@@ -220,7 +232,9 @@ return {
 			"when played poker hand hasn't been",
 			"played within the {C:attention}last #2# {}hands",
 			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
-			corrupted_from("To-Do List, Card Sharp, or Obelisk")
+		},
+		corrupted_from = {
+			"To-Do List, Card Sharp, or Obelisk"
 		}
 	},
 	j_ovn_cultivar = {
@@ -230,7 +244,9 @@ return {
 			"{C:green}#2# in #3#{} chance this",
 			"card is destroyed",
 			"at end of round",
-			corrupted_from("Cavendish"),
+		},
+		corrupted_from = {
+			"Cavendish"
 		}
 	},
 	j_ovn_apartfalling = {
@@ -239,7 +255,9 @@ return {
 			"This Joker gains {X:mult,C:white} X#2# {} Mult",
 			"whenever a Joker {C:ovn_corrupted}corrupts{}",
 			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive} Mult)",
-			corrupted_from("Hologram"),
+		},
+		corrupted_from = {
+			"Hologram"
 		}
 	},
 	j_ovn_philosophers_stone = {
@@ -248,7 +266,9 @@ return {
 			"After playing, each {C:attention}numbered {}card",
 			"has a {C:green}#1# in #2# {}chance to have",
 			"their enhancement {C:attention}transmuted",
-			corrupted_from("Midas Mask"),
+		},
+		corrupted_from = {
+			"Midas Mask"
 		}
 	},
 	j_ovn_supplydrop = {
@@ -266,8 +286,9 @@ return {
 			"{s:0.3} {}",
 
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
-			"{s:0.2} {}",
-			corrupted_from("Gift Card"),
+		},
+		corrupted_from = {
+			"Gift Card"
 		}
 	},
 	j_ovn_perpendicular = {
@@ -275,7 +296,9 @@ return {
 		text = {
 			"Scored cards earn {C:attention}$#1#{} if another",
 			"card of its {C:attention}same rank{} is held in hand",
-			corrupted_from("Reserved Parking"),
+		},
+		corrupted_from = {
+			"Reserved Parking"
 		}
 	},
 	j_ovn_migraine = {
@@ -283,7 +306,9 @@ return {
 		text = {
 			"{C:attention}Standard Packs {}only",
 			"contain modified {C:ovn_optic}Optic {}cards",
-			corrupted_from("Hallucination"),
+		},
+		corrupted_from = {
+			"Hallucination"
 		}
 	},
 	j_ovn_spiral_of_addiction = {
@@ -294,7 +319,9 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
-			corrupted_from("Drunkard"),
+		},
+		corrupted_from = {
+			"Drunkard"
 		}
 	},
 	j_ovn_cigarette_card = {
@@ -302,7 +329,9 @@ return {
 		text = {
 			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
 			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
-			corrupted_from("Baseball Card"),
+		},
+		corrupted_from = {
+			"Baseball Card"
 		}
 	},
 	j_ovn_airstrike = {
@@ -312,9 +341,9 @@ return {
 			"{X:mult,C:white} X#1# {} Mult every hand played",
 			"When scored, {C:attention}10{}s give their stockpiled Mult",
 			"and reset their stockpile after the hand",
-			corrupted_from("Walkie Talkie"),
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Art by Andromeda{}"
+		},
+		corrupted_from = {
+			"Walkie Talkie"
 		}
 	},
 	j_ovn_yolo = {
@@ -323,9 +352,11 @@ return {
 			"Each played card gives",
 			"{X:mult,C:white} X#1# {} Mult when scored",
 			"{s:0.3} {}",
-			"{C:chips}-a fucktillion{} Hands",
+			"{C:chips}-a fucktillion{} hands",
 			"when hand played",
-			corrupted_from("Acrobat"),
+		},
+		corrupted_from = {
+			"Acrobat"
 		}
 	},
 	j_ovn_apache_tears = {
@@ -339,9 +370,10 @@ return {
 			"{C:attention}Pure forms {}are not banished",
 			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
 			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}Arrowhead, Bloodstone,",
-			"{C:attention,s:0.8}Onyx Agate, or Rough Gem",
+		},
+		corrupted_from = {
+			"Arrowhead, Bloodstone,",
+			"Onyx Agate, or Rough Gem"
 		}
 	},
 	j_ovn_apache_tears_every_card_cash = {
@@ -364,7 +396,9 @@ return {
 		text = {
 			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
 			"banish or destroy their counterparts",
-			corrupted_from("Showman"),
+		},
+		corrupted_from = {
+			"Showman"
 		}
 	},
 	j_ovn_infinitesimal = {
@@ -374,7 +408,9 @@ return {
 			"This Joker gains {C:mult}+#2# {}Mult",
 			"when a {C:attention}3 {}is scored",
 			"{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)",
-			corrupted_from("Wee Joker"),
+		},
+		corrupted_from = {
+			"Wee Joker"
 		}
 	},
 	j_ovn_master_of_puppets = {
@@ -383,7 +419,9 @@ return {
 			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
 			"a random {C:attention}Jack {}in your deck is given",
 			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
-			corrupted_from("Hit the Road"),
+		},
+		corrupted_from = {
+			"Hit the Road"
 		}
 	},
 	j_ovn_breach = {
@@ -392,15 +430,19 @@ return {
 			"{X:mult,C:white} X#1# {} Mult if played",
 			"hand contains",
 			"a {C:attention}Spectrum{}",
-			corrupted_from("The Tribe"),
+		},
+		corrupted_from = {
+			"The Tribe"
 		}
 	},
 	j_ovn_bottled_ship_of_theseus = {
 		name = "Bottled Ship of Theseus",
 		text = {
 			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
-			"create a {C:attention}Glass Card {}of its rank and suit",
-			corrupted_from("Trolley Problem")
+			"create a {C:attention}Glass Card {}of its rank and suit"
+		},
+		corrupted_from = {
+			"Trolley Problem"
 		}
 	},
 	j_ovn_nexus_point = {
@@ -410,7 +452,9 @@ return {
 			"Scored cards give {X:mult,C:white}X#1# {} Mult",
 			"Increases by {X:mult,C:white}X#2# {} each time this Joker",
 			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
-			corrupted_from("Purifier or Nexus Point")
+		},
+		corrupted_from = {
+			"Purifier or Nexus Point"
 		}
 	},
 }

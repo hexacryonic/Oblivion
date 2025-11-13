@@ -328,22 +328,14 @@ SMODS.Back{
 ----------------------
 -- Corrupt Plasma Deck
 ----------------------
--- Dummy Joker used solely to hold the Instability tooltip
-SMODS.Joker {
-	key = "instabilitytooltip",
-	no_collection = true,
-	unlocked = false,
-	discovered = false,
-	check_for_unlock = function() return false end,
-	in_pool = function() return false end,
-}
+Oblivion.DescriptionDummy { key = "instability_description" }
 
 SMODS.Back{
 	key = "c_plasma",
 	ovn_corrupt_deck = true,
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
-			localize { type = 'name_text', key = 'j_ovn_instabilitytooltip', set = 'Joker' },
+			localize { type = 'name_text', key = 'dd_ovn_instability_description', set = 'DescriptionDummy' },
 			localize { type = 'name_text', key = self.config.jokers[1], set = 'Joker' },
 			localize { type = 'name_text', key = self.config.consumables[1], set = 'Tarot' },
 			localize { type = 'name_text', key = self.config.consumables[2], set = 'Tarot' },

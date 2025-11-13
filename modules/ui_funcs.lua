@@ -33,6 +33,60 @@ end
 
 
 
+-----------------------
+---- MISCELLANEOUS ----
+-----------------------
+
+-- Applies additional tooltips to the hovered card.
+---@param _c SMODS.Center
+---@param card Card
+---@param info_queue table
+---@return nil
+function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
+	if card and Ovn_f.joker_is_corruptible(card.config.center.key) and card.config.center.discovered then
+		table.insert(info_queue, {
+			key = 'ovn_corruptible',
+			set = 'Other',
+			vars = { localize {
+				type = "name_text",
+				set = "Joker",
+				key = card.config.center.key
+			} }
+		})
+	end
+
+	if card and card.base and card.base.suit == "ovn_Optics" then
+		table.insert(info_queue, {
+			key = 'ovn_opticinfo',
+			set = 'Other',
+		})
+	end
+
+	if card and G.your_collection and (
+		card.config.center.credits
+		or card.config.center.uses_placeholder_sprite
+	) then for _,collection_area in ipairs(G.your_collection) do
+		if card.area == collection_area then
+			if card.config.center.credits then
+				-- Only way to attach vars to send to the description dummy
+				G.P_CENTERS['dd_ovn_credits'].specific_vars = card.config.center.credits
+				table.insert(info_queue, G.P_CENTERS['dd_ovn_credits'])
+			end
+
+			if card.config.center.uses_placeholder_sprite then
+				table.insert(info_queue, {
+					key = 'ovn_placeholder_sprite',
+					set = 'Other'
+				})
+			end
+
+			break
+		end
+	end end
+end
+
+
+
 -----------------
 ---- CREDITS ----
 -----------------
