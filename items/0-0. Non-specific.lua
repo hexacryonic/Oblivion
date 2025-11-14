@@ -164,8 +164,13 @@ SMODS.Scoring_Parameter {
 		if amount == 0 then return end
 
 		G.GAME.ovn_instability = G.GAME.ovn_instability or 1
-		local instability_max = 2
-		if G.GAME.ovn_instability >= instability_max then return end
+		local instability_max = G.GAME.opticclamp or 2
+
+		if G.GAME.ovn_instability + amount >= instability_max then
+			G.GAME.ovn_instability = instability_max
+		else
+			G.GAME.ovn_instability = G.GAME.ovn_instability + amount
+		end
 
 		if Oblivion.play_instability_noise then
 			if amount < 0 then
@@ -178,8 +183,6 @@ SMODS.Scoring_Parameter {
 				Oblivion.play_instability_noise = false
 			end
 		end
-
-		G.GAME.ovn_instability = G.GAME.ovn_instability + amount
 	end,
 }
 

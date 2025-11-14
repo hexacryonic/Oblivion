@@ -358,6 +358,7 @@ SMODS.Back{
 	apply = function(self)
 		G.GAME.corrumod = 0.2
 		G.GAME.opticmod = 0.025
+		G.GAME.opticclamp = 2
 		-- Scoring calculation set in Game:start_run hook
 	end,
 
