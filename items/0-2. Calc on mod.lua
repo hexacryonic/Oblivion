@@ -80,4 +80,13 @@ SMODS.current_mod.calculate = function (self, context)
         -- Stop juicing corruptible Jokers after ending booster pack, if appropriate
         check_stop_juice_corruptibles()
     end
+
+    if (
+        context.individual
+        and context.cardarea == G.play
+        and context.other_card:is_suit("ovn_Optics")
+    ) then
+        -- This flag is added by Apache Tears
+        context.other_card.ovn_apache_counted = nil
+    end
 end

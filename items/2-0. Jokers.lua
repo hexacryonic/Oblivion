@@ -1474,13 +1474,27 @@ SMODS.Joker {
 			and context.other_card:is_suit("ovn_Optics")
 		) then
 			local chips, mult, xmult, cash, cash_freq = determine_tear_effect(card)
-			card.ability.extra.card_count = card.ability.extra.card_count + 1
 
-			local do_cash = false
-			if card.ability.extra.card_count >= cash_freq then
-				card.ability.extra.card_count = 0
-				do_cash = true
+			-- These flags are necessary to ensure that
+			-- joker copying/retriggers do not increase counter,
+			-- but playing card retriggers -do-
+
+			-- When copied, the Joker flag is only added to the "master" card
+
+			-- The flag on the playing card is cleared in calc on mod
+			-- (which occurs after Jokers and before any playing card retriggers)
+			if not context.other_card.ovn_apache_counted then
+				context.other_card.ovn_apache_counted = {}
 			end
+			if not card.ovn_apache_counted_id then
+				card.ovn_apache_counted_id = tostring(math.random())
+			end
+			if not context.other_card.ovn_apache_counted[card.ovn_apache_counted_id] then
+				context.other_card.ovn_apache_counted[card.ovn_apache_counted_id] = true
+				card.ability.extra.card_count = card.ability.extra.card_count + 1
+			end
+
+			local do_cash = card.ability.extra.card_count % cash_freq == 0
 
 			return {
 				chips = chips,
@@ -1488,6 +1502,11 @@ SMODS.Joker {
 				xmult = xmult,
 				dollars = do_cash and cash or nil
 			}
+		end
+
+		if context.after then
+			local _,_,_,_, cash_freq = determine_tear_effect(card)
+			card.ability.extra.card_count = card.ability.extra.card_count % cash_freq
 		end
 
 		if (
