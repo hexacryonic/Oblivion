@@ -373,6 +373,13 @@ local loc =  {
 			["ovn_Spectrum Five"] = {
 				"A Spectrum with all 5 cards of the same rank"
 			},
+			["ovn_5DDeck"] = {
+			"A hand that contains every single",
+			"card found in a 52-card deck, plus",
+			"an entire full set of Optics",
+			" ",
+			"What the actual fuck is wrong with you?",
+			}
 		},
 		credits = {
 			{"Hexa", "Creator, Lead Developer"},

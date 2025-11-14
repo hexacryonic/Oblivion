@@ -43,8 +43,8 @@ return {
 	c_ovn_optinen = {
 		name = "Optinen",
 		text = {
-			"({V:1}lvl.#5#{})({V:2}lvl.#6#{})",
-			"({V:3}lvl.#7#{})({V:4}lvl.#8#{})",
+			"({V:1}lvl.#5#{}) ({V:2}lvl.#6#{})",
+			"({V:3}lvl.#7#{}) ({V:4}lvl.#8#{})",
 			"Level up",
 			"{C:attention}#1#{},",
 			"{C:attention}#2#{},",

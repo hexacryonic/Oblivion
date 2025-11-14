@@ -1,0 +1,272 @@
+-- This is loaded by Cryptid instead of Oblivion
+-- (Cryptid was patched to load this file)
+
+---------------------------------
+-- ATLAS
+-- Cross-mod Cryptid Planet Cards
+---------------------------------
+---@type SMODS.Atlas
+local cryptid_crossplanet_atlas = {
+	object_type = "Atlas",
+	key = "cryptidplanets",
+	path = "cryptid_crossplanets.png",
+	px = 71,
+	py = 95,
+}
+
+----------------------------------------------
+-- POKER HAND
+-- 5D Fucking Deck With Multiverse Time Travel
+----------------------------------------------
+local fucking_huge = {
+	chips = to_big(65656565656565656565656565656565656565656565)^65656565656565656565656565,
+	mult = to_big(6565656565656565656565656565656565656565656)^65656565656565656565656565,
+	l_chips = to_big(6565656565656565656565656565656565656565656)^65656565656565656565656565,
+	l_mult = to_big(656565656565656565656565656565656565656565)^65656565656565656565656565
+}
+
+-- Generates the example table for The Enture Fucking Deck And Then Some.
+---@return table
+local function tefd_ats_example()
+	local cards = {}
+	local suits = {"ovn_O", "S", "H", "C", "D"}
+	local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
+
+	for _,rank in ipairs(ranks) do
+		for _,suit in ipairs(suits) do
+			table.insert(cards, {suit .. "_" .. rank, true})
+		end
+	end
+
+	return cards
+end
+
+local suit_list = {"ovn_Optics", "Spades", "Hearts", "Clubs", "Diamonds"}
+local suit_int_map = {}
+for i,suit_name in ipairs(suit_list) do
+	suit_int_map[suit_name] = i
+end
+
+-- Gives the rank-suit ID of a card.
+local function rank_suit_id(suit_int, rank)
+	-- Since ranks start at 2, subtract to to normalize ranks
+	return suit_int + (rank - 2)*#suit_list
+end
+
+---@type SMODS.PokerHand
+-- This code is pretty much copied from TEFD from Cryptid
+-- (cleaned up to my personal standards -Oinite)
+local tefd_ats = {
+	object_type = "PokerHand",
+	key = "5DDeck",
+	example = tefd_ats_example(),
+
+	visible = false,
+	chips = fucking_huge.chips,
+	mult = fucking_huge.mult,
+	l_chips = fucking_huge.l_chips,
+	l_mult = fucking_huge.l_mult,
+
+	evaluate = function (parts, hand)
+		if (
+			not Cryptid.enabled("set_cry_poker_hand_stuff")
+			or not Cryptid.enabled("c_cry_universe")
+		) then return end
+
+		if #hand < 65 then return end
+
+		local deck_booleans = {}
+		local scored_cards = {}
+		for _ = 1, 65 do
+			table.insert(deck_booleans, false)
+		end
+		local wilds = {}
+
+		for _,card in ipairs(hand) do
+			if
+				card.config.center_key ~= "m_wild"
+				and not card.config.center.any_suit
+				and card.config.center_key ~= "m_stone"
+				and not card.config.center.no_rank
+			then
+				local rank = card:get_id()
+				local suit = card.base.suit
+				local suit_int = suit_int_map[suit] or -1
+				if suit_int > 0 then
+					deck_booleans[rank_suit_id(suit_int, rank)] = true
+				end
+
+			elseif card.config.center_key == "m_wild" or card.config.center.any_suit then
+				-- Wilds are evaluated later down the road
+				-- after all non-wilds are counted
+				table.insert(wilds, card)
+			end
+			table.insert(scored_cards, card)
+		end
+
+		for _,wild_card in ipairs(wilds) do
+			-- Apparently this breaks with custom ranks, oh well
+			local rank = wild_card:get_id()
+			for i = 1, #suit_list do
+				if not deck_booleans[rank_suit_id(i, rank)] then
+					-- Since a wild card is only one card, it can only "fill" in one slot
+					deck_booleans[rank_suit_id(i, rank)] = true
+					break
+				end
+			end
+		end
+
+		local is_tefd_ats = true
+		for _,card_is_present in ipairs(deck_booleans) do
+			if not card_is_present then
+				is_tefd_ats = false
+				break
+			end
+		end
+
+		return is_tefd_ats and {scored_cards} or nil
+	end
+}
+
+-- ig this hook is needed to properly add hand values
+local game_startrun_hook = Game.start_run
+function Game:start_run(args)
+	game_startrun_hook(self, args)
+	if not args.savetext then
+		G.GAME.hands.ovn_5DDeck.mult = fucking_huge.mult
+		G.GAME.hands.ovn_5DDeck.l_mult = fucking_huge.l_mult
+		G.GAME.hands.ovn_5DDeck.chips = fucking_huge.chips
+		G.GAME.hands.ovn_5DDeck.l_chips = fucking_huge.l_chips
+	end
+end
+
+-----------------------------------------------
+-- CONSUMABLE
+-- PLANET
+-- The Complete Fucking Annihilation of Reality
+-----------------------------------------------
+local function hand_color(hand_key)
+	local hand_level = G.GAME.hands[hand_key].level
+	return (
+		to_big(hand_level) == to_big(1) and G.C.UI.TEXT_DARK
+		or G.C.HAND_LEVELS[to_big(math.min(7, hand_level)):to_number()]
+	)
+end
+
+---@type SMODS.Consumable
+local reality = {
+	dependencies = {
+		items = {
+			"set_cry_poker_hand_stuff"
+		}
+	},
+	object_type = "Consumable",
+
+	set = 'Planet',
+	key = 'reality',
+	loc_vars = function ()
+		return {
+			vars = {
+				localize("ovn_5DDeck"),
+				G.GAME.hands["ovn_5DDeck"].level,
+				G.GAME.hands["ovn_5DDeck"].l_mult,
+				G.GAME.hands["ovn_5DDeck"].l_chips,
+				colours = {hand_color("ovn_5DDeck")}
+			}
+		}
+	end,
+	config = { hand_type = 'ovn_5DDeck', softlock = true },
+	generate_ui = 0,
+
+	atlas = "cryptidplanets",
+	pos = { x = 0, y = 0 },
+
+	set_card_type_badge = function(self, card, badges)
+		badges[1] = create_badge('WHAT THE FUCK', get_type_colour(self or card.config, card), G.C.WHITE, 1.5)
+	end,
+
+	aurinko = true,
+}
+
+-------------
+-- CONSUMABLE
+-- PLANET
+-- Optinen
+-------------
+---@type SMODS.Consumable
+local optinen = {
+	dependencies = {
+		items = {
+			"set_cry_planet",
+			"set_cry_poker_hand_stuff",
+		},
+	},
+	object_type = "Consumable",
+
+	set = "Planet",
+	name = "ovn_Optinen",
+	key = "optinen",
+	loc_vars = function(self, info_queue, center)
+		return {
+			vars = {
+				localize("ovn_Spectrum", "poker_hands"),
+				localize("ovn_Straight Spectrum", "poker_hands"),
+				localize("ovn_Spectrum House", "poker_hands"),
+				localize("ovn_Spectrum Five", "poker_hands"),
+				G.GAME.hands["ovn_Spectrum"].level,
+				G.GAME.hands["ovn_Straight Spectrum"].level,
+				G.GAME.hands["ovn_Spectrum House"].level,
+				G.GAME.hands["ovn_Spectrum Five"].level,
+				colours = {
+					hand_color("ovn_Spectrum"),
+					hand_color("ovn_Straight Spectrum"),
+					hand_color("ovn_Spectrum House"),
+					hand_color("ovn_Spectrum Five"),
+				},
+			},
+		}
+	end,
+	config = { hand_types = { "ovn_Spectrum", "ovn_Straight Spectrum", "ovn_Spectrum House", "ovn_Spectrum Five" }, softlock = true },
+
+	atlas = "cryptidplanets",
+	pos = { x = 1, y = 0 },
+
+	use = function (self, card, area, copier)
+		Cryptid.suit_level_up(card, copier, 1, card.config.center.config.hand_types)
+	end,
+	calculate = function(self, card, context)
+		if
+			G.GAME.used_vouchers.v_observatory
+			and context.joker_main
+			and (
+				context.scoring_name == "ovn_Spectrum"
+				or context.scoring_name == "ovn_Straight Spectrum"
+				or context.scoring_name == "ovn_Spectrum House"
+				or context.scoring_name == "ovn_Spectrum Five"
+			)
+		then
+			local value = G.P_CENTERS.v_observatory.config.extra
+			return {
+				message = localize({ type = "variable", key = "a_xmult", vars = { value } }),
+				Xmult_mod = value,
+			}
+		end
+	end,
+
+	aurinko = true,
+	bulk_use = function(self, card, area, copier, number)
+		Cryptid.suit_level_up(card, copier, number, card.config.center.config.hand_types)
+	end,
+}
+
+---------------------------
+
+return {
+	init = function () end,
+	items = {
+		cryptid_crossplanet_atlas,
+		tefd_ats,
+		reality,
+		optinen
+	}
+}

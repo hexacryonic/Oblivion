@@ -1,0 +1,59 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/cross-mod.toml
+# Changes for other mods
+
+# ----
+
+# In Cryptid:
+# function N/A
+# Load content in cross-mod/Cryptid.lua
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "Cryptid.lua"]'
+pattern = '''
+if file == "Cryptid" and path .. "Cryptid/" ~= Cryptid.path then
+    local files = NFS.getDirectoryItems(path .. "Cryptid")
+    for _, file in ipairs(files) do
+        print("[CRYPTID] Loading file " .. file .. " from " .. mod.id)
+        local f, err = SMODS.load_file("Cryptid/" .. file, mod.id)
+        if err then
+            error(err) --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
+        end
+        process_items(f, mod)
+    end
+end
+'''
+position = "after"
+payload = '''
+-- Hi! This is a patch by Oblivion. If you somehow see this, please report bugs from this patch to Oblivion devs, not Cryptid devs. --
+if mod.id == "Oblivion" then
+    print("[OBLIVION patching CRYPTID] Loading cross-mod/Cryptid.lua from " .. mod.id)
+    local f, err = SMODS.load_file("cross-mod/Cryptid.lua", mod.id)
+    if err then
+        error(err) -- evil file loader be like: Steamodded unsurprisingly does a really BAD job of displaying this info! Now we need to do a bunch of useless junk
+    end
+    process_items(f, mod)
+    break
+end
+-- END OBLIVION PATCH --
+'''
+match_indent = true
+
+# In Steamodded (with Cryptid/Talisman):
+# function SMODS.PokerHand.post_inject_class
+# Talisman compatibility for poopshit fuckall (why do neither Talisman nor Cryptid do this???)
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '''
+return (x_above and (1e-6*eval(x) + eval(x_above)) or eval(x)) > (y_above and (1e-6*eval(y) + eval(y_above)) or eval(y))
+'''
+position = "at"
+payload = '''
+return to_big(x_above and (1e-6*eval(x) + eval(x_above)) or eval(x)) > to_big(y_above and (1e-6*eval(y) + eval(y_above)) or eval(y))
+'''
+match_indent = true
