@@ -295,6 +295,7 @@ function G.UIDEF.card_h_popup(card)
 	local j_locs = G.localization.descriptions.Joker
 	if (
 		card
+		and card.config.center
 		and card.config.center.key
 		and j_locs[card.config.center.key]
 		and j_locs[card.config.center.key].corrupted_from
