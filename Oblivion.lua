@@ -72,7 +72,7 @@ Ovn_f.load_directory("items")
 Ovn_f.load_directory("cross-mod", function (file_name)
 	-- Cross-mod files (named with mod ID) only loaded if mod is loaded
 	-- Cryptid is loaded by a patch into Cryptid, so skip it here
-	return file_name ~= "Cryptid.lua" and (SMODS.Mod[file_name:gsub('%.lua$', '')] or {}).can_load
+	return file_name ~= "Cryptid.lua" and (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
 
 -- Mapping this way so other mods can add define_corruption if it's nonexistent
