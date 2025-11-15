@@ -54,3 +54,23 @@ if Ovn_f.has_joker('j_ovn_cigarette_card') and card.config.center.rarity == 2 th
 end
 '''
 match_indent = true
+
+# ----
+
+# function create_card
+# ovn_extra_perishable sets all cards to Perishable
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if G.GAME.modifiers.all_eternal then
+    card:set_eternal(true)
+end
+'''
+position = "after"
+payload = '''
+if G.GAME.modifiers.ovn_eternal_extra_perishable then
+    card:set_perishable(true)
+end
+'''
+match_indent = true

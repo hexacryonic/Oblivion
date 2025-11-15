@@ -5,19 +5,20 @@ SMODS.Challenge {
     key = 'corrupt_omelette',
     rules = {
         custom = {
-			{ id = 'ovn_og'              },
-			{ id = 'ovn_spacer'          },
-            { id = 'no_reward'           },
-            { id = 'no_extra_hand_money' },
-            { id = 'no_interest'         },
-			{ id = 'ovn_spacer'          },
-			{ id = 'ovn_spacer'          },
+			{ id = 'ovn_og'                  },
+			{ id = 'ovn_spacer'              },
+            { id = 'no_reward'               },
+            { id = 'no_extra_hand_money'     },
+            { id = 'no_interest'             },
+			{ id = 'ovn_spacer'              },
+			{ id = 'ovn_spacer'              },
 
-			{ id = 'ovn_new'             },
-			{ id = 'ovn_spacer'          },
-			-- poot text here
-			{ id = 'ovn_but'             },
-			-- poot text here
+			{ id = 'ovn_new'                 },
+			{ id = 'ovn_spacer'              },
+			{ id = 'ovn_egg_all_eggs'        },
+			{ id = 'ovn_but'                 },
+			{ id = 'ovn_egg_eternal_egg'     },
+			{ id = 'ovn_egg_no_swashbuckler' },
         }
     },
     jokers = {
@@ -44,10 +45,14 @@ SMODS.Challenge {
         }
     },
 	calculate = function (self, context)
-		if context.end_of_round then
-			for _,egg in ipairs(SMODS.find_card('j_egg')) do
-				egg:add_sticker('eternal', true)
-			end
+		if context.end_of_round and context.main_eval then
+			local all_eggs = SMODS.find_card('j_egg')
+			if #all_eggs == 0 then return end
+
+			local selected_egg = pseudorandom_element(all_eggs, 'ovn_corrupt_omlette') --[[@as Card]]
+			selected_egg:add_sticker('eternal', true)
+			selected_egg:juice_up()
+			play_sound('generic1')
 		end
 	end
 }
@@ -147,17 +152,17 @@ SMODS.Challenge {
     key = 'corrupt_eternity',
     rules = {
         custom = {
-			{ id = 'ovn_og'      },
-			{ id = 'ovn_spacer'  },
-            { id = 'all_eternal' }, -- ts actually setting stuff eternal
-			{ id = 'ovn_spacer'  }, -- actually wtf all these adding to G.GAME.modifiers
-			{ id = 'ovn_spacer'  }, -- there has to be a better way to add these descs ;-;
+			{ id = 'ovn_og'               },
+			{ id = 'ovn_spacer'           },
+            { id = 'ovn_all_eternal'      },
+			{ id = 'ovn_spacer'           },
+			{ id = 'ovn_spacer'           },
 
-			{ id = 'ovn_new'     },
-			{ id = 'ovn_spacer'  },
-			-- poot text here
-			{ id = 'ovn_but'     },
-			-- poot text here
+			{ id = 'ovn_new'              },
+			{ id = 'ovn_spacer'           },
+			{ id = 'ovn_eternal_none_eternal'     },
+			{ id = 'ovn_but'              },
+			{ id = 'ovn_eternal_extra_perishable' }, -- This has an effect; see joker_effects.toml
         }
     },
     restrictions = {
@@ -181,5 +186,42 @@ SMODS.Challenge {
             { id = 'j_glass'         },
             { id = 'j_wee'           },
         },
+    },
+	apply = function (self)
+		G.GAME.perishable_rounds = 2
+	end
+}
+
+------------------
+-- Corrupt Quintet
+------------------
+SMODS.Challenge {
+    key = 'corrupt_quintet',
+    rules = {
+		custom = {
+			{ id = 'ovn_new'               },
+			{ id = 'ovn_spacer'            },
+            { id = 'ovn_quintet_jokerslot' },
+            { id = 'ovn_quintet_discard'   },
+			{ id = 'ovn_but'               },
+            { id = 'ovn_quintet_addiction' },
+		},
+        modifiers = {
+            { id = 'discards',    value = 7 },
+            { id = 'hand_size',   value = 5 },
+            { id = 'joker_slots', value = 8 },
+        }
+    },
+    jokers = {
+        { id = 'j_card_sharp' },
+        { id = 'j_joker' },
+		{ id = 'j_ovn_spiral_of_addiction', edition = 'negative', eternal = true }
+    },
+    restrictions = {
+        banned_cards = {
+            { id = 'j_juggler' },
+            { id = 'j_troubadour' },
+            { id = 'j_turtle_bean' },
+        }
     }
 }
