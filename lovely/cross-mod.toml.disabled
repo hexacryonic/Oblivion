@@ -37,6 +37,8 @@ if mod.id == "Oblivion" then
         error(err) -- evil file loader be like: Steamodded unsurprisingly does a really BAD job of displaying this info! Now we need to do a bunch of useless junk
     end
     process_items(f, mod)
+    -- granted this should be outside the for-files loop
+    -- but i dont wanna replace the "if not mod" with "elseif not mod"
     break
 end
 -- END OBLIVION PATCH --
