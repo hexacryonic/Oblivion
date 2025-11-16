@@ -1416,6 +1416,17 @@ local function determine_tear_effect(card)
 	return chips, mult, xmult, cash, cash_freq
 end
 
+-- Change Apache Tears's sprite depending on its tracked Jokers.
+---@param card Card
+---@return nil
+local function change_tear_sprite(card)
+	local tracker = card.ability.extra.track_corrupts
+	-- e.g. Bloodstone appears from the 3rd sprite onward; Arrowhead appears every other sprite
+	local x = (tracker.j_bloodstone and 2 or 0) + (tracker.j_arrowhead  and 1 or 0)
+	local y = (tracker.j_rough_gem  and 2 or 0) + (tracker.j_onyx_agate and 1 or 0)
+	card.children.center:set_sprite_pos({x = x, y = y})
+end
+
 SMODS.Joker {
 	key = "apache_tears",
 	loc_vars = function (self, info_queue, card)
@@ -1467,6 +1478,10 @@ SMODS.Joker {
 	rarity = "ovn_corrupted",
 	cost = 10,
 
+	add_to_deck = function (self, card, from_debuff)
+		change_tear_sprite(card)
+	end,
+
 	calculate = function (self, card, context)
 		if (
 			context.individual
@@ -1515,19 +1530,13 @@ SMODS.Joker {
 			and context.ovn_corrupted_card ~= card
 			and card.ability.extra.track_corrupts[context.ovn_former_form_key] ~= nil
 		) then
-			local tracker = card.ability.extra.track_corrupts
-			tracker[context.ovn_former_form_key] = true
-			local x = (tracker.j_bloodstone and 2 or 0) + (tracker.j_arrowhead  and 1 or 0)
-			local y = (tracker.j_rough_gem  and 2 or 0) + (tracker.j_onyx_agate and 1 or 0)
-			card.children.center:set_sprite_pos({x = x, y = y})
+			card.ability.extra.track_corrupts[context.ovn_former_form_key] = true
+			change_tear_sprite(card)
 			card:juice_up()
 		end
 
 		if context.ovn_run_started then
-			local tracker = card.ability.extra.track_corrupts
-			local x = (tracker.j_bloodstone and 2 or 0) + (tracker.j_arrowhead  and 1 or 0)
-			local y = (tracker.j_rough_gem  and 2 or 0) + (tracker.j_onyx_agate and 1 or 0)
-			card.children.center:set_sprite_pos({x = x, y = y})
+			change_tear_sprite(card)
 		end
 	end,
 }
