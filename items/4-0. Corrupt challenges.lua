@@ -1,37 +1,35 @@
+local __og__  = { id = 'ovn_og'     }
+local __new__ = { id = 'ovn_new'    }
+local _but_   = { id = 'ovn_but'    }
+local _spacer = { id = 'ovn_spacer' }
+
 -------------------
 -- Corrupt Omelette
 -------------------
+local c_egg = { id = 'j_egg', edition = 'negative' }
 SMODS.Challenge {
     key = 'corrupt_omelette',
     rules = {
         custom = {
-			{ id = 'ovn_og'                  },
-			{ id = 'ovn_spacer'              },
+			__og__,
+			_spacer,
             { id = 'no_reward'               },
             { id = 'no_extra_hand_money'     },
             { id = 'no_interest'             },
-			{ id = 'ovn_spacer'              },
-			{ id = 'ovn_spacer'              },
+			_spacer,
+			_spacer,
 
-			{ id = 'ovn_new'                 },
-			{ id = 'ovn_spacer'              },
+			__new__,
+			_spacer,
 			{ id = 'ovn_egg_all_eggs'        },
-			{ id = 'ovn_but'                 },
+			_but_,
 			{ id = 'ovn_egg_eternal_egg'     },
 			{ id = 'ovn_egg_no_swashbuckler' },
         }
     },
     jokers = {
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
-        { id = 'j_egg', edition = 'negative' },
+        c_egg, c_egg, c_egg, c_egg, c_egg,
+		c_egg, c_egg, c_egg, c_egg, c_egg,
     },
     restrictions = {
         banned_cards = {
@@ -64,10 +62,10 @@ SMODS.Challenge {
     key = 'corrupt_edge',
 	rules = {
 		custom = {
-			{ id = 'ovn_new'        },
-			{ id = 'ovn_spacer'     },
+			__new__,
+			_spacer,
             { id = 'ovn_edge_foil'  },
-			{ id = 'ovn_but'        },
+			_but_,
             { id = 'ovn_edge_knife' },
 		},
         modifiers = { {id = 'joker_slots', value = 2} }
@@ -111,17 +109,17 @@ SMODS.Challenge {
 	key = 'corrupt_world',
 	rules = {
 		custom = {
-			{ id = 'ovn_og'              },
-			{ id = 'ovn_spacer'          },
+			__og__,
+			_spacer,
 			{ id = 'no_extra_hand_money' },
 			{ id = 'no_interest'         },
-			{ id = 'ovn_spacer'          },
-			{ id = 'ovn_spacer'          },
+			_spacer,
+			_spacer,
 
-			{ id = 'ovn_new'             },
-			{ id = 'ovn_spacer'          },
+			__new__,
+			_spacer,
 			{ id = 'ovn_world_aces'      },
-			{ id = 'ovn_but'             },
+			_but_,
 			{ id = 'ovn_world_pmo'       },
 		},
 		modifiers = { }
@@ -152,16 +150,16 @@ SMODS.Challenge {
     key = 'corrupt_eternity',
     rules = {
         custom = {
-			{ id = 'ovn_og'               },
+			__og__,
 			{ id = 'ovn_spacer'           },
             { id = 'ovn_all_eternal'      },
 			{ id = 'ovn_spacer'           },
 			{ id = 'ovn_spacer'           },
 
-			{ id = 'ovn_new'              },
+			__new__,
 			{ id = 'ovn_spacer'           },
 			{ id = 'ovn_eternal_none_eternal'     },
-			{ id = 'ovn_but'              },
+			_but_,
 			{ id = 'ovn_eternal_extra_perishable' }, -- This has an effect; see joker_effects.toml
         }
     },
@@ -199,11 +197,11 @@ SMODS.Challenge {
     key = 'corrupt_quintet',
     rules = {
 		custom = {
-			{ id = 'ovn_new'               },
-			{ id = 'ovn_spacer'            },
+			__new__,
+			_spacer,
             { id = 'ovn_quintet_jokerslot' },
             { id = 'ovn_quintet_discard'   },
-			{ id = 'ovn_but'               },
+			_but_,
             { id = 'ovn_quintet_addiction' },
 		},
         modifiers = {
