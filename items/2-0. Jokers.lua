@@ -959,14 +959,14 @@ SMODS.Joker {
 	end,
 	config = {
 		extra = {
+			visual_transition = nil, -- if number, play transition animation
 			xmult_increase = 0.75,
 			x_mult = 1,
 		},
 	},
 
-	atlas = 'corrupted',
-	pos = { x = 4, y = 0 },
-	uses_placeholder_sprite = true,
+	atlas = 'apart_falling',
+	pos = { x = 0, y = 1 },
 
 	rarity = "ovn_corrupted",
 	cost = 8,
@@ -984,6 +984,31 @@ SMODS.Joker {
 			and context.ovn_corrupted_card ~= card
 		) then
 			simple_scale(card, "x_mult", "xmult_increase", G.C.MULT, "a_xmult")
+			G.E_MANAGER:add_event(Event {
+				blocking = false,
+				blockable = false,
+				trigger = "after",
+				delay = 0.25,
+				func = function()
+					card.ability.extra.visual_transition = 0
+					-- See Card:update hook for transition animation code
+					return true
+				end
+			})
+			G.E_MANAGER:add_event(Event {
+				blocking = false,
+				blockable = false,
+				trigger = "after",
+				delay = 2,
+				func = function()
+					add_simple_event(nil, nil, function ()
+						local x = pseudorandom('apartfalling_sprite', 0, 4)
+						card.children.center:set_sprite_pos({x = x, y = 1})
+						card.ability.extra.visual_transition = nil
+					end)
+					return true
+				end
+			})
 		end
 	end
 }

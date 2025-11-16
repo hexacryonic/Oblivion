@@ -21,9 +21,10 @@ local card_atlases = {
 	skin_nd_hc         = "skinND_hc",
 	skin_ism_lc        = "skinISM_lc",
 	skin_ism_hc        = "skinISM_hc",
-	skin_acgt_lc        = "skinACGT_lc",
-	skin_acgt_hc        = "skinACGT_hc",
+	skin_acgt_lc       = "skinACGT_lc",
+	skin_acgt_hc       = "skinACGT_hc",
 	apache_tears       = "ApacheTears",
+	apart_falling      = "APartFalling",
 }
 
 for key, path in pairs(card_atlases) do
