@@ -970,6 +970,16 @@ SMODS.Joker {
 
 	rarity = "ovn_corrupted",
 	cost = 8,
+	update = function (self, card, dt)
+		if card.ability.extra.visual_transition then -- should be an int
+			local card_ex = card.ability.extra
+			card_ex.visual_transition = card_ex.visual_transition + 1
+			if card_ex.visual_transition > 3 then
+				card_ex.visual_transition = 0
+			end
+			card.children.center:set_sprite_pos({x = card_ex.visual_transition, y = 0})
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.x_mult > 1 then
 			return {
@@ -991,7 +1001,6 @@ SMODS.Joker {
 				delay = 0.25,
 				func = function()
 					card.ability.extra.visual_transition = 0
-					-- See Card:update hook for transition animation code
 					return true
 				end
 			})

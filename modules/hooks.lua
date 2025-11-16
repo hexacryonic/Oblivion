@@ -180,19 +180,6 @@ local card_upd8_hook = Card.update
 function Card:update(dt)
 	card_upd8_hook(self, dt)
 
-	if (
-		self.config.center.key == 'j_ovn_apartfalling'
-		and self.ability.extra
-		and self.ability.extra.visual_transition -- should be an int
-	) then
-		local self_ex = self.ability.extra
-		self_ex.visual_transition = self_ex.visual_transition + 1
-		if self_ex.visual_transition > 3 then
-			self_ex.visual_transition = 0
-		end
-		self.children.center:set_sprite_pos({x = self_ex.visual_transition, y = 0})
-	end
-
 	-- Destroy card if it is corruptbanished
 	if self.area == G.jokers then
 		local card_key = self.config.center.key
