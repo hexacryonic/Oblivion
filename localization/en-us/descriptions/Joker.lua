@@ -391,9 +391,7 @@ return {
 	j_ovn_showneverends = {
 		name = 'THE SHOW NEVER ENDS',
 		text = {
-			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
-			"banish or destroy their counterparts",
-			"Corrupted Jokers",
+			"{C:ovn_corrupted}Corrupted {C:attention}Jokers",
 			"no longer banish or",
 			"destroy their counterparts"
 		},
