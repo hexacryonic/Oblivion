@@ -386,9 +386,6 @@ return {
 			"{C:attention}Pure forms {}are not banished",
 			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
 			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
-			"{s:0.3} {}",
-			"{C:inactive,s:0.8}Corrupted from {C:attention,s:0.8}Arrowhead, Bloodstone,",
-			"{C:attention,s:0.8}Onyx Agate, or Rough Gem",
 		}
 	},
 	j_ovn_showneverends = {
@@ -396,6 +393,9 @@ return {
 		text = {
 			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{} no longer",
 			"banish or destroy their counterparts",
+			"Corrupted Jokers",
+			"no longer banish or",
+			"destroy their counterparts"
 		},
 		corrupted_from = {
 			"Showman"
