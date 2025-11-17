@@ -144,6 +144,7 @@ SMODS.Consumable{
 
 	atlas = 'spectrum_atlas',
 	pos = {x = 0, y = 0 },
+	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -162,6 +163,7 @@ SMODS.Consumable{
 
 	atlas = 'spectrum_atlas',
 	pos = {x = 1, y = 0 },
+	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -180,6 +182,7 @@ SMODS.Consumable{
 
 	atlas = 'spectrum_atlas',
 	pos = {x = 2, y = 0 },
+	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -198,6 +201,7 @@ SMODS.Consumable{
 
 	atlas = 'spectrum_atlas',
 	pos = {x = 3, y = 0 },
+	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -282,6 +286,7 @@ SMODS.Consumable {
 
 	atlas = "cataclysm_atlas",
 	pos = {x=2, y=0},
+	uses_placeholder_sprite = true,
 
 	cost = 2,
 
@@ -331,10 +336,14 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_Eidolon",
 	key = "eidolon",
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_SEALS[card.ability.extra.seal]
+    end,
 	config = { extra = { seal = 'ovn_indigo' }, max_highlighted = 1 },
 
 	atlas = "cataclysm_atlas",
 	pos = {x=2, y=0},
+	uses_placeholder_sprite = true,
 
 	cost = 4,
 
@@ -372,6 +381,7 @@ SMODS.Voucher {
 
 	atlas = "voucher_atlas",
 	pos = {x=0, y=0},
+	uses_placeholder_sprite = true,
 	cost = 10,
 
 	redeem = function(self, card)
@@ -393,6 +403,7 @@ SMODS.Voucher {
 
 	atlas = "voucher_atlas",
 	pos = {x=1, y=0},
+	uses_placeholder_sprite = true,
 	cost = 10,
 
 	redeem = function(self, card)

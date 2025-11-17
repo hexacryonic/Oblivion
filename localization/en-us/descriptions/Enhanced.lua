@@ -3,14 +3,16 @@ return {
 		name = 'Radiant Card',
 		text = {
 			"While held in hand,",
-			"{C:attention}scoring {}cards get bonus {C:chips}chips",
-			"equal to {C:attention}this card's {C:chips}chip {}value"
+			"{C:attention}scoring {}cards get",
+			"bonus {C:chips}chips equal to",
+			"{C:attention}this card's {C:chips}chip {}value"
 		}
 	},
 	m_ovn_dynamo = {
 		name = 'Dynamo Card',
 		text = {
-			"If this card is {C:attention}played {}and {C:attention}unscoring,",
+			"If this card is",
+			"{C:attention}played {}and {C:attention}unscoring,",
 			"scored cards give {C:mult}+#1# {}Mult"
 		}
 	},

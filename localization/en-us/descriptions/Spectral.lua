@@ -9,15 +9,17 @@ return {
 	c_ovn_charybdis = {
 		name = 'Charybdis',
 		text = {
-			"Create {C:attention}#1#{} random {C:ovn_corrupted}Corrupted{} {C:attention}Jokers{}",
+			"Create {C:attention}#1#{} random",
+			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{}",
 			"Destroy all other {C:attention}Jokers{}"
 		}
 	},
 	c_ovn_oblivion = {
 		name = 'Oblivion',
 		text = {
-			"Add {C:ovn_corrupted}Miasma{} {C:attention}Edition{} to",
-			"{C:attention}#1#{} selected playing cards or {C:attention}Joker{}"
+			"Add {C:ovn_corrupted}Miasma{} {C:attention}Edition{}",
+			"to {C:attention}#1#{} selected",
+			"playing cards or {C:attention}Joker{}"
 		}
 	},
 	c_ovn_eidolon = {

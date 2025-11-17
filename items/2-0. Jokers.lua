@@ -111,6 +111,10 @@ SMODS.Joker {
 ------
 SMODS.Joker {
 	key = 'ovn',
+	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
+	end,
+
     atlas = 'notcorrupted',
 	pos  = { x=4, y=0 },
 
@@ -142,6 +146,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'radiant_joker',
 	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.m_ovn_radiant)
 		return {vars = {
 			card.ability.extra.extra_chips,
 			card.ability.extra.chip_increase
@@ -202,6 +207,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'ice_joker',
 	loc_vars = function(self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.m_ovn_ice)
 		return {vars = {
 			card.ability.extra.xmult_gain,
 			card.ability.extra.xmult,
@@ -251,6 +257,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'crystal_joker',
 	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.m_ovn_crystal)
 		return {vars = {
 			card.ability.extra.extra_plays
 		}}
@@ -308,6 +315,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'ion_joker',
 	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.m_ovn_ion)
 		return {vars = {
 			card.ability.extra.chips
 		}}
@@ -1292,6 +1300,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'cigarette_card',
 	loc_vars = function(self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 		return {vars = {
 			card.ability.extra.xmult
 		}}

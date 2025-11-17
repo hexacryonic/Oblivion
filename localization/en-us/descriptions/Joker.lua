@@ -117,8 +117,9 @@ return {
 	j_ovn_prideful = {
 		name = 'Prideful Joker',
 		text = {
-			"Played cards with {C:ovn_optic}Optic{} suit",
-			"give {C:mult}+#1#{} Mult when scored",
+			"Played cards with",
+			"{C:ovn_optic}Optic{} suit give",
+			"{C:mult}+#1#{} Mult when scored",
 		},
 		corrupted_from = {
 			"the Sinful Jokers"
@@ -150,7 +151,7 @@ return {
 		name = "Edge of a Collapsing World",
 		text = {
 			"The {C:attention}rightmost and leftmost {}cards",
-			"discarded in the {C:attention}final Discard",
+			"discarded in the {C:attention}final discard",
 			"of the round are {C:red}destroyed,",
 			"then this Joker gains {C:mult}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
@@ -162,9 +163,9 @@ return {
 	j_ovn_lucasseries = {
 		name = 'Lucas Series',
 		text = {
-			"Each played",
-			"{C:attention}2, 3, 4, 7,{} or {C:attention}Ace{}",
-			"gives {X:mult,C:white} X#1# {} Mult when scored",
+			"Each played {C:attention}Ace{},",
+			"{C:attention}2, 3, 4,{} or {C:attention}7{} gives",
+			"{X:mult,C:white} X#1# {} Mult when scored",
 		},
 		corrupted_from = {
 			"Fibonacci"
@@ -173,8 +174,9 @@ return {
 	j_ovn_database = {
 		name = "Database",
 		text = {
-			"{C:chips}+#1# {}Chips per {C:attention}unique {}Joker",
-			"obtained cumulatively over the run",
+			"{C:chips}+#1# {}Chips per",
+			"{C:attention}unique {}Joker obtained",
+			"cumulatively over the run",
 			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
 		},
 		corrupted_from = {
@@ -184,8 +186,9 @@ return {
 	j_ovn_pmo = {
 		name = 'Prosopometamorphopsia',
 		text = {
-			"Effects that would target",
-			"{C:attention}any face card{} target {C:attention}Aces{} instead",
+			"Effects that would",
+			"target {C:attention}any face card",
+			"target {C:attention}Aces {}instead",
 		},
 		corrupted_from = {
 			"Pareidolia"
@@ -194,9 +197,10 @@ return {
 	j_ovn_aeon = {
 		name = 'Aeon Cavendish',
 		text = {
-			"{X:mult,C:white} X#1# {} Mult",
-			"{C:attention}Cavendish {}is no longer extinct",
-			"and can be obtained multiple times",
+			"{X:mult,C:white}X#1# {} Mult",
+			"{C:attention}Cavendish {}is no longer",
+			"extinct and can be",
+			"obtained multiple times"
 		},
 		corrupted_from = {
 			"Gros Michel"
@@ -206,9 +210,11 @@ return {
 		name = "Event Horizon",
 		text = {
 			"{C:red}Hands no longer level up",
-			"Instead, this Joker gains half of",
-			"the upgrade's {C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
-			.." {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})",
+			"Instead, this Joker gains",
+			"half of the upgrade's",
+			"{C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
+			.. " {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})"
+			-- above line split b/c too long
 		},
 		corrupted_from = {
 			"Supernova or Constellation"
@@ -229,12 +235,14 @@ return {
 		name = "Library of Babel",
 		text = {
 			"This Joker gains {X:mult,C:white}X#1# {} Mult",
-			"when played poker hand hasn't been",
-			"played within the {C:attention}last #2# {}hands",
+			"when played poker hand",
+			"hasn't been played within",
+			"the {C:attention}last #2# {}hands",
 			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
 		},
 		corrupted_from = {
-			"To-Do List, Card Sharp, or Obelisk"
+			"To-Do List,",
+			"Card Sharp, or Obelisk"
 		}
 	},
 	j_ovn_cultivar = {
@@ -280,8 +288,8 @@ return {
 			"{s:0.3} {}",
 
 			"When this Joker is sold",
-			"again, even between runs,",
-			"create the stored Joker",
+			"again, {C:attention}even between runs,",
+			"{C:attention}create {}the stored Joker",
 			"and remove it from storage",
 			"{s:0.3} {}",
 
@@ -294,8 +302,9 @@ return {
 	j_ovn_perpendicular = {
 		name = 'Perpendicular Parking',
 		text = {
-			"Scored cards earn {C:attention}$#1#{} if another",
-			"card of its {C:attention}same rank{} is held in hand",
+			"Scored cards earn {C:attention}$#1#{}",
+			"if another card of its",
+			"{C:attention}same rank{} is held in hand",
 		},
 		corrupted_from = {
 			"Reserved Parking"
@@ -304,8 +313,9 @@ return {
 	j_ovn_migraine = {
 		name = "Migraine",
 		text = {
-			"{C:attention}Standard Packs {}only",
-			"contain modified {C:ovn_optic}Optic {}cards",
+			"{C:attention}Standard Packs",
+			"only contain",
+			"modified {C:ovn_optic}Optic cards"
 		},
 		corrupted_from = {
 			"Hallucination"
@@ -314,8 +324,9 @@ return {
 	j_ovn_spiral_of_addiction = {
 		name = "Spiral of Addiction",
 		text = {
-			"This Joker gains {X:mult,C:white}X#1# {} Mult per round",
-			"where {C:attention}every discard {}is used",
+			"This Joker gains {X:mult,C:white}X#1# {} Mult",
+			"per round where",
+			"{C:attention}every discard {}is used",
 			"{C:inactive}(Currently {X:mult,C:white}X#2# {C:inactive} Mult)",
 			"{C:red}#3# {}hand size next round if",
 			"at least {C:attention}1 {}discard remains",
@@ -327,8 +338,10 @@ return {
 	j_ovn_cigarette_card = {
 		name = "Cigarette Card",
 		text = {
-			"{C:green}Uncommon {}Jokers always spawn with {C:dark_edition}Miasma",
-			"{C:ovn_corrupted}Corrupted {}Jokers each give {X:mult,C:white}X#1# {} Mult",
+			"{C:green}Uncommon {}Jokers always",
+			"spawn with {C:dark_edition}Miasma",
+			"{C:ovn_corrupted}Corrupted {}Jokers each",
+			"give {X:mult,C:white}X#1# {} Mult",
 		},
 		corrupted_from = {
 			"Baseball Card"
@@ -339,8 +352,12 @@ return {
 		text = {
 			"Held or unscoring {C:attention}10{}s stockpile",
 			"{X:mult,C:white} X#1# {} Mult every hand played",
-			"When scored, {C:attention}10{}s give their stockpiled Mult",
-			"and reset their stockpile after the hand",
+			"{s:0.3} {}",
+
+			"When scored, {C:attention}10{}s give",
+			"their stockpiled Mult",
+			"and {C:attention}reset their stockpile",
+			"after the hand",
 		},
 		corrupted_from = {
 			"Walkie Talkie"
@@ -437,7 +454,8 @@ return {
 		name = "Bottled Ship of Theseus",
 		text = {
 			"When a {C:attention}non-Glass card {}is {C:red}destroyed,",
-			"create a {C:attention}Glass Card {}of its rank and suit"
+			"create a {C:attention}Glass Card",
+			"of its rank and suit",
 		},
 		corrupted_from = {
 			"Trolley Problem"
@@ -446,10 +464,14 @@ return {
 	j_ovn_nexus_point = {
 		name = "Nexus Point",
 		text = {
-			"This Joker can be {C:ovn_corrupted}repeatedly corrupted",
+			"This Joker can be",
+			"{C:ovn_corrupted}repeatedly corrupted",
+			"{s:0.3} {}",
+
 			"Scored cards give {X:mult,C:white}X#1# {} Mult",
-			"Increases by {X:mult,C:white}X#2# {} each time this Joker",
-			"is {C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
+			"Increases by {X:mult,C:white}X#2# {} each",
+			"time this Joker is",
+			"{C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
 		},
 		corrupted_from = {
 			"Purifier or Nexus Point"

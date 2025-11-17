@@ -78,7 +78,7 @@ local loc =  {
 				name = "Placeholder sprite",
 				text = {
 					"This card's sprite",
-					"is a {C:attention}placeholder{};",
+					"is a {S:1.1,C:attention,E:2}placeholder{};",
 					"a proper sprite will",
 					"be created {C:blue}later."
 				}
