@@ -1617,6 +1617,9 @@ SMODS.Joker {
 		},
 		card_limit = 1,
 	},
+	credits = {
+		art = "Lil Mr. Slipstream",
+	},
 
 	atlas = 'corrupted',
 	pos = {x=1, y=3},
@@ -1791,10 +1794,12 @@ SMODS.Joker {
 			xmult = 1.1,
 		}
 	},
+	credits = {
+		art = "Lil Mr. Slipstream",
+	},
 
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
-	uses_placeholder_sprite = true,
+	pos = {x=5, y=0},
 
 	rarity = 'ovn_corrupted',
 	cost = 7,
