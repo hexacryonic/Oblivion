@@ -3,6 +3,8 @@
 --   {X:mult,C:white}X#1# {} Mult
 --   Note that the last node {} is surrounded by spaces on BOTH sides, not just the left
 
+local __sp__ = "{s:0.3} "
+
 return {
 	j_ovn_john = {
 		name = 'John Oblivion',
@@ -285,13 +287,13 @@ return {
 			"Sell this Joker to {C:attention}store{} the",
 			"Joker to its left, if its rarity",
 			"is not higher than {C:red}Rare{}",
-			"{s:0.3} {}",
+			__sp__,
 
 			"When this Joker is sold",
 			"again, {C:attention}even between runs,",
 			"{C:attention}create {}the stored Joker",
 			"and remove it from storage",
-			"{s:0.3} {}",
+			__sp__,
 
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
 		},
@@ -352,7 +354,7 @@ return {
 		text = {
 			"Held or unscoring {C:attention}10{}s stockpile",
 			"{X:mult,C:white} X#1# {} Mult every hand played",
-			"{s:0.3} {}",
+			__sp__,
 
 			"When scored, {C:attention}10{}s give",
 			"their stockpiled Mult",
@@ -368,7 +370,7 @@ return {
 		text = {
 			"Each played card gives",
 			"{X:mult,C:white} X#1# {} Mult when scored",
-			"{s:0.3} {}",
+			__sp__,
 			"{C:chips}-a fucktillion{} hands",
 			"when hand played",
 		},
@@ -383,7 +385,7 @@ return {
 			"{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
 			"{C:attention}Every#4# {C:ovn_optic}Optic {}cards",
 			"scored {C:inactive}(#5#) {}gives {C:money}$#6#",
-			"{s:0.3} {}",
+			__sp__,
 			"{C:attention}Pure forms {}are not banished",
 			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
 			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
@@ -399,7 +401,7 @@ return {
 			"Scored {C:ovn_optic}Optic {}cards give",
 			"{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
 			"{C:attention}Every {C:ovn_optic}Optic {}card scored gives {C:money}$#4#",
-			"{s:0.3} {}",
+			__sp__,
 			"{C:attention}Pure forms {}are not banished",
 			"This Joker {C:ovn_corrupted}absorbs {}and banishes",
 			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
@@ -431,9 +433,13 @@ return {
 	j_ovn_master_of_puppets = {
 		name = "Master of Puppets",
 		text = {
-			"When selling a {C:blue}Common{C:inactive}/{C:green}Uncommon{C:inactive}/{C:red}Rare {}Joker,",
-			"a random {C:attention}Jack {}in your deck is given",
-			"an {C:blue}Enhancement{C:inactive}/{C:green}Seal{C:inactive}/{C:red}Edition {}respectively",
+			"When selling a Joker, a random {C:attention}Jack",
+			"in your deck is given a {C:attention}modifier",
+			"depending on the sold Joker's rarity:",
+			__sp__,
+			"{C:blue}Common {}-> {C:blue}Enhancement",
+			"{C:green}Uncommon {}-> {C:green}Seal",
+			"{C:red}Rare {}-> {C:red}Edition",
 		},
 		corrupted_from = {
 			"Hit the Road"
@@ -466,7 +472,7 @@ return {
 		text = {
 			"This Joker can be",
 			"{C:ovn_corrupted}repeatedly corrupted",
-			"{s:0.3} {}",
+			__sp__,
 
 			"Scored cards give {X:mult,C:white}X#1# {} Mult",
 			"Increases by {X:mult,C:white}X#2# {} each",

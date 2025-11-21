@@ -9,6 +9,8 @@ local macro = {
 	}
 }
 
+local __sp__ = "{s:0.3} "
+
 local loc =  {
 	descriptions = {
 		Mod = {
@@ -177,7 +179,7 @@ local loc =  {
 					"{C:attention}Retriggers{} thrice,",
 					"then {C:ovn_corrupted}corrupts{} if possible,",
 					"otherwise {S:1.1,C:red,E:2}self-destructs{}",
-					"{s:0.3} {}",
+					__sp__,
 					"{C:ovn_corrupted}Corrupt {}Jokers or {C:ovn_corrupted}Optic",
 					"cards {C:attention}retrigger {}once",
 					"and do {C:attention}not {}self-destruct"
@@ -252,7 +254,7 @@ local loc =  {
 				name = 'Explosive Growth',
 				text = {
 					"{C:ovn_mutation}Unique{}: Only usable once",
-					"{s:0.3} {}",
+					__sp__,
 					"Next {C:ovn_mutation}non-Unique Mutation{} is used",
 					"{C:attention}#1#{} additional times, then banished"
 				}
@@ -303,6 +305,7 @@ local loc =  {
 	misc = {
 		labels = {
 			ovn_miasma = "Miasma",
+				-- Developer's note: Corrupted and Supercorrupted are superficially equivalent, hence they should have the same text
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
 			ovn_indigo_seal = "Indigo Seal",
@@ -322,42 +325,55 @@ local loc =  {
 			ovn_ion_misfire = "...",
 			k_primary_contributors = "Primary contributors",
 			k_additional_credits = "Additional credits",
-			ovn_corrupted_from = "Corrupted from"
+				-- Developer's note: This will be formatted like (ovn_corrupted_from .. 'X, X, or X') -> "Corrupted from X, X, or X"
+			ovn_corrupted_from = "Corrupted from",
+				-- Developer's note: "Datcard" is a portmanteau of "dat" and "discard", i.e. "dis and dat", "this and that"
+			b_ovn_datcard = "Datcard",
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
 			remaining_discard_money_i = "Remaining Discards ($#1#i each)",
 			interest_i = "#1#i interest per $#2#i (#3#i max)",
 		},
+			-- Developer's note: Corrupt Challenge names are based on vanilla challenges; localization should try to reflect such to the best of one's ability
+			-- E.g. The Omlette -> Corrupt Omlette
+			-- E.g. On a Knife's Edge -> Corrupt Edge
+			-- Exceptions will be noted as the rest of the challenges are implemented
 		challenge_names = {
 			c_ovn_corrupt_omelette = "Corrupt Omlette",
 			c_ovn_corrupt_edge = "Corrupt Edge",
 			c_ovn_corrupt_world = "Corrupt World",
+				-- EXCEPTION - Perishable Sticker -> Eternal Sticker
 			c_ovn_corrupt_eternity = "Corrupt Eternity",
+				-- partial EXCEPTION - "Five-Card" -> "Quintet"
 			c_ovn_corrupt_quintet = "Corrupt Quintet"
 		},
 		v_text = {
 			ch_c_ovn_og = { "{C:attention,s:1.5}Original Rules:{}" },
 			ch_c_ovn_new = { "{C:ovn_corrupted,s:1.5}Changes:{}" },
 			ch_c_ovn_but = { "{C:ovn_corrupted,s:1.3}BUT{}" },
-			ch_c_ovn_spacer = { "{s:0.3} {}" },
+			ch_c_ovn_spacer = { __sp__ },
 
 			-- Corrupt Omelette
 			ch_c_ovn_egg_all_eggs = { "WHY ARE THERE {C:dark_edition}SO MANY {C:attention}EGGS" },
 			ch_c_ovn_egg_eternal_egg = { "A random {C:attention}Egg {}becomes {C:eternal}Eternal {}after each round" },
+				-- Developer's note: Note "motherfuckler", a forced rhyme between "Swashbuckler" (Joker) and "motherfuckler"
 			ch_c_ovn_egg_no_swashbuckler = { "DON'T EVEN THINK ABOUT USING {C:attention}SWASHBUCKLER {}YOU MOTHERFUCKLER" },
 
 			-- Corrupt Edge
 			ch_c_ovn_edge_foil = { "The {C:attention}Ceremonial Dagger{} is now {C:dark_edition}Foil{}" },
+				-- Developer's note: A play on the challenge name "On a Knife's Edge", referring to the removal of the space not targetted by Ceremonial Dagger
 			ch_c_ovn_edge_knife = { "There is no edge, only knife" },
 
 			-- Corrupt World
 			ch_c_ovn_world_aces = { "You have an {C:attention}Ace{} of each suit" },
+				-- Developer's note: Refers to the Joker
 			ch_c_ovn_world_pmo = { "{C:ovn_corrupted}Prosopometamorphopsia{}" },
 
 			-- Corrupt Eternity
 			ch_c_ovn_all_eternal = G.localization.misc.v_text.ch_c_all_eternal, -- duplicate to prevent eternals from occurring
 			ch_c_ovn_eternal_none_eternal = { "All Jokers are no longer {C:eternal}Eternal{}" },
+				-- Developer's note: Should reference the Perishable Sticker, if possible
 			ch_c_ovn_eternal_extra_perishable = { "Extra {C:perishable}Perishable" },
 
 			-- Corrupt Quintet
@@ -396,13 +412,14 @@ local loc =  {
 				"A Spectrum with all 5 cards of the same rank"
 			},
 			["ovn_5DDeck"] = {
-			"A hand that contains every single",
-			"card found in a 52-card deck, plus",
-			"an entire full set of Optics",
-			" ",
-			"What the actual fuck is wrong with you?",
+				"A hand that contains every single",
+				"card found in a 52-card deck, plus",
+				"an entire full set of Optics",
+				" ",
+				"What the actual fuck is wrong with you?",
 			}
 		},
+			-- Developer's note: Please only translate the second item of each tuple
 		credits = {
 			{"Hexa", "Creator, Lead Developer"},
 			{"Oinite", "Developer"},

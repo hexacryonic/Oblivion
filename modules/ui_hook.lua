@@ -94,7 +94,7 @@ local uiboxbuttons_hook_c_red = function()
 	local discard_button =
 	{"column", id="discard_button", class="action_button", onclick="discard_cards_from_held", ondraw="can_weirddiscard", style={fillColour = G.C.RED}, {
 		{"row", class="row_styles", {
-			{"text", class="top_label", text="Datcard", ondraw='set_button_pip', style={focus = {button = 'y', orientation = 'bm'}}}
+			{"text", class="top_label", text=localize('b_ovn_datcard'), ondraw='set_button_pip', style={focus = {button = 'y', orientation = 'bm'}}}
 		}},
 		{"row", class="row_styles", {
 			{"text", class="bottom_label", reftable=SMODS.hand_limit_strings, refvalue="discard"}
