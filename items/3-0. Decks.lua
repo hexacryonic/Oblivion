@@ -266,7 +266,10 @@ SMODS.Back{
 			localize { type = 'name_text', key = 'tag_standard', set = 'Tag' }
 		}}
 	end,
-	config = { tag_count = 10 },
+	config = {
+		tag_count = 10,
+		ovn_empty_deck = true,
+	},
 
 	atlas = "cdeck_atlas",
     pos = { x = 3, y = 1 },
@@ -278,9 +281,6 @@ SMODS.Back{
 
 	apply = function (self)
 		add_simple_event('immediate', nil, function()
-            for i = 1, #G.deck.cards do
-                G.deck.cards[i]:start_dissolve()
-            end
 			for _ = 1, self.config.tag_count do
 				add_tag(Tag("tag_standard"))
 			end

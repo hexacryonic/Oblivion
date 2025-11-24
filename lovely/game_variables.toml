@@ -36,3 +36,32 @@ if next(poker_hands["ovn_Straight Spectrum"]) then
 end
 '''
 match_indent = true
+
+# ----
+
+# function Game:start_run
+# Implementing Back config.ovn_empty_deck
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+card_protos = {}
+'''
+position = "after"
+payload = '''
+if not self.GAME.selected_back.effect.config.ovn_empty_deck then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if keep then card_protos[#card_protos+1] = {s=_s,r=_r,e=_e,d=_d,g=_g} end
+::continue::
+'''
+position = "after"
+payload = '''
+end
+'''
+match_indent = true
