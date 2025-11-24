@@ -21,14 +21,12 @@ SMODS.Back{
 
 	apply = function(self)
 		G.GAME.ovn_has_ocular = true
-		add_simple_event('immediate', nil, function()
-			local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
-			for _,rank in ipairs(ranks) do
-				local card_key = ('ovn_O_%s'):format(rank)
-				local card_front = G.P_CARDS[card_key]
-				create_playing_card({front = card_front}, G.deck)
-			end
-		end)
+		G.GAME.starting_params.extra_cards = G.GAME.starting_params.extra_cards or {}
+
+		local ranks = {"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"}
+		for _,rank in ipairs(ranks) do
+			table.insert(G.GAME.starting_params.extra_cards, {s='ovn_O',r=rank})
+		end
 	end,
 }
 
