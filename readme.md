@@ -183,7 +183,10 @@ Sent to the newly transformed (purified) Joker after a previous Joker was purifi
     ovn_corruption_occurred = true,
     ovn_corruption_type = "Joker", --[[STRING]]
     ovn_former_form_key = card_key, --[[STRING]]
-    ovn_corrupted_card = card --[[Card; nil if corrupting a card destroys it (e.g. Apache Tears absorption)]]
+    ovn_corrupted_card = card
+    -- ovn_corrupted_card can instead be nil
+    -- when corrupting a card destroys it
+    -- (e.g. Apache Tears absorption)
 }
 ```
 
