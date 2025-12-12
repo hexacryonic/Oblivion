@@ -97,71 +97,155 @@ SMODS.Joker {
 ```
 
 ## Contexts
-This context is used for adding repetitions *from* playing cards with modifiers. It is sent during the main scoring loop, received by enhancements, seals, editions, and stickers, and defined by the `SMODS.calculate_repetitions` hook. (Much thanks to [Paperback](https://github.com/Balatro-Paperback/paperback) for the code for this context.)
+<table>
+
+<tr>
+<th>Primary key</th>
+<th>Context table</th>
+<th>Description</th>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_repetition_from_playing_card</code></td>
+<td>
+
 ```lua
-if context.ovn_repetition_from_playing_card then
 {
-    other_card = card
-    cardarea = G.play --[[etc.]],
-    scoring_hand = scoring_hand,
     ovn_repetition_from_playing_card = true,
+    other_card = Card
+    cardarea = G.play --[[etc.]],
+    scoring_hand = cards --[[TABLE]],
 }
 ```
 
-This context is used on the newly transformed (corrupted) Joker after a previous Joker was corrupted. It is sent by `Ovn_f.corrupt_joker`.
+</td>
+<td>
+
+Used for adding repetitions *from* playing cards with modifiers. Sent during the main scoring loop, received by enhancements, seals, editions, and stickers, and defined by the `SMODS.calculate_repetitions` hook. (Much thanks to [Paperback](//github.com/Balatro-Paperback/paperback) for the code for this context.)
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_corrupted_from</code></td>
+<td>
+
 ```lua
-if context.ovn_corrupted_from then
 {
     ovn_corrupted_from = true,
-    ovn_former_form_key = card_key,
-    ovn_former_form_ability = table
+    ovn_former_form_key = card_key --[[STRING]],
+    ovn_former_form_ability = ability_table --[[card.ability]]
 }
 ```
 
-This context is used when Joker corruption occurs. It is sent by `Ovn_f.corrupt_joker`.
-```lua
-if context.ovn_corruption_occurred and ovn_corruption_type == "Joker" then
-{
-    ovn_corruption_occurred = true,
-    ovn_corruption_type = "Joker",
-    ovn_former_form_key = card_key,
-    ovn_corrupted_card = card -- nil if card is destroyed due to corruption (e.g. Apache Tears absorption)
-}
-```
+</td>
+<td>
 
-This context is used on the newly transformed (purified) Joker after a previous Joker was purified. It is sent by `Ovn_f.purify_joker`.
+Sent to the newly transformed (corrupted) Joker after a previous Joker was corrupted. Sent by `Ovn_f.corrupt_joker`.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_purified_from</code></td>
+<td>
+
 ```lua
-if context.ovn_purified_from then
 {
     ovn_purified_from = true,
-    ovn_former_form_key = card_key,
-    ovn_former_form_ability = table
+    ovn_former_form_key = card_key --[[STRING]],
+    ovn_former_form_ability = ability_table --[[card.ability]]
 }
 ```
 
-This context is used when Joker purification occurs. It is sent by `Ovn_f.purify_joker`.
+</td>
+<td>
+
+Sent to the newly transformed (purified) Joker after a previous Joker was purified. Sent by `Ovn_f.purify_joker`.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_corruption_occurred</code></td>
+<td>
+
 ```lua
-if context.ovn_purification_occurred and ovn_purification_type == "Joker" then
+{
+    ovn_corruption_occurred = true,
+    ovn_corruption_type = "Joker", --[[STRING]]
+    ovn_former_form_key = card_key, --[[STRING]]
+    ovn_corrupted_card = card --[[Card; nil if corrupting a card destroys it (e.g. Apache Tears absorption)]]
+}
+```
+
+</td>
+<td>
+
+Occurs when Joker corruption occurs. Sent by `Ovn_f.corrupt_joker`.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_purification_occurred</code></td>
+<td>
+
+```lua
 {
     ovn_purification_occurred = true,
-    ovn_purification_type = "Joker",
-    ovn_former_form_key = card_key,
-    ovn_purified_card = card
+    ovn_purification_type = "Joker", --[[STRING]]
+    ovn_former_form_key = card_key, --[[STRING]]
+    ovn_corrupted_card = card
 }
 ```
 
-This context is used when a run is started or loaded. It is sent by the `Game.start_run` hook.
+</td>
+<td>
+
+Occurs when Joker purification occurs. Sent by `Ovn_f.purify_joker`.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_run_started</code></td>
+<td>
+
 ```lua
-if context.ovn_run_started then
 {
     ovn_run_started = true,
     -- Recommended to check G.STATE as well
 }
 ```
 
-This context is used when an Ice card degrades. It is sent by the Ice enhancement register.
+</td>
+<td>
+
+Occurs when a run is started or loaded. Sent by the `Game.start_run` hook.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_ice_degraded</code></td>
+<td>
+
 ```lua
-if context.ovn_ice_degraded then
 {
     ovn_ice_degraded = true,
     other_card = ice_card,
@@ -169,12 +253,36 @@ if context.ovn_ice_degraded then
 }
 ```
 
-This context is used when a card is removed from deck via selling, destruction, or specified removal. It triggers in the same context as a card's `remove_from_deck` function.
+</td>
+<td>
+
+Occurs when an Ice card degrades. Sent by the Ice enhancement register.
+
+</td>
+</tr>
+
+<!-------------------->
+
+<tr>
+<td><code>ovn_card_removed</code></td>
+<td>
+
 ```lua
-if context.ovn_card_removed then
 {
     ovn_card_removed = true,
     card = card,
     from_debuff = boolean
 }
 ```
+
+</td>
+<td>
+
+Occurs when a card is removed from deck via selling, destruction, or specified removal. Triggers in the same context as a card's `remove_from_deck` function.
+
+</td>
+</tr>
+
+<!-------------------->
+
+</table>
