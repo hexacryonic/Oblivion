@@ -6,7 +6,8 @@
 -- 4. JOKER TRANSMUTATION STATES
 -- 5. MODIFIER TRANSMUTATION
 -- 6. INSTABILITY
--- 7. MISCELLANEOUS
+-- 7. GHOSTLY ADVERSARY
+-- 8. MISCELLANEOUS
 
 
 
@@ -350,6 +351,159 @@ end
 
 
 
+---------------------------
+---- GHOSTLY ADVERSARY ----
+---------------------------
+
+-- Selects a random Spectral card, if not yet chosen from the previous load.
+---@return string|nil If nil, no Spectral card can be used.
+local function ghast_select_spec()
+	local selected_spec
+
+	-- Ghostspec was NOT SAVED - grab one and save
+	if not G.GAME.ovn_cghost_ghostspec then
+		-- Determine which Spectral cards can actually be used
+		local valid_specs = {}
+		for spec_key, spec_info in pairs(Oblivion.spectral_logic) do
+			if spec_info.usable() and not (
+				next(SMODS.find_card(spec_key))
+				and not Ovn_f.has_joker('j_ring_master') -- Showman
+			) then
+				table.insert(valid_specs, spec_key)
+			end
+		end
+
+		-- If no Spectral card can be used (for some god forsaken reason)
+		-- then don't even bother continuing
+		if #valid_specs == 0 then
+			G.GAME.ovn_cghost_ghostspec = nil
+			G.GAME.ovn_cghost_pseudorandom = {}
+			save_run()
+			return
+		end
+
+		-- Select the Spectral card
+		selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
+		G.GAME.ovn_cghost_ghostspec = selected_spec
+
+	-- Ghostspec was SAVED - use it
+	else
+		print('N I C E   T R Y ,   P L A Y E R .')
+		selected_spec = G.GAME.ovn_cghost_ghostspec
+	end
+
+	return selected_spec
+end
+
+-- Prepare a table of randomly selected cards.
+-- (also returns select areas)
+---@param spectral_key string
+---@return table
+---@return table[]
+local function ghast_select_cards(spectral_key)
+	local selected_cards = {}
+
+	local selected_logic = Oblivion.spectral_logic[spectral_key]
+	local select_areas = selected_logic.select_area()
+
+	if selected_logic.select > 0 and #select_areas > 0 and selected_logic.card_point_calc then
+		-- card_points indexes point_list in a sorted manner
+		local point_list = {}
+		local card_points = {} -- key number, value cards
+
+		-- Calculate each card's point value
+		for _,area in ipairs(select_areas) do
+			for _,area_card in ipairs(area.cards) do
+				local area_card_point = selected_logic.card_point_calc(area_card)
+				if not card_points[area_card_point] then
+					card_points[area_card_point] = {}
+				end
+				table.insert(point_list, area_card_point)
+				table.insert(card_points[area_card_point], area_card)
+			end
+		end
+
+		-- Time to select cards
+		table.sort(point_list)
+		local select_count = selected_logic.select
+		while select_count > 0 do
+			local max_point = point_list[#point_list]
+			local point_cards = card_points[max_point]
+
+			-- Save pseudorandom values since rerolled between sessions
+			local pseudo_index = selected_logic.select - select_count + 1
+			local pseudolist = G.GAME.ovn_cghost_pseudorandom
+			pseudolist[pseudo_index] = pseudolist[pseudo_index] or pseudoseed('c_ghost_pick')
+
+			-- Select card
+			local random_card,i = pseudorandom_element(point_cards, pseudolist[pseudo_index])
+			table.insert(selected_cards, random_card)
+
+			table.remove(point_cards, i)
+			point_list[#point_list] = nil
+			select_count = select_count - 1
+		end
+	end
+
+	return selected_cards, select_areas
+end
+
+-- When called, the game itself plays a random Spectral card in an adversarial manner.
+-- Only works on Corrupt Ghost Deck.
+---@return nil
+Ovn_f.activate_ghostly_adversary = function()
+	local selected_spec = ghast_select_spec()
+	if not selected_spec then return end
+	local selected_cards, select_areas = ghast_select_cards(selected_spec)
+
+	-- Run animations
+	add_simple_event(nil, nil, function()
+		G.CONTROLLER.locks.use = true -- Prevents interaction
+		G.STATE = G.STATES.PLAY_TAROT -- Move cards like when consumable is being used
+		local spectral = SMODS.add_card{
+			set = 'Spectral',
+			key = selected_spec,
+			area = G.play,
+			edition = 'e_ovn_miasma'
+		}
+
+		local event_sequence = {}
+		---@param delay number
+		---@param event_func function
+		local function add_seq(delay, event_func)
+			table.insert(event_sequence, {delay, event_func})
+		end
+
+		if #selected_cards > 0 then
+			add_seq(1, function ()
+				for _,selected_card in ipairs(selected_cards) do
+					selected_card.area:add_to_highlighted(selected_card)
+				end
+			end)
+		end
+		add_seq(0.5, function ()
+			spectral:use_consumeable()
+		end)
+		add_seq(0.5, function ()
+			SMODS.destroy_cards(spectral)
+			for _,area in ipairs(select_areas) do
+				area:unhighlight_all()
+			end
+		end)
+		add_seq(0.5, function ()
+			G.CONTROLLER.locks.use = false
+			G.STATE = G.STATES.SELECTING_HAND
+			G.GAME.ovn_cghost_ghostspec = nil
+			G.GAME.ovn_cghost_pseudorandom = {}
+			save_run()
+		end)
+
+		Ovn_f.event_sequence(event_sequence)
+	end)
+end
+
+
+
 -----------------------
 ---- MISCELLANEOUS ----
 -----------------------
@@ -468,139 +622,24 @@ Ovn_f.update_hands_last_played = function(scoring_name)
 	end
 end
 
--- When called, the game itself plays a random Spectral card in an adversarial manner.
--- Only works on Corrupt Ghost Deck.
+-- Run a sequence of events, with defineable delays.
+---@param event_func_list [number, function][]
+---@param delay? number
+---@param offset? number
 ---@return nil
-Ovn_f.activate_ghostly_adversary = function()
-	-- Select a Spectral card
-	local selected_spec
+Ovn_f.event_sequence = function(event_func_list, delay, offset)
+	delay = delay or 0
+	offset = offset or 1
+	local event_def = event_func_list[offset]
+	if not event_def then return end
 
-	-- Ghostspec was not saved - grab one and save
-	if not G.GAME.ovn_cghost_ghostspec then
-		-- Determine which Spectral cards can actually be used
-		local valid_specs = {}
-		for spec_key, spec_info in pairs(Oblivion.spectral_logic) do
-			if spec_info.usable() and not (
-				next(SMODS.find_card(spec_key))
-				and not Ovn_f.has_joker('j_ring_master') -- Showman
-			) then
-				table.insert(valid_specs, spec_key)
-			end
-		end
+	local event_delay = event_def[1] or 0
+	local event_func  = event_def[2]
 
-		-- If no Spectral card can be used (for some god forsaken reason)
-		-- then don't even bother continuing
-		if #valid_specs == 0 then
-			G.GAME.ovn_cghost_ghostspec = nil
-			G.GAME.ovn_cghost_pseudorandom = {}
-			save_run()
-			return
-		end
-
-		-- Select the Spectral card
-		selected_spec = pseudorandom_element(valid_specs, pseudoseed('c_ghost'))
-		G.GAME.ovn_cghost_ghostspec = selected_spec
-
-	-- Ghostspec was saved - use it
-	else
-		print('N I C E   T R Y ,   P L A Y E R .')
-		selected_spec = G.GAME.ovn_cghost_ghostspec
-	end
-
-	----
-
-	-- Select playing cards, if needed
-	local selected_logic = Oblivion.spectral_logic[selected_spec]
-	local selected_cards = {}
-	local select_areas = selected_logic.select_area()
-
-	if selected_logic.select > 0 and #select_areas > 0 and selected_logic.card_point_calc then
-		-- card_points indexes point_list in a sorted manner
-		local point_list = {}
-		local card_points = {} -- key number, value cards
-
-		-- Calculate each card's point value
-		for _,area in ipairs(select_areas) do
-			for _,area_card in ipairs(area.cards) do
-				local area_card_point = selected_logic.card_point_calc(area_card)
-				if not card_points[area_card_point] then
-					card_points[area_card_point] = {}
-				end
-				table.insert(point_list, area_card_point)
-				table.insert(card_points[area_card_point], area_card)
-			end
-		end
-
-		-- Time to select cards
-		table.sort(point_list)
-		local select_count = selected_logic.select
-		while select_count > 0 do
-			local max_point = point_list[#point_list]
-			local point_cards = card_points[max_point]
-
-			-- Save pseudorandom values since rerolled between sessions
-			local pseudo_index = selected_logic.select - select_count + 1
-			local pseudolist = G.GAME.ovn_cghost_pseudorandom
-			pseudolist[pseudo_index] = pseudolist[pseudo_index] or pseudoseed('c_ghost_pick')
-
-			-- Select card
-			local random_card,i = pseudorandom_element(point_cards, pseudolist[pseudo_index])
-			table.insert(selected_cards, random_card)
-
-			table.remove(point_cards, i)
-			point_list[#point_list] = nil
-			select_count = select_count - 1
-		end
-	end
-
-	----
-
-	-- Run animations
-	add_simple_event(nil, nil, function()
-		G.CONTROLLER.locks.use = true -- Prevents interaction
-		G.STATE = G.STATES.PLAY_TAROT -- Move cards like when consumable is being used
-		local spectral = SMODS.add_card{
-			set = 'Spectral',
-			key = selected_spec,
-			area = G.play,
-			edition = 'e_ovn_miasma'
-		}
-
-		-- god-awful requirement of timings
-		-- to prevent premature deselection crashing everything
-		local function use_event(is_selectcards)
-			local shorten = is_selectcards and 0 or 0.75
-
-			add_simple_event('after', 1.5 - shorten, function()
-				spectral:use_consumeable()
-
-				add_simple_event('after', 2 - shorten, function()
-					SMODS.destroy_cards(spectral)
-					for _,area in ipairs(select_areas) do
-						area:unhighlight_all()
-					end
-
-					-- Finishing point
-					add_simple_event('after', 2.5 - shorten, function()
-						G.CONTROLLER.locks.use = false
-						G.STATE = G.STATES.SELECTING_HAND
-						G.GAME.ovn_cghost_ghostspec = nil
-						G.GAME.ovn_cghost_pseudorandom = {}
-						save_run()
-					end)
-				end)
-			end)
-		end
-
-		if #selected_cards > 0 then
-			add_simple_event('after', 1, function()
-				for _,selected_card in ipairs(selected_cards) do
-					selected_card.area:add_to_highlighted(selected_card)
-				end
-				use_event(true)
-			end)
-		else
-			use_event(false)
-		end
+	delay = delay + event_delay
+	add_simple_event("after", delay, function()
+		if event_func then event_func() end
+		-- :(
+		Ovn_f.event_sequence(event_func_list, delay, offset + 1)
 	end)
 end
