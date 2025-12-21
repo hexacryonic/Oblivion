@@ -1652,8 +1652,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'master_of_puppets',
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
-	uses_placeholder_sprite = true,
+	pos = {x=5, y=1},
 
 	rarity = 'ovn_corrupted',
 	cost = 10,
@@ -1750,7 +1749,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'bottled_ship_of_theseus',
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	pos = {x=5, y=2},
 	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
