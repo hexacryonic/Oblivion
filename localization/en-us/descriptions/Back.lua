@@ -143,5 +143,20 @@ return {
 			"{s:0.9}the Showdown Boss",
 			"{s:0.9}Blind requirement"
 		}
+	},
+	b_ovn_c_erratic = {
+		name = 'Corrupt Erratic Deck',
+		text = {
+			"{E:ovn_c_erratic_desc,C:red}Infects{E:ovn_c_erratic_desc} everything you know",
+			"{E:ovn_c_erratic_desc}with {C:ovn_corrupted}Corruption...{}",
+			"{E:ovn_c_erratic_desc}Its reach is {C:ovn_corrupted}Endless...",
+			"{C:attention}(SEIZURE WARNING)",
+		},
+		unlock = {
+			"{s:0.9}On {s:0.9,C:attention}Erratic{s:0.9} Deck with",
+			"{s:0.9,C:blue}Blue Stake {s:0.9}or higher,",
+			"{s:0.9}succeed a {s:0.9,C:green}1 in 8{s:0.9}",
+			"{s:0.9}chance upon winning",
+		}
 	}
 }

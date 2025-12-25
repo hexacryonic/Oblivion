@@ -367,3 +367,9 @@ SMODS.Back{
 		end
 	end,
 }
+
+----------------------
+-- Sorry Mario, but your
+-- Corrupt Erratic Deck
+-- is in another file
+----------------------

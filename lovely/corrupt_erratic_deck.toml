@@ -1,0 +1,26 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# used for crt replacement primarily
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''love.graphics.setShader( G.SHADERS['CRT'])'''
+position = "after"
+payload = '''
+if G.GAME and G.GAME.override_crt then
+    G.SHADERS['ovn_crt_override']:send("iTime", -G.TIMERS.REAL)
+    G.SHADERS['ovn_crt_override']:send("resolution", {love.graphics.getWidth(), love.graphics.getHeight()})
+    G.SHADERS['ovn_crt_override']:send("matrix_intensity", G.GAME.erratic_fx_matrix_intensity or 0)
+    G.SHADERS['ovn_crt_override']:send("matrix_lines", G.GAME.erratic_fx_matrix_lines or 30)
+    G.SHADERS['ovn_crt_override']:send("block_size", G.GAME.erratic_fx_block_size or 8)
+    G.SHADERS['ovn_crt_override']:send("block_offset", G.GAME.erratic_fx_block_offset or 10)
+    G.SHADERS['ovn_crt_override']:send("block_probability", G.GAME.erratic_fx_block_probability or 0.2)
+    G.SHADERS['ovn_crt_override']:send("matrix_color", G.GAME.erratic_fx_matrix_colour or {0.2, 1, 0.2, 0})
+    love.graphics.setShader(G.SHADERS['ovn_crt_override'])
+end
+'''
+match_indent = true
