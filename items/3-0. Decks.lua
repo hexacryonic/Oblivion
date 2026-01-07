@@ -368,8 +368,102 @@ SMODS.Back{
 	end,
 }
 
-----------------------
--- Sorry Mario, but your
+-----------------------
 -- Corrupt Erratic Deck
--- is in another file
-----------------------
+-----------------------
+
+-- THANK YOU MARIO!
+-- YOUR QUEST IS OVER.
+-- WE PRESENT YOU A NEW QUEST:
+
+SMODS.DynaTextEffect({
+	key = "c_erratic_desc",
+	func = function(dynatext, index, letter)
+		local rnd = math.random(8, 127)
+		local char = string.char(rnd)
+		letter.letter = love.graphics.newText(dynatext.font.FONT, char)
+	end,
+})
+
+SMODS.Shader({
+	key = "crt_override",
+	path = "CRTOverride.fs",
+})
+
+SMODS.Back({
+	key = "c_erratic",
+	ovn_corrupt_deck = true,
+	atlas = "cdeck_atlas",
+	pos = { x = 4, y = 2 },
+
+	unlocked = false,
+	check_for_unlock = function(self, args)
+		if achievement_get("erratic_eruption") then
+			return true
+		end
+	end,
+
+	apply = function(self)
+		G.GAME.c_erratic = true -- good luck.
+		G.GAME.override_crt = true
+		G.GAME.erratic_fx_block_probability = 0
+		G.GAME.erratic_fx_matrix_colour = HEX("00ff00")
+
+		add_simple_event(nil, nil, function()
+			Ovn_f.erratic_randomize_deck("starting_deck")
+		end)
+	end,
+
+	calculate = function(self, card, context)
+		if context.end_of_round and context.main_eval then
+            local intensity = Ovn_f.get_erratic_intensity()
+
+            -- Randomize deck again
+			if context.beat_boss then
+				Ovn_f.erratic_randomize_deck("post_boss")
+			end
+
+            -- Increase glitchiness of entire screen
+			Ovn_f.set_glitch_vfx(intensity)
+
+			-- Change cardarea sizes
+			local max_lost = 1
+			local max_gained = 4
+			for k, area in pairs(G.I.CARDAREA) do
+				area:change_size(Ovn_f.round_to_nearest(Ovn_f.pseudoerratic("slots" .. k), 1 / intensity))
+				local mod = area.config.card_limits.mod
+				local base = area.config.card_limits.base
+				local underflow = -math.min((base + mod) - (base - max_lost), 0)
+				local overflow = -math.max((base + mod) - (base + max_gained), 0)
+				area:change_size(underflow + overflow)
+			end
+
+            -- Change current cash
+			ease_dollars(Ovn_f.pseudoerratic("money") * 3)
+
+            -- Slightly change colors
+			Ovn_f.colour_drift(0.002 * intensity)
+
+            -- Slightly rotate UI
+            local ui_rotate_amount = 0.0005*Ovn_f.pseudoerratic("drift1")*Ovn_f.pseudoerratic("drift2")
+			Ovn_f.ui_rotation_drift(ui_rotate_amount)
+		end
+
+		if context.setting_blind then
+			ease_hands_played(Ovn_f.pseudoerratic("hands"))
+			ease_discard(Ovn_f.pseudoerratic("hands"))
+		end
+
+		if context.destroying_card then
+			if pseudorandom("cerratic_destruction") <= 0.05 then
+				return { remove = true }
+			end
+		end
+
+		if context.individual and context.cardarea == G.play and pseudorandom("cerratic_duplication") <= 0.05 then
+			local copy = copy_card(context.other_card)
+			G.hand:emplace(copy)
+			copy:add_to_deck()
+		end
+	end,
+})

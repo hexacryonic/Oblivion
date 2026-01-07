@@ -3,6 +3,7 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
+# lovely/corrupt_erratic_deck.toml
 # used for crt replacement primarily
 
 [[patches]]
