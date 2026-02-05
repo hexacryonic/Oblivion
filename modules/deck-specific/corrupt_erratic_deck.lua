@@ -12,6 +12,8 @@
 -- 5. HOOKS
 -- 6. unused functions
 
+
+
 ---------------------------------
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
@@ -161,6 +163,7 @@ function Ovn_f.erratic_randomize_deck(seed)
 		local seal        = SMODS.poll_seal{        key = ertkey("seal"),    mod = mod }
 		enhancement = enhancement or "c_base"
 
+        ---@diagnostic disable-next-line
         SMODS.change_base(card, suit, rank)
 		card:set_ability(enhancement, true, true)
 		card:set_edition(edition, true, true, false)
