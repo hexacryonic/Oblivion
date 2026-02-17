@@ -315,9 +315,11 @@ function Game:start_run(args)
 end
 
 -- Hook for losing if all held cards are Unobtainium
+local dt_track = 0
 local game_upd8_hook = Game.update
 function Game:update(dt)
 	game_upd8_hook(self, dt)
+	dt_track = dt_track + dt
 
 	-- If all held cards are Unobtainium, lose the run
 	if G.STATE == G.STATES.SELECTING_HAND then
@@ -336,6 +338,49 @@ function Game:update(dt)
 			return true
 		end
 	end
+
+	-- Corrupt Erratic Deck - Ocasionally spawn splash text
+	-- i took some code from potassium xd -oin
+	if Ovn_f.on_deck("c_erratic") and dt_track >= 1 then
+		local chance_per_second = 1/60 -- on avg, 1 every minute
+		local quips = G.localization.misc.c_err_quips
+		local random_index = math.ceil(math.random()*#quips)
+		local text = quips[random_index]
+
+		-- By ante 8, this increases to 1/10
+		if math.random() < chance_per_second*Ovn_f.get_erratic_intensity() then
+			-- choose between -65deg and 65deg = -1.134deg and 1.134deg
+			-- ranged random = min + random*(max - min)
+			-- 2.268 = 1.134 - (-1.134)
+			local rotation = -1.134 + math.random()*(2.268)
+			local ondraw = "rotate_quip"
+			local onclick = random_index == 1 and "give_quip_achievement" or nil
+
+			-- A patch for attention_text is added in miscellaneous.toml so the fading animation works in this context
+			-- G.FUNCS.rotate_quip           can be found in deck-specific/corrupt_erratic_deck.lua
+			-- G.FUNCS.give_quip_achievement can be found in deck-specific/corrupt_erratic_deck.lua
+			local text_ui =
+			{n=G.UIT.R, config={align="cm",quip_rotate=rotation,func=ondraw,button=onclick}, nodes = {
+				{n=G.UIT.O, config={draw_layer = 1, object =
+					DynaText({text_rot = rotation, scale = 0.625, string = text, colours = {G.C.BLUE},float = true, shadow = true, pop_in = 0, pop_in_rate = 6, silent=true})
+				}}
+			}}
+
+			attention_text{
+				text = text_ui,
+				offset = {
+					x = math.random() * (G.TILE_W - 1) - G.TILE_W / 2,
+					y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
+				},
+				major = G.play,
+				colour = G.C.BLUE,
+				hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED, -- between 2 and 5 seconds
+				scale = 0.625
+			}
+		end
+	end
+
+	if dt_track >= 1 then dt_track = dt_track - 1 end
 end
 
 

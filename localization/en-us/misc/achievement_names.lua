@@ -24,5 +24,6 @@ return {
 	["ach_ovn_do_it_first"]           = "Not If I Do It First!",
 	["ach_ovn_bananas"]               = "This Entire Quest Was Bananas",
 	["ach_ovn_darkweb"]               = "Dark Web",
-	["ach_ovn_unstoppableforce"]               = "Unstoppable Force Vs. Immovable Object",
+	["ach_ovn_unstoppableforce"]      = "Unstoppable Force Vs. Immovable Object",
+	["ach_ovn_tickled"]               = "That Tickled!"
 }

@@ -381,9 +381,9 @@ SMODS.Achievement{
 	end
 }
 
---------------------------------------
+-----------
 -- Dark Web
---------------------------------------
+-----------
 SMODS.Achievement{
 	key = "darkweb",
 	order = 25,
@@ -392,13 +392,24 @@ SMODS.Achievement{
 	end
 }
 
---------------------------------------
+-----------------------------------------
 -- Unstoppable Force Vs. Immovable Object
---------------------------------------
+-----------------------------------------
 SMODS.Achievement{
 	key = "unstoppableforce",
 	order = 26,
 	unlock_condition = function (self, args)
 		return (args.type == 'ovn_lol_lmao_even')
+	end
+}
+
+----------------
+-- That Tickled!
+----------------
+SMODS.Achievement{
+	key = "tickled",
+	order = 28,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_ticklish_quip')
 	end
 }

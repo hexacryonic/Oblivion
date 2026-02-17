@@ -1,9 +1,10 @@
 -- lib/corrupt_erratic_deck.lua
 -- holy $!@%
--- Much of this code was written/started by Lily; all our gratitudes to her
+-- Much of this code was written/initiated by Lily; all our gratitudes to her
 
 -- Other files associated with Corrupt Erratic Deck:
 ---- items/3-0. Decks.lua - Corrupt Erratic Deck register
+---- modules/hooks.lua    - In Game:update, occasionally show quips
 
 -- 1. SUPPLEMENTARY FUNCTIONS
 -- 2. NUMERICAL FUNCTIONS
@@ -31,7 +32,7 @@ end
 ---@param min number
 ---@param max number
 local function ranged_pseudorandom(seed, min, max)
-	return min + (pseudorandom(seed) * (max - min))
+	return min + (pseudorandom(seed)*(max - min))
 end
 
 -- Create a copy of a table, its contents, and the contents of any contained table.
@@ -53,7 +54,6 @@ local function deep_copy(obj, seen)
 	end
 	return res
 end
-
 
 
 
@@ -169,6 +169,20 @@ function Ovn_f.erratic_randomize_deck(seed)
 		card:set_edition(edition, true, true, false)
 		card:set_seal(seal, true, true)
 	end
+end
+
+-- Rotates the UI element.
+---@param e any
+---@return nil
+function G.FUNCS.rotate_quip(e)
+	e.T.r = e.config.quip_rotate
+end
+
+-- Gives the achievement "That Tickled!".
+---@param e any
+---@return nil
+function G.FUNCS.give_quip_achievement(e)
+	check_for_unlock{type="ovn_ticklish_quip"}
 end
 
 

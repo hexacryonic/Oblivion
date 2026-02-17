@@ -28,5 +28,6 @@ return {
 	["ach_ovn_do_it_first"]           = "While The Purity is upcoming, obtain the pure versions of currently held Corrupt Jokers, then sell all Corrupt Jokers",
 	["ach_ovn_bananas"]               = "Naturally obtain Aeon Cavendish",
 	["ach_ovn_darkweb"]               = "Have a single Database exceed 1000 chips",
-	["ach_ovn_unstoppableforce"]               = "Have your held hand full of Unobtanium Cards when you can't discard",
+	["ach_ovn_unstoppableforce"]      = "Have your held hand full of Unobtanium Cards when you can't discard",
+	["ach_ovn_tickled"]               = "I'm a deck of my word! Here's your achievement"
 }

@@ -68,3 +68,34 @@ if (e.config.type == "ovn_instability") and (num <= 10) and (tonumber(("%.2f"):f
 end
 '''
 match_indent = true
+
+# ---
+
+# function attention_text
+# target dynatext in row
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+if type(args.text) == 'string' then
+    args.text = args.AT.UIRoot.children[1].config.object
+    args.text:pulse(0.5)
+'''
+position = "after"
+payload = '''
+-- This elseif added by Oblivion so that
+-- if args.text is a node table containing
+-- an object node containing dynatext,
+-- that dynatext is properly targetted
+elseif (
+    args.text.n
+    and args.text.nodes
+    and args.text.nodes[1]
+    and args.text.nodes[1].n == G.UIT.O
+    and args.text.nodes[1].config
+    and Object.is(args.text.nodes[1].config.object, DynaText)
+) then
+    args.text = args.AT.UIRoot.children[1].children[1].config.object
+    args.text:pulse(0.5)
+'''
+match_indent = true
