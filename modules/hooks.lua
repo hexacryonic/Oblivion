@@ -373,7 +373,7 @@ function Game:update(dt)
 					y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
 				},
 				major = G.play,
-				colour = G.C.BLUE,
+				colour = lighten(G.C.BLUE, 0.4),
 				hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED, -- between 2 and 5 seconds
 				scale = 0.625
 			}
