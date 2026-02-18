@@ -4,7 +4,7 @@
 
 -- Other files associated with Corrupt Erratic Deck:
 ---- items/3-0. Decks.lua - Corrupt Erratic Deck register
----- modules/hooks.lua    - In Game:update, occasionally show quips
+---- modules/hooks.lua    - Game:update has a chance to use Ovn_f.spawn_erratic_quip
 
 -- 1. SUPPLEMENTARY FUNCTIONS
 -- 2. NUMERICAL FUNCTIONS
@@ -136,6 +136,50 @@ function Ovn_f.colour_drift(max_amount, start)
             start[key] = start[key] + ranged_pseudorandom("c_e_colourdrift", -max_amount, max_amount)
         end
 	end
+end
+
+-- Spawn a quip, which has a chance to be clickable.
+---@param index? integer
+---@return nil
+function Ovn_f.spawn_erratic_quip(index)
+	local quips = G.localization.misc.c_err_quips
+	if not index then
+		index = math.ceil(math.random()*#quips)
+	elseif index < 1 then
+		error("Index cannot be less than 1")
+	elseif index > #quips then
+		error("Index cannot be greater than number of quips in localization ("..#quips..")")
+	end
+	local text = quips[index]
+
+	-- choose between -65deg and 65deg = -1.134deg and 1.134deg
+	-- ranged random = min + random*(max - min)
+	-- 2.268 = 1.134 - (-1.134)
+	local rotation = -1.134 + math.random()*(2.268)
+	local ondraw = "rotate_quip"
+	local onclick = index == 1 and "give_quip_achievement" or nil
+
+	-- A patch for attention_text is added in miscellaneous.toml so the fading animation works in this context
+	-- G.FUNCS.rotate_quip           can be found in deck-specific/corrupt_erratic_deck.lua
+	-- G.FUNCS.give_quip_achievement can be found in deck-specific/corrupt_erratic_deck.lua
+	local text_ui =
+	{n=G.UIT.R, config={align="cm",quip_rotate=rotation,func=ondraw,button=onclick}, nodes = {
+		{n=G.UIT.O, config={draw_layer = 1, object =
+			DynaText({text_rot = rotation, scale = 0.625, string = text, colours = {G.C.BLUE},float = true, shadow = true, pop_in = 0, pop_in_rate = 6, silent=true})
+		}}
+	}}
+
+	attention_text{
+		text = text_ui,
+		offset = {
+			x = math.random() * (G.TILE_W - 1) - G.TILE_W / 2,
+			y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
+		},
+		major = G.play,
+		colour = lighten(G.C.BLUE, 0.4),
+		hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED, -- between 2 and 5 seconds
+		scale = 0.625
+	}
 end
 
 
