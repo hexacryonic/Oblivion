@@ -379,9 +379,13 @@ SMODS.Back{
 SMODS.DynaTextEffect({
 	key = "c_erratic_desc",
 	func = function(dynatext, index, letter)
-		local rnd = math.random(8, 127)
+		-- ignore spaces
+		local og_char = dynatext.strings[1].letters[index].char
+		if og_char == " " then return end
+
+		local rnd = math.random(33, 126)
 		local char = string.char(rnd)
-		letter.letter = love.graphics.newText(dynatext.font.FONT, char)
+		letter.letter:set(char)
 	end,
 })
 
