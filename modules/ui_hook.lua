@@ -289,20 +289,8 @@ end
 local uidef_cardhpopup_hook = G.UIDEF.card_h_popup
 function G.UIDEF.card_h_popup(card)
 	local ret_val = uidef_cardhpopup_hook(card)
-	-- God I wish there was an easier way to do this
-	local name_rows = (
-		ret_val
-		and ret_val.nodes
-		and ret_val.nodes[1]
-		and ret_val.nodes[1].nodes
-		and ret_val.nodes[1].nodes[1]
-		and ret_val.nodes[1].nodes[1].nodes
-		and ret_val.nodes[1].nodes[1].nodes[1]
-		and ret_val.nodes[1].nodes[1].nodes[1].nodes
-		and ret_val.nodes[1].nodes[1].nodes[1].nodes[1]
-		and ret_val.nodes[1].nodes[1].nodes[1].nodes[1].nodes
-		or nil
-	)
+	-- ret_val and ret_val.nodes and ret_val.nodes[1] and ret_val.nodes[1].nodes ...
+	local name_rows = Ovn_f.descend_table{ret_val, "nodes", 1, "nodes", 1, "nodes", 1, "nodes", 1, "nodes"}
 	if not name_rows then return ret_val end
 	local scale = 0.275
 

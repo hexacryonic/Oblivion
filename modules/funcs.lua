@@ -490,3 +490,13 @@ Ovn_f.event_sequence = function(event_func_list, delay, offset)
 		Ovn_f.event_sequence(event_func_list, delay, offset + 1)
 	end)
 end
+
+Ovn_f.descend_table = function(input_table)
+	local tablee = input_table[1]
+	for i = 2, #input_table do
+		local key = input_table[i]
+		tablee = tablee[key]
+		if not tablee then return nil end
+	end
+	return tablee
+end
