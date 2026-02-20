@@ -139,11 +139,11 @@ function Ovn_f.set_glitch_vfx(intensity)
 	G.GAME.erratic_fx_block_size = 2.5 * intensity
 	G.GAME.erratic_fx_block_offset = 4.5 * intensity
 	G.GAME.erratic_fx_block_probability = math.min(intensity / 40, 0.5)
-	G.GAME.erratic_fx_matrix_lines = math.floor(intensity)
+	G.GAME.erratic_fx_matrix_lines = math.floor(intensity) + 30
 
 	local int = (intensity / 8)
 
-	G.GAME.erratic_fx_matrix_intensity = math.min(int ^ 0.35, int)
+	G.GAME.erratic_fx_matrix_intensity = math.min(int ^ 0.35, int)*1.3
 end
 
 -- Very slightly change colors.
