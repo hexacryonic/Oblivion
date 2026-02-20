@@ -53,7 +53,13 @@ end
 -- Checks if the current Deck is corrupt.
 ---@return boolean
 Ovn_f.deck_is_corrupt = function ()
-	return G.GAME.selected_back and G.GAME.selected_back.effect.center.ovn_corrupt_deck or false
+	return (
+		G.GAME.selected_back
+		and G.GAME.selected_back.effect.center.ovn_corrupt_deck
+	) or (
+		G.GAME.modifiers
+		and G.GAME.modifiers.ovn_corrupt_challenge
+	) or false
 end
 
 -- Checks if the current Deck is that of a specified key. Do not include prefixes.\

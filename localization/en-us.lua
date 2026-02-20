@@ -353,6 +353,7 @@ local loc =  {
 			ch_c_ovn_new = { "{C:ovn_corrupted,s:1.5}Changes:{}" },
 			ch_c_ovn_but = { "{C:ovn_corrupted,s:1.3}BUT{}" },
 			ch_c_ovn_spacer = { __sp__ },
+			ovn_corrupt_challenge = { "" }, -- Leave blank
 
 			-- Corrupt Omelette
 			ch_c_ovn_egg_all_eggs = { "WHY ARE THERE {C:dark_edition}SO MANY {C:attention}EGGS" },

@@ -1,3 +1,4 @@
+local __corrupt_ = { id = 'ovn_corrupt_challenge' } -- Must be added for Oblivion background to appear on corrupt challenges
 local __og__  = { id = 'ovn_og'     }
 local __new__ = { id = 'ovn_new'    }
 local _but_   = { id = 'ovn_but'    }
@@ -25,6 +26,7 @@ SMODS.Challenge {
 			_but_,
 			{ id = 'ovn_egg_eternal_egg'     },
 			{ id = 'ovn_egg_no_swashbuckler' },
+			__corrupt_,
         }
     },
     jokers = {
@@ -67,6 +69,7 @@ SMODS.Challenge {
             { id = 'ovn_edge_foil'  },
 			_but_,
             { id = 'ovn_edge_knife' },
+			__corrupt_,
 		},
         modifiers = { {id = 'joker_slots', value = 2} }
 	},
@@ -121,6 +124,7 @@ SMODS.Challenge {
 			{ id = 'ovn_world_aces'      },
 			_but_,
 			{ id = 'ovn_world_pmo'       },
+			__corrupt_,
 		},
 		modifiers = { }
 	},
@@ -161,6 +165,7 @@ SMODS.Challenge {
 			{ id = 'ovn_eternal_none_eternal'     },
 			_but_,
 			{ id = 'ovn_eternal_extra_perishable' }, -- This has an effect; see joker_effects.toml
+			__corrupt_,
         }
     },
     restrictions = {
@@ -203,6 +208,7 @@ SMODS.Challenge {
             { id = 'ovn_quintet_discard'   },
 			_but_,
             { id = 'ovn_quintet_addiction' },
+			__corrupt_,
 		},
         modifiers = {
             { id = 'discards',    value = 7 },
