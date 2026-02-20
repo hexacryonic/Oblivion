@@ -108,6 +108,19 @@ function Ovn_f.ui_rotation_drift(amount)
 	end
 end
 
+function Ovn_f.card_size_random()
+	for _,area in ipairs{G.jokers.cards, G.playing_cards, G.consumeables.cards} do
+		for _,card in pairs(area) do
+			if not card.ability then goto ovnf_cardsizerandom_skip end
+			local intensity = Ovn_f.get_erratic_intensity()/75
+			local new_size = ranged_pseudorandom("cardsize", 0.925 - intensity, 0.975 + intensity)
+			card.ability.ovn_size_multiply = new_size
+			card.T.scale = new_size
+			::ovnf_cardsizerandom_skip::
+		end
+	end
+end
+
 -- Glitch the entire screen with specifiable intensity.
 ---@param intensity? number
 ---@return nil

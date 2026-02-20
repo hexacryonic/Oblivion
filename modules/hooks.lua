@@ -283,12 +283,6 @@ end
 ---- Setting Instable scoring calculation (Corrupt Plasma Deck)
 local game_startrun_hook = Game.start_run
 function Game:start_run(args)
-	Ovn_f.add_simple_event(nil, nil, function()
-		-- C-Ghost anti-cheese :P
-		SMODS.calculate_context({
-			ovn_run_started = true
-		})
-	end)
 	game_startrun_hook(self, args)
 	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
 	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
@@ -312,6 +306,9 @@ function Game:start_run(args)
 	if Ovn_f.on_deck('c_plasma') and not args.savetext then
 		SMODS.set_scoring_calculation("ovn_instable")
 	end
+		SMODS.calculate_context({
+			ovn_run_started = true
+		})
 end
 
 -- Hook for losing if all held cards are Unobtainium

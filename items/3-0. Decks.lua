@@ -451,6 +451,18 @@ SMODS.Back({
             -- Slightly rotate UI
             local ui_rotate_amount = 0.0005*Ovn_f.pseudoerratic("drift1")*Ovn_f.pseudoerratic("drift2")
 			Ovn_f.ui_rotation_drift(ui_rotate_amount)
+
+			-- Change card sizes
+			Ovn_f.card_size_random()
+		end
+
+		if context.ovn_run_started and G.STATE == G.STATES.SELECTING_HAND then
+            local intensity = Ovn_f.get_erratic_intensity()
+
+            local ui_rotate_amount = 0.0005*Ovn_f.pseudoerratic("drift1")*Ovn_f.pseudoerratic("drift2")
+			Ovn_f.ui_rotation_drift(ui_rotate_amount)
+			Ovn_f.colour_drift(0.002 * intensity)
+			Ovn_f.card_size_random()
 		end
 
 		if context.setting_blind then
