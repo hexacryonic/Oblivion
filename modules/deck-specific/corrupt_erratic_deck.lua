@@ -169,18 +169,21 @@ function Ovn_f.spawn_erratic_quip(index)
 	-- ranged random = min + random*(max - min)
 	-- 2.268 = 1.134 - (-1.134)
 	local rotation = -1.134 + math.random()*(2.268)
-	local ondraw = "rotate_quip"
-	local onclick = index == 1 and "give_quip_achievement" or nil
+
+	local text_ui =
+	{n=G.UIT.O, config={draw_layer = 1, object =
+		DynaText({text_rot = rotation, scale = 0.625, string = text, colours = {G.C.BLUE},float = true, shadow = true, pop_in = 0, pop_in_rate = 6, silent=true})
+	}}
 
 	-- A patch for attention_text is added in miscellaneous.toml so the fading animation works in this context
 	-- G.FUNCS.rotate_quip           can be found in deck-specific/corrupt_erratic_deck.lua
 	-- G.FUNCS.give_quip_achievement can be found in deck-specific/corrupt_erratic_deck.lua
-	local text_ui =
-	{n=G.UIT.R, config={align="cm",quip_rotate=rotation,func=ondraw,button=onclick}, nodes = {
-		{n=G.UIT.O, config={draw_layer = 1, object =
-			DynaText({text_rot = rotation, scale = 0.625, string = text, colours = {G.C.BLUE},float = true, shadow = true, pop_in = 0, pop_in_rate = 6, silent=true})
+	if index == 1 then
+		text_ui =
+		{n=G.UIT.R, config={align="cm",quip_rotate=rotation,func="rotate_quip",button="give_quip_achievement"}, nodes = {
+			text_ui
 		}}
-	}}
+	end
 
 	attention_text{
 		text = text_ui,

@@ -84,9 +84,16 @@ if type(args.text) == 'string' then
 position = "after"
 payload = '''
 -- This elseif added by Oblivion so that
--- if args.text is a node table containing
--- an object node containing dynatext,
+-- if args.text is an object node containing dynatext,
 -- that dynatext is properly targetted
+elseif (
+    args.text.n == G.UIT.O
+    and args.text.config
+    and Object.is(args.text.config.object, DynaText)
+) then
+    args.text = args.AT.UIRoot.children[1].config.object
+    args.text:pulse(0.5)
+-- Same as above, just one node deeper
 elseif (
     args.text.n
     and args.text.nodes
