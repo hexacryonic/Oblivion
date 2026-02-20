@@ -108,14 +108,24 @@ function Ovn_f.ui_rotation_drift(amount)
 	end
 end
 
+-- Randomize width and height of cards, which increases as erratic intensity increases.
+---@return nil
 function Ovn_f.card_size_random()
 	for _,area in ipairs{G.jokers.cards, G.playing_cards, G.consumeables.cards} do
 		for _,card in pairs(area) do
 			if not card.ability then goto ovnf_cardsizerandom_skip end
-			local intensity = Ovn_f.get_erratic_intensity()/75
-			local new_size = ranged_pseudorandom("cardsize", 0.925 - intensity, 0.975 + intensity)
-			card.ability.ovn_size_multiply = new_size
-			card.T.scale = new_size
+			local intensity = Ovn_f.get_erratic_intensity()
+			-- iscale changes how large intensity is
+			local ratio_iscale = 50
+			local width_iscale = 40
+
+			-- *3 to increase likelihood of stretching by width
+			local ratio = ranged_pseudorandom("cardsizeratio", 1 - intensity/ratio_iscale*3, 1 + intensity/ratio_iscale)
+			local new_width = ranged_pseudorandom("cardsize", 0.95 - intensity/width_iscale, 0.95 + intensity/width_iscale)
+			local new_height = new_width*ratio
+
+			card.T.w = card.original_T.w*new_width
+			card.T.h = card.original_T.h*new_height
 			::ovnf_cardsizerandom_skip::
 		end
 	end
