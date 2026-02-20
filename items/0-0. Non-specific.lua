@@ -10,7 +10,7 @@ SMODS.Rarity({
         return (
 			G.GAME.used_vouchers.v_ovn_call_of_the_void
 			and 0.25
-			or 0
+			or weight
 		)
     end,
 	pools = {

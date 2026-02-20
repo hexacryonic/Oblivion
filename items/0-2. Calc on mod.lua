@@ -89,4 +89,11 @@ SMODS.current_mod.calculate = function (self, context)
         -- This flag is added by Apache Tears
         context.other_card.ovn_apache_counted = nil
     end
+
+    if context.ovn_run_started and context.new_run then
+        G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0
+        G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0
+        G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0
+        G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0
+    end
 end

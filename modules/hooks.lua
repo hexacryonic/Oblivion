@@ -306,9 +306,10 @@ function Game:start_run(args)
 	if Ovn_f.on_deck('c_plasma') and not args.savetext then
 		SMODS.set_scoring_calculation("ovn_instable")
 	end
-		SMODS.calculate_context({
-			ovn_run_started = true
-		})
+	SMODS.calculate_context({
+		ovn_run_started = true,
+		new_run = not args.savetext
+	})
 end
 
 -- Hook for losing if all held cards are Unobtainium

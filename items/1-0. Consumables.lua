@@ -387,10 +387,20 @@ SMODS.Voucher {
 	redeem = function(self, card)
 		add_simple_event(nil, nil, function()
 			G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
 			G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0.6
 		end)
 	end,
+
+	calculate = function (self, card, context)
+		if context.ovn_run_started then
+			G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
+			G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0.6
+		end
+	end
 }
 
 -------------------
