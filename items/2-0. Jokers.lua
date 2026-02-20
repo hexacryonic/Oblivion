@@ -1248,7 +1248,7 @@ SMODS.Joker {
 	},
 
 	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	pos = {x=5, y=3},
 	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
