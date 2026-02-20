@@ -230,6 +230,7 @@ Occurs when Joker purification occurs. Sent by `Ovn_f.purify_joker`.
 ```lua
 {
     ovn_run_started = true,
+    new_run = true -- False if game loaded from save
     -- Recommended to check G.STATE as well
 }
 ```

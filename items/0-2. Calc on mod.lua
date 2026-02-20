@@ -91,6 +91,7 @@ SMODS.current_mod.calculate = function (self, context)
     end
 
     if context.ovn_run_started and context.new_run then
+        -- Reverse Wicked Invocation effect
         G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0
         G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0
         G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0
