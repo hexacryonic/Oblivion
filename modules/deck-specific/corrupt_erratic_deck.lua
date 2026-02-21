@@ -266,8 +266,9 @@ local blindamt_hook = get_blind_amount
 function get_blind_amount(ante)
 	local chips = blindamt_hook(ante)
 	if G.GAME.c_erratic then
-		local er = Ovn_f.get_erratic_intensity() + -1.05
-		chips = chips * ranged_pseudorandom("chips", 0 / er, er)
+		local er = math.abs(Ovn_f.get_erratic_intensity() - 1.05)
+		chips = chips * ranged_pseudorandom("chips", 1, er)
+		chips = math.ceil(chips)
 	end
 	return chips
 end
@@ -278,8 +279,8 @@ function Card:set_cost()
     local n = card_setcost_hook(self)
 
 	if Ovn_f.on_deck('c_erratic') then
-		self.cost = self.cost + Ovn_f.pseudoerratic("cost")
-		self.sell_cost = self.sell_cost + Ovn_f.pseudoerratic("cost")
+		self.cost = self.cost + math.floor(Ovn_f.pseudoerratic("cost"))
+		self.sell_cost = self.sell_cost + math.floor(Ovn_f.pseudoerratic("cost"))
 	end
 
 	return n --dk if this does anything; might as well 

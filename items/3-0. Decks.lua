@@ -437,22 +437,18 @@ SMODS.Back({
 				area:change_size(Ovn_f.round_to_nearest(Ovn_f.pseudoerratic("slots" .. k), 1 / intensity))
 				local mod = area.config.card_limits.mod
 				local base = area.config.card_limits.base
-				local underflow = -math.min((base + mod) - (base - max_lost), 0)
-				local overflow = -math.max((base + mod) - (base + max_gained), 0)
-				area:change_size(underflow + overflow)
+				local underflow = -math.max((base + mod) - (base - max_lost), 0)
+				local overflow = -math.min((base + mod) - (base + max_gained), 0)
+				area:change_size(math.ceil(underflow + overflow))
 			end
 
             -- Change current cash
-			ease_dollars(Ovn_f.pseudoerratic("money") * 3)
+			ease_dollars(math.ceil(Ovn_f.pseudoerratic("money") * 3))
 
-            -- Slightly change colors
-			Ovn_f.colour_drift(0.002 * intensity)
-
-            -- Slightly rotate UI
+			-- Visual changes
             local ui_rotate_amount = 0.0005*Ovn_f.pseudoerratic("drift1")*Ovn_f.pseudoerratic("drift2")
 			Ovn_f.ui_rotation_drift(ui_rotate_amount)
-
-			-- Change card sizes
+			Ovn_f.colour_drift(0.002 * intensity)
 			Ovn_f.card_size_random()
 		end
 
@@ -466,8 +462,8 @@ SMODS.Back({
 		end
 
 		if context.setting_blind then
-			ease_hands_played(Ovn_f.pseudoerratic("hands"))
-			ease_discard(Ovn_f.pseudoerratic("hands"))
+			ease_hands_played(math.ceil(Ovn_f.pseudoerratic("hands")))
+			ease_discard(math.ceil(Ovn_f.pseudoerratic("hands")))
 		end
 
 		if context.destroying_card then
