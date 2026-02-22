@@ -434,7 +434,7 @@ SMODS.Back({
 			local max_lost = 1
 			local max_gained = 4
 			for k, area in pairs(G.I.CARDAREA) do
-				area:change_size(Ovn_f.round_to_nearest(Ovn_f.pseudoerratic("slots" .. k), 1 / intensity))
+				area:change_size(math.ceil(Ovn_f.round_to_nearest(Ovn_f.pseudoerratic("slots" .. k), 1 / intensity)))
 				local mod = area.config.card_limits.mod
 				local base = area.config.card_limits.base
 				local underflow = -math.max((base + mod) - (base - max_lost), 0)
