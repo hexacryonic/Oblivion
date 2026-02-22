@@ -31,6 +31,13 @@ function G.FUNCS.can_transmute(e)
 	end
 end
 
+-- Rotates the UI element.
+---@param e any
+---@return nil
+function G.FUNCS.rotate_node(e)
+	e.T.r = e.config.rotate
+end
+
 
 
 -----------------------

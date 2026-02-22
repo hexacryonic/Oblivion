@@ -73,8 +73,8 @@ end
 ---@param amount? number
 ---@return number
 function Ovn_f.get_erratic_intensity(amount)
-    local ante = G.GAME.round_resets.ante
-    local ante_progress = (G.GAME.round % 3) / 3
+	local ante = G.GAME.round_resets.ante
+	local ante_progress = (G.GAME.round % 3) / 3
 	local session_progress = ante + ante_progress
 
 	local n = amount or session_progress
@@ -87,7 +87,7 @@ end
 ---@param seed string
 ---@return number
 function Ovn_f.pseudoerratic(seed)
-    local nonert_pseudorandom = ranged_pseudorandom("c_erratic_"..seed, -1, 1)
+	local nonert_pseudorandom = ranged_pseudorandom("c_erratic_"..seed, -1, 1)
 	local erratic_intensity = Ovn_f.get_erratic_intensity()
 
 	return nonert_pseudorandom * erratic_intensity
@@ -156,8 +156,8 @@ function Ovn_f.colour_drift(max_amount, start)
 		if type(entry) == "table" then
 			Ovn_f.colour_drift(max_amount, entry)
 		elseif type(entry) == "number" and key ~= 4 then
-            start[key] = start[key] + ranged_pseudorandom("c_e_colourdrift", -max_amount, max_amount)
-        end
+			start[key] = start[key] + ranged_pseudorandom("c_e_colourdrift", -max_amount, max_amount)
+		end
 	end
 end
 
@@ -179,33 +179,76 @@ function Ovn_f.spawn_erratic_quip(index)
 	-- ranged random = min + random*(max - min)
 	-- 2.268 = 1.134 - (-1.134)
 	local rotation = -1.134 + math.random()*(2.268)
+	local colour = SMODS.shallow_copy(lighten(G.C.BLUE, 0.4))
+	local hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED + 0.1*(G.SPEEDFACTOR)  -- between 2 and 5 seconds
+	local fade = 1
 
-	local text_ui =
-	{n=G.UIT.O, config={draw_layer = 1, object =
-		DynaText({text_rot = rotation, scale = 0.625, string = text, colours = {G.C.BLUE},float = true, shadow = true, pop_in = 0, pop_in_rate = 6, silent=true})
-	}}
+	local ondraw = "rotate_node"
+	local onclick = index == 1 and "give_quip_achievement" or nil
 
-	-- A patch for attention_text is added in miscellaneous.toml so the fading animation works in this context
-	-- G.FUNCS.rotate_quip           can be found in deck-specific/corrupt_erratic_deck.lua
-	-- G.FUNCS.give_quip_achievement can be found in deck-specific/corrupt_erratic_deck.lua
-	if index == 1 then
-		text_ui =
-		{n=G.UIT.R, config={align="cm",quip_rotate=rotation,func="rotate_quip",button="give_quip_achievement"}, nodes = {
-			text_ui
-		}}
-	end
+	local AT = nil ---@type UIBox
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = 0,
+		blockable = false,
+		blocking = false,
+		func = function()
+			text = DynaText {
+				text_rot = rotation,
+				scale = 0.625,
+				string = text,
+				colours = {lighten(G.C.BLUE, 0.4)},
+				float = true,
+				shadow = true,
+				pop_in = 0,
+				pop_in_rate = 6,
+				silent = true
+			}
 
-	attention_text{
-		text = text_ui,
-		offset = {
-			x = math.random() * (G.TILE_W - 1) - G.TILE_W / 2,
-			y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
-		},
-		major = G.play,
-		colour = lighten(G.C.BLUE, 0.4),
-		hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED, -- between 2 and 5 seconds
-		scale = 0.625
-	}
+			-- i dont fucking know how to stop the root element from blocking clicks god
+			AT = UIBox {
+				T = {0,0,0,0},
+				definition =
+				{n=G.UIT.ROOT, config = {maxw=0, maxh=0, colour=copy_table(G.C.CLEAR)}, nodes={
+					{n=G.UIT.R, config={align="cm", rotate=rotation, func=ondraw, button=onclick}, nodes = {
+						{n=G.UIT.O, config={draw_layer = 1, object = text}}
+					}}
+				}},
+				config = {
+					align = 'cm',
+					offset = {
+						x = math.random() * (G.TILE_W - 1) - G.TILE_W / 2,
+						y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
+					},
+					major = G.play,
+				}
+			}
+			AT.attention_text = true
+			text:pulse(0.5)
+			return true
+		end
+	}))
+
+	local start_time = nil
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = hold,
+		blockable = false,
+		blocking = false,
+		func = function()
+			if not start_time then
+				start_time = G.TIMERS.TOTAL
+				text:pop_out(3)
+			else
+				fade = math.max(0, 1 - 3*(G.TIMERS.TOTAL - start_time))
+				colour[4] = math.min(colour[4], fade)
+				if fade <= 0 then
+					AT:remove()
+					return true
+				end
+			end
+		end
+	}))
 end
 
 
@@ -233,19 +276,12 @@ function Ovn_f.erratic_randomize_deck(seed)
 		local seal        = SMODS.poll_seal{        key = ertkey("seal"),    mod = mod }
 		enhancement = enhancement or "c_base"
 
-        ---@diagnostic disable-next-line
-        SMODS.change_base(card, suit, rank)
+		---@diagnostic disable-next-line
+		SMODS.change_base(card, suit, rank)
 		card:set_ability(enhancement, true, true)
 		card:set_edition(edition, true, true, false)
 		card:set_seal(seal, true, true)
 	end
-end
-
--- Rotates the UI element.
----@param e any
----@return nil
-function G.FUNCS.rotate_quip(e)
-	e.T.r = e.config.quip_rotate
 end
 
 -- Gives the achievement "That Tickled!".
@@ -276,7 +312,7 @@ end
 -- Hook to change card costs by a random amount
 local card_setcost_hook = Card.set_cost
 function Card:set_cost()
-    local n = card_setcost_hook(self)
+	local n = card_setcost_hook(self)
 
 	if Ovn_f.on_deck('c_erratic') then
 		self.cost = self.cost + math.floor(Ovn_f.pseudoerratic("cost"))
@@ -289,7 +325,7 @@ end
 -- Hook to reload and backup c.Erratic color changes
 local startrun_hook = Game.start_run
 function Game:start_run(args)
-    if self.C_BACKUP then
+	if self.C_BACKUP then
 		self.C = self.C_BACKUP
 	end
 
@@ -314,9 +350,9 @@ end
 ---- unused functions ----
 --------------------------
 --[[
-    I'm assuming these were used for initial prototypes
-    but were left unremoved
-    -oinite
+	I'm assuming these were used for initial prototypes
+	but were left unremoved
+	-oinite
 ]]
 
 --[[
