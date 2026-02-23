@@ -1,6 +1,9 @@
 return {
+    
     "CLICK ME FOR AN ACHIEVEMENT",
     "function Ovn_f.spawn_erratic_quip(2)",
+    "DOMAIN EXPANSION: QUIPLASH",
+
     "HELLO THERE",
     "SUN WITH FACE EMOJI",
     "ZULUTASTIC",

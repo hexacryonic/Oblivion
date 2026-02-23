@@ -167,7 +167,12 @@ end
 function Ovn_f.spawn_erratic_quip(index)
 	local quips = G.localization.misc.c_err_quips
 	if not index then
-		index = math.ceil(math.random()*#quips)
+		-- todo: dont do conditional check if achievement unlocked
+		if math.random() < (1/50) then
+			index = 1 -- "Click me for an achievement"
+		else
+			index = math.ceil(math.random()*#quips)
+		end
 	elseif index < 1 then
 		error("Index cannot be less than 1")
 	elseif index > #quips then
@@ -180,7 +185,7 @@ function Ovn_f.spawn_erratic_quip(index)
 	-- 2.268 = 1.134 - (-1.134)
 	local rotation = -1.134 + math.random()*(2.268)
 	local colour = SMODS.shallow_copy(lighten(G.C.BLUE, 0.4))
-	local hold = (math.random()*3 + 2)*G.SETTINGS.GAMESPEED + 0.1*(G.SPEEDFACTOR)  -- between 2 and 5 seconds
+	local hold = (math.random()*3 + 5)*G.SETTINGS.GAMESPEED + 0.1*(G.SPEEDFACTOR)  -- between 5 and 8 seconds
 	local fade = 1
 
 	local ondraw = "rotate_node"
@@ -229,6 +234,22 @@ function Ovn_f.spawn_erratic_quip(index)
 		end
 	}))
 
+	if index == 3 then
+		G.E_MANAGER:add_event(Event({
+			trigger = 'after',
+			delay = hold - (4*G.SETTINGS.GAMESPEED + 0.1*(G.SPEEDFACTOR)),
+			blockable = false,
+			blocking = false,
+			func = function ()
+				local max_quip_count = math.floor(math.random()*5 + 3) -- Between 3 and 7
+				for _=1, max_quip_count do
+					Ovn_f.spawn_erratic_quip()
+				end
+				return true
+			end
+		}))
+	end
+
 	local start_time = nil
 	G.E_MANAGER:add_event(Event({
 		trigger = 'after',
@@ -243,6 +264,7 @@ function Ovn_f.spawn_erratic_quip(index)
 				fade = math.max(0, 1 - 3*(G.TIMERS.TOTAL - start_time))
 				colour[4] = math.min(colour[4], fade)
 				if fade <= 0 then
+					text:remove()
 					AT:remove()
 					return true
 				end
