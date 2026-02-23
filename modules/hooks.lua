@@ -22,8 +22,8 @@ function level_up_hand(card, hand, instant, amount)
 		local mult  = G.GAME.hands[hand].l_mult
 		local chips = G.GAME.hands[hand].l_chips
 		for i,event_horizon in ipairs(all_event_horizons) do
-			event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + (mult /2)
-			event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + (chips/2)
+			event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + (mult * event_horizon.ability.extra.scalemult[event_horizon.ability.ovn_former_form or "j_supernova"])
+			event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + (chips * event_horizon.ability.extra.scalemult[event_horizon.ability.ovn_former_form or "j_supernova"])
 
 			if not instant then
 				local speed = 1 + (i-1)*0.1
@@ -33,7 +33,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(mult/2),
+						message = "+"..(mult * event_horizon.ability.extra.scalemult[event_horizon.ability.ovn_former_form or "j_supernova"]),
 						colour = G.C.MULT,
 						instant = true
 					})
@@ -44,7 +44,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(chips/2),
+						message = "+"..(chips * event_horizon.ability.extra.scalemult[event_horizon.ability.ovn_former_form or "j_supernova"]),
 						colour = G.C.CHIPS,
 						instant = true
 					})

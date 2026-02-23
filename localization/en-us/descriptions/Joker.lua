@@ -213,7 +213,7 @@ return {
 		text = {
 			"{C:red}Hands no longer level up",
 			"Instead, this Joker gains",
-			"half of the upgrade's",
+			"{C:attention}#3#X{} the upgrade's",
 			"{C:chips}Chips {C:inactive}({C:chips}+#1#{C:inactive})"
 			.. " {}and {C:mult}Mult {C:inactive}({C:mult}+#2#{C:inactive})"
 			-- above line split b/c too long
@@ -438,7 +438,7 @@ return {
 			"depending on the sold Joker's rarity:",
 			__sp__,
 			"{C:blue}Common {}-> {C:blue}Enhancement",
-			"{C:green}Uncommon {}-> {C:green}Seal",
+			"{C:green}Uncommon{}/{C:ovn_corrupted}Corrupted {}-> {C:green}Seal",
 			"{C:red}Rare {}-> {C:red}Edition",
 		},
 		corrupted_from = {

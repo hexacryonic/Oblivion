@@ -772,13 +772,18 @@ SMODS.Joker {
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.chips,
-			card.ability.extra.mult
+      card.ability.extra.mult,
+      card.ability.extra.scalemult[card.ability.ovn_former_form or "j_supernova"]
 		}}
 	end,
 	config = {
 		extra = {
 			chips = 0,
 			mult = 0,
+      scalemult = {
+                j_supernova = 0.5,
+                j_constellation = 0.75,
+			},
 		}
 	},
 
@@ -1669,6 +1674,7 @@ SMODS.Joker {
 						(sold_rarity == 1 and playing_card.config.center.key == "c_base")
 						or (sold_rarity == 2 and playing_card.seal == nil)
 						or (sold_rarity == 3 and playing_card.edition == nil)
+            or (sold_rarity == 'ovn_corrupted' and playing_card.seal == nil)
 					)
 				) then
 					table.insert(jack_list, playing_card)
@@ -1690,8 +1696,8 @@ SMODS.Joker {
 					}
 					selected_jack:set_ability(enhancement)
 
-				-- Uncommon generates seal
-				elseif sold_rarity == 2 then
+        -- Uncommon and Corrupted generate seal
+        elseif sold_rarity == 2 or sold_rarity == 'ovn_corrupted' then
 					local seal = SMODS.poll_seal{
 						guaranteed = true,
 						type_key = "ovn_master_of_puppets"
