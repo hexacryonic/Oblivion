@@ -1673,7 +1673,9 @@ SMODS.Joker {
 			local order_b = rarity_modi_def_b.display_order
 			if order_a then
 				if order_b then
-					return order_a < order_b
+					if order_a ~= order_b then
+						return order_a < order_b
+					end
 				else
 					return true
 				end
