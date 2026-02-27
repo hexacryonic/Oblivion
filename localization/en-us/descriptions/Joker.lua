@@ -437,9 +437,6 @@ return {
 			"in your deck is given a {C:attention}modifier",
 			"depending on the sold Joker's rarity:",
 			__sp__,
-			"{C:blue}Common {}-> {C:blue}Enhancement",
-			"{C:green}Uncommon{}/{C:ovn_corrupted}Corrupted {}-> {C:green}Seal",
-			"{C:red}Rare {}-> {C:red}Edition",
 		},
 		corrupted_from = {
 			"Hit the Road"

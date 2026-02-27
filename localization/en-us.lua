@@ -329,6 +329,12 @@ local loc =  {
 			ovn_corrupted_from = "Corrupted from",
 				-- Developer's note: "Datcard" is a portmanteau of "dat" and "discard", i.e. "dis and dat", "this and that"
 			b_ovn_datcard = "Datcard",
+
+			-- Used in Master of Puppets desc
+			k_enhancement = "Enhancement",
+			k_seal = "Seal",
+			k_ovn_other_rarity = "(other)",
+			k_ovn_random_modifier = "(random)"
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",

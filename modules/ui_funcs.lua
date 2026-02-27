@@ -40,6 +40,106 @@ end
 
 
 
+------------------
+---- TABLE UI ----
+------------------
+
+local table_ui_style = {
+	[".table_container"] = {
+		align = "center-middle",
+		padding = 0.05
+	},
+	[".table_body"] = {align = "center-middle"},
+	[".table_column"] = {padding = 0},
+	[".table_cell"] = {
+		outlineWidth = 0.5,
+		outlineColour = G.C.JOKER_GREY,
+		padding = 0,
+	},
+	[".table_text_container"] = {
+		padding = 0.075
+	},
+	[".table_text"] = {
+		scale = 0.32,
+		colour = G.C.UI.TEXT_DARK,
+		padding = 0.025,
+	},
+
+	[".left"] = {align = "center-right"},
+	[".right"] = {align = "center-left"},
+
+	[".cell_header"] = {
+		fillColour = lighten(G.C.JOKER_GREY, 0.5)
+	}
+}
+
+---@param tbl any[][]
+local function transpose_table(tbl)
+	local tbl_T = {}
+	for _,row in ipairs(tbl) do
+		for i, item in ipairs(row) do
+			tbl_T[i] = tbl_T[i] or {}
+			table.insert(tbl_T[i], item)
+		end
+	end
+
+	return tbl_T
+end
+
+-- Generates the UIBox table for a table of text, like with rows and columns and cells n shit
+---@param table_def string[][]
+---@return Balatro.UIBoxDefinition
+function Ovn_f.generate_table_ui(table_def)
+	-- Fill in empty spots
+	local max_row_length = 0
+	for _,row in ipairs(table_def) do
+		max_row_length = math.max(max_row_length, #row)
+	end
+	for _,row in ipairs(table_def) do
+		for i = 1, max_row_length do
+			row[i] = row[i] or ""
+		end
+	end
+
+	-- table_def is a table of ROWS,
+	-- need to first transpose into a table of COLUMNS
+	local table_def_cols = transpose_table(table_def)
+
+	local columns = {}
+	for _,col_def in ipairs(table_def_cols) do
+		local entries = {}
+		for i,cell_def in ipairs(col_def) do
+			local text, colour
+			if type(cell_def) == "table" then
+				text = cell_def.text
+				colour = cell_def.colour
+			else
+				text = cell_def
+			end
+
+			local cell_ui =
+			{"row", class="table_cell" .. (i == 1 and " cell_header" or ""), {
+				{"row", class="table_text_container", {
+					{"text", class="table_text", style={colour=colour}, text=text}
+				}}
+			}}
+			table.insert(entries, cell_ui)
+		end
+
+		local column_ui = {"column", class="table_column", entries}
+		table.insert(columns, column_ui)
+	end
+
+	local table_ui =
+	{"row", class="table_container", {
+		{"row", class="table_body", columns}
+	}}
+	return Ovn_f.jtml_to_uiboxdef(table_ui, table_ui_style)
+end
+
+
+
+
 -----------------------
 ---- MISCELLANEOUS ----
 -----------------------

@@ -1656,6 +1656,60 @@ SMODS.Joker {
 --------------------
 SMODS.Joker {
 	key = 'master_of_puppets',
+	loc_vars = function (self, info_queue, card)
+		-- This loc_vars primarily for making the rarity-modifier table
+		local rarity_modi_map = Oblivion.rarity_modifier_map
+		local rarity_modifier_list = {}
+		for key in pairs(rarity_modi_map) do
+			table.insert(rarity_modifier_list, key)
+		end
+
+		-- Sort by display_order, then by rarity key
+		table.sort(rarity_modifier_list, function(a,b)
+			local rarity_modi_def_a = rarity_modi_map[a]
+			local rarity_modi_def_b = rarity_modi_map[b]
+
+			local order_a = rarity_modi_def_a.display_order
+			local order_b = rarity_modi_def_b.display_order
+			if order_a then
+				if order_b then
+					return order_a < order_b
+				else
+					return true
+				end
+			end
+
+			return tostring(a) < tostring(b)
+		end)
+
+		local rarity_id_to_key = {"Common", "Uncommon", "Rare"}
+
+		local rarity_modifier_table = {{"Rarity", "Modifier"}}
+		for _,key in ipairs(rarity_modifier_list) do
+			local rarity_modi_def = rarity_modi_map[key]
+			if not rarity_modi_def.hidden then
+				local rarity_def = SMODS.Rarities[rarity_id_to_key[key] or key]
+				local rarity_color = rarity_def and rarity_def.badge_colour or nil
+
+				local rarity_loc_key = rarity_modi_def.rarity_loc_key
+				local modifier_loc_key = rarity_modi_def.modifier_loc_key
+				table.insert(rarity_modifier_table, {
+					{
+						text = localize(rarity_loc_key),
+						colour = rarity_modi_def.rarity_loc_colour or rarity_color
+					},
+					{
+						text = localize(modifier_loc_key),
+						colour = rarity_modi_def.modifier_loc_colour -- or nil
+					}
+				})
+			end
+		end
+
+		local main_end = {Ovn_f.generate_table_ui(rarity_modifier_table)}
+		return {main_end = main_end}
+	end,
+
 	atlas = 'corrupted',
 	pos = {x=5, y=1},
 
@@ -1665,61 +1719,52 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.selling_card and context.cardarea == G.jokers then
 			local sold_rarity = context.card.config.center.rarity
+			local rarity_modi_def = Oblivion.rarity_modifier_map[sold_rarity]
+			local modi_def = Oblivion.modifier_def[rarity_modi_def.modifier]
+
 			local jack_list = {}
 			for _,playing_card in ipairs(G.playing_cards) do
 				if (
 					playing_card.base.value == "Jack"
-					and playing_card.config.center.key ~= "m_stone"
-					and (
-						(sold_rarity == 1 and playing_card.config.center.key == "c_base")
-						or (sold_rarity == 2 and playing_card.seal == nil)
-						or (sold_rarity == 3 and playing_card.edition == nil)
-            or (sold_rarity == 'ovn_corrupted' and playing_card.seal == nil)
-					)
+					and not SMODS.has_no_rank(playing_card)
+					and modi_def.has_no_modifier(playing_card)
 				) then
 					table.insert(jack_list, playing_card)
 				end
 			end
+
 			if #jack_list < 1 then return end
 			local selected_jack = pseudorandom_element(
 				jack_list,
 				"ovn_master_of_puppets_jack"
 			) --[[@as Card]]
 
+			local whitelist = rarity_modi_def.whitelist
+			local blacklist = rarity_modi_def.blacklist and SMODS.shallow_copy(rarity_modi_def.blacklist)
+			local options = whitelist or (modi_def.pool and get_current_pool(modi_def.pool)) or nil
+
+			if options and not whitelist and blacklist then
+				for i, value in ipairs(options) do
+					for j,blacklisted_value in ipairs(blacklist) do
+						if value == blacklisted_value then
+							options[i] = "UNAVAILABLE"
+							table.remove(blacklist, j)
+							break
+						end
+					end
+					if #blacklist < 1 then break end
+				end
+			end
 
 			add_simple_event(nil, nil, function()
-				-- Common generates enhancement
-				if sold_rarity == 1 then
-					local enhancement = SMODS.poll_enhancement{
-						guaranteed = true,
-						type_key = "ovn_master_of_puppets"
-					}
-					selected_jack:set_ability(enhancement)
-
-        -- Uncommon and Corrupted generate seal
-        elseif sold_rarity == 2 or sold_rarity == 'ovn_corrupted' then
-					local seal = SMODS.poll_seal{
-						guaranteed = true,
-						type_key = "ovn_master_of_puppets"
-					}
-					selected_jack:set_seal(seal)
-
-				-- Rare generates edition
-				elseif sold_rarity == 3 then
-					local edition = poll_edition(
-						"ovn_master_of_puppets",
-						nil, true, true,
-						{"e_foil", "e_holo", "e_polychrome"}
-					)
-					selected_jack:set_edition(edition)
-				end
-
+				modi_def.apply_random_modifier(selected_jack, options)
 				selected_jack:juice_up()
 				card:juice_up()
 				play_sound('tarot1')
 			end)
 		end
-	end
+	end,
+	-- Additional functionality found in "modules/item-specific/master_of_puppets.lua"
 }
 
 -------------
