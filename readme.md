@@ -86,6 +86,8 @@ Oblivion.rarity_modifier_map[rarity_key] = {
 * `display_order` (OPTIONAL) allows the rarity to be placed in specific positions.
 * `hidden` (OPTIONAL) hides the rarity from the Joker's description table.
 * `modifier` is a key in the table `Oblivion.modifier_def` (see below).
+  * Available modifiers: "enhancement", "seal", "edition".
+  * There is also "*" for applying ALL modifier types to a card, and "\*C" for applying corrupt enhancements, marks, the edition Miasma, and all other modifier types to a card.
 * `whitelist` (OPTIONAL) is a list of object keys, which is used instead of the default modifier pool for the random modifier selection.
 * `blacklist` (OPTIONAL) is a list of object keys that are to be removed from the default modifier pool during random modifier selection. It does nothing if `whitelist` is defined.
 * `modifier_loc_key` is the localization key for the modifier type name, used in the Joker's description table.
