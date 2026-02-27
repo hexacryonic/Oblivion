@@ -296,7 +296,7 @@ local loc =  {
 				name = 'Call of the Void',
 				text = {
 					"{C:ovn_corrupted}Corrupted Jokers {}now",
-					"appear in the shop"
+					"appear in the Joker pool"
 				}
 			}
 		}
