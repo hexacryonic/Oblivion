@@ -66,6 +66,45 @@ Oblivion.spectral_logic[spectral_key] = {
 
 (Additional note regarding Corrupted Ghost Deck: Card selection by the player is disabled while the consumable is being used.)
 
+### Master of Puppets effect extension
+Master of Puppets gives a specific card modifier type to a random Jack lacking that card modifier. By default, only Vanilla and Oblivion rarities are supported, but mods may extend the list of supported rarities by adding entries to the table `Oblivion.rarity_modifier_map`:
+```lua
+Oblivion.rarity_modifier_map[rarity_key] = {
+    display_order = '<integer>',
+    hidden = '<boolean>',
+    modifier = '<string>',
+
+    whitelist = '<list: strings>',
+    blacklist = '<list: strings>',
+
+    modifier_loc_key = '<string>',
+    modifier_loc_colour = '<colourTable>',
+    rarity_loc_key = '<string>',
+    rarity_loc_colour = '<colourTable>',
+}
+```
+* `display_order` (OPTIONAL) allows the rarity to be placed in specific positions.
+* `hidden` (OPTIONAL) hides the rarity from the Joker's description table.
+* `modifier` is a key in the table `Oblivion.modifier_def` (see below).
+* `whitelist` (OPTIONAL) is a list of object keys, which is used instead of the default modifier pool for the random modifier selection.
+* `blacklist` (OPTIONAL) is a list of object keys that are to be removed from the default modifier pool during random modifier selection. It does nothing if `whitelist` is defined.
+* `modifier_loc_key` is the localization key for the modifier type name, used in the Joker's description table.
+* `modifier_loc_colour` (OPTIONAL) is the colour of the modifier type name, used in the Joker's description table.
+* `rarity_loc_key` is the localization key for the rarity, used in the Joker's description table.
+* `rarity_loc_colour` (OPTIONAL) is the colour of the rarity, used in the Joker's description table.
+
+#### Modifier definition
+```lua
+Oblivion.modifier_def[some_key] = {
+    pool = '<string>',
+    has_no_modifier = function(card) return '<boolean>' end,
+    apply_random_modifier = function(card, options) return nil end
+}
+```
+* `pool` is a string that would be used as the first argument in the function `get_current_pool`.
+* `has_no_modifier` returns true if `card` lacks a modifier type, false otherwise. This must be specified due to differing methods in determining this.
+* `apply_random_modifier` selects a random modifier from `options` and applies it to `card`. This must be specified due to differing methods to do so.
+
 ## Card tooltip elements
 The following card tooltip elements are added by the mod:
 - A "Corrupted from" text is displayed under the name of a Corrupted Joker. This can be added for any Joker (but most recommended for Corrupted Jokers) by adding a `corrupted_from` parameter in a Joker's localization:
