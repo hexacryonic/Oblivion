@@ -7,7 +7,7 @@ Oblivion.modifier_def = {
 		apply_random_modifier = function(card, options)
 			local enhancement = SMODS.poll_enhancement{
 				guaranteed = true,
-				type_key = "ovn_master_of_puppets",
+				type_key = "ovn_master_of_puppets_enhancement",
 				options = options
 			}
 			card:set_ability(enhancement)
@@ -21,7 +21,7 @@ Oblivion.modifier_def = {
 		apply_random_modifier = function(card, options)
 			local seal = SMODS.poll_seal{
 				guaranteed = true,
-				type_key = "ovn_master_of_puppets",
+				type_key = "ovn_master_of_puppets_seal",
 				options = options
 			}
 			card:set_seal(seal)
@@ -34,7 +34,7 @@ Oblivion.modifier_def = {
 		end,
 		apply_random_modifier = function(card, options)
 			local edition = poll_edition(
-				"ovn_master_of_puppets",
+				"ovn_master_of_puppets_edition",
 				nil, true, true,
 				options
 			)
@@ -62,90 +62,50 @@ local marks = {
 	"ovn_iolite_mark",
 }
 
-Oblivion.modifier_def["*"] = {
-	has_no_modifier = function(card)
-		local no_mod = true
-		for name, modi_def in pairs(Oblivion.modifier_def) do
-			if name ~= "*" then
-				no_mod = no_mod and modi_def.has_no_modifier(card)
-			end
-		end
-		return no_mod
-	end,
-	apply_random_modifier = function(card, options)
-		for name, modi_def in pairs(Oblivion.modifier_def) do
-			if name ~= "*" and name ~= "*C" and modi_def.has_no_modifier(card) then
-				local modi_options = get_current_pool(modi_def.pool)
-				modi_def.apply_random_modifier(card, modi_options)
-			end
-		end
-	end
-}
-
-Oblivion.modifier_def["*C"] = {
-	has_no_modifier = function(card)
-		local no_mod = true
-		for name, modi_def in pairs(Oblivion.modifier_def) do
-			if name ~= "*" and name ~= "*C" then
-				no_mod = no_mod and modi_def.has_no_modifier(card)
-			end
-		end
-		return no_mod
-	end,
-	apply_random_modifier = function(card, options)
-		for name, modi_def in pairs(Oblivion.modifier_def) do
-			if name ~= "*" and name ~= "*C" and modi_def.has_no_modifier(card) then
-				local modi_options
-				if name == "enhancement" then
-					modi_options = twisted_enhancements
-				elseif name == "seals" then
-					modi_options = marks
-				elseif name == "editions" then
-					modi_options = {"e_ovn_miasma"}
-				else
-					modi_options = get_current_pool(modi_def.pool)
-				end
-				modi_def.apply_random_modifier(card, modi_options)
-			end
-		end
-	end
-}
-
 Oblivion.rarity_modifier_map = {
 	[1] = { -- Common -> Enhancements
 		display_order = 1,
+		modifiers = {"enhancement"},
+
 		rarity_loc_key = "k_common",
-		modifier = "enhancement",
 		modifier_loc_key = "k_enhancement", -- added by Oblivion
 	},
 	[2] = { -- Uncommon -> Seal
 		display_order = 2,
+		modifiers = {"seal"},
+
 		rarity_loc_key = "k_uncommon",
-		modifier = "seal",
 		modifier_loc_key = "k_seal", -- added by Oblivion
 	},
 	[3] = { -- Rare -> Edition
 		display_order = 3,
+		modifiers = {"edition"},
+		blacklist = {edition = {"e_negative"}},
+
 		rarity_loc_key = "k_rare",
-		modifier = "edition",
 		modifier_loc_key = "k_edition",
-		blacklist = {"e_negative"},
 	},
 	["ovn_corrupted"] = { -- Corrupted -> Twisted Enhancements
 		display_order = 4,
+		modifiers = {"enhancement"},
+		whitelist = {enhancement = twisted_enhancements},
+
 		rarity_loc_key = "k_ovn_corrupted",
-		modifier = "enhancement",
 		modifier_loc_key = "k_enhancement", -- added by Oblivion
 		modifier_loc_colour = HEX('2349cb'),
-		whitelist = twisted_enhancements,
 	},
 	[4] = { -- Legendary -> All
 		hidden = true,
-		modifier = "*",
+		modifiers = "*",
 	},
 	["ovn_supercorrupted"] = { -- Supercorrupted -> All Corrupted
 		hidden = true,
-		modifier = "*C",
+		modifiers = "*",
+		whitelist = {
+			enhancement = twisted_enhancements,
+			seal = marks,
+			edition = {"e_ovn_miasma"}
+		},
 	},
 	["~"] = { -- dummy rarity-modi-def to note that other -> random
 		rarity_loc_key = "k_ovn_other_rarity",
@@ -154,3 +114,4 @@ Oblivion.rarity_modifier_map = {
 		modifier_loc_colour = G.C.UI.TEXT_INACTIVE,
 	}
 }
+

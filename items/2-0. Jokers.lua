@@ -1722,44 +1722,33 @@ SMODS.Joker {
 		if context.selling_card and context.cardarea == G.jokers then
 			local sold_rarity = context.card.config.center.rarity
 			local rarity_modi_def = Oblivion.rarity_modifier_map[sold_rarity]
-			local modi_def = Oblivion.modifier_def[rarity_modi_def.modifier]
 
-			local jack_list = {}
-			for _,playing_card in ipairs(G.playing_cards) do
-				if (
-					playing_card.base.value == "Jack"
-					and not SMODS.has_no_rank(playing_card)
-					and modi_def.has_no_modifier(playing_card)
-				) then
-					table.insert(jack_list, playing_card)
+			if rarity_modi_def.modifiers == "*" then
+				local all_modis = {}
+				for modifier in pairs(Oblivion.modifier_def) do
+					table.insert(all_modis, modifier)
 				end
+				rarity_modi_def.modifiers = all_modis
 			end
 
+			-- Jacks (so not Stone Cards etc.) without specific modifier types
+			local jack_list = Ovn_f.get_puppet_jacks(sold_rarity)
 			if #jack_list < 1 then return end
 			local selected_jack = pseudorandom_element(
 				jack_list,
 				"ovn_master_of_puppets_jack"
 			) --[[@as Card]]
 
-			local whitelist = rarity_modi_def.whitelist
-			local blacklist = rarity_modi_def.blacklist and SMODS.shallow_copy(rarity_modi_def.blacklist)
-			local options = whitelist or (modi_def.pool and get_current_pool(modi_def.pool)) or nil
+			-- Prepare options table
+			local all_options = Ovn_f.prepare_modifier_options(sold_rarity)
 
-			if options and not whitelist and blacklist then
-				for i, value in ipairs(options) do
-					for j,blacklisted_value in ipairs(blacklist) do
-						if value == blacklisted_value then
-							options[i] = "UNAVAILABLE"
-							table.remove(blacklist, j)
-							break
-						end
-					end
-					if #blacklist < 1 then break end
-				end
-			end
-
+			-- Finally add modifiers
 			add_simple_event(nil, nil, function()
-				modi_def.apply_random_modifier(selected_jack, options)
+				for _,modifier in ipairs(rarity_modi_def.modifiers) do
+					local modi_def = Oblivion.modifier_def[modifier]
+					local options = all_options[modifier]
+					modi_def.apply_random_modifier(selected_jack, options)
+				end
 				selected_jack:juice_up()
 				card:juice_up()
 				play_sound('tarot1')

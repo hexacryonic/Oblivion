@@ -6,7 +6,7 @@
 -- 4. JOKER TRANSMUTATION STATES
 -- 5. MODIFIER TRANSMUTATION
 -- 6. INSTABILITY
--- 7. GHOSTLY ADVERSARY
+-- 7. MASTER OF PUPPETS
 -- 8. MISCELLANEOUS
 
 
@@ -353,6 +353,101 @@ Ovn_f.optic_instability = function(factor)
 	factor = factor or 1
 	local mod = G.GAME.opticmod or 0
 	Ovn_f.change_instability(mod*factor)
+end
+
+
+
+---------------------------
+---- MASTER OF PUPPETS ----
+---------------------------
+
+-- Copies a table and any table it contains.
+---@param tbl table
+---@return table
+Ovn_f.bi_shallow_copy = function(tbl)
+	local new_table = SMODS.shallow_copy(tbl)
+	for i,item in pairs(new_table) do
+		new_table[i] = type(item) == "table" and SMODS.shallow_copy(item) or item
+	end
+	return new_table
+end
+
+-- Prepares a list of applicable modifiers for Master of Puppets.
+---@param rarity integer|string The key of a rarity. Vanilla rarities still use integer values.
+---@return {string: string[]}
+Ovn_f.prepare_modifier_options = function(rarity)
+	local rarity_modi_def = Oblivion.rarity_modifier_map[rarity]
+
+	local include   = rarity_modi_def.include or {}
+	local whitelist = (
+		rarity_modi_def.whitelist
+		and Ovn_f.bi_shallow_copy(rarity_modi_def.whitelist)
+		or {}
+	)
+	local blacklist = (
+		rarity_modi_def.blacklist
+		and Ovn_f.bi_shallow_copy(rarity_modi_def.blacklist)
+		or {}
+	)
+
+	local all_options = whitelist or {}
+	for _,modifier in ipairs(rarity_modi_def.modifiers --[[@as string[] ]]) do
+		local modi_def = Oblivion.modifier_def[modifier]
+
+		-- Below table pre-exists if whitelist specifies it
+		all_options[modifier] = all_options[modifier] or get_current_pool(modi_def.pool)
+		all_options[modifier] = SMODS.shallow_copy(all_options[modifier])
+		local modi_options = all_options[modifier]
+
+		-- Apply include
+		local modi_include = include[modifier] or {}
+		modi_options = SMODS.merge_lists({modi_options}, {modi_include})
+
+		-- Apply blacklist
+		local modi_blacklist = blacklist[modifier] or {}
+		for i, value in ipairs(modi_options) do
+			for j,blacklisted_value in ipairs(modi_blacklist) do
+				if value == blacklisted_value then
+					modi_options[i] = "UNAVAILABLE"
+					table.remove(modi_blacklist, j)
+					break
+				end
+			end
+			if #modi_blacklist < 1 then break end
+		end
+	end
+
+	return all_options
+end
+
+-- Gets a list of Jacks that do not have certain modifier types.
+---@param rarity integer|string The key of a rarity. Vanilla rarities still use integer values.
+---@return Card[]
+Ovn_f.get_puppet_jacks = function(rarity)
+	local rarity_modi_def = Oblivion.rarity_modifier_map[rarity] --[[@as string[] ]]
+
+	local jack_list = {}
+	for _,playing_card in ipairs(G.playing_cards) do
+		local has_no_modifiers = false
+		for _,modifier in ipairs(rarity_modi_def.modifiers) do
+			local modi_def = Oblivion.modifier_def[modifier]
+			-- True if at least one modifier type is found to be missing
+			has_no_modifiers = (
+				has_no_modifiers
+				or modi_def.has_no_modifier(playing_card)
+			)
+		end
+
+		if (
+			playing_card.base.value == "Jack"
+			and not SMODS.has_no_rank(playing_card)
+			and has_no_modifiers
+		) then
+			table.insert(jack_list, playing_card)
+		end
+	end
+
+	return jack_list
 end
 
 
