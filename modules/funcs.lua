@@ -429,13 +429,22 @@ Ovn_f.get_puppet_jacks = function(rarity)
 	local jack_list = {}
 	for _,playing_card in ipairs(G.playing_cards) do
 		local has_no_modifiers = false
-		for _,modifier in ipairs(rarity_modi_def.modifiers) do
-			local modi_def = Oblivion.modifier_def[modifier]
-			-- True if at least one modifier type is found to be missing
-			has_no_modifiers = (
-				has_no_modifiers
-				or modi_def.has_no_modifier(playing_card)
-			)
+		if rarity_modi_def then
+			for _,modifier in ipairs(rarity_modi_def.modifiers) do
+				local modi_def = Oblivion.modifier_def[modifier]
+				-- True if at least one modifier type is found to be missing
+				has_no_modifiers = (
+					has_no_modifiers
+					or modi_def.has_no_modifier(playing_card)
+				)
+			end
+		else
+			for _,modi_def in pairs(Oblivion.modifier_def) do
+				has_no_modifiers = (
+					has_no_modifiers
+					or modi_def.has_no_modifier(playing_card)
+				)
+			end
 		end
 
 		if (

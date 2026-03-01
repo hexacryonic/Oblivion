@@ -1731,12 +1731,30 @@ SMODS.Joker {
 				"ovn_master_of_puppets_jack"
 			) --[[@as Card]]
 
-			-- Prepare options table
-			local all_options = Ovn_f.prepare_modifier_options(sold_rarity)
+			-- Prepare options table and modifiers list
+			local all_options, modifiers_list
+			if not rarity_modi_def then -- Rarity not defined -> Random modifier
+				local applicable_modifiers = {}
+				for modifier, modi_def in pairs(Oblivion.modifier_def) do
+					if modi_def.has_no_modifier(selected_jack) then
+						table.insert(applicable_modifiers, modifier)
+					end
+				end
+
+				local selected_modifier = pseudorandom_element(applicable_modifiers, "master_of_puppets_random_modi")
+				local modi_def = Oblivion.modifier_def[selected_modifier]
+				local modi_pool = get_current_pool(modi_def.pool)
+
+				all_options = {[selected_modifier] = SMODS.shallow_copy(modi_pool)}
+				modifiers_list = {selected_modifier}
+			else
+				all_options = Ovn_f.prepare_modifier_options(sold_rarity)
+				modifiers_list = rarity_modi_def.modifiers
+			end
 
 			-- Finally add modifiers
 			add_simple_event(nil, nil, function()
-				for _,modifier in ipairs(rarity_modi_def.modifiers) do
+				for _,modifier in ipairs(modifiers_list) do
 					local modi_def = Oblivion.modifier_def[modifier]
 					local options = all_options[modifier]
 					modi_def.apply_random_modifier(selected_jack, options)
