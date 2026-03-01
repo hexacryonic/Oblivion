@@ -1,3 +1,13 @@
+-- Welcome to the Oblivion source code! This file is primarily for loading separate files,
+-- which are split to improve code readibility and navigability.
+
+-- Points of interest:
+	-- /cross-mod   - Code for features that only activate when the corresponding mod is enabled.
+	-- /data        - Data used across the entire mod, and meant to be as easily expandible as possible.
+	-- /items       - The code for the mod's content itself, including cards, card modifiers, blinds, and stakes.
+	-- /load-assets - Allows assets to be defined quickly and easily.
+	-- /modules     - Largely technical code that is used across the entire mod.
+
 SMODS.current_mod.optional_features = {
 	retrigger_joker = true,
 	post_trigger = true,
@@ -9,10 +19,13 @@ SMODS.current_mod.optional_features = {
 }
 
 -- talisman compat
+-- but you should really be using amulet
+-- (might depreciate talisman sometime down the line)
 to_big = to_big or function(x)
 	return x
 end
 
+-- Create this mod's global table
 if not Oblivion then Oblivion = {} end
 Oblivion.mod_path = tostring(SMODS.current_mod.path)
 -- Function object
@@ -69,82 +82,12 @@ end
 Ovn_f.load_directory("modules")
 Ovn_f.load_directory("load-assets")
 Ovn_f.load_directory("items")
+Ovn_f.load_directory("data")
 Ovn_f.load_directory("cross-mod", function (file_name)
 	-- Cross-mod files (named with mod ID) only loaded if mod is loaded
 	-- Cryptid is loaded by a patch into Cryptid, so skip it here
 	return file_name ~= "Cryptid.lua" and (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
-
--- Mapping this way so other mods can add define_corruption if it's nonexistent
--- and thus define their own corruptions
-if not Oblivion.corruption_map then Oblivion.corruption_map = {} end
-local cmap = Oblivion.corruption_map
-cmap["j_joker"]               = "j_ovn_darkjoker"
-cmap["j_fibonacci"]           = "j_ovn_lucasseries"
-cmap["j_reserved_parking"]    = "j_ovn_perpendicular"
-cmap["j_acrobat"]             = "j_ovn_yolo"
-cmap["j_gift"]                = "j_ovn_supplydrop"
-cmap["j_pareidolia"]          = "j_ovn_pmo"
-cmap["j_ring_master"]         = "j_ovn_showneverends"
-cmap["j_walkie_talkie"]       = "j_ovn_airstrike"
-cmap["j_droll"]               = "j_ovn_bombastic"
-cmap["j_crafty"]              = "j_ovn_insightful"
-cmap["j_tribe"]               = "j_ovn_breach"
-cmap["j_lusty_joker"]         = "j_ovn_prideful"
-cmap["j_wrathful_joker"]      = "j_ovn_prideful"
-cmap["j_gluttenous_joker"]    = "j_ovn_prideful"
-cmap["j_greedy_joker"]        = "j_ovn_prideful"
-cmap["j_cavendish"]           = "j_ovn_cultivar"
-cmap["j_gros_michel"]         = "j_ovn_aeon"
-cmap["j_hologram"]            = "j_ovn_apartfalling"
-cmap["j_drunkard"]            = "j_ovn_spiral_of_addiction"
-cmap["j_mystic_summit"]       = "j_ovn_collapsing_world"
-cmap["j_erosion"]             = "j_ovn_collapsing_world"
-cmap["j_hit_the_road"]        = "j_ovn_master_of_puppets"
-cmap["j_wee"]                 = "j_ovn_infinitesimal"
-cmap["j_hallucination"]       = "j_ovn_migraine"
-cmap["j_abstract"]            = "j_ovn_database"
-cmap["j_ovn_pure_visage"]     = "j_ovn_corrupt_visage"
-cmap["j_todo_list"]           = "j_ovn_library_of_babel"
-cmap["j_card_sharp"]          = "j_ovn_library_of_babel"
-cmap["j_obelisk"]             = "j_ovn_library_of_babel"
-cmap["j_ovn_trolley_problem"] = "j_ovn_bottled_ship_of_theseus"
-cmap["j_ovn_purifier"]        = "j_ovn_nexus_point"
-cmap["j_ovn_nexus_point"]     = "j_ovn_nexus_point"
-cmap["j_supernova"]           = "j_ovn_event_horizon"
-cmap["j_constellation"]       = "j_ovn_event_horizon"
-cmap["j_midas_mask"]          = "j_ovn_philosophers_stone"
-cmap["j_baseball"]            = "j_ovn_cigarette_card"
-cmap["j_splash"]              = "j_ovn_sludge"
-cmap["j_arrowhead"]           = "j_ovn_apache_tears"
-cmap["j_bloodstone"]          = "j_ovn_apache_tears"
-cmap["j_onyx_agate"]          = "j_ovn_apache_tears"
-cmap["j_rough_gem"]           = "j_ovn_apache_tears"
-
-if not Oblivion.corruption_condition then Oblivion.corruption_condition = {} end
-Oblivion.corruption_condition["j_gros_michel"] = function()
-	return G.GAME and G.GAME.corruptiblemichel
-end
-
--- Similar to corruption_map
-if not Oblivion.enhancement_corrupt then Oblivion.enhancement_corrupt = {} end
-local cenh = Oblivion.enhancement_corrupt
-cenh["m_glass"] = "m_ovn_ice"
-cenh["m_gold"]  = "m_ovn_dense"
-cenh["m_steel"] = "m_ovn_unob"
-cenh["m_wild"]  = "m_ovn_coord"
-cenh["m_stone"] = "m_ovn_crystal"
-cenh["m_bonus"] = "m_ovn_radiant"
-cenh["m_mult"]  = "m_ovn_dynamo"
-cenh["m_lucky"] = "m_ovn_ion"
-
-if not Oblivion.seal_corrupt then Oblivion.seal_corrupt = {} end
-local cseal         = Oblivion.seal_corrupt
-cseal["Red"]        = "ovn_ruby_mark"
-cseal["Blue"]       = "ovn_sapphire_mark"
-cseal["Purple"]     = "ovn_amethyst_mark"
-cseal["Gold"]       = "ovn_citrine_mark"
-cseal["ovn_indigo"] = "ovn_iolite_mark"
 
 SMODS.current_mod.extra_tabs = function ()
 	return {
@@ -197,6 +140,17 @@ G.E_MANAGER:add_event(Event {
 		end
 
 		-- Purity map entries map to either a string (only pure form) or a list of strings (list of pure forms)
+
+		-- For rarity-modifier mapping, convert "*" to an actual list of all defined modifiers
+		local all_modis = {}
+		for modifier in pairs(Oblivion.modifier_def) do
+			table.insert(all_modis, modifier)
+		end
+
+		for _,rarity_modi_def in pairs(Oblivion.rarity_modifier_map) do
+			rarity_modi_def.modifiers = all_modis
+		end
+
 		return true
 	end
 })

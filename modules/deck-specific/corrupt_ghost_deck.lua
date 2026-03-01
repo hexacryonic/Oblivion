@@ -3,6 +3,7 @@
 
 -- Other files associated with Corrupt Ghost Deck:
 ---- items/3-0. Decks.lua - Corrupt Ghost Deck register
+---- data/corrupt_ghost_logic.lua - Logic for Spectral Card usage
 
 -- 1. SUPPLEMENTARY FUNCTIONS
 -- 2. FUNCTIONS

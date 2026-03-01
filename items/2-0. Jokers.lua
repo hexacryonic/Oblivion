@@ -1723,14 +1723,6 @@ SMODS.Joker {
 			local sold_rarity = context.card.config.center.rarity
 			local rarity_modi_def = Oblivion.rarity_modifier_map[sold_rarity]
 
-			if rarity_modi_def.modifiers == "*" then
-				local all_modis = {}
-				for modifier in pairs(Oblivion.modifier_def) do
-					table.insert(all_modis, modifier)
-				end
-				rarity_modi_def.modifiers = all_modis
-			end
-
 			-- Jacks (so not Stone Cards etc.) without specific modifier types
 			local jack_list = Ovn_f.get_puppet_jacks(sold_rarity)
 			if #jack_list < 1 then return end

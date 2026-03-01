@@ -1,4 +1,9 @@
-if not Oblivion.spectral_logic then Oblivion.spectral_logic = {} end
+-- Defines the logic for Corrupt Ghost Deck using specific consumables
+-- especially for consumables that require specific cards to be selected
+
+-- Please read documentation for how to add to this table
+
+Oblivion.spectral_logic = Oblivion.spectral_logic or {}
 local speclogic = Oblivion.spectral_logic
 
 local hold_enhancements = {
@@ -6,6 +11,8 @@ local hold_enhancements = {
 	["m_gold"] = true,
 	["m_ovn_unob"] = true
 }
+
+----
 
 speclogic['c_talisman'] = {
 	select = 1,
@@ -267,6 +274,6 @@ speclogic['c_ankh'] = {
 	select = 0,
 	select_area = function() return {} end,
 	usable = function()
-		return 0 < #G.jokers.cards and #G.jokers.cards < G.jokers.config.card_limit
+		return (0 < #G.jokers.cards) and (#G.jokers.cards < G.jokers.config.card_limit)
 	end
 }

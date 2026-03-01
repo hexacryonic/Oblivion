@@ -72,10 +72,11 @@ Master of Puppets gives a specific card modifier type to a random Jack lacking t
 Oblivion.rarity_modifier_map[rarity_key] = {
     display_order = '<integer>',
     hidden = '<boolean>',
-    modifier = '<string>',
+    modifier = '<list: string> OR "*"',
 
-    whitelist = '<list: strings>',
-    blacklist = '<list: strings>',
+    whitelist = '<table string:<list: string>>',
+    include   = '<table string:<list: string>>',
+    blacklist = '<table string:<list: string>>',
 
     modifier_loc_key = '<string>',
     modifier_loc_colour = '<colourTable>',
@@ -85,14 +86,18 @@ Oblivion.rarity_modifier_map[rarity_key] = {
 ```
 * `display_order` (OPTIONAL) allows the rarity to be placed in specific positions.
 * `hidden` (OPTIONAL) hides the rarity from the Joker's description table.
-* `modifier` is a key in the table `Oblivion.modifier_def` (see below).
+* `modifier` is a list of keys in the table `Oblivion.modifier_def` (see below).
   * Available modifiers: "enhancement", "seal", "edition".
-  * There is also "*" for applying ALL modifier types to a card, and "\*C" for applying corrupt enhancements, marks, the edition Miasma, and all other modifier types to a card.
-* `whitelist` (OPTIONAL) is a list of object keys, which is used instead of the default modifier pool for the random modifier selection.
-* `blacklist` (OPTIONAL) is a list of object keys that are to be removed from the default modifier pool during random modifier selection. It does nothing if `whitelist` is defined.
+  * Alternatively by setting the modifier to be the string "*", the rarity will map to ALL defined modifiers automatically.
+* `whitelist` (OPTIONAL) By default, the randomizer list used are the modifiers' default pools; this parameter overrides that list.
+* `include` (OPTIONAL) adds values not normally in the default pools in the aforementioned randomizer list.
+* `blacklist` (OPTIONAL) removes values from the aforementioned randomizer list.
+  * The above three parameters are tables with keys being a key in the table `Oblivion.modifier_def`, and values being a list of object keys.
 * `modifier_loc_key` is the localization key for the modifier type name, used in the Joker's description table.
+  * OPTIONAL if `hidden = true`.
 * `modifier_loc_colour` (OPTIONAL) is the colour of the modifier type name, used in the Joker's description table.
 * `rarity_loc_key` is the localization key for the rarity, used in the Joker's description table.
+  * OPTIONAL if `hidden = true`.
 * `rarity_loc_colour` (OPTIONAL) is the colour of the rarity, used in the Joker's description table.
 
 #### Modifier definition
