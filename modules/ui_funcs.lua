@@ -54,10 +54,7 @@ local table_ui_style = {
 	[".table_cell"] = {
 		outlineWidth = 0.5,
 		outlineColour = G.C.JOKER_GREY,
-		padding = 0,
-	},
-	[".table_text_container"] = {
-		padding = 0.075
+		padding = 0.075,
 	},
 	[".table_text"] = {
 		scale = 0.32,
@@ -65,8 +62,9 @@ local table_ui_style = {
 		padding = 0.025,
 	},
 
-	[".left"] = {align = "center-right"},
-	[".right"] = {align = "center-left"},
+	[".align-left"] = {align = "center-left"},
+	[".align-right"] = {align = "center-right"},
+	[".align-middle"] = {align = "center-middle"},
 
 	[".cell_header"] = {
 		fillColour = lighten(G.C.JOKER_GREY, 0.5)
@@ -88,8 +86,13 @@ end
 
 -- Generates the UIBox table for a table of text, like with rows and columns and cells n shit
 ---@param table_def string[][]
+---@param config? {string: any}
 ---@return Balatro.UIBoxDefinition
-function Ovn_f.generate_table_ui(table_def)
+function Ovn_f.generate_table_ui(table_def, config)
+	config = config or {}
+	-- Valid config:
+		-- no_header
+
 	-- Fill in empty spots
 	local max_row_length = 0
 	for _,row in ipairs(table_def) do
@@ -109,19 +112,24 @@ function Ovn_f.generate_table_ui(table_def)
 	for _,col_def in ipairs(table_def_cols) do
 		local entries = {}
 		for i,cell_def in ipairs(col_def) do
-			local text, colour
+			-- Prepare cell config
+			local text, colour, align
 			if type(cell_def) == "table" then
 				text = cell_def.text
 				colour = cell_def.colour
+				align = cell_def.align
 			else
 				text = cell_def
 			end
 
+			-- Prepare classes
+			local cell_header_class = (not config.no_header) and i == 1 and " cell_header" or ""
+			local align_class = " align-" .. (align or "left")
+
+			-- Define UI
 			local cell_ui =
-			{"row", class="table_cell" .. (i == 1 and " cell_header" or ""), {
-				{"row", class="table_text_container", {
-					{"text", class="table_text", style={colour=colour}, text=text}
-				}}
+			{"row", class="table_cell" .. cell_header_class .. align_class, {
+				{"text", class="table_text", style={colour=colour}, text=text}
 			}}
 			table.insert(entries, cell_ui)
 		end
@@ -132,6 +140,7 @@ function Ovn_f.generate_table_ui(table_def)
 
 	local table_ui =
 	{"row", class="table_container", {
+		-- Required to remove gaps between elements
 		{"row", class="table_body", columns}
 	}}
 	return Ovn_f.jtml_to_uiboxdef(table_ui, table_ui_style)

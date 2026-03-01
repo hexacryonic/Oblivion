@@ -160,60 +160,27 @@ Oblivion.DescriptionDummy {
 	key = "credits",
 	generate_ui = function (self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
 		-- specific_vars is sent by generate_card_ui (patched by corruption.toml)
-		-- and is a string-keyed table based on a card's `credits` value
+		-- It is a string-keyed table based on a card's `credits` value
 		if not card then card = self:create_fake_card() end
 
-		local credits_ui_style = {
-			[".credits_text_container"] = {padding = 0.075},
-			[".credits_text"] = {
-				scale = 0.32,
-				colour = G.C.UI.TEXT_DARK,
-				padding = 0.025,
-			},
-			[".credits_body"] = {align = "center-middle"},
-			[".credits_label"] = {colour = G.C.BLUE},
-			[".left"] = {align = "center-right"},
-			[".right"] = {align = "center-left"},
-		}
-
+		local label_loc = G.localization.descriptions.DescriptionDummy.dd_ovn_credits.labels
 		local label_order = {"art", "code"}
 
-		local function credits_labels()
-			local entries = {}
-			local label_loc = G.localization.descriptions.DescriptionDummy.dd_ovn_credits.labels
-			for _,label_key in ipairs(label_order) do
-				if specific_vars[label_key] then
-					table.insert(entries,
-						{"row", class="left", style={padding=0}, {
-							{"text", class="credits_text credits_label", text=label_loc[label_key]}
-						}}
-					)
-				end
+		local table_rows = {}
+		for _,label_key in ipairs(label_order) do
+			local left = {
+				text = label_loc[label_key],
+				colour = G.C.BLUE,
+				align = "right"
+			}
+			local right = specific_vars[label_key]
+			if right then
+				table.insert(table_rows, {left, right})
 			end
-			return {"column", class="credits_text_container left", entries}
 		end
 
-		local function credits_names()
-			local entries = {}
-			for _,label_key in ipairs(label_order) do
-				if specific_vars[label_key] then
-					table.insert(entries,
-						{"row", class="right", style={padding=0}, {
-							{"text", class="credits_text credits_name", text=specific_vars[label_key]}
-						}}
-					)
-				end
-			end
-			return {"column", class="credits_text_container right", entries}
-		end
-
-		local credits_ui =
-		{"row", class="credits_body", {
-			credits_labels(),
-			credits_names()
-		}}
-
+		local credits_ui = Ovn_f.generate_table_ui(table_rows, {no_header = true})
 		desc_nodes.name = localize{type = 'name_text', key = 'dd_ovn_credits', set = "DescriptionDummy"}
-		table.insert(desc_nodes, {Ovn_f.jtml_to_uiboxdef(credits_ui, credits_ui_style)})
+		table.insert(desc_nodes, {credits_ui})
 	end
 }
