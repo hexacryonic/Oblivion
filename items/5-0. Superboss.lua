@@ -49,7 +49,7 @@ end
 local function ominous_consumable_consequence(consumable_name, card_obj, sound_per, sound_vol)
 	add_simple_event('after', 0.4, function ()
 		card_obj:juice_up(0.3, 0.4)
-		play_sound("ovn_" .. consumable_name, sound_per, sound_vol)
+		play_sound("ovn_use_" .. consumable_name, sound_per, sound_vol)
 		card_obj.children.center.pinch.x = true
 	end)
 	delay(0.6)
@@ -66,8 +66,8 @@ SMODS.Consumable {
 	name = "ovn_Insecurity",
 	key = "insecurity",
 
-	atlas = "cataclysm_atlas",
-	pos = {x=0, y=0},
+	atlas = "consumables",
+	pos = {x=0, y=3},
 
 	cost = 2,
 
@@ -87,8 +87,8 @@ SMODS.Consumable {
 	name = "ovn_Tres",
 	key = "tres",
 
-	atlas = "cataclysm_atlas",
-	pos = {x=1, y=0},
+	atlas = "placeholder",
+	pos = {x=0, y=2},
 
 	cost = 2,
 
@@ -109,8 +109,8 @@ SMODS.Consumable {
 	name = "ovn_Recall",
 	key = "recall",
 
-	atlas = "cataclysm_atlas",
-	pos = {x=2, y=0},
+	atlas = "placeholder",
+	pos = {x=1, y=2},
 
 	cost = 2,
 

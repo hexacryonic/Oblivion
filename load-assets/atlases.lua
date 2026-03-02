@@ -1,34 +1,28 @@
 local card_atlases = {
 	-- For atlases with px = 71, py = 95
-	-- true means path is <key>.png ("ditto case")
-	-- <string> means path is <string>.png
-	corrupted    = true,
-	notcorrupted = true,
-
-	charybdis_atlas    = "charybdis",
-	abyss_atlas        = "abyss",
-	opticenhance_atlas = "opticenhance",
-	cataclysm_atlas    = "cataclysm",
-	spectrum_atlas     = "spectrum",
-	deck_atlas         = "deck",
-	cdeck_atlas        = "corruptdeck",
-	mutation_atlas     = "mutation",
-	cboosters_atlas    = "cbooster",
-	seals_atlas        = "seals",
-	marks_atlas        = "marks",
-	voucher_atlas      = "atlasvoucher",
-	skin_nd_lc         = "skinND_lc",
-	skin_nd_hc         = "skinND_hc",
-	skin_ism_lc        = "skinISM_lc",
-	skin_ism_hc        = "skinISM_hc",
-	skin_acgt_lc       = "skinACGT_lc",
-	skin_acgt_hc       = "skinACGT_hc",
-	apache_tears       = "ApacheTears",
-	apart_falling      = "APartFalling",
+	-- Must match file name exactly
+	"booster_packs",
+	"consumables",
+	"decks",
+	"decks_corrupt",
+	"enhancements",
+	"jokers",
+	"jokers_corrupt",
+	"mutations",
+	"optics",
+	"optics_hc",
+	"placeholder",
+	"seals",
+	"seals_marks",
+	"itemspecific/apache_tears",
+	"itemspecific/apartfalling",
+	"crossmod/cryptid_planets",
+	-- Deck skin atlases are found in items/0-3. Deck skins.lua
 }
 
-for key, path in pairs(card_atlases) do
-	local file_name = (path == true and key or path) .. ".png"
+for _,path in ipairs(card_atlases) do
+	local file_name = path .. ".png"
+	local key = path:gsub("/", "_")
 	SMODS.Atlas {
 		key = key,
 		path = file_name,
@@ -40,16 +34,16 @@ end
 ----
 
 SMODS.Atlas {
-	key = "ctags_atlas",
-	path = "ctags.png",
+	key = "tags",
+	path = "tags.png",
 	px = 34,
 	py = 34
 }
 
 SMODS.Atlas {
-	key = "ovn_blinds_atlas",
+	key = "blinds",
 	atlas_table = "ANIMATION_ATLAS",
-	path = "ovn_blinds.png",
+	path = "blinds.png",
 	px = 34,
 	py = 34,
 	frames = 21
@@ -66,7 +60,7 @@ SMODS.Atlas {
 
 SMODS.Atlas {
 	key = 'optics_hc',
-	path = 'opticsHC.png',
+	path = 'optics_hc.png',
 	px = 71,
 	py = 95
 }
@@ -80,7 +74,7 @@ SMODS.Atlas{
 
 SMODS.Atlas{
 	key = 'suits_hc',
-	path = 'suitsHC.png',
+	path = 'suits_hc.png',
 	px = 18,
 	py = 18
 }

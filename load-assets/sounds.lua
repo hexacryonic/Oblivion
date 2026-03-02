@@ -1,71 +1,38 @@
+--------------------
+---- SOUNDBYTES ----
+--------------------
+
 local soundbytes = {
-	-- true means path is <key>.ogg ("ditto case")
-	-- <string> means path is <string>.ogg
-	abyss        = true,
-	optic        = true,
-	pure         = true,
-	e_miasma     = true,
-	insecurity   = true,
-	tres         = true,
-	recall       = true,
-	decrement    = "powerdecrement",
-	increment    = "powerincrement",
-	ion_backfire = "ionBackfire",
-	ion_zap      = "ionZap"
+	-- For non-music sounds
+	-- Must match file name exactly
+	"corrupting_joker",
+	"optic",
+	"purifying",
+	"e_miasma",
+	"use_insecurity",
+	"use_tres",
+	"use_recall",
+	"instability_decrement",
+	"instability_increment",
+	"ion_backfire",
+	"ion_zap",
 }
 
-for key, path in pairs(soundbytes) do
-	local file_name = (path == true and key or path) .. ".ogg"
-	SMODS.Sound{
+for _,key in ipairs(soundbytes) do
+	local file_name = key .. ".ogg"
+	SMODS.Sound {
 		key = key,
 		path = file_name
 	}
 end
 
--- == Music
 
-local sync_group = {
-	music1 = true,
-}
 
-SMODS.Sound({
-	key = "musicDoom",
-	path = "musicDoom.ogg",
-
-	sync = false,
-	pitch = 1,
-	volume = 1.2,
-
-	select_music_track = function()
-		return (
-			G.GAME
-			and G.GAME.used_insecurity
-			and G.GAME.used_tres
-			and G.GAME.used_recall
-			and not G.GAME.imcoming -- [sic]
-		)
-	end,
-})
-
-SMODS.Sound({
-	key = "musicApproaching",
-	path = "musicApproaching.ogg",
-
-	sync = false,
-	pitch = 1,
-
-	select_music_track = function()
-		return G.GAME and G.GAME.imcoming
-	end,
-})
-
-SMODS.Sound({
-	key = "musicCorrupt",
-	path = "musicCorrupt.ogg",
-
-	pitch = 1,
-
-	select_music_track = function()
+-----------------------
+---- REGULAR MUSIC ----
+-----------------------
+local standard_music = {
+	music_corrupt = function()
 		return (
 			G.GAME
 			and Ovn_f.deck_is_corrupt()
@@ -77,15 +44,7 @@ SMODS.Sound({
 			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
-})
-
-SMODS.Sound({
-	key = "musicCorruptShop",
-	path = "musicCorruptShop.ogg",
-
-	pitch = 1,
-
-	select_music_track = function()
+	music_corrupt_shop = function()
 		return (
 			G.GAME
 			and Ovn_f.deck_is_corrupt()
@@ -97,15 +56,7 @@ SMODS.Sound({
 			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
-})
-
-SMODS.Sound({
-	key = "musicCorruptPack1",
-	path = "musicCorruptPack1.ogg",
-
-	pitch = 1,
-
-	select_music_track = function()
+	music_corrupt_pack1 = function()
 		return (
 			G.GAME
 			and Ovn_f.deck_is_corrupt()
@@ -115,15 +66,7 @@ SMODS.Sound({
 			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
-})
-
-SMODS.Sound({
-	key = "musicCorruptPack2",
-	path = "musicCorruptPack2.ogg",
-
-	pitch = 1,
-
-	select_music_track = function()
+	music_corrupt_pack2 = function()
 		return G.GAME and (
 			Ovn_f.deck_is_corrupt()
 			and G.booster_pack_meteors
@@ -132,15 +75,7 @@ SMODS.Sound({
 			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
-})
-
-SMODS.Sound({
-	key = "musicCorruptBoss",
-	path = "musicCorruptBoss.ogg",
-
-	pitch = 1,
-
-	select_music_track = function()
+	music_corrupt_boss = function()
 		return G.GAME and (
 			Ovn_f.deck_is_corrupt()
 			and G.GAME.blind
@@ -148,13 +83,28 @@ SMODS.Sound({
 			and not Ovn_f.has_joker('j_ovn_apartfalling')
 		)
 	end,
-})
+}
 
-SMODS.Sound({
-	key = "musicAPF",
-	path = "musicAPF.ogg",
+for key,select_music_track in pairs(standard_music) do
+	SMODS.Sound({
+		key = key,
+		path = "music/" .. key .. ".ogg",
+		pitch = 1,
+		select_music_track = select_music_track
+	})
+end
 
-	sync = { ovn_musicAPFBlind = true },
+
+
+------------------------
+---- A PART FALLING ----
+------------------------
+
+SMODS.Sound {
+	key = "music_apf",
+	path = "music/music_apf.ogg",
+
+	sync = { ovn_music_apf_boss = true },
 	pitch = 1,
 	volume = 0.6,
 
@@ -170,13 +120,13 @@ SMODS.Sound({
 		)
 	)
 	end,
-})
+}
 
-SMODS.Sound({
-	key = "musicAPFBlind",
-	path = "musicAPFBlind.ogg",
+SMODS.Sound {
+	key = "music_apf_boss",
+	path = "music/music_apf_boss.ogg",
 
-	sync = { ovn_musicAPF = true },
+	sync = { ovn_music_apf = true },
 	pitch = 1,
 	volume = 0.5,
 
@@ -186,4 +136,38 @@ SMODS.Sound({
 			and G.GAME.blind
 		)
 	end,
-})
+}
+
+-------------------
+---- SUPERBOSS ----
+-------------------
+SMODS.Sound {
+	key = "music_doom",
+	path = "music/music_doom.ogg",
+
+	sync = false,
+	pitch = 1,
+	volume = 1.2,
+
+	select_music_track = function()
+		return (
+			G.GAME
+			and G.GAME.used_insecurity
+			and G.GAME.used_tres
+			and G.GAME.used_recall
+			and not G.GAME.imcoming -- [sic]
+		)
+	end,
+}
+
+SMODS.Sound {
+	key = "music_approaching",
+	path = "music/music_approaching.ogg",
+
+	sync = false,
+	pitch = 1,
+
+	select_music_track = function()
+		return G.GAME and G.GAME.imcoming
+	end,
+}

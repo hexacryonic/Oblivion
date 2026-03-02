@@ -17,7 +17,7 @@ end
 SMODS.Back{
 	key = "ocular",
 	pos = { x = 0, y = 0 },
-	atlas = "deck_atlas",
+	atlas = "decks",
 
 	apply = function(self)
 		G.GAME.ovn_has_ocular = true
@@ -39,7 +39,7 @@ SMODS.Back{
 	key = "c_red",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 0, y = 0 },
 
 	unlocked = false,
@@ -79,7 +79,7 @@ SMODS.Back{
 	key = "c_blue",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 1, y = 0 },
 
 	unlocked = false,
@@ -106,7 +106,7 @@ SMODS.Back{
 	key = "c_yellow",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 2, y = 0 },
 
 	unlocked = false,
@@ -170,7 +170,7 @@ SMODS.Back{
 	key = "c_green",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 3, y = 0 },
 
 	unlocked = false,
@@ -194,7 +194,7 @@ SMODS.Back{
     key = "c_black",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
     pos = { x = 4, y = 0 },
 
 	unlocked = false,
@@ -219,7 +219,7 @@ SMODS.Back{
 	ovn_corrupt_deck = true,
 	config = { spectral_rate = 6 },
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 2, y = 1 },
 
 	unlocked = false,
@@ -271,7 +271,7 @@ SMODS.Back{
 		ovn_empty_deck = true,
 	},
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
     pos = { x = 3, y = 1 },
 
 	unlocked = false,
@@ -295,7 +295,7 @@ SMODS.Back{
 	key = "c_painted",
 	ovn_corrupt_deck = true,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 1, y = 2 },
 
 	unlocked = false,
@@ -359,7 +359,7 @@ SMODS.Back{
 		} }
 	end,
 
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 3, y = 2 },
 
 	unlocked = false,
@@ -416,7 +416,7 @@ SMODS.Shader({
 SMODS.Back({
 	key = "c_erratic",
 	ovn_corrupt_deck = true,
-	atlas = "cdeck_atlas",
+	atlas = "decks_corrupt",
 	pos = { x = 4, y = 2 },
 
 	unlocked = false,

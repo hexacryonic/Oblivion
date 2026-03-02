@@ -104,7 +104,7 @@ Ovn_f.corrupt_joker = function(card)
 	end
 
     add_simple_event(nil, nil, function()
-        play_sound("ovn_abyss")
+        play_sound("ovn_corrupting_joker")
 
 		if not card_destroyed then
 			card:juice_up(0.3, 0.5)
@@ -150,7 +150,7 @@ Ovn_f.purify_joker = function(card)
 		card:set_ability(G.P_CENTERS[pure_card_key])
 	end
     add_simple_event(nil, nil, function()
-        play_sound("ovn_pure")
+        play_sound("ovn_purifying")
 		card:juice_up(0.3, 0.5)
 
 		card:calculate_joker{
@@ -314,7 +314,7 @@ Ovn_f.purify_modifiers = function(card)
 
 	if transmuted then
 		add_simple_event('immediate', nil, function()
-			play_sound('ovn_pure', 1, 1.1)
+			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 		end)
 	end

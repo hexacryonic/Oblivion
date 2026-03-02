@@ -42,7 +42,7 @@ SMODS.Enhancement{
 	key = "radiant",
 	config = {extra = {bonus_chips = 0}},
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 3, y = 0 },
 	in_pool = function() return false end,
 
@@ -84,7 +84,7 @@ SMODS.Enhancement{
 		extra = {mult = 7}
 	},
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 0, y = 1 },
 	in_pool = function() return false end,
 
@@ -112,7 +112,7 @@ SMODS.Enhancement{
 		return { }
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 2, y = 1 },
 	in_pool = function() return false end,
 	config = { },
@@ -149,7 +149,7 @@ SMODS.Enhancement{
 		}}
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 0, y = 0 },
 	in_pool = function() return false end,
 	config = {extra = {
@@ -203,7 +203,7 @@ SMODS.Enhancement{
 		return { vars = { card.ability.extra.repetitions }}
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 2, y = 0 },
 	in_pool = function() return false end,
 	config = {extra = {repetitions = 1}},
@@ -236,7 +236,7 @@ SMODS.Enhancement{
 		return { vars = { card.ability.extra.plays_left }}
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 1, y = 1 },
 	in_pool = function() return false end,
 	config = {extra = {plays_left = 3}},
@@ -289,7 +289,7 @@ SMODS.Enhancement {
 		}}
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 1, y = 0 },
 	in_pool = function() return false end,
 	config = {
@@ -333,7 +333,7 @@ SMODS.Enhancement{
 		}}
 	end,
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x = 3, y = 1 },
 	in_pool = function() return false end,
 	config = {extra = {
@@ -401,7 +401,7 @@ SMODS.Seal {
 	key = 'indigo',
 	badge_colour = HEX('252fe3'),
 
-	atlas = "seals_atlas",
+	atlas = "seals",
 	pos = {x=0, y=0},
 
 	calculate = function(self, card, context)
@@ -435,7 +435,7 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.RED, 0.1),
 
-    atlas = "marks_atlas",
+    atlas = "seals_marks",
 	pos = {x=0, y=0},
 	in_pool = function() return false end,
 	never_scores = true,
@@ -467,7 +467,7 @@ SMODS.Seal {
 	key = 'sapphire_mark',
 	badge_colour = darken(G.C.BLUE, 0.1),
 
-    atlas = "marks_atlas",
+    atlas = "seals_marks",
     pos = {x=1, y=0},
 	in_pool = function() return false end,
 
@@ -553,7 +553,7 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.GOLD, 0.1),
 
-    atlas = "marks_atlas",
+    atlas = "seals_marks",
     pos = {x=2, y=0},
 	in_pool = function() return false end,
 
@@ -606,7 +606,7 @@ SMODS.Seal {
 	end,
 	badge_colour = darken(G.C.PURPLE, 0.1),
 
-    atlas = "marks_atlas",
+    atlas = "seals_marks",
     pos = {x=3, y=0},
 	in_pool = function() return false end,
 
@@ -634,7 +634,7 @@ SMODS.Seal {
 	key = 'iolite_mark',
 	badge_colour = darken(HEX('252fe3'), 0.1),
 
-    atlas = "marks_atlas",
+    atlas = "seals_marks",
     pos = {x=4, y=0},
 	in_pool = function() return false end,
 

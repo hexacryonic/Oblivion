@@ -17,7 +17,7 @@ SMODS.Consumable {
 	name = "ovn_The Abyss",
 	key = "abyss",
 
-	atlas = "abyss_atlas",
+	atlas = "consumables",
 	pos = {x=0, y=0},
 
 	cost = 2,
@@ -66,11 +66,12 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_Perception",
 	key = "perception",
-	cost = 2,
-	atlas = "abyss_atlas",
     config = {max_highlighted = 3, suit_conv = 'ovn_Optics'},
 	loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
+
+	atlas = "consumables",
 	pos = {x=1, y=0},
+	cost = 2,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Parallel Tarot', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -142,8 +143,8 @@ SMODS.Consumable{
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum', softlock = true },
 
-	atlas = 'spectrum_atlas',
-	pos = {x = 0, y = 0 },
+	atlas = 'consumables',
+	pos = {x = 0, y = 1 },
 	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
@@ -161,8 +162,8 @@ SMODS.Consumable{
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Straight Spectrum', softlock = true },
 
-	atlas = 'spectrum_atlas',
-	pos = {x = 1, y = 0 },
+	atlas = 'consumables',
+	pos = {x = 1, y = 1 },
 	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
@@ -180,8 +181,8 @@ SMODS.Consumable{
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum House', softlock = true },
 
-	atlas = 'spectrum_atlas',
-	pos = {x = 2, y = 0 },
+	atlas = 'consumables',
+	pos = {x = 2, y = 1 },
 	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
@@ -199,8 +200,8 @@ SMODS.Consumable{
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum Five', softlock = true },
 
-	atlas = 'spectrum_atlas',
-	pos = {x = 3, y = 0 },
+	atlas = 'consumables',
+	pos = {x = 3, y = 1 },
 	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
@@ -222,8 +223,8 @@ SMODS.Consumable {
 		return { vars = { self.config.create } }
 	end,
 
-	atlas = "charybdis_atlas",
-	pos = {x=0, y=0},
+	atlas = "consumables",
+	pos = {x=0, y=2},
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -284,8 +285,8 @@ SMODS.Consumable {
 	end,
 	config = {max_highlighted = 2},
 
-	atlas = "cataclysm_atlas",
-	pos = {x=2, y=0},
+	atlas = "placeholder",
+	pos = {x=1, y=2},
 	uses_placeholder_sprite = true,
 
 	cost = 2,
@@ -341,8 +342,8 @@ SMODS.Consumable {
     end,
 	config = { extra = { seal = 'ovn_indigo' }, max_highlighted = 1 },
 
-	atlas = "cataclysm_atlas",
-	pos = {x=2, y=0},
+	atlas = "placeholder",
+	pos = {x=1, y=2},
 	uses_placeholder_sprite = true,
 
 	cost = 4,
@@ -379,8 +380,8 @@ SMODS.Consumable {
 SMODS.Voucher {
 	key = "wicked_invocation",
 
-	atlas = "voucher_atlas",
-	pos = {x=0, y=0},
+	atlas = "placeholder",
+	pos = {x=0, y=1},
 	uses_placeholder_sprite = true,
 	cost = 10,
 
@@ -411,8 +412,8 @@ SMODS.Voucher {
 	key = "call_of_the_void",
 	requires = {'v_ovn_wicked_invocation'},
 
-	atlas = "voucher_atlas",
-	pos = {x=1, y=0},
+	atlas = "placeholder",
+	pos = {x=1, y=1},
 	uses_placeholder_sprite = true,
 	cost = 10,
 

@@ -4,7 +4,7 @@
 SMODS.Tag({
 	key = "corrtag",
 
-	atlas = "ctags_atlas",
+	atlas = "ovn_tags",
 	pos = { x = 0, y = 0 },
 
 	min_ante = 2,
@@ -52,7 +52,7 @@ SMODS.Tag({
 SMODS.Tag({
 	key = "miasmatag",
 
-	atlas = "ctags_atlas",
+	atlas = "ovn_tags",
 	pos = { x = 1, y = 0 },
 
 	min_ante = 2,
@@ -84,7 +84,7 @@ SMODS.Tag({
 SMODS.Tag({
 	key = "stygiantag",
 
-	atlas = "ctags_atlas",
+	atlas = "ovn_tags",
 	pos = { x = 3, y = 0 },
 
 	min_ante = 2,

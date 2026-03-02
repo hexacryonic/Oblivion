@@ -77,7 +77,7 @@ local function booster_wicked_normal(num)
 			}
 		end,
 
-		atlas = 'cboosters_atlas',
+		atlas = 'booster_packs',
 		pos = {x=num - 1, y=0},
 
 		config = { extra = 4, choose = 1 },
@@ -174,9 +174,9 @@ SMODS.Scoring_Parameter {
 
 		if Oblivion.play_instability_noise then
 			if amount < 0 then
-				play_sound("ovn_decrement", 1, 0.8)
+				play_sound("ovn_instability_decrement", 1, 0.8)
 			elseif amount > 0 then
-				play_sound("ovn_increment", 1, 0.9)
+				play_sound("ovn_instability_increment", 1, 0.9)
 			end
 			-- Prevention of sound spam (often occurs with consumables)
 			if G.STATE == G.STATES.PLAY_TAROT then
@@ -244,91 +244,4 @@ SMODS.Scoring_Calculation {
 SMODS.Shader{
 	key = 'miasma',
 	path = 'miasma.fs'
-}
-
--------------
--- DECK SKIN
--- Optics
--- Nova Drift
--------------
-SMODS.DeckSkin{
-	key = 'novadrift',
-	suit = 'ovn_Optics',
-	loc_txt = {["en-us"] = "Nova Drift"},
-
-	palettes = {
-		{
-			key = 'lc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-			atlas = "ovn_skin_nd_lc",
-			pos_style = 'collab',
-		},
-		{
-			key = 'hc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-			atlas = "ovn_skin_nd_hc",
-			pos_style = 'collab',
-            hc_default = true,
-		},
-	}
-}
-
-----------------
--- DECK SKIN
--- Optics
--- In Sound Mind
-----------------
-SMODS.DeckSkin{
-    key = 'insoundmind',
-	suit = 'ovn_Optics',
-    loc_txt = {["en-us"] = "In Sound Mind"},
-
-	palettes = {
-		{
-			key = 'lc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-            atlas = "ovn_skin_ism_lc",
-			pos_style = 'collab',
-		},
-		{
-			key = 'hc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-            atlas = "ovn_skin_ism_hc",
-			pos_style = 'collab',
-            hc_default = true,
-		},
-	}
-}
-
------------------------------------------------
--- DECK SKIN
--- Optics
--- Genome Guardian/Cell Command ("ACGT Series")
------------------------------------------------
-SMODS.DeckSkin{
-    key = 'acgt',
-	suit = 'ovn_Optics',
-    loc_txt = {["en-us"] = "ACGT Series"},
-
-	palettes = {
-		{
-			key = 'lc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-            atlas = "ovn_skin_acgt_lc",
-			pos_style = 'collab',
-		},
-		{
-			key = 'hc',
-			ranks = {"King", "Queen", "Jack"},
-			display_ranks = {"King", "Queen", "Jack"},
-            atlas = "ovn_skin_acgt_hc",
-			pos_style = 'collab',
-            hc_default = true,
-		},
-	}
 }

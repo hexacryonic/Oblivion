@@ -16,7 +16,7 @@ SMODS.Blind({
 	boss = {min = 1, max = 10},
 	boss_colour = HEX('a876d6'),
 
-	atlas = 'ovn_blinds_atlas',
+	atlas = 'blinds',
 	pos = {x = 0, y = 0},
 
 	dollars = 5,
@@ -70,7 +70,7 @@ SMODS.Blind({
 	boss = {min = 4, max = 10},
 	boss_colour = HEX('d9e58a'),
 
-	atlas = 'ovn_blinds_atlas',
+	atlas = 'blinds',
 	pos = {x = 0, y = 1},
 
 	dollars = 5,
@@ -106,7 +106,7 @@ SMODS.Blind({
 	boss = {min = 8, max = 10, showdown = true},
 	boss_colour = HEX('1538af'),
 
-	atlas = 'ovn_blinds_atlas',
+	atlas = 'blinds',
 	pos = {x = 0, y = 2},
 
 	dollars = 8,

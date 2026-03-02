@@ -56,7 +56,7 @@ SMODS.Joker {
 		code = "HexaCryonic"
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 0, y = 0 },
 
 	blueprint_compat = true,
@@ -78,7 +78,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'john',
 
-	atlas = 'notcorrupted',
+	atlas = 'jokers',
 	pos = { x = 0, y = 0 },
 
 	blueprint_compat = false,
@@ -115,8 +115,8 @@ SMODS.Joker {
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 	end,
 
-    atlas = 'notcorrupted',
-	pos  = { x=4, y=0 },
+    atlas = 'jokers',
+	pos  = { x=2, y=1 },
 
 	blueprint_compat = false,
 	rarity = 3,
@@ -159,7 +159,7 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x=3, y=0 },
 	uses_placeholder_sprite = true,
 
@@ -223,7 +223,7 @@ SMODS.Joker {
 	},
 
 	-- placeholder
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x=0, y=0 },
 	uses_placeholder_sprite = true,
 
@@ -269,7 +269,7 @@ SMODS.Joker {
 	},
 
 	-- placeholder
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x=1, y=1 },
 	uses_placeholder_sprite = true,
 
@@ -327,7 +327,7 @@ SMODS.Joker {
 	},
 
 	-- placeholder
-	atlas = "opticenhance_atlas",
+	atlas = "enhancements",
 	pos = { x=3, y=1 },
 	uses_placeholder_sprite = true,
 
@@ -347,7 +347,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'trolley_problem',
-    atlas = 'notcorrupted',
+    atlas = 'jokers',
     pos  = { x=0, y=1 },
 
 	config = { extra = { valid_hands = {
@@ -401,8 +401,8 @@ SMODS.Joker {
 	},
 
 
-	atlas = "notcorrupted",
-    pos = { x=3, y=0 },
+	atlas = "jokers",
+    pos = { x=1, y=1 },
 
 
 	rarity = 2,
@@ -443,8 +443,7 @@ SMODS.Joker {
 			on_cooldown = 2
 		}
 	},
-	-- placeholder
-	atlas = "notcorrupted",
+	atlas = "jokers",
 	pos = { x=1, y=0 },
 
 	rarity = 1,
@@ -480,7 +479,7 @@ SMODS.Joker {
 			xmult = 3
 		}
 	},
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos  = { x=0, y=3 },
 
 	rarity = "ovn_corrupted",
@@ -511,7 +510,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { mult = 6 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 4, y = 2 },
 
 	blueprint_compat = true,
@@ -542,7 +541,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { mult = 13 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 2, y = 2 },
 
 	rarity = "ovn_corrupted",
@@ -568,7 +567,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { chips = 110 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 2 },
 
 	rarity = "ovn_corrupted",
@@ -605,7 +604,7 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=0, y=4},
 
 	rarity = 'ovn_corrupted',
@@ -649,7 +648,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { xmult = 1.29 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 2, y = 0 },
 
 	blueprint_compat = true,
@@ -692,7 +691,7 @@ SMODS.Joker {
 		},
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=3, y=3},
 
 	rarity = 'ovn_corrupted',
@@ -720,7 +719,7 @@ SMODS.Joker {
 		code = "Airtoum"
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 0 },
 
 	rarity = "ovn_corrupted",
@@ -741,8 +740,8 @@ SMODS.Joker {
 		}}
 	end,
 
-	atlas = 'corrupted',
-	pos = { x = 4, y = 0 },
+	atlas = 'placeholder',
+	pos = { x = 0, y = 0 },
 	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
@@ -787,8 +786,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	atlas = 'placeholder',
+	pos = {x=0, y=0},
 	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
@@ -822,8 +821,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
-	pos = {x=1, y=4},
+	atlas = 'jokers_corrupt',
+	pos = {x=4, y=0},
 
 	rarity = 'ovn_corrupted',
 	cost = 5,
@@ -863,8 +862,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	atlas = 'placeholder',
+	pos = {x=0, y=0},
 	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
@@ -908,8 +907,8 @@ SMODS.Joker {
 		odds = 4
 	}},
 
-	atlas = 'corrupted',
-	pos = { x = 4, y = 0 },
+	atlas = 'placeholder',
+	pos = { x = 0, y = 0 },
 	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
@@ -978,7 +977,7 @@ SMODS.Joker {
 		},
 	},
 
-	atlas = 'apart_falling',
+	atlas = 'itemspecific_apartfalling',
 	pos = { x = 0, y = 1 },
 
 	rarity = "ovn_corrupted",
@@ -1054,8 +1053,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
-	pos = {x=4, y=0},
+	atlas = 'placeholder',
+	pos = {x=0, y=0},
 	uses_placeholder_sprite = true,
 
 	rarity = 'ovn_corrupted',
@@ -1105,7 +1104,7 @@ SMODS.Joker {
 		return { vars = { stored } }
 	end,
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 1 },
 
 	blueprint_compat = false,
@@ -1193,7 +1192,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { money = 1 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 1, y = 0 },
 
 	blueprint_compat = true,
@@ -1223,7 +1222,7 @@ SMODS.Joker {
 -----------
 SMODS.Joker {
 	key = 'migraine',
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=2, y=3},
 	rarity = 'ovn_corrupted',
 	cost = 6
@@ -1252,9 +1251,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=5, y=3},
-	uses_placeholder_sprite = true,
 
 	rarity = "ovn_corrupted",
 	cost = 6,
@@ -1316,7 +1314,7 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=4, y=3},
 
 	rarity = 'ovn_corrupted',
@@ -1348,7 +1346,7 @@ SMODS.Joker {
 		art = "Andromeda",
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 0, y = 2 },
 
 	rarity = "ovn_corrupted",
@@ -1388,7 +1386,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { xmult = 1.5 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 4, y = 1 },
 
 	blueprint_compat = true,
@@ -1520,7 +1518,7 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = "apache_tears",
+	atlas = "itemspecific_apache_tears",
 	pos = {x=0, y=0},
 
 	rarity = "ovn_corrupted",
@@ -1595,7 +1593,7 @@ SMODS.Joker {
 ----------------------
 SMODS.Joker {
 	key = 'showneverends',
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 1, y = 2 },
 	rarity = "ovn_corrupted",
 	cost = 8,
@@ -1626,7 +1624,7 @@ SMODS.Joker {
 		art = "Lil Mr. Slipstream",
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=1, y=3},
 
 	rarity = 'ovn_corrupted',
@@ -1712,7 +1710,7 @@ SMODS.Joker {
 		return {main_end = main_end}
 	end,
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=5, y=1},
 
 	rarity = 'ovn_corrupted',
@@ -1779,7 +1777,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { xmult = 4 } },
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = { x = 2, y = 1 },
 
 	rarity = "ovn_corrupted",
@@ -1800,7 +1798,7 @@ SMODS.Joker {
 --------------------------
 SMODS.Joker {
 	key = 'bottled_ship_of_theseus',
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=5, y=2},
 	uses_placeholder_sprite = true,
 
@@ -1849,7 +1847,7 @@ SMODS.Joker {
 		art = "Lil Mr. Slipstream",
 	},
 
-	atlas = 'corrupted',
+	atlas = 'jokers_corrupt',
 	pos = {x=5, y=0},
 
 	rarity = 'ovn_corrupted',

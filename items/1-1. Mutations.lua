@@ -28,8 +28,8 @@ SMODS.Consumable {
 			badges[#badges+1] = create_badge("Common", G.C.BLUE, G.C.WHITE, 1.2 )
 	end,
 
-	atlas = "mutation_atlas",
-	pos = { x = 1, y = 0 },
+	atlas = "mutations",
+	pos = { x = 0, y = 0 },
 
 	cost = 4,
 
@@ -73,8 +73,8 @@ SMODS.Consumable {
 			badges[#badges+1] = create_badge("Rare", G.C.RED, G.C.WHITE, 1.2 )
 	end,
 
-	atlas = "mutation_atlas",
-	pos = { x = 2, y = 0 },
+	atlas = "mutations",
+	pos = { x = 1, y = 0 },
 
 	cost = 4,
 
