@@ -63,7 +63,7 @@ local function ghast_select_cards(spectral_key)
 	local selected_cards = {}
 
 	local selected_logic = Oblivion.spectral_logic[spectral_key]
-	local select_areas = selected_logic.select_area()
+	local select_areas = selected_logic.select_area and selected_logic.select_area() or {}
 
 	if selected_logic.select > 0 and #select_areas > 0 and selected_logic.card_point_calc then
 		-- card_points indexes point_list in a sorted manner
