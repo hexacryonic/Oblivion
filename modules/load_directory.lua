@@ -1,1 +1,1 @@
-Ovn_f.load_directory("modules/item-specific")
+Ovn_f.load_directory("modules/deck-specific")
