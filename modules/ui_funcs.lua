@@ -242,7 +242,7 @@ local credits_ui_style = {
 
 local function header(text)
 	return
-	{"row", style={align="center-middle"}, {
+	{"row", style={align="center-middle", padding=0.2}, {
 		{"row", class="credits_header", {
 			{"text", class="credits_header_text", text=text}
 		}}
@@ -252,7 +252,7 @@ end
 local table_config = {
 	no_header = true,
 	default_text_colour = G.C.UI.TEXT_LIGHT,
-	text_scale = 0.4,
+	text_scale = 0.36,
 	outline_colour = darken(G.C.JOKER_GREY, 0.5)
 }
 
@@ -285,24 +285,42 @@ local function additional_credits()
 	return Ovn_f.generate_table_ui(credits_copy, table_config)
 end
 
+local function sources()
+	local row_nodes = {}
+	local credits_long = G.localization.misc.credits_long
+	for _,row_text in ipairs(credits_long) do
+		local row_text_parsed = loc_parse_string(row_text)
+		local row_ui_text
+		if row_text_parsed then
+			row_ui_text = SMODS.localize_box(row_text_parsed, {
+				text_colour = G.C.UI.TEXT_LIGHT,
+				scale = 1.125,
+			})
+		end
+		local row_ui = {"row", style={padding = row_text_parsed and 0.03 or 0.15}, row_ui_text}
+		table.insert(row_nodes, row_ui)
+	end
+
+	return {"row", row_nodes}
+end
+
 function Ovn_f.credits_ui()
 	local credits_ui =
 	{"root", class="credits_ui_style", {
-		header(localize("k_primary_contributors")),
-		{"row", class="credits_body", {
-			primary_contributors(),
-		}},
-		header(localize("k_additional_credits")),
-		{"row", class="credits_body", {
-			additional_credits(),
-			{"row", style={padding=0.1}},
-			{"row", {
-				{"text", class="credits_text", text='Music used in A Part Falling is "A Part Falling",'},
+		{"column", {
+			header(localize("k_primary_contributors")),
+			{"row", class="credits_body", {
+				primary_contributors(),
 			}},
-			{"row", {
-				{"text", class="credits_text", text='composed by Hakita for ULTRAKILL'},
+			header(localize("k_additional_credits")),
+			{"row", class="credits_body", {
+				additional_credits(),
 			}},
 		}},
+		{"column", {
+			header(localize("k_sources")),
+			sources(),
+		}}
 	}}
 
 	return Ovn_f.jtml_to_uiboxdef(credits_ui, credits_ui_style)

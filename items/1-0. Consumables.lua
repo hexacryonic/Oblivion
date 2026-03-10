@@ -19,7 +19,8 @@ SMODS.Consumable {
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
-		code = "HexaCryonic"
+		code = "HexaCryonic",
+		sound = "HexaCryonic"
 	},
 
 	atlas = "consumables",
@@ -382,6 +383,12 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_Eidolon",
 	key = "eidolon",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "TBD"
+	},
+
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_SEALS[card.ability.extra.seal]
     end,

@@ -117,6 +117,12 @@ SMODS.Joker {
 ------
 SMODS.Joker {
 	key = 'ovn',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 	end,
@@ -151,6 +157,12 @@ SMODS.Joker {
 ----------------
 SMODS.Joker {
 	key = 'radiant_joker',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "TBD"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.m_ovn_radiant)
 		return {vars = {
@@ -212,6 +224,12 @@ SMODS.Joker {
 ------------
 SMODS.Joker {
 	key = 'ice_joker',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "TBD"
+	},
+
 	loc_vars = function(self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.m_ovn_ice)
 		return {vars = {
@@ -262,6 +280,11 @@ SMODS.Joker {
 ----------------
 SMODS.Joker {
 	key = 'crystal_joker',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "TBD",
+	},
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.m_ovn_crystal)
 		return {vars = {
@@ -320,6 +343,12 @@ SMODS.Joker {
 ------------
 SMODS.Joker {
 	key = 'ion_joker',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "TBD"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.m_ovn_ion)
 		return {vars = {
@@ -353,6 +382,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'trolley_problem',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
     atlas = 'jokers',
     pos  = { x=0, y=1 },
 
@@ -393,6 +427,12 @@ end
 
 SMODS.Joker {
 	key = 'purifier',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.mult_gain,
@@ -436,6 +476,12 @@ SMODS.Joker {
 --------------
 SMODS.Joker {
 	key = 'pure_visage',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {
 			key = "j_ovn_pure_visage" .. (card.ability.extra.on_cooldown <= 0 and "_ready" or ""),
@@ -475,6 +521,12 @@ SMODS.Joker {
 -----------------
 SMODS.Joker {
 	key = 'corrupt_visage',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.xmult
@@ -770,6 +822,12 @@ SMODS.Joker {
 -----------------
 SMODS.Joker {
 	key = 'aeon',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "TBD",
+	},
+
 	config = { extra = { Xmult = 4} },
 	loc_vars = function(self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.j_cavendish)
@@ -854,6 +912,12 @@ SMODS.Joker {
 ---------
 SMODS.Joker {
 	key = 'sludge',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "Andromeda",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.hand_size
@@ -944,6 +1008,12 @@ SMODS.Joker {
 -----------------------
 SMODS.Joker {
 	key = 'cultivar',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "TBD",
+	},
+
 	loc_vars = function(self, info_queue, card)
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cultivar')
 		return {vars = {
@@ -1097,6 +1167,12 @@ SMODS.Joker {
 ----------------------
 SMODS.Joker {
 	key = 'philosophers_stone',
+	credits = {
+		concept = "QueenChloe",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+
 	loc_vars = function (self, info_queue, card)
 		local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'ovn_philosophers_stone')
 		return {vars = {
@@ -1289,6 +1365,11 @@ SMODS.Joker {
 -----------
 SMODS.Joker {
 	key = 'migraine',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
 	atlas = 'jokers_corrupt',
 	pos = {x=2, y=3},
 	rarity = 'ovn_corrupted',
@@ -1302,6 +1383,11 @@ SMODS.Joker {
 ----------------------
 SMODS.Joker {
 	key = 'spiral_of_addiction',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.extra.xmult_gain,
@@ -1369,6 +1455,12 @@ SMODS.Joker {
 -----------------
 SMODS.Joker {
 	key = 'cigarette_card',
+	credits = {
+		concept = "Inspector_Bee",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+
 	loc_vars = function(self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 		return {vars = {
@@ -1896,6 +1988,11 @@ SMODS.Joker {
 --------------------------
 SMODS.Joker {
 	key = 'bottled_ship_of_theseus',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
 	atlas = 'jokers_corrupt',
 	pos = {x=5, y=2},
 	uses_placeholder_sprite = true,
@@ -1942,6 +2039,8 @@ SMODS.Joker {
 		}
 	},
 	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
 		art = "Lil Mr. Slipstream",
 	},
 

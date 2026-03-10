@@ -40,6 +40,11 @@ end
 ---------------
 SMODS.Enhancement{
 	key = "radiant",
+	credits = {
+		concept = "",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream",
+	},
 	config = {extra = {bonus_chips = 0}},
 
 	atlas = "enhancements",
@@ -75,6 +80,12 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement{
 	key = 'dynamo',
+	credits = {
+		concept = "",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.mult
@@ -146,6 +157,11 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement{
 	key = "ice",
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
@@ -346,6 +362,7 @@ SMODS.Enhancement{
 		concept = "HexaCryonic",
 		code = "Oinite",
 		art = "Lil Mr. Slipstream",
+		sound = "HexaCryonic",
 	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
@@ -698,9 +715,9 @@ SMODS.Edition {
 	key = "miasma",
 	credits = {
 		concept = "HexaCryonic",
-		code = "HexaCryonic",
+		code = "HexaCryonic, Oinite",
 		shader = "cassknows",
-		sound = "HexaCryonic",
+		sound = "PONOS Corp. for The Battle Cats",
 	},
 
 	config = {

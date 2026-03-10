@@ -93,7 +93,7 @@ end)
 SMODS.current_mod.extra_tabs = function ()
 	return {
 		{
-			label = "Credits (WIP)",
+			label = "Credits",
 			tab_definition_function = Ovn_f.credits_ui
 		}
 	}

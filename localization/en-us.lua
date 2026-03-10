@@ -329,6 +329,7 @@ local loc =  {
 			ovn_ion_misfire = "...",
 			k_primary_contributors = "Primary contributors",
 			k_additional_credits = "Additional credits",
+			k_sources = "Sources",
 				-- Developer's note: This will be formatted like (ovn_corrupted_from .. 'X, X, or X') -> "Corrupted from X, X, or X"
 			ovn_corrupted_from = "Corrupted from",
 				-- Developer's note: "Datcard" is a portmanteau of "dat" and "discard", i.e. "dis and dat", "this and that"
@@ -432,7 +433,7 @@ local loc =  {
 		},
 			-- Developer's note: Please only translate the second and third item of each tuple
 		credits = {
-			{"Hexa", "Creator, Lead Developer"},
+			{"HexaCryonic", "Creator, Lead Developer"},
 			{"Oinite", "Developer"},
 			{"Lil Mr. Slipstream", "Artist"},
 		},
@@ -444,10 +445,26 @@ local loc =  {
 			{"AlexZGreat", "Concepts", "Master of Puppets, Coordinate Cards"},
 			{"NinjaBanana", "Concepts", "Library of Babel, Event Horizon"},
 			{"thaun0", "Concept", "Database"},
-			{"QueenChloe", "Concept", "Mark of Amethyst"},
-			{"Inspector_Bee", "Concept", "Corrupt Yellow Deck"},
+			{"QueenChloe", "Concepts", "Mark of Amethyst, Philosopher's Stone"},
+			{"Inspector_Bee", "Concepts", "Corrupt Yellow Deck, Cigarette Card"},
 			{"MathIsFun_", "Code", "Corrupt Plasma Deck (initial)"},
 			{"Lily", "Code", "Corrupt Erratic Deck (initial)"},
+		},
+		credits_long = {
+			'Music used by A Part Falling is "A Part Falling",',
+			"composed by {C:red}Hakita {}for {C:hearts}ULTRAKILL",
+			"",
+			"Sounds for Miasma, instability decrease,",
+			"and part of instability increase are",
+			"by the {C:attention}PONOS Corporation {}for {C:purple}The Battle {C:attention}Cats",
+			"",
+			"Sounds for Ion Card, instability increase,",
+			"Joker corruption, Optics, and purification are",
+			"made by {C:blue}HexaCryonic {}using sounds from {C:green}Pixabay",
+			"",
+			"Code for counting repetitions from card modifiers",
+			"used from {C:attention}Paperback {}(mod),",
+			"which is under the MIT License",
 		}
 	},
 }
