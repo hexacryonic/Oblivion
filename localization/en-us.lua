@@ -47,7 +47,11 @@ local loc =  {
 				-- this is just here for rapid reference
 				labels = {
 					art = "Art",
-					code = "Code"
+					code = "Code",
+					concept = "Concept",
+					shader = "Shader",
+					sound = "Sounds",
+					music = "Music"
 				}
 			},
 			dd_ovn_instability_description = {
@@ -426,14 +430,24 @@ local loc =  {
 				"What the actual fuck is wrong with you?",
 			}
 		},
-			-- Developer's note: Please only translate the second item of each tuple
+			-- Developer's note: Please only translate the second and third item of each tuple
 		credits = {
 			{"Hexa", "Creator, Lead Developer"},
 			{"Oinite", "Developer"},
 			{"Lil Mr. Slipstream", "Artist"},
 		},
 		credits_additional = {
-			{"Airtoum", "Prosopometamorphopsia"}
+			{"Airtoum", "Code", "Prosopometamorphopsia"},
+			{"cassknows", "Shader", "Miasma"},
+			{"Zero (null)", "Concept", "A Part Falling"},
+			{"Andromeda", "Art", "Airstrike"},
+			{"AlexZGreat", "Concepts", "Master of Puppets, Coordinate Cards"},
+			{"NinjaBanana", "Concepts", "Library of Babel, Event Horizon"},
+			{"thaun0", "Concept", "Database"},
+			{"QueenChloe", "Concept", "Mark of Amethyst"},
+			{"Inspector_Bee", "Concept", "Corrupted Yellow Deck"},
+			{"MathIsFun_", "Code", "Corrupted Plasma Deck (initial)"},
+			{"Lily", "Code", "Corrupted Erratic Deck (initial)"},
 		}
 	},
 }

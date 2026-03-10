@@ -3,6 +3,11 @@
 ----------------
 SMODS.Tag({
 	key = "corrtag",
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 
 	atlas = "ovn_tags",
 	pos = { x = 0, y = 0 },
@@ -51,6 +56,11 @@ SMODS.Tag({
 -------------
 SMODS.Tag({
 	key = "miasmatag",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
 
 	atlas = "ovn_tags",
 	pos = { x = 1, y = 0 },
@@ -83,6 +93,11 @@ SMODS.Tag({
 --------------
 SMODS.Tag({
 	key = "stygiantag",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
 
 	atlas = "ovn_tags",
 	pos = { x = 3, y = 0 },

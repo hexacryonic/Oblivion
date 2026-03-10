@@ -108,6 +108,11 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement{
 	key = "coord",
+	credits = {
+		concept = "HexaCryonic, AlexZGreat",
+		code = "HexaCryonic",
+		art = "Lil Mr. Slipstream",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { }
 	end,
@@ -199,6 +204,11 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement{
 	key = "unob",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.repetitions }}
 	end,
@@ -232,6 +242,11 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement{
 	key = "crystal",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.plays_left }}
 	end,
@@ -281,6 +296,11 @@ SMODS.Enhancement{
 ---------------
 SMODS.Enhancement {
 	key = "dense",
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
 		return {vars = {
@@ -322,6 +342,11 @@ SMODS.Enhancement {
 --------------
 SMODS.Enhancement{
 	key = "ion",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream",
+	},
 	loc_vars = function(self, info_queue, card)
 		local item = card and card.ability or self.config --[[@as any]]
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, item.extra.odds, 'ovn_ion')
@@ -400,6 +425,11 @@ SMODS.Enhancement{
 SMODS.Seal {
 	key = 'indigo',
 	badge_colour = HEX('252fe3'),
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
 
 	atlas = "seals",
 	pos = {x=0, y=0},
@@ -598,6 +628,11 @@ SMODS.Seal {
 -------------------
 SMODS.Seal {
 	key = 'amethyst_mark',
+	credits = {
+		concept = "QueenChloe",
+		code = "Oinite",
+		art = "Lil Mr. Slipstream"
+	},
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, { key = 'c_fool', set = 'Tarot' })
 		return { vars = {
@@ -661,6 +696,13 @@ SMODS.Seal {
 ----------
 SMODS.Edition {
 	key = "miasma",
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		shader = "cassknows",
+		sound = "HexaCryonic",
+	},
+
 	config = {
 		extra = {
 			retriggers = 3,

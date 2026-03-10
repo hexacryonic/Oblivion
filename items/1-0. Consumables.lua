@@ -16,6 +16,11 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_The Abyss",
 	key = "abyss",
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 
 	atlas = "consumables",
 	pos = {x=0, y=0},
@@ -66,6 +71,12 @@ SMODS.Consumable {
 	set = "Tarot",
 	name = "ovn_Perception",
 	key = "perception",
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
+
     config = {max_highlighted = 3, suit_conv = 'ovn_Optics'},
 	loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
@@ -140,6 +151,12 @@ end
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'ganymede',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "TBD"
+	},
+
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum', softlock = true },
 
@@ -159,6 +176,12 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'callisto',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "TBD"
+	},
+
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Straight Spectrum', softlock = true },
 
@@ -178,6 +201,12 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'io',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "TBD"
+	},
+
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum House', softlock = true },
 
@@ -197,6 +226,12 @@ SMODS.Consumable{
 SMODS.Consumable{
 	set = 'Planet',
 	key = 'europa',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "TBD"
+	},
+
 	loc_vars = planet_loc_vars,
 	config = { hand_type = 'ovn_Spectrum Five', softlock = true },
 
@@ -219,6 +254,11 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_charybdis",
 	key = "charybdis",
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { self.config.create } }
 	end,
@@ -279,6 +319,12 @@ SMODS.Consumable {
 	set = "Spectral",
 	name = "ovn_Oblivion",
 	key = "oblivion",
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
+
 	loc_vars = function(self, info_queue)
 		table.insert(info_queue, G.P_CENTERS.e_ovn_miasma)
 		return {vars = {self.config.max_highlighted}}
@@ -378,6 +424,11 @@ SMODS.Consumable {
 --------------------
 SMODS.Voucher {
 	key = "wicked_invocation",
+	credits = {
+		concept = "HexaCryonic",
+		art = "TBD",
+		code = "Oinite"
+	},
 
 	atlas = "placeholder",
 	pos = {x=0, y=1},
@@ -410,6 +461,11 @@ SMODS.Voucher {
 SMODS.Voucher {
 	key = "call_of_the_void",
 	requires = {'v_ovn_wicked_invocation'},
+	credits = {
+		concept = "HexaCryonic",
+		art = "TBD",
+		code = "Oinite"
+	},
 
 	atlas = "placeholder",
 	pos = {x=1, y=1},

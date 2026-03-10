@@ -52,6 +52,7 @@ SMODS.Joker {
 	end,
 	config = { extra = { mult = 2 } },
 	credits = {
+		concept = "HexaCryonic",
 		art = "HexaCryonic",
 		code = "HexaCryonic"
 	},
@@ -77,6 +78,11 @@ SMODS.Joker {
 ----------------
 SMODS.Joker {
 	key = 'john',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 
 	atlas = 'jokers',
 	pos = { x = 0, y = 0 },
@@ -505,6 +511,11 @@ SMODS.Joker {
 -----------------
 SMODS.Joker {
 	key = 'prideful',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
@@ -536,6 +547,11 @@ SMODS.Joker {
 ------------------
 SMODS.Joker {
 	key = 'bombastic',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.mult } }
 	end,
@@ -562,6 +578,11 @@ SMODS.Joker {
 -------------------
 SMODS.Joker {
 	key = 'insightful',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.chips } }
 	end,
@@ -588,6 +609,11 @@ SMODS.Joker {
 -----------------------------
 SMODS.Joker {
 	key = 'collapsing_world',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "Oinite"
+	},
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.mult_set[card.ability.ovn_former_form or "j_mystic_summit"],
@@ -643,6 +669,11 @@ SMODS.Joker {
 ---------------
 SMODS.Joker {
 	key = 'lucasseries',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -679,6 +710,11 @@ SMODS.Joker {
 -----------
 SMODS.Joker {
 	key = 'database',
+	credits = {
+		concept = "thaun0",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.chips_per,
@@ -716,7 +752,9 @@ SMODS.Joker {
 SMODS.Joker {
 	key = 'pmo',
 	credits = {
-		code = "Airtoum"
+		concept = "HexaCryonic",
+		code = "Airtoum",
+		art = "HexaCryonic",
 	},
 
 	atlas = 'jokers_corrupt',
@@ -768,6 +806,12 @@ SMODS.Joker {
 ----------------
 SMODS.Joker {
 	key = 'event_horizon',
+	credits = {
+		concept = "NinjaBanana, HexaCryonic",
+		code = "Oinite",
+		art = "TBD",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.chips,
@@ -843,6 +887,12 @@ SMODS.Joker {
 -------------------
 SMODS.Joker {
 	key = 'library_of_babel',
+	credits = {
+		concept = "NinjaBanana, HexaCryonic",
+		code = "Oinite",
+		art = "TBD",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.xmult_set[card.ability.ovn_former_form or "j_todo_list"],
@@ -963,6 +1013,13 @@ SMODS.Joker {
 -----------------
 SMODS.Joker {
 	key = 'apartfalling',
+	credits = {
+		concept = "HexaCryonic, Zero (null)",
+		code = "HexaCryonic, Oinite",
+		art = "Oinite",
+		music = '"A Part Falling" - Hakita for ULTRAKILL',
+	},
+
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.extra.x_mult,
@@ -1083,6 +1140,11 @@ SMODS.Joker {
 --------------
 SMODS.Joker {
 	key = 'supplydrop',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, center)
 		local stored
 		local stored_joker = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
@@ -1187,6 +1249,11 @@ SMODS.Joker {
 ------------------------
 SMODS.Joker {
 	key = 'perpendicular',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.money } }
 	end,
@@ -1343,6 +1410,8 @@ SMODS.Joker {
 	end,
 	config = { extra = { xmult = 0.2 } },
 	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
 		art = "Andromeda",
 	},
 
@@ -1381,6 +1450,11 @@ SMODS.Joker {
 -------------------
 SMODS.Joker {
 	key = 'yolo',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -1475,6 +1549,12 @@ end
 
 SMODS.Joker {
 	key = "apache_tears",
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		local chips, mult, xmult, cash, cash_freq = determine_tear_effect(card)
 		local card_count = cash_freq - card.ability.extra.card_count
@@ -1593,6 +1673,11 @@ SMODS.Joker {
 ----------------------
 SMODS.Joker {
 	key = 'showneverends',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	atlas = 'jokers_corrupt',
 	pos = { x = 1, y = 2 },
 	rarity = "ovn_corrupted",
@@ -1621,6 +1706,8 @@ SMODS.Joker {
 		card_limit = 1,
 	},
 	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
 		art = "Lil Mr. Slipstream",
 	},
 
@@ -1654,6 +1741,12 @@ SMODS.Joker {
 --------------------
 SMODS.Joker {
 	key = 'master_of_puppets',
+	credits = {
+		concept = "AlexZGreat, HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
+
 	loc_vars = function (self, info_queue, card)
 		-- This loc_vars primarily for making the rarity-modifier table
 		local rarity_modi_map = Oblivion.rarity_modifier_map
@@ -1772,6 +1865,11 @@ SMODS.Joker {
 -------------
 SMODS.Joker {
 	key = 'breach',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,

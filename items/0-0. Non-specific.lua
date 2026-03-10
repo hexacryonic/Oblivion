@@ -66,6 +66,11 @@ local function booster_wicked_normal(num)
 		key = "wicked_normal_" .. num,
 		kind = 'ovn_Wicked',
 		group_key = 'k_ovn_wicked_pack',
+		credits = {
+			concept = "HexaCryonic",
+			code = "Oinite",
+			art = "HexaCryonic",
+		},
 		loc_vars = function(self, info_queue, card)
 			table.insert(info_queue, G.P_CENTERS['c_ovn_abyss'])
 			return {

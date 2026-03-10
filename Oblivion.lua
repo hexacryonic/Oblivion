@@ -165,7 +165,7 @@ Oblivion.DescriptionDummy {
 		if not card then card = self:create_fake_card() end
 
 		local label_loc = G.localization.descriptions.DescriptionDummy.dd_ovn_credits.labels
-		local label_order = {"art", "code"}
+		local label_order = {"concept", "art", "shader", "music", "sound", "code"}
 
 		local table_rows = {}
 		for _,label_key in ipairs(label_order) do

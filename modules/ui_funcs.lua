@@ -92,6 +92,9 @@ function Ovn_f.generate_table_ui(table_def, config)
 	config = config or {}
 	-- Valid config:
 		-- no_header
+		-- default_text_colour
+		-- text_scale (default 0.32)
+		-- outline_colour
 
 	-- Fill in empty spots
 	local max_row_length = 0
@@ -116,10 +119,11 @@ function Ovn_f.generate_table_ui(table_def, config)
 			local text, colour, align
 			if type(cell_def) == "table" then
 				text = cell_def.text
-				colour = cell_def.colour
+				colour = cell_def.colour or config.default_text_colour
 				align = cell_def.align
 			else
 				text = cell_def
+				colour = config.default_text_colour
 			end
 
 			-- Prepare classes
@@ -128,8 +132,8 @@ function Ovn_f.generate_table_ui(table_def, config)
 
 			-- Define UI
 			local cell_ui =
-			{"row", class="table_cell" .. cell_header_class .. align_class, {
-				{"text", class="table_text", style={colour=colour}, text=text}
+			{"row", class="table_cell" .. cell_header_class .. align_class, style={outlineColour = config.outline_colour}, {
+				{"text", class="table_text", style={colour=colour, scale = config.text_scale}, text=text}
 			}}
 			table.insert(entries, cell_ui)
 		end
@@ -228,51 +232,13 @@ local credits_ui_style = {
 		scale = 0.45,
 		colour = G.C.UI.TEXT_LIGHT
 	},
-
-	[".credits_text_container"] = {
-		padding = 0.1
-	},
-
 	[".credits_text"] = {
 		scale = 0.4,
 		colour = G.C.UI.TEXT_LIGHT,
 		padding = 0.05,
 	},
 	[".credits_body"] = {align = "center-middle"},
-	[".credits_name"] = {colour = G.C.BLUE},
-	[".left"] = {align = "center-right"},
-	[".right"] = {align = "center-left"},
 }
-
-local function credits_names(loc_list)
-	local entries = {}
-	for _,credit_info in ipairs(loc_list) do
-		local name = credit_info[1]
-		table.insert(entries,
-			{"row", class="left", style={padding=0}, { -- padding enables alignment
-				{"text", class="credits_text credits_name", text=name}
-			}}
-		)
-	end
-
-	return
-	{"column", class="credits_text_container left", entries}
-end
-
-local function credits_desc(loc_list)
-	local entries = {}
-	for _,credit_info in ipairs(loc_list) do
-		local description = credit_info[2]
-		table.insert(entries,
-			{"row", class="right", style={padding=0}, {
-				{"text", class="credits_text", text=description}
-			}}
-		)
-	end
-
-	return
-	{"column", class="credits_text_container right", entries}
-end
 
 local function header(text)
 	return
@@ -283,18 +249,59 @@ local function header(text)
 	}}
 end
 
+local table_config = {
+	no_header = true,
+	default_text_colour = G.C.UI.TEXT_LIGHT,
+	text_scale = 0.4,
+	outline_colour = darken(G.C.JOKER_GREY, 0.5)
+}
+
+local function primary_contributors()
+	local credits_copy = Ovn_f.bi_shallow_copy(G.localization.misc.credits)
+	for _,row in ipairs(credits_copy) do
+		row[1] = {
+			text = row[1],
+			colour = G.C.BLUE,
+			align = "right"
+		}
+	end
+	return Ovn_f.generate_table_ui(credits_copy, table_config)
+end
+
+local function additional_credits()
+	local credits_copy = Ovn_f.bi_shallow_copy(G.localization.misc.credits_additional)
+	for _, row in ipairs(credits_copy) do
+		row[1] = {
+			text = row[1],
+			colour = G.C.BLUE,
+			align = "right"
+		}
+		row[2] = {
+			text = row[2],
+			colour = G.C.ORANGE,
+			align = "right"
+		}
+	end
+	return Ovn_f.generate_table_ui(credits_copy, table_config)
+end
+
 function Ovn_f.credits_ui()
 	local credits_ui =
 	{"root", class="credits_ui_style", {
 		header(localize("k_primary_contributors")),
 		{"row", class="credits_body", {
-			credits_names(G.localization.misc.credits),
-			credits_desc(G.localization.misc.credits)
+			primary_contributors(),
 		}},
 		header(localize("k_additional_credits")),
 		{"row", class="credits_body", {
-			credits_names(G.localization.misc.credits_additional),
-			credits_desc(G.localization.misc.credits_additional)
+			additional_credits(),
+			{"row", style={padding=0.1}},
+			{"row", {
+				{"text", class="credits_text", text='Music used in A Part Falling is "A Part Falling",'},
+			}},
+			{"row", {
+				{"text", class="credits_text", text='composed by Hakita for ULTRAKILL'},
+			}},
 		}},
 	}}
 

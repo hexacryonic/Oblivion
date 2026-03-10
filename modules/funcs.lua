@@ -613,3 +613,22 @@ Ovn_f.descend_table = function(input_table)
 	end
 	return tablee
 end
+
+-- Compile a list of credited users and their contributions.
+---@return {string: string[]}
+Ovn_f.credited_users = function()
+	local users = {}
+	for key,center in pairs(G.P_CENTERS) do
+		if center.credits then
+			for role,usernames in pairs(center.credits) do
+				local split_usernames = usernames:gmatch("([^,]+)")
+				for username in split_usernames do
+					username = username:gsub("^ +", ""):gsub(" +$", "")
+					users[username] = users[username] or {}
+					table.insert(users[username], role .. " - " .. key)
+				end
+			end
+		end
+	end
+	return users
+end
