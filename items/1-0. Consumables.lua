@@ -285,9 +285,8 @@ SMODS.Consumable {
 	end,
 	config = {max_highlighted = 2},
 
-	atlas = "placeholder",
+	atlas = "consumables",
 	pos = {x=1, y=2},
-	uses_placeholder_sprite = true,
 
 	cost = 2,
 
