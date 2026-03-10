@@ -601,6 +601,9 @@ Ovn_f.event_sequence = function(event_func_list, delay, offset)
 	end)
 end
 
+-- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a table.
+---@param input_table string[] Strings correspond to table keys.
+---@return any
 Ovn_f.descend_table = function(input_table)
 	local tablee = input_table[1]
 	for i = 2, #input_table do
