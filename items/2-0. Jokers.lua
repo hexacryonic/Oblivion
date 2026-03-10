@@ -867,7 +867,7 @@ SMODS.Joker {
 	credits = {
 		concept = "NinjaBanana, HexaCryonic",
 		code = "Oinite",
-		art = "TBD",
+		art = "Oinite",
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -888,9 +888,8 @@ SMODS.Joker {
 		}
 	},
 
-	atlas = 'placeholder',
-	pos = {x=0, y=0},
-	uses_placeholder_sprite = true,
+	atlas = 'jokers_corrupt',
+	pos = {x=3, y=4},
 
 	rarity = 'ovn_corrupted',
 	cost = 7,
