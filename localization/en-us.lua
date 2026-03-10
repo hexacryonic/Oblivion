@@ -440,14 +440,14 @@ local loc =  {
 			{"Airtoum", "Code", "Prosopometamorphopsia"},
 			{"cassknows", "Shader", "Miasma"},
 			{"Zero (null)", "Concept", "A Part Falling"},
-			{"Andromeda", "Art", "Airstrike"},
+			{"Andromeda", "Art", "Airstrike, Sludge"},
 			{"AlexZGreat", "Concepts", "Master of Puppets, Coordinate Cards"},
 			{"NinjaBanana", "Concepts", "Library of Babel, Event Horizon"},
 			{"thaun0", "Concept", "Database"},
 			{"QueenChloe", "Concept", "Mark of Amethyst"},
-			{"Inspector_Bee", "Concept", "Corrupted Yellow Deck"},
-			{"MathIsFun_", "Code", "Corrupted Plasma Deck (initial)"},
-			{"Lily", "Code", "Corrupted Erratic Deck (initial)"},
+			{"Inspector_Bee", "Concept", "Corrupt Yellow Deck"},
+			{"MathIsFun_", "Code", "Corrupt Plasma Deck (initial)"},
+			{"Lily", "Code", "Corrupt Erratic Deck (initial)"},
 		}
 	},
 }
