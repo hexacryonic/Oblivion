@@ -63,8 +63,9 @@ end
 ---@return nil
 function Ovn_f.load_directory(folder_name, condition_function)
 	local mod_path = Oblivion.mod_path
-	local files = NFS.getDirectoryItems(mod_path .. folder_name)
+	local files = SMODS.NFS.getDirectoryItems(mod_path .. folder_name)
 
+	print("[OBLIVION] == Loading directory " .. folder_name .. " ==")
 	for _,file_name in ipairs(files) do if file_name:match("%.lua$") then
 		local condition_is_met = true
 		if condition_function then condition_is_met = condition_function(file_name) end
