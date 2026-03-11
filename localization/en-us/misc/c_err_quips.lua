@@ -1,8 +1,10 @@
 return {
-    
-    "CLICK ME FOR AN ACHIEVEMENT",
-    "function Ovn_f.spawn_erratic_quip(2)",
-    "DOMAIN EXPANSION: QUIPLASH",
+    -- Developer's note: If you have any questions about what these quips mean,
+    -- please consult with Oinite or Hexa
+    -- Explanations for these quips can be found on [modded balatro wiki page for ovn quips]
+    "CLICK ME FOR AN ACHIEVEMENT", -- MUST be placed here for clickable quip to work
+    "Ovn_f.spawn_erratic_quip(2)", -- MUST be placed here for the joke to work
+    "DOMAIN EXPANSION: QUIPLASH",  -- MUST be placed here for quip bomb to work
 
     "HELLO THERE",
     "SUN WITH FACE EMOJI",
@@ -184,7 +186,7 @@ return {
     "PISS IN THE RIVER PHLEGETHON",
     "HEE-HO!",
     "[tiger drops you]",
-    "ESSENCE OF ORBITAL STRIKE",
+    "ESSENCE OF ORBITAL LASER",
     "sudo rm -rf /* --no-preserve-root",
     "XDDCC",
     "RWQFSFASXC",
