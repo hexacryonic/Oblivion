@@ -513,6 +513,9 @@ SMODS.Joker { key = 'pure_visage',
 	atlas = "jokers",
 	pos = { x=1, y=0 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 1,
 	cost = 4,
 
@@ -554,6 +557,9 @@ SMODS.Joker { key = 'corrupt_visage',
 	atlas = 'jokers_corrupt',
 	pos  = { x=0, y=3 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 4,
 
