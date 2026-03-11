@@ -69,33 +69,6 @@ return {
 			"{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)"
 		}
 	},
-	j_ovn_pure_visage = {
-		name = "Pure Visage",
-		text = {
-			"In {C:inactive}[{C:attention}#1#{C:inactive}] {}rounds,",
-			"click {C:attention}side button {}to",
-			"{C:ovn_corrupted}corrupt {}this Joker"
-		}
-	},
-	j_ovn_pure_visage_ready = {
-		name = "Pure Visage",
-		text = {
-			"Click {C:attention}side button {}to",
-			"{C:ovn_corrupted}corrupt {}this Joker"
-		}
-	},
-	-- Corrupt Visage goes here for immediate viewing after Pure Visage
-	j_ovn_corrupt_visage = {
-		name = "Corrupt Visage",
-		text = {
-			"{X:mult,C:white}X#1# {} Mult",
-			"{C:blue}Purifies {}at",
-			"end of round"
-		},
-		corrupted_from = {
-			"{C:attention}Pure Visage"
-		}
-	},
 	j_ovn_trolley_problem = {
 		name = "Trolley Problem",
 		text = {
@@ -112,6 +85,32 @@ return {
 			"is {C:blue}purified {}to give",
 			"this card {C:red}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
+		}
+	},
+	j_ovn_pure_visage = {
+		name = "Pure Visage",
+		text = {
+			"In {C:inactive}[{C:attention}#1#{C:inactive}] {}rounds,",
+			"click {C:attention}side button {}to",
+			"{C:ovn_corrupted}corrupt {}this Joker"
+		}
+	},
+	j_ovn_pure_visage_ready = {
+		name = "Pure Visage",
+		text = {
+			"Click {C:attention}side button {}to",
+			"{C:ovn_corrupted}corrupt {}this Joker"
+		}
+	},
+	j_ovn_corrupt_visage = {
+		name = "Corrupt Visage",
+		text = {
+			"{X:mult,C:white}X#1# {} Mult",
+			"{C:blue}Purifies {}at",
+			"end of round"
+		},
+		corrupted_from = {
+			"{C:attention}Pure Visage"
 		}
 	},
 	j_ovn_prideful = {

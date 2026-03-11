@@ -61,6 +61,8 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 
 	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 3,
 
@@ -89,6 +91,7 @@ SMODS.Joker {
 
 	blueprint_compat = false,
 	eternal_compat = false,
+	perishable_compat = true,
 	rarity = 2,
 	cost = 6,
 
@@ -131,6 +134,8 @@ SMODS.Joker {
 	pos  = { x=2, y=1 },
 
 	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 3,
 	cost = 10,
 
@@ -181,6 +186,9 @@ SMODS.Joker {
 	pos = { x=3, y=0 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 2,
 	cost = 6,
     enhancement_gate = "m_ovn_radiant",
@@ -251,6 +259,9 @@ SMODS.Joker {
 	pos = { x=0, y=0 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 2,
 	cost = 6,
     enhancement_gate = "m_ovn_ice",
@@ -261,11 +272,14 @@ SMODS.Joker {
 			return {xmult = card_extra.xmult}
 		end
 
+		if context.blueprint then return end
+		-- non-blueprint calc past here
+
 		if context.ovn_ice_degraded then
 			simple_scale(card, "xmult", "xmult_gain", G.C.RED)
 		end
 
-		if context.remove_playing_cards and not context.blueprint then
+		if context.remove_playing_cards then
 			for _,removed_card in ipairs(context.removed) do
 				if removed_card.ice_melted then
 					simple_scale(card, "xmult_gain", "xmult_gain_gain", G.C.RED)
@@ -302,6 +316,9 @@ SMODS.Joker {
 	pos = { x=1, y=1 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 2,
 	cost = 6,
     enhancement_gate = "m_ovn_crystal",
@@ -366,6 +383,9 @@ SMODS.Joker {
 	pos = { x=3, y=1 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 2,
 	cost = 6,
     enhancement_gate = "m_ovn_ion",
@@ -387,14 +407,18 @@ SMODS.Joker {
 		code = "Oinite",
 		art = "HexaCryonic"
 	},
-    atlas = 'jokers',
-    pos  = { x=0, y=1 },
-
 	config = { extra = { valid_hands = {
 		["Three of a Kind"] = true,
 		["Four of a Kind"] = true,
 		["Five of a Kind"] = true
 	}}},
+
+    atlas = 'jokers',
+    pos  = { x=0, y=1 },
+
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 3,
 	cost = 8,
 
@@ -446,27 +470,28 @@ SMODS.Joker {
 		}
 	},
 
-
 	atlas = "jokers",
     pos = { x=1, y=1 },
 
-
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 2,
 	cost = 5,
 
 	calculate = function (self, card, context)
-		if context.setting_blind then
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+
+		if context.setting_blind and not context.blueprint then
 			local _, leftmost = get_leftmost_corrupted_joker()
 			if leftmost then
 				Ovn_f.purify_joker(leftmost)
 				simple_scale(card, "mult", "mult_gain", G.C.MULT)
 			end
-		end
-
-		if context.joker_main then
-			return {
-				mult = card.ability.extra.mult
-			}
 		end
 	end
 }
@@ -577,6 +602,8 @@ SMODS.Joker {
 	pos = { x = 4, y = 2 },
 
 	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -612,6 +639,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = { x = 2, y = 2 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 5,
 
@@ -643,6 +673,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 2 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 5,
 
@@ -685,14 +718,22 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=0, y=4},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 'ovn_corrupted',
 	cost = 7,
-	blueprint_compat = false,
 
 	add_to_deck = function(self, card, context)
 		Ovn_f.set_random_former_form(card)
 	end,
 	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+
 		if (
 			context.discard
 			and not context.blueprint
@@ -708,10 +749,6 @@ SMODS.Joker {
 			end
 			return { remove = true }
 		end
-
-		if context.joker_main then return {
-			mult = card.ability.extra.mult
-		} end
 	end
 }
 
@@ -735,6 +772,8 @@ SMODS.Joker {
 	pos = { x = 2, y = 0 },
 
 	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -782,6 +821,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=3, y=3},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 6,
 
@@ -812,8 +854,12 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 0 },
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
+	-- Functionality in Card.calculate_joker hook
 }
 
 -----------------
@@ -840,6 +886,9 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -871,19 +920,20 @@ SMODS.Joker {
 	},
 
 	loc_vars = function (self, info_queue, card)
+		local former_form = card.ability.ovn_former_form or "j_supernova"
 		return {vars = {
 			card.ability.extra.chips,
-      card.ability.extra.mult,
-      card.ability.extra.scalemult[card.ability.ovn_former_form or "j_supernova"]
+			card.ability.extra.mult,
+			card.ability.extra.scalemult[former_form]
 		}}
 	end,
 	config = {
 		extra = {
 			chips = 0,
 			mult = 0,
-      scalemult = {
-                j_supernova = 0.5,
-                j_constellation = 0.75,
+      		scalemult = {
+				j_supernova = 0.5,
+				j_constellation = 0.75,
 			},
 		}
 	},
@@ -891,6 +941,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=3, y=4},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 'ovn_corrupted',
 	cost = 7,
 
@@ -931,6 +984,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=4, y=0},
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 5,
 
@@ -979,6 +1035,9 @@ SMODS.Joker {
 	pos = {x=0, y=0},
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
@@ -986,7 +1045,7 @@ SMODS.Joker {
 		Ovn_f.set_random_former_form(card)
 	end,
 	calculate = function (self, card, context)
-		if context.before then
+		if context.before and not context.blueprint then
 			local hand = context.scoring_name
 			if G.GAME.hands_last_played[hand] >= card.ability.extra.last_played_threshold then
 				former_form_scale(card, "xmult", "xmult_set", G.C.MULT)
@@ -1030,6 +1089,9 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = true,
+	eternal_compat = false,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 7,
 
@@ -1040,32 +1102,18 @@ SMODS.Joker {
 			}
 		end
 
-		if context.end_of_round and context.game_over == false and not context.repetition and not context.blueprint then
+		if (
+			context.end_of_round
+			and context.game_over == false
+			and not context.repetition
+			and not context.blueprint
+		) then
 			if not SMODS.pseudorandom_probability(card, 'cultivar', 1, card.ability.extra.odds) then
 				return { message = localize('k_safe_ex') }
 			end
 
 			-- Odd is hit
-			add_simple_event(nil, nil, function ()
-				play_sound('tarot1')
-				card.T.r = -0.2
-				card:juice_up(0.3, 0.4)
-				card.states.drag.is = true
-				card.children.center.pinch.x = true
-
-				G.E_MANAGER:add_event(Event {
-					trigger = 'after',
-					delay = 0.3,
-					blockable = false,
-					func = function()
-						G.jokers:remove_card(card)
-						card:remove()
-						card = nil
-						return true;
-					end
-				})
-			end)
-
+			SMODS.destroy_cards(card, nil, true, true)
 			G.GAME.pool_flags.gros_michel_extinct = false
 			G.GAME.corruptiblemichel = true
 			return { message = localize('k_extinct_ex') }
@@ -1100,14 +1148,19 @@ SMODS.Joker {
 			visual_transition = nil, -- if number, play transition animation
 			xmult_increase = 0.75,
 			x_mult = 1,
+			current_screen = 0, -- Needed to prevent repeats (which suck)
 		},
 	},
 
 	atlas = 'itemspecific_apartfalling',
 	pos = { x = 0, y = 1 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = "ovn_corrupted",
 	cost = 8,
+
 	update = function (self, card, dt)
 		if card.ability.extra.visual_transition then -- should be an int
 			local card_ex = card.ability.extra
@@ -1150,8 +1203,12 @@ SMODS.Joker {
 				func = function()
 					add_simple_event(nil, nil, function ()
 						local x = pseudorandom('apartfalling_sprite', 0, 4)
+						if x == card.ability.extra.current_screen then
+							x = (x == 4) and (0) or (x + 1)
+						end
 						card.children.center:set_sprite_pos({x = x, y = 1})
 						card.ability.extra.visual_transition = nil
+						card.ability.extra.current_screen = x
 					end)
 					return true
 				end
@@ -1189,6 +1246,9 @@ SMODS.Joker {
 	pos = {x=0, y=0},
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 8,
 
@@ -1245,6 +1305,8 @@ SMODS.Joker {
 	pos = { x = 3, y = 1 },
 
 	blueprint_compat = false,
+	eternal_compat = false,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -1338,6 +1400,8 @@ SMODS.Joker {
 	pos = { x = 1, y = 0 },
 
 	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -1371,6 +1435,10 @@ SMODS.Joker {
 	},
 	atlas = 'jokers_corrupt',
 	pos = {x=2, y=3},
+
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 6
 	-- Functionality implemented in "Migraine makes all standard pack cards Optics" Lovely patch
@@ -1406,6 +1474,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=5, y=3},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = "ovn_corrupted",
 	cost = 6,
 
@@ -1475,6 +1546,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=4, y=3},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
@@ -1509,6 +1583,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = { x = 0, y = 2 },
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 6,
 
@@ -1555,6 +1632,8 @@ SMODS.Joker {
 	pos = { x = 4, y = 1 },
 
 	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 
@@ -1692,6 +1771,9 @@ SMODS.Joker {
 	atlas = "itemspecific_apache_tears",
 	pos = {x=0, y=0},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = "ovn_corrupted",
 	cost = 10,
 
@@ -1771,6 +1853,10 @@ SMODS.Joker {
 	},
 	atlas = 'jokers_corrupt',
 	pos = { x = 1, y = 2 },
+
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 8,
 	-- Functionality implemented in Card:update hook
@@ -1805,6 +1891,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=1, y=3},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
@@ -1897,6 +1986,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=5, y=1},
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
@@ -1969,6 +2061,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = { x = 2, y = 1 },
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = "ovn_corrupted",
 	cost = 9,
 
@@ -1996,6 +2091,9 @@ SMODS.Joker {
 	pos = {x=5, y=2},
 	uses_placeholder_sprite = true,
 
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
 	rarity = 'ovn_corrupted',
 	cost = 10,
 
@@ -2046,6 +2144,9 @@ SMODS.Joker {
 	atlas = 'jokers_corrupt',
 	pos = {x=5, y=0},
 
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
 	rarity = 'ovn_corrupted',
 	cost = 7,
 
@@ -2053,6 +2154,7 @@ SMODS.Joker {
 		if (
 			context.ovn_corrupted_from
 			and context.ovn_former_form_key == "j_ovn_nexus_point"
+			and not context.blueprint
 		) then
 			simple_scale(card, "xmult", "xmult_gain", G.C.RED)
 		end
