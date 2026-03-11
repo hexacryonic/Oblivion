@@ -34,6 +34,12 @@ end
 ----
 
 SMODS.Atlas {
+	key = "modicon",
+	path = "modicon.png",
+    px = 34, py = 34,
+}
+
+SMODS.Atlas {
 	key = "tags",
 	path = "tags.png",
 	px = 34,
