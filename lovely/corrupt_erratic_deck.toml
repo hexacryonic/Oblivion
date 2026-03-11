@@ -25,3 +25,19 @@ if G.GAME and G.GAME.override_crt then
 end
 '''
 match_indent = true
+
+# ----
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.T, config={text = number_format(blind_amt), scale = score_number_scale(0.9, blind_amt), colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.RED, shadow =  not disabled}}
+'''
+position = "before"
+payload = '''
+G.GAME.c_erratic and
+SMODS.localize_box(loc_parse_string("{C:red,E:ovn_c_erratic_desc}????"), {scale=score_number_scale(0.9,6666)/0.32})[1]
+or
+'''
+match_indent = true
