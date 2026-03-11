@@ -209,6 +209,35 @@ end
 
 
 -----------------
+---- CONFIG ----
+-----------------
+
+Oblivion.obj.config_tab = function ()
+	local config_ui =
+	{"root", {
+		{"row", {
+			create_toggle {
+				label = "Family Friendly Mode",
+				ref_table = Oblivion.config,
+				ref_value = "family_friendly",
+				callback = Ovn_f.reload_localization
+			}
+		}},
+		{"row", {
+			create_toggle {
+				label = "Disable Corrupt Erratic Deck Shader",
+				ref_table = Oblivion.config,
+				ref_value = "disable_c_erratic_shader"
+			}
+		}},
+	}}
+
+	return Ovn_f.jtml_to_uiboxdef(config_ui, {})
+end
+
+
+
+-----------------
 ---- CREDITS ----
 -----------------
 

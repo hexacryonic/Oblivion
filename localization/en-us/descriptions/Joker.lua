@@ -363,12 +363,15 @@ return {
 		}
 	},
 	j_ovn_yolo = {
-		name = 'Fuck It, We Ball',
+		name = Ovn_f.f_f('Fuck It, We Ball', 'YOLO'),
 		text = {
 			"Each played card gives",
 			"{X:mult,C:white} X#1# {} Mult when scored",
 			__sp__,
-			"{C:chips}-a fucktillion{} hands",
+			Ovn_f.f_f(
+				"{C:chips}-a fucktillion{} hands",
+				"{C:chips}-math.huge{} hands"
+			),
 			"when hand played",
 		},
 		corrupted_from = {

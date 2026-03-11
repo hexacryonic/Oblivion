@@ -8,7 +8,15 @@
 	-- /load-assets - Allows assets to be defined quickly and easily.
 	-- /modules     - Largely technical code that is used across the entire mod.
 
-SMODS.current_mod.optional_features = {
+-- Create this mod's global table
+if not Oblivion then Oblivion = {} end
+Oblivion.obj = SMODS.current_mod
+Oblivion.mod_path = tostring(Oblivion.obj.path)
+Oblivion.config = Oblivion.obj.config
+-- Function object
+Ovn_f = {}
+
+Oblivion.obj.optional_features = {
 	retrigger_joker = true,
 	post_trigger = true,
 	cardareas = {
@@ -24,12 +32,6 @@ SMODS.current_mod.optional_features = {
 to_big = to_big or function(x)
 	return x
 end
-
--- Create this mod's global table
-if not Oblivion then Oblivion = {} end
-Oblivion.mod_path = tostring(SMODS.current_mod.path)
--- Function object
-Ovn_f = {}
 
 -- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
 -- Event function will always return true, so "return true" is not required.\
@@ -49,7 +51,7 @@ Ovn_f.add_simple_event = function(trigger, delay, func)
 end
 
 -- Sets description box styling
-SMODS.current_mod.description_loc_vars = function()
+Oblivion.obj.description_loc_vars = function()
 	return {
 		background_colour = G.C.CLEAR,
 		text_colour = G.C.WHITE,
@@ -90,7 +92,7 @@ Ovn_f.load_directory("cross-mod", function (file_name)
 	return file_name ~= "Cryptid.lua" and (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
 
-SMODS.current_mod.extra_tabs = function ()
+Oblivion.obj.extra_tabs = function ()
 	return {
 		{
 			label = "Credits",

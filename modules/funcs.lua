@@ -29,7 +29,7 @@ function Ovn_f.compile_localization(loc_table, lang)
 
 	for _,section in ipairs(loc_sections) do
 		loc_table[section] = loc_table[section] or {}
-		local files = NFS.getDirectoryItems(loc_path .. section)
+		local files = SMODS.NFS.getDirectoryItems(loc_path .. section)
 		local folder = loc_folder .. section
 		for __,file_name in ipairs(files) do
 			local subsection_name = file_name:gsub(".lua", "")
@@ -42,6 +42,19 @@ function Ovn_f.compile_localization(loc_table, lang)
 			end
 		end
 	end
+end
+
+-- Returns `censored` if family friendly is enabled, else returns `normal`.
+---@param normal any
+---@param censored any
+---@return any
+function Ovn_f.f_f(normal, censored)
+	return Oblivion.config.family_friendly and censored or normal
+end
+
+function Ovn_f.reload_localization()
+	SMODS.load_mod_localization(Oblivion.mod_path, Oblivion.obj.id)
+	return init_localization()
 end
 
 

@@ -24,7 +24,7 @@ local function check_stop_juice_corruptibles()
     G.GAME.ovn_abyss_juicing = nil
 end
 
-SMODS.current_mod.calculate = function (self, context)
+Oblivion.obj.calculate = function (self, context)
     if context.playing_card_added then
         -- Increase instability when Optic playing cards are added
         local optics_count = 0
