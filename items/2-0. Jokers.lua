@@ -1274,6 +1274,16 @@ SMODS.Joker { key = 'supplydrop',
 
 		return { vars = { stored } }
 	end,
+	config = {
+		extra = {
+			storable_rarities = {
+				[1] = true,
+				[2] = true,
+				[3] = true,
+				["ovn_corrupted"] = true
+			}
+		}
+	},
 
 	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 1 },
@@ -1288,23 +1298,15 @@ SMODS.Joker { key = 'supplydrop',
 		if context.selling_self and not context.retrigger_joker and not context.blueprint then
 			local save_file = G.PROFILES[G.SETTINGS.profile]
 			if not save_file.ovn_supply_drop then
-				local card_index
-				for i = 2, #G.jokers.cards do
-					if G.jokers.cards[i] == card then
-						card_index = i
-						break
-					end
-				end
+				-- this gives a card's position in a card area, not ace, king, 10 etc
+				-- (that would be card.base.id or whatever)
+				local card_index = card.rank
+				if card_index == 1 then return end
 
-				if not card_index then return end
 				local left_joker = G.jokers.cards[card_index-1]
 				local left_joker_rarity = left_joker.config.center.rarity
-
-				-- greater than rare or not corrupted
-				if not (
-					(type(left_joker_rarity) == "number" and left_joker_rarity <= 3)
-					or left_joker_rarity == "ovn_corrupted"
-				) then return end
+				local storable_rarities = card.ability.extra.storable_rarities
+				if not storable_rarities[left_joker_rarity] then return end
 
 				local left_joker_key = left_joker.config.center.key
 				local left_joker_edition = left_joker.edition and left_joker.edition.key
@@ -1320,6 +1322,7 @@ SMODS.Joker { key = 'supplydrop',
 				save_file.ovn_supply_drop_sticker = left_joker_stickers
 				check_for_unlock{type="ovn_sell_supply_drop"}
 
+				-- i think you can use smods.destroy_cards but idk, too lazy to check -oin
 				add_simple_event('after', 0.1, function ()
 					left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
 				end)
@@ -1333,7 +1336,7 @@ SMODS.Joker { key = 'supplydrop',
 				local stored_joker_edition = save_file.ovn_supply_drop_edition
 				local stored_joker_sticker = save_file.ovn_supply_drop_sticker
 
-				local stored_card = SMODS.add_card{
+				SMODS.add_card{
 					set = 'Joker',
 					area = G.joker,
 					key = stored_joker_key,
