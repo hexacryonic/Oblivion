@@ -13,6 +13,7 @@ extern float block_offset;
 extern float block_probability;
 extern vec2 resolution;
 extern vec4 matrix_color;
+extern float actually_mess_shit_up;
 
 float random(in float x){
     return fract(sin(x)*43758.5453);
@@ -84,31 +85,35 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     //  im ult spamming here
     // assuming my ult is googling mersenne primes
     //i love normalized positions
-    float diff = fract(iTime);
-    float rndx = random(rtn(screen_coords.x,block_size+diff));
-    float rndy = random(rtn(screen_coords.y,block_size+diff));
-    if ((rndx+rndy) <= (block_probability*2)) {
-        float dirMod = (rndx + rndy) * 7;
+    if (actually_mess_shit_up == 1) {
+        float diff = fract(iTime);
+        float rndx = random(rtn(screen_coords.x,block_size+diff));
+        float rndy = random(rtn(screen_coords.y,block_size+diff));
+        if ((rndx+rndy) <= (block_probability*2)) {
+            float dirMod = (rndx + rndy) * 7;
 
-        float x = rtn(cos(iTime+dirMod)*block_offset, 0.5);
-        float y = rtn(sin(iTime+dirMod)*block_offset, 0.5);
-        vec2 off = vec2(x,y);
-        off /= resolution; 
-        texture_coords += off;
+            float x = rtn(cos(iTime+dirMod)*block_offset, 0.5);
+            float y = rtn(sin(iTime+dirMod)*block_offset, 0.5);
+            vec2 off = vec2(x,y);
+            off /= resolution; 
+            texture_coords += off;
+        }
     }
 
     vec4 tex = Texel(texture, texture_coords);
 
-    vec3 str = matrix(screen_coords / max(resolution.x, resolution.y), 0)*matrix_color.rgb;
-    vec3 str_bg = matrix(screen_coords / max(resolution.x, resolution.y), 25)*(matrix_color.rgb - 0.1);
-    str *= 3;
-    str_bg *= 2;
-    vec4 larger = maxvec(tex, vec4(str,0)+vec4(str_bg,0));
+    if (actually_mess_shit_up == 1) {
+        vec3 str = matrix(screen_coords / max(resolution.x, resolution.y), 0)*matrix_color.rgb;
+        vec3 str_bg = matrix(screen_coords / max(resolution.x, resolution.y), 25)*(matrix_color.rgb - 0.1);
+        str *= 3;
+        str_bg *= 2;
+        vec4 larger = maxvec(tex, vec4(str,0)+vec4(str_bg,0));
 
-    tex = tex + ((larger - tex)*matrix_intensity);
+        tex = tex + ((larger - tex)*matrix_intensity);
 
-    tex -= 0.1;
-    // tex = normalize(tex);
+        tex -= 0.1;
+        // tex = normalize(tex);
+    }
 
     return tex*color;
 }

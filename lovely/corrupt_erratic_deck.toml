@@ -21,6 +21,7 @@ if G.GAME and G.GAME.override_crt then
     G.SHADERS['ovn_crt_override']:send("block_offset", G.GAME.erratic_fx_block_offset or 10)
     G.SHADERS['ovn_crt_override']:send("block_probability", G.GAME.erratic_fx_block_probability or 0.2)
     G.SHADERS['ovn_crt_override']:send("matrix_color", G.GAME.erratic_fx_matrix_colour or {0.2, 1, 0.2, 0})
+    G.SHADERS['ovn_crt_override']:send("actually_mess_shit_up", Oblivion.config.disable_c_erratic_shader and 0 or 1)
     love.graphics.setShader(G.SHADERS['ovn_crt_override'])
 end
 '''

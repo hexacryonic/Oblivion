@@ -303,7 +303,7 @@ local loc =  {
 					"appear in the Joker pool"
 				}
 			}
-		}
+		},
 	},
 
 	misc = {
@@ -339,7 +339,10 @@ local loc =  {
 			k_enhancement = "Enhancement",
 			k_seal = "Seal",
 			k_ovn_other_rarity = "(other)",
-			k_ovn_random_modifier = "(random)"
+			k_ovn_random_modifier = "(random)",
+
+			k_cfg_family_friendly = "Family friendly mode",
+			k_cfg_disable_c_erratic_shader = "Disable Corrupt Erratic shader"
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
@@ -465,7 +468,7 @@ local loc =  {
 			"Code for counting repetitions from card modifiers",
 			"used from {C:attention}Paperback {}(mod),",
 			"which is under the MIT License",
-		}
+		},
 	},
 }
 

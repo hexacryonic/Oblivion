@@ -206,6 +206,34 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 	end end
 end
 
+-- Automatically formats a list of localization strings into a JTML element.
+---@param desc string[]
+---@param args? table
+---@return JTML.JTML
+function Ovn_f.localize_desc(desc, args)
+	args = args or {}
+	args.scale = args.scale or 1.125
+	args.empty_line_space = args.empty_line_space or 0.15
+	args.padding = args.padding or 0.03
+	args.text_colour = args.text_colour or G.C.UI.TEXT_LIGHT
+
+	local row_nodes = {}
+	for _,row_text in ipairs(desc) do
+		local row_text_parsed = loc_parse_string(row_text)
+		local row_ui_text
+		if row_text_parsed then
+			row_ui_text = SMODS.localize_box(row_text_parsed, {
+				text_colour = args.text_colour,
+				scale = args.scale,
+			})
+		end
+		local row_ui = {"row", style={padding = row_text_parsed and args.padding or args.empty_line_space}, row_ui_text}
+		table.insert(row_nodes, row_ui)
+	end
+
+	return {"row", row_nodes}
+end
+
 
 
 -----------------
@@ -214,10 +242,16 @@ end
 
 Oblivion.obj.config_tab = function ()
 	local config_ui =
-	{"root", {
+	{"root", style={
+		align = "center-middle",
+		padding = 0.2,
+		fillColour = G.C.BLACK,
+		roundness = 0.1,
+		emboss = 0.05,
+	}, {
 		{"row", {
 			create_toggle {
-				label = "Family Friendly Mode",
+				label = localize("k_cfg_family_friendly"),
 				ref_table = Oblivion.config,
 				ref_value = "family_friendly",
 				callback = Ovn_f.reload_localization
@@ -225,7 +259,7 @@ Oblivion.obj.config_tab = function ()
 		}},
 		{"row", {
 			create_toggle {
-				label = "Disable Corrupt Erratic Deck Shader",
+				label = localize("k_cfg_disable_c_erratic_shader"),
 				ref_table = Oblivion.config,
 				ref_value = "disable_c_erratic_shader"
 			}
@@ -315,25 +349,6 @@ local function additional_credits()
 	return Ovn_f.generate_table_ui(credits_copy, table_config)
 end
 
-local function sources()
-	local row_nodes = {}
-	local credits_long = G.localization.misc.credits_long
-	for _,row_text in ipairs(credits_long) do
-		local row_text_parsed = loc_parse_string(row_text)
-		local row_ui_text
-		if row_text_parsed then
-			row_ui_text = SMODS.localize_box(row_text_parsed, {
-				text_colour = G.C.UI.TEXT_LIGHT,
-				scale = 1.125,
-			})
-		end
-		local row_ui = {"row", style={padding = row_text_parsed and 0.03 or 0.15}, row_ui_text}
-		table.insert(row_nodes, row_ui)
-	end
-
-	return {"row", row_nodes}
-end
-
 function Ovn_f.credits_ui()
 	local credits_ui =
 	{"root", class="credits_ui_style", {
@@ -349,7 +364,7 @@ function Ovn_f.credits_ui()
 		}},
 		{"column", {
 			header(localize("k_sources")),
-			sources(),
+			Ovn_f.localize_desc(G.localization.misc.credits_long),
 		}}
 	}}
 
