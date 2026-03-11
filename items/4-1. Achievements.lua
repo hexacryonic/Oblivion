@@ -389,3 +389,13 @@ SMODS.Achievement { key = "tickled",
 		return (args.type == 'ovn_ticklish_quip')
 	end
 }
+
+------------------------------------------
+-- Reach for the Sun and Burn! Burn! Burn!
+------------------------------------------
+SMODS.Achievement { key = "eventhoz_scale",
+	order = 29,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_eventhoz_scale')
+	end
+}

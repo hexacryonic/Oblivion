@@ -25,5 +25,6 @@ return {
 	["ach_ovn_bananas"]               = "This Entire Quest Was Bananas",
 	["ach_ovn_darkweb"]               = "Dark Web",
 	["ach_ovn_unstoppableforce"]      = "Unstoppable Force Vs. Immovable Object",
-	["ach_ovn_tickled"]               = "That Tickled!"
+	["ach_ovn_tickled"]               = "That Tickled!",
+	["ach_ovn_eventhoz_scale"]        = "Reach for the Sun and Burn! Burn! Burn!",
 }

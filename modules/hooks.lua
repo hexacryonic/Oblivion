@@ -56,6 +56,14 @@ function level_up_hand(card, hand, instant, amount)
 				end
 				delay(1.3/speed)
 			end
+			if (
+				event_horizon.ability.extra.mult >= 193
+				and event_horizon.ability.extra.chips >= 1730
+			) then
+				Ovn_f.add_simple_event(nil, nil, function ()
+					check_for_unlock{type="ovn_eventhoz_scale"}
+				end)
+			end
 		end
 	else
 		lvluphand_hook(card, hand, instant, amount)

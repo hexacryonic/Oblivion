@@ -29,5 +29,6 @@ return {
 	["ach_ovn_bananas"]               = "Naturally obtain Aeon Cavendish",
 	["ach_ovn_darkweb"]               = "Have a single Database exceed 1000 chips",
 	["ach_ovn_unstoppableforce"]      = "Have your held hand full of Unobtanium Cards when you can't discard",
-	["ach_ovn_tickled"]               = "I'm a deck of my word! Here's your achievement"
+	["ach_ovn_tickled"]               = "I'm a deck of my word! Here's your achievement",
+	["ach_ovn_eventhoz_scale"]        = "Scale Event Horizon to at least +193 Mult and +1730 Chips",
 }
