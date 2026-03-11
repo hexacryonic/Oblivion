@@ -6,6 +6,16 @@
 local __sp__ = "{s:0.3} "
 
 return {
+	j_ovn_darkjoker = {
+		name = 'Parallel Joker',
+		text = {
+			"Played cards give",
+			"{C:mult}+#1#{} Mult when scored"
+		},
+		corrupted_from = {
+			"{C:attention}Joker"
+		}
+	},
 	j_ovn_john = {
 		name = 'John Oblivion',
 		text = {
@@ -83,7 +93,7 @@ return {
 			"end of round"
 		},
 		corrupted_from = {
-			"Pure Visage"
+			"{C:attention}Pure Visage"
 		}
 	},
 	j_ovn_trolley_problem = {
@@ -104,18 +114,6 @@ return {
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		}
 	},
-
-	-- CORRUPTED JOKERS
-	j_ovn_darkjoker = {
-		name = 'Parallel Joker',
-		text = {
-			"Played cards give",
-			"{C:mult}+#1#{} Mult when scored"
-		},
-		corrupted_from = {
-			"Joker"
-		}
-	},
 	j_ovn_prideful = {
 		name = 'Prideful Joker',
 		text = {
@@ -124,7 +122,7 @@ return {
 			"{C:mult}+#1#{} Mult when scored",
 		},
 		corrupted_from = {
-			"the Sinful Jokers"
+			"the {C:attention}Sinful Jokers"
 		}
 	},
 	j_ovn_bombastic = {
@@ -135,7 +133,7 @@ return {
 			"a {C:attention}Spectrum{}",
 		},
 		corrupted_from = {
-			"Droll Joker"
+			"{C:attention}Droll Joker"
 		}
 	},
 	j_ovn_insightful = {
@@ -146,7 +144,7 @@ return {
 			"a {C:attention}Spectrum{}",
 		},
 		corrupted_from = {
-			"Crafty Joker"
+			"{C:attention}Crafty Joker"
 		}
 	},
 	j_ovn_collapsing_world = {
@@ -159,7 +157,7 @@ return {
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		},
 		corrupted_from = {
-			"Mystic Summit or Erosion"
+			"{C:attention}Mystic Summit {}or {C:attention}Erosion"
 		}
 	},
 	j_ovn_lucasseries = {
@@ -170,7 +168,7 @@ return {
 			"{X:mult,C:white} X#1# {} Mult when scored",
 		},
 		corrupted_from = {
-			"Fibonacci"
+			"{C:attention}Fibonacci"
 		}
 	},
 	j_ovn_database = {
@@ -182,7 +180,7 @@ return {
 			"{C:inactive}(Currently {C:chips}+#2# {C:inactive}Chips)",
 		},
 		corrupted_from = {
-			"Abstract Joker"
+			"{C:attention}Abstract Joker"
 		}
 	},
 	j_ovn_pmo = {
@@ -193,7 +191,7 @@ return {
 			"target {C:attention}Aces {}instead",
 		},
 		corrupted_from = {
-			"Pareidolia"
+			"{C:attention}Pareidolia"
 		}
 	},
 	j_ovn_aeon = {
@@ -205,7 +203,7 @@ return {
 			"obtained multiple times"
 		},
 		corrupted_from = {
-			"Gros Michel"
+			"{C:attention}Gros Michel"
 		}
 	},
 	j_ovn_event_horizon = {
@@ -219,7 +217,7 @@ return {
 			-- above line split b/c too long
 		},
 		corrupted_from = {
-			"Supernova or Constellation"
+			"{C:attention}Supernova {}or {C:attention}Constellation"
 		}
 	},
 	j_ovn_sludge = {
@@ -230,7 +228,7 @@ return {
 			"Cards held in hand now score",
 		},
 		corrupted_from = {
-			"Splash"
+			"{C:attention}Splash"
 		}
 	},
 	j_ovn_library_of_babel = {
@@ -243,8 +241,8 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#3# {C:inactive} Mult)",
 		},
 		corrupted_from = {
-			"To-Do List,",
-			"Card Sharp, or Obelisk"
+			"{C:attention}To-Do List{},",
+			"{C:attention}Card Sharp{}, or {C:attention}Obelisk"
 		}
 	},
 	j_ovn_cultivar = {
@@ -256,7 +254,7 @@ return {
 			"at end of round",
 		},
 		corrupted_from = {
-			"Cavendish"
+			"{C:attention}Cavendish"
 		}
 	},
 	j_ovn_apartfalling = {
@@ -267,7 +265,7 @@ return {
 			"{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive} Mult)",
 		},
 		corrupted_from = {
-			"Hologram"
+			"{C:attention}Hologram"
 		}
 	},
 	j_ovn_philosophers_stone = {
@@ -278,7 +276,7 @@ return {
 			"their enhancement {C:attention}transmuted",
 		},
 		corrupted_from = {
-			"Midas Mask"
+			"{C:attention}Midas Mask"
 		}
 	},
 	j_ovn_supplydrop = {
@@ -298,7 +296,7 @@ return {
 			"{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
 		},
 		corrupted_from = {
-			"Gift Card"
+			"{C:attention}Gift Card"
 		}
 	},
 	j_ovn_perpendicular = {
@@ -309,7 +307,7 @@ return {
 			"{C:attention}same rank{} is held in hand",
 		},
 		corrupted_from = {
-			"Reserved Parking"
+			"{C:attention}Reserved Parking"
 		}
 	},
 	j_ovn_migraine = {
@@ -320,7 +318,7 @@ return {
 			"modified {C:ovn_optic}Optic cards"
 		},
 		corrupted_from = {
-			"Hallucination"
+			"{C:attention}Hallucination"
 		}
 	},
 	j_ovn_spiral_of_addiction = {
@@ -334,7 +332,7 @@ return {
 			"at least {C:attention}1 {}discard remains",
 		},
 		corrupted_from = {
-			"Drunkard"
+			"{C:attention}Drunkard"
 		}
 	},
 	j_ovn_cigarette_card = {
@@ -346,7 +344,7 @@ return {
 			"give {X:mult,C:white}X#1# {} Mult",
 		},
 		corrupted_from = {
-			"Baseball Card"
+			"{C:attention}Baseball Card"
 		}
 	},
 	j_ovn_airstrike = {
@@ -362,7 +360,7 @@ return {
 			"after the hand",
 		},
 		corrupted_from = {
-			"Walkie Talkie"
+			"{C:attention}Walkie Talkie"
 		}
 	},
 	j_ovn_yolo = {
@@ -375,7 +373,7 @@ return {
 			"when hand played",
 		},
 		corrupted_from = {
-			"Acrobat"
+			"{C:attention}Acrobat"
 		}
 	},
 	j_ovn_apache_tears = {
@@ -391,8 +389,8 @@ return {
 			"{C:ovn_corrupted}re-corrupted {C:attention}pure forms",
 		},
 		corrupted_from = {
-			"Arrowhead, Bloodstone,",
-			"Onyx Agate, or Rough Gem"
+			"{C:attention}Arrowhead{}, {C:attention}Bloodstone{},",
+			"{C:attention}Onyx Agate{}, or {C:attention}Rough Gem"
 		}
 	},
 	j_ovn_apache_tears_every_card_cash = {
@@ -415,7 +413,7 @@ return {
 			"destroy their counterparts"
 		},
 		corrupted_from = {
-			"Showman"
+			"{C:attention}Showman"
 		}
 	},
 	j_ovn_infinitesimal = {
@@ -427,7 +425,7 @@ return {
 			"{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)",
 		},
 		corrupted_from = {
-			"Wee Joker"
+			"{C:attention}Wee Joker"
 		}
 	},
 	j_ovn_master_of_puppets = {
@@ -439,7 +437,7 @@ return {
 			__sp__,
 		},
 		corrupted_from = {
-			"Hit the Road"
+			"{C:attention}Hit the Road"
 		}
 	},
 	j_ovn_breach = {
@@ -450,7 +448,7 @@ return {
 			"a {C:attention}Spectrum{}",
 		},
 		corrupted_from = {
-			"The Tribe"
+			"{C:attention}The Tribe"
 		}
 	},
 	j_ovn_bottled_ship_of_theseus = {
@@ -461,7 +459,7 @@ return {
 			"of its rank and suit",
 		},
 		corrupted_from = {
-			"Trolley Problem"
+			"{C:attention}Trolley Problem"
 		}
 	},
 	j_ovn_nexus_point = {
@@ -477,7 +475,7 @@ return {
 			"{C:ovn_corrupted}corrupted {}from {C:attention}Nexus Point",
 		},
 		corrupted_from = {
-			"Purifier or Nexus Point"
+			"{C:attention}Purifier {}or {C:attention}Nexus Point"
 		}
 	},
 }

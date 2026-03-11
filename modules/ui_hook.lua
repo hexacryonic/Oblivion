@@ -302,20 +302,21 @@ function G.UIDEF.card_h_popup(card)
 		and j_locs[card.config.center.key]
 		and j_locs[card.config.center.key].corrupted_from
 	) then
+		local localize_box_args = {scale=scale/0.32, text_colour=G.C.WHITE}
 		local corrupted_from_list = j_locs[card.config.center.key].corrupted_from
-		local corrupted_from_row1 =
-		{n=G.UIT.R, config={align="cm"}, nodes={
-			{n=G.UIT.T, config={align="cm", colour = G.C.WHITE, text=localize('ovn_corrupted_from').." ", scale=scale, padding=0}},
-			{n=G.UIT.T, config={align="cm", colour = G.C.ORANGE, text=corrupted_from_list[1], scale=scale, padding=0}},
-		}}
+		local corrupted_from_parsed1 = loc_parse_string(corrupted_from_list[1])
+		local corrupted_from_ui_text1 = SMODS.localize_box(corrupted_from_parsed1, localize_box_args) --[[@as table]]
+		table.insert(corrupted_from_ui_text1, 1,
+			{n=G.UIT.T, config={align="cm", colour = G.C.WHITE, text=localize('ovn_corrupted_from').." ", scale=scale, padding=0}}
+		)
+		local corrupted_from_row1 = {n=G.UIT.R, config={align="cm"}, nodes=corrupted_from_ui_text1}
 		table.insert(name_rows, corrupted_from_row1)
 
 		for i=2,#corrupted_from_list do
 			local corrupted_from_text = corrupted_from_list[i]
-			local corrupted_from_row =
-			{n=G.UIT.R, config={align="cm"}, nodes={
-				{n=G.UIT.T, config={align="cm", colour = G.C.ORANGE, text=corrupted_from_text, scale=scale, padding=0}},
-			}}
+			local corrupted_from_parsed = loc_parse_string(corrupted_from_text)
+			local corrupted_from_ui_text = SMODS.localize_box(corrupted_from_parsed, localize_box_args)
+			local corrupted_from_row = {n=G.UIT.R, config={align="cm"}, nodes=corrupted_from_ui_text}
 			table.insert(name_rows, corrupted_from_row)
 		end
 	end

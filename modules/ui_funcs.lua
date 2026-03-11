@@ -65,6 +65,7 @@ local table_ui_style = {
 	[".align-left"] = {align = "center-left"},
 	[".align-right"] = {align = "center-right"},
 	[".align-middle"] = {align = "center-middle"},
+	[".align-center"] = {align = "center-middle"},
 
 	[".cell_header"] = {
 		fillColour = lighten(G.C.JOKER_GREY, 0.5)
@@ -279,7 +280,7 @@ local function additional_credits()
 		row[2] = {
 			text = row[2],
 			colour = G.C.ORANGE,
-			align = "right"
+			align = "center"
 		}
 	end
 	return Ovn_f.generate_table_ui(credits_copy, table_config)
