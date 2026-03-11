@@ -12,10 +12,9 @@ end
 -- TAROT
 -- The Abyss
 ------------
-SMODS.Consumable {
+SMODS.Consumable { key = "abyss",
 	set = "Tarot",
 	name = "ovn_The Abyss",
-	key = "abyss",
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -68,10 +67,9 @@ SMODS.Consumable {
 -- TAROT
 -- Perception
 -------------
-SMODS.Consumable {
+SMODS.Consumable { key = "perception",
 	set = "Tarot",
 	name = "ovn_Perception",
-	key = "perception",
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -149,9 +147,8 @@ end
 -- PLANET
 -- Ganymede
 -----------
-SMODS.Consumable{
+SMODS.Consumable { key = 'ganymede',
 	set = 'Planet',
-	key = 'ganymede',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -174,9 +171,8 @@ SMODS.Consumable{
 -- PLANET
 -- Callisto
 -----------
-SMODS.Consumable{
+SMODS.Consumable { key = 'callisto',
 	set = 'Planet',
-	key = 'callisto',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -199,9 +195,8 @@ SMODS.Consumable{
 -- PLANET
 -- Io
 ---------
-SMODS.Consumable{
+SMODS.Consumable { key = 'io',
 	set = 'Planet',
-	key = 'io',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -224,9 +219,8 @@ SMODS.Consumable{
 -- PLANET
 -- Europa
 ---------
-SMODS.Consumable{
+SMODS.Consumable { key = 'europa',
 	set = 'Planet',
-	key = 'europa',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -251,10 +245,9 @@ SMODS.Consumable{
 -- SPECTRAL
 -- Charybdis
 ------------
-SMODS.Consumable {
+SMODS.Consumable { key = "charybdis",
 	set = "Spectral",
 	name = "ovn_charybdis",
-	key = "charybdis",
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -316,10 +309,9 @@ SMODS.Consumable {
 -- SPECTRAL
 -- Oblivion
 -----------
-SMODS.Consumable {
+SMODS.Consumable { key = "oblivion",
 	set = "Spectral",
 	name = "ovn_Oblivion",
-	key = "oblivion",
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -379,10 +371,9 @@ SMODS.Consumable {
 -- SPECTRAL
 -- Eidolon
 -----------
-SMODS.Consumable {
+SMODS.Consumable { key = "eidolon",
 	set = "Spectral",
 	name = "ovn_Eidolon",
-	key = "eidolon",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -429,8 +420,7 @@ SMODS.Consumable {
 -- VOUCHER
 -- Wicked Invokation
 --------------------
-SMODS.Voucher {
-	key = "wicked_invocation",
+SMODS.Voucher { key = "wicked_invocation",
 	credits = {
 		concept = "HexaCryonic",
 		art = "TBD",
@@ -465,8 +455,7 @@ SMODS.Voucher {
 -- VOUCHER
 -- Call of the Void
 -------------------
-SMODS.Voucher {
-	key = "call_of_the_void",
+SMODS.Voucher { key = "call_of_the_void",
 	requires = {'v_ovn_wicked_invocation'},
 	credits = {
 		concept = "HexaCryonic",

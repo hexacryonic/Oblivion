@@ -1,8 +1,7 @@
 ----------------
 -- Corrupted Tag
 ----------------
-SMODS.Tag({
-	key = "corrtag",
+SMODS.Tag { key = "corrtag",
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -49,13 +48,12 @@ SMODS.Tag({
 			return new_card
 		end
 	end,
-})
+}
 
 -------------
 -- Miasma Tag
 -------------
-SMODS.Tag({
-	key = "miasmatag",
+SMODS.Tag { key = "miasmatag",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -86,13 +84,12 @@ SMODS.Tag({
 			end
 		end
 	end,
-})
+}
 
 --------------
 -- Stygian Tag
 --------------
-SMODS.Tag({
-	key = "stygiantag",
+SMODS.Tag { key = "stygiantag",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -125,4 +122,4 @@ SMODS.Tag({
 			return true
 		end
 	end
-})
+}

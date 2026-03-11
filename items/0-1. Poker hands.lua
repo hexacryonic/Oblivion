@@ -2,8 +2,7 @@
 -- POKER HAND PART
 -- Spectrum
 ------------------
-SMODS.PokerHandPart{ -- Spectrum base (yoink)
-	key = 'spectrum',
+SMODS.PokerHandPart { key = 'spectrum', -- Spectrum base (yoink)
 	func = function(hand)
 		local suits = {}
         local has_wild = 0
@@ -41,8 +40,7 @@ SMODS.PokerHandPart{ -- Spectrum base (yoink)
 -- POKER HAND
 -- Spectrum
 -------------
-SMODS.PokerHand{ -- Spectrum (yoink)
-	key = 'Spectrum',
+SMODS.PokerHand { key = 'Spectrum', -- Spectrum (yoink)
 	visible = false,
 	chips = 60,
 	mult = 6,
@@ -65,8 +63,7 @@ SMODS.PokerHand{ -- Spectrum (yoink)
 -- POKER HAND
 -- Straight Spectrum
 --------------------
-SMODS.PokerHand{ -- Straight Spectrum (yoink)
-	key = 'Straight Spectrum',
+SMODS.PokerHand { key = 'Straight Spectrum', -- Straight Spectrum (yoink)
 	visible = false,
 	chips = 130,
 	mult = 10,
@@ -106,8 +103,7 @@ SMODS.PokerHand{ -- Straight Spectrum (yoink)
 -- POKER HAND
 -- Spectrum House
 -----------------
-SMODS.PokerHand{ -- Spectrum House (yoonk)
-	key = 'Spectrum House',
+SMODS.PokerHand { key = 'Spectrum House', -- Spectrum House (yoonk)
 	visible = false,
 	chips = 150,
 	mult = 15,
@@ -131,8 +127,7 @@ SMODS.PokerHand{ -- Spectrum House (yoonk)
 -- POKER HAND
 -- Spectrum Five
 --------------------
-SMODS.PokerHand{ -- Spectrum Five (yonk)
-	key = 'Spectrum Five',
+SMODS.PokerHand { key = 'Spectrum Five', -- Spectrum Five (yonk)
 	visible = false,
 	chips = 170,
 	mult = 18,

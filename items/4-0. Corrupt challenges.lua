@@ -8,8 +8,7 @@ local _spacer = { id = 'ovn_spacer' }
 -- Corrupt Omelette
 -------------------
 local c_egg = { id = 'j_egg', edition = 'negative' }
-SMODS.Challenge {
-    key = 'corrupt_omelette',
+SMODS.Challenge { key = 'corrupt_omelette',
     rules = {
         custom = {
 			__og__,
@@ -60,8 +59,7 @@ SMODS.Challenge {
 ---------------
 -- Corrupt Edge
 ---------------
-SMODS.Challenge {
-    key = 'corrupt_edge',
+SMODS.Challenge { key = 'corrupt_edge',
 	rules = {
 		custom = {
 			__new__,
@@ -108,8 +106,7 @@ local function corrupt_world_deck_cards()
 	return cards
 end
 
-SMODS.Challenge {
-	key = 'corrupt_world',
+SMODS.Challenge { key = 'corrupt_world',
 	rules = {
 		custom = {
 			__og__,
@@ -150,8 +147,7 @@ SMODS.Challenge {
 -------------------
 -- Corrupt Eternity
 -------------------
-SMODS.Challenge {
-    key = 'corrupt_eternity',
+SMODS.Challenge { key = 'corrupt_eternity',
     rules = {
         custom = {
 			__og__,
@@ -198,8 +194,7 @@ SMODS.Challenge {
 ------------------
 -- Corrupt Quintet
 ------------------
-SMODS.Challenge {
-    key = 'corrupt_quintet',
+SMODS.Challenge { key = 'corrupt_quintet',
     rules = {
 		custom = {
 			__new__,

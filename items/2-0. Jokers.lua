@@ -45,8 +45,7 @@ end
 -- CORRUPTED
 -- Parallel Joker
 -----------------
-SMODS.Joker {
-	key = 'darkjoker',
+SMODS.Joker { key = 'darkjoker',
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult } }
 	end,
@@ -78,8 +77,7 @@ SMODS.Joker {
 ----------------
 -- John Oblivion
 ----------------
-SMODS.Joker {
-	key = 'john',
+SMODS.Joker { key = 'john',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -118,8 +116,7 @@ SMODS.Joker {
 ------
 -- ovn
 ------
-SMODS.Joker {
-	key = 'ovn',
+SMODS.Joker { key = 'ovn',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -160,8 +157,7 @@ SMODS.Joker {
 ----------------
 -- Radiant Joker
 ----------------
-SMODS.Joker {
-	key = 'radiant_joker',
+SMODS.Joker { key = 'radiant_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -230,8 +226,7 @@ SMODS.Joker {
 ------------
 -- Ice Joker
 ------------
-SMODS.Joker {
-	key = 'ice_joker',
+SMODS.Joker { key = 'ice_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -292,8 +287,7 @@ SMODS.Joker {
 ----------------
 -- Crystal Joker
 ----------------
-SMODS.Joker {
-	key = 'crystal_joker',
+SMODS.Joker { key = 'crystal_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -358,8 +352,7 @@ SMODS.Joker {
 ------------
 -- Ion Joker
 ------------
-SMODS.Joker {
-	key = 'ion_joker',
+SMODS.Joker { key = 'ion_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -400,8 +393,7 @@ SMODS.Joker {
 -- Trolley Problem
 ------------------
 
-SMODS.Joker {
-	key = 'trolley_problem',
+SMODS.Joker { key = 'trolley_problem',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -449,8 +441,7 @@ local function get_leftmost_corrupted_joker()
 	return -1, nil
 end
 
-SMODS.Joker {
-	key = 'purifier',
+SMODS.Joker { key = 'purifier',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -499,8 +490,7 @@ SMODS.Joker {
 --------------
 -- Pure Visage
 --------------
-SMODS.Joker {
-	key = 'pure_visage',
+SMODS.Joker { key = 'pure_visage',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -544,8 +534,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Corrupt Visage
 -----------------
-SMODS.Joker {
-	key = 'corrupt_visage',
+SMODS.Joker { key = 'corrupt_visage',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -586,8 +575,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Prideful Joker
 -----------------
-SMODS.Joker {
-	key = 'prideful',
+SMODS.Joker { key = 'prideful',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -624,8 +612,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Bombastic Joker
 ------------------
-SMODS.Joker {
-	key = 'bombastic',
+SMODS.Joker { key = 'bombastic',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -658,8 +645,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Insightful Joker
 -------------------
-SMODS.Joker {
-	key = 'insightful',
+SMODS.Joker { key = 'insightful',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -692,8 +678,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Edge of a Collapsing World
 -----------------------------
-SMODS.Joker {
-	key = 'collapsing_world',
+SMODS.Joker { key = 'collapsing_world',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -756,8 +741,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Lucas Series
 ---------------
-SMODS.Joker {
-	key = 'lucasseries',
+SMODS.Joker { key = 'lucasseries',
 	credits = {
 		concept = "HexaCryonic",
 		art = "HexaCryonic",
@@ -799,8 +783,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Database
 -----------
-SMODS.Joker {
-	key = 'database',
+SMODS.Joker { key = 'database',
 	credits = {
 		concept = "thaun0",
 		code = "Oinite",
@@ -843,8 +826,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Prosopometamorphopsia
 ------------------------
-SMODS.Joker {
-	key = 'pmo',
+SMODS.Joker { key = 'pmo',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Airtoum",
@@ -866,8 +848,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Aeon Cavendish
 -----------------
-SMODS.Joker {
-	key = 'aeon',
+SMODS.Joker { key = 'aeon',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -911,8 +892,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Event Horizon
 ----------------
-SMODS.Joker {
-	key = 'event_horizon',
+SMODS.Joker { key = 'event_horizon',
 	credits = {
 		concept = "NinjaBanana, HexaCryonic",
 		code = "Oinite",
@@ -962,8 +942,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Sludge
 ---------
-SMODS.Joker {
-	key = 'sludge',
+SMODS.Joker { key = 'sludge',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -1004,8 +983,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Library of Babel
 -------------------
-SMODS.Joker {
-	key = 'library_of_babel',
+SMODS.Joker { key = 'library_of_babel',
 	credits = {
 		concept = "NinjaBanana, HexaCryonic",
 		code = "Oinite",
@@ -1064,8 +1042,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Theoretical Cultivar
 -----------------------
-SMODS.Joker {
-	key = 'cultivar',
+SMODS.Joker { key = 'cultivar',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -1128,8 +1105,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- A Part Falling
 -----------------
-SMODS.Joker {
-	key = 'apartfalling',
+SMODS.Joker { key = 'apartfalling',
 	credits = {
 		concept = "HexaCryonic, Zero (null)",
 		code = "HexaCryonic, Oinite",
@@ -1221,8 +1197,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Philosopher's Stone
 ----------------------
-SMODS.Joker {
-	key = 'philosophers_stone',
+SMODS.Joker { key = 'philosophers_stone',
 	credits = {
 		concept = "QueenChloe",
 		code = "Oinite",
@@ -1273,8 +1248,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Supply Drop
 --------------
-SMODS.Joker {
-	key = 'supplydrop',
+SMODS.Joker { key = 'supplydrop',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -1384,8 +1358,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Perpendicular Parking
 ------------------------
-SMODS.Joker {
-	key = 'perpendicular',
+SMODS.Joker { key = 'perpendicular',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -1426,8 +1399,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Migraine
 -----------
-SMODS.Joker {
-	key = 'migraine',
+SMODS.Joker { key = 'migraine',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -1448,8 +1420,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Spiral of Addiction
 ----------------------
-SMODS.Joker {
-	key = 'spiral_of_addiction',
+SMODS.Joker { key = 'spiral_of_addiction',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -1523,8 +1494,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Cigarette Card
 -----------------
-SMODS.Joker {
-	key = 'cigarette_card',
+SMODS.Joker { key = 'cigarette_card',
 	credits = {
 		concept = "Inspector_Bee",
 		code = "Oinite",
@@ -1568,8 +1538,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Airstrike
 ------------
-SMODS.Joker {
-	key = 'airstrike',
+SMODS.Joker { key = 'airstrike',
 	loc_vars = function(self, info_queue, center)
 		return { vars = { center.ability.extra.xmult } }
 	end,
@@ -1616,8 +1585,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Fuck it, We Ball
 -------------------
-SMODS.Joker {
-	key = 'yolo',
+SMODS.Joker { key = 'yolo',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -1717,8 +1685,7 @@ local function change_tear_sprite(card)
 	card.children.center:set_sprite_pos({x = x, y = y})
 end
 
-SMODS.Joker {
-	key = "apache_tears",
+SMODS.Joker { key = "apache_tears",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -1844,8 +1811,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- THE SHOW NEVER ENDS
 ----------------------
-SMODS.Joker {
-	key = 'showneverends',
+SMODS.Joker { key = 'showneverends',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -1866,8 +1832,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Infinitesimal Joker
 ----------------------
-SMODS.Joker {
-	key = 'infinitesimal',
+SMODS.Joker { key = 'infinitesimal',
 	loc_vars = function(self, info_queue, card)
 		return {vars = {
 			card.ability.card_limit,
@@ -1919,8 +1884,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Master of Puppets
 --------------------
-SMODS.Joker {
-	key = 'master_of_puppets',
+SMODS.Joker { key = 'master_of_puppets',
 	credits = {
 		concept = "AlexZGreat, HexaCryonic",
 		code = "Oinite",
@@ -2046,8 +2010,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- The Breach
 -------------
-SMODS.Joker {
-	key = 'breach',
+SMODS.Joker { key = 'breach',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -2080,8 +2043,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Bottled Ship of Theseus
 --------------------------
-SMODS.Joker {
-	key = 'bottled_ship_of_theseus',
+SMODS.Joker { key = 'bottled_ship_of_theseus',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -2121,8 +2083,7 @@ SMODS.Joker {
 -- CORRUPTED
 -- Nexus Point
 --------------
-SMODS.Joker {
-	key = 'nexus_point',
+SMODS.Joker { key = 'nexus_point',
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			card.ability.extra.xmult,

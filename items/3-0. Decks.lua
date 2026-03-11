@@ -14,8 +14,7 @@ end
 --------------
 -- Ocular Deck
 --------------
-SMODS.Back{
-	key = "ocular",
+SMODS.Back { key = "ocular",
 	pos = { x = 0, y = 0 },
 	atlas = "decks",
 
@@ -35,8 +34,7 @@ SMODS.Back{
 -------------------
 -- Corrupt Red Deck
 -------------------
-SMODS.Back{
-	key = "c_red",
+SMODS.Back { key = "c_red",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -59,7 +57,7 @@ SMODS.Back{
 				if G.hand.cards[i] then
 					local selected_card, card_key = pseudorandom_element(discarded_cards, pseudoseed("CRed"))
 					G.hand:add_to_highlighted(selected_card, true)
-					table.remove(discarded_cards, card_key)
+					table.remove(discarded_cards, card_key --[[@as integer]])
 					any_selected = true
 				end
 			end
@@ -75,8 +73,7 @@ SMODS.Back{
 --------------------
 -- Corrupt Blue Deck
 --------------------
-SMODS.Back{
-	key = "c_blue",
+SMODS.Back { key = "c_blue",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -102,8 +99,7 @@ SMODS.Back{
 ----------------------
 -- Corrupt Yellow Deck
 ----------------------
-SMODS.Back{
-	key = "c_yellow",
+SMODS.Back { key = "c_yellow",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -166,8 +162,7 @@ SMODS.Back{
 ---------------------
 -- Corrupt Green Deck
 ---------------------
-SMODS.Back{
-	key = "c_green",
+SMODS.Back { key = "c_green",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -190,8 +185,7 @@ SMODS.Back{
 ---------------------
 -- Corrupt Black Deck
 ---------------------
-SMODS.Back{
-    key = "c_black",
+SMODS.Back { key = "c_black",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -214,8 +208,7 @@ SMODS.Back{
 ---------------------
 -- Corrupt Ghost Deck
 ---------------------
-SMODS.Back{
-	key = "c_ghost",
+SMODS.Back { key = "c_ghost",
 	ovn_corrupt_deck = true,
 	config = { spectral_rate = 6 },
 
@@ -257,8 +250,7 @@ SMODS.Back{
 -----------------------
 -- Corrupt Abandoned Deck
 -----------------------
-SMODS.Back{
-    key = "c_abandoned",
+SMODS.Back { key = "c_abandoned",
 	ovn_corrupt_deck = true,
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
@@ -291,8 +283,7 @@ SMODS.Back{
 -----------------------
 -- Corrupt Painted Deck
 -----------------------
-SMODS.Back{
-	key = "c_painted",
+SMODS.Back { key = "c_painted",
 	ovn_corrupt_deck = true,
 
 	atlas = "decks_corrupt",
@@ -347,8 +338,7 @@ SMODS.Back{
 ----------------------
 Oblivion.DescriptionDummy { key = "instability_description" }
 
-SMODS.Back{
-	key = "c_plasma",
+SMODS.Back { key = "c_plasma",
 	ovn_corrupt_deck = true,
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
@@ -395,8 +385,7 @@ SMODS.Back{
 -- YOUR QUEST IS OVER.
 -- WE PRESENT YOU A NEW QUEST:
 
-SMODS.DynaTextEffect({
-	key = "c_erratic_desc",
+SMODS.DynaTextEffect { key = "c_erratic_desc",
 	func = function(dynatext, index, letter)
 		-- ignore spaces
 		local og_char = dynatext.strings[1].letters[index].char
@@ -406,14 +395,14 @@ SMODS.DynaTextEffect({
 		local char = string.char(rnd)
 		letter.letter:set(char)
 	end,
-})
+}
 
-SMODS.Shader({
+SMODS.Shader {
 	key = "crt_override",
 	path = "CRTOverride.fs",
-})
+}
 
-SMODS.Back({
+SMODS.Back {
 	key = "c_erratic",
 	ovn_corrupt_deck = true,
 	atlas = "decks_corrupt",
@@ -497,4 +486,4 @@ SMODS.Back({
 			copy:add_to_deck()
 		end
 	end,
-})
+}

@@ -4,8 +4,7 @@ local add_simple_event = Ovn_f.add_simple_event
 ------------
 -- The Nerve
 ------------
-SMODS.Blind({
-	key = 'nerve',
+SMODS.Blind { key = 'nerve',
 	loc_vars = function(self, info_queue, card)
 		return {}
 	end,
@@ -35,7 +34,7 @@ SMODS.Blind({
 		end
 		return total_optics >= 9
 	end,
-})
+}
 
 local function purify_all_jokers()
 	for _,joker in pairs(G.jokers.cards) do
@@ -58,8 +57,7 @@ end
 -------------
 -- The Purity
 -------------
-SMODS.Blind({
-	key = 'purity',
+SMODS.Blind { key = 'purity',
 	loc_vars = function(self, info_queue, card)
 		return { }
 	end,
@@ -89,13 +87,12 @@ SMODS.Blind({
 		end
 	end,
 	disable = function(self, silent) purify_all_jokers() end,
-})
+}
 
 ----------------
 -- Stygian Sigil
 ----------------
-SMODS.Blind({
-	key = 'stygian',
+SMODS.Blind { key = 'stygian',
 	loc_vars = function(self, info_queue, card)
 		return { vars = {self.config.stygian_cslmod} }
 	end,
@@ -143,4 +140,4 @@ SMODS.Blind({
 			return false
 		end
 	end,
-})
+}

@@ -2,8 +2,7 @@
 -- RARITY
 -- Corrupted
 ------------
-SMODS.Rarity({
-	key = "corrupted",
+SMODS.Rarity { key = "corrupted",
 	badge_colour = HEX('2349cb'),
 	default_weight = 0,
     get_weight = function(self, weight, object_type)
@@ -16,7 +15,7 @@ SMODS.Rarity({
 	pools = {
 		["Joker"] = true
 	}
-})
+}
 
 ------------
 -- RARITY
@@ -24,17 +23,15 @@ SMODS.Rarity({
 ------------
 -- Nyarlathotep (and W.D. Gaster with Cryptid) is internally classified as a separate rarity
 -- so that it can't appear in the usual Corrupted summoning pools
-SMODS.Rarity({
-	key = "supercorrupted",
+SMODS.Rarity { key = "supercorrupted",
 	badge_colour = HEX('2349cb'),
-})
+}
 
 ---------
 -- SUIT
 -- Optics
 ---------
-SMODS.Suit{
-	key = 'Optics',
+SMODS.Suit { key = 'Optics',
 	card_key = 'O',
 	hidden = true,
 
@@ -62,8 +59,7 @@ SMODS.Suit{
 -- Wicked Packs
 ----------------
 local function booster_wicked_normal(num)
-	SMODS.Booster {
-		key = "wicked_normal_" .. num,
+	SMODS.Booster { key = "wicked_normal_" .. num,
 		kind = 'ovn_Wicked',
 		group_key = 'k_ovn_wicked_pack',
 		credits = {
@@ -152,8 +148,7 @@ Oblivion.play_instability_noise = true
 -- Instability
 --------------------
 -- Values are dummy; to change instability, use Ovn_f.change_instability
-SMODS.Scoring_Parameter {
-	key = 'instability',
+SMODS.Scoring_Parameter { key = 'instability',
 	default_value = 1,
 	colour = G.C.RARITY['ovn_corrupted'],
 	flame_handler = function(self)
@@ -195,8 +190,7 @@ SMODS.Scoring_Parameter {
 -- SCORING OPERATOR
 -- Instable
 -------------------
-SMODS.Scoring_Calculation {
-	key = "instable",
+SMODS.Scoring_Calculation { key = "instable",
 	func = function(self, chips, mult, flames)
 		local instability = G.GAME.ovn_instability
 		---@diagnostic disable-next-line: redundant-return-value
@@ -246,7 +240,6 @@ SMODS.Scoring_Calculation {
 -- SHADER
 -- Miasma
 ---------
-SMODS.Shader{
-	key = 'miasma',
+SMODS.Shader { key = 'miasma',
 	path = 'miasma.fs'
 }

@@ -38,8 +38,7 @@ end
 -- ENHANCEMENT
 -- Radiant Card
 ---------------
-SMODS.Enhancement{
-	key = "radiant",
+SMODS.Enhancement { key = "radiant",
 	credits = {
 		concept = "",
 		code = "Oinite",
@@ -78,8 +77,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Dynamo Card
 ---------------
-SMODS.Enhancement{
-	key = 'dynamo',
+SMODS.Enhancement { key = 'dynamo',
 	credits = {
 		concept = "",
 		code = "Oinite",
@@ -117,8 +115,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Coordinate Card
 ---------------
-SMODS.Enhancement{
-	key = "coord",
+SMODS.Enhancement { key = "coord",
 	credits = {
 		concept = "HexaCryonic, AlexZGreat",
 		code = "HexaCryonic",
@@ -155,8 +152,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Ice Card
 ---------------
-SMODS.Enhancement{
-	key = "ice",
+SMODS.Enhancement { key = "ice",
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -218,8 +214,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Unobtainium Card
 ---------------
-SMODS.Enhancement{
-	key = "unob",
+SMODS.Enhancement { key = "unob",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -256,8 +251,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Crystal Card
 ---------------
-SMODS.Enhancement{
-	key = "crystal",
+SMODS.Enhancement { key = "crystal",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -310,8 +304,7 @@ SMODS.Enhancement{
 -- ENHANCEMENT
 -- Tungsten Card
 ---------------
-SMODS.Enhancement {
-	key = "dense",
+SMODS.Enhancement { key = "dense",
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
@@ -356,8 +349,7 @@ SMODS.Enhancement {
 -- ENHANCEMENT
 -- Ion Card
 --------------
-SMODS.Enhancement{
-	key = "ion",
+SMODS.Enhancement { key = "ion",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
@@ -439,8 +431,7 @@ SMODS.Enhancement{
 -- SEAL
 -- Indigo Seal
 --------------
-SMODS.Seal {
-	key = 'indigo',
+SMODS.Seal { key = 'indigo',
 	badge_colour = HEX('252fe3'),
 	credits = {
 		concept = "HexaCryonic",
@@ -472,8 +463,7 @@ SMODS.Seal {
 -- SEAL
 -- Mark of Ruby
 ---------------
-SMODS.Seal {
-	key = 'ruby_mark',
+SMODS.Seal { key = 'ruby_mark',
 	config = { extra = {retriggers = 2} },
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
@@ -510,8 +500,7 @@ SMODS.Seal {
 -- SEAL
 -- Mark of Sapphire
 -------------------
-SMODS.Seal {
-	key = 'sapphire_mark',
+SMODS.Seal { key = 'sapphire_mark',
 	badge_colour = darken(G.C.BLUE, 0.1),
 
     atlas = "seals_marks",
@@ -586,8 +575,7 @@ SMODS.Seal {
 -- SEAL
 -- Mark of Citrine
 ------------------
-SMODS.Seal {
-	key = 'citrine_mark',
+SMODS.Seal { key = 'citrine_mark',
 	config = { extra = {
 		seal_cash = 1,
 		mark_cash = 3
@@ -643,8 +631,7 @@ SMODS.Seal {
 -- SEAL
 -- Mark of Amethyst
 -------------------
-SMODS.Seal {
-	key = 'amethyst_mark',
+SMODS.Seal { key = 'amethyst_mark',
 	credits = {
 		concept = "QueenChloe",
 		code = "Oinite",
@@ -682,8 +669,7 @@ SMODS.Seal {
 -- SEAL
 -- Mark of Iolite
 -----------------
-SMODS.Seal {
-	key = 'iolite_mark',
+SMODS.Seal { key = 'iolite_mark',
 	badge_colour = darken(HEX('252fe3'), 0.1),
 
     atlas = "seals_marks",
@@ -711,8 +697,7 @@ SMODS.Seal {
 -- EDITION
 -- Miasma
 ----------
-SMODS.Edition {
-	key = "miasma",
+SMODS.Edition { key = "miasma",
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic, Oinite",

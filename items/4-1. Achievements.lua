@@ -8,8 +8,7 @@ end
 ----------
 -- Red Rum
 ----------
-SMODS.Achievement{
-	key = "red_rum",
+SMODS.Achievement { key = "red_rum",
 	order = 1,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -25,8 +24,7 @@ SMODS.Achievement{
 -------------
 -- Blue Blitz
 -------------
-SMODS.Achievement{
-	key = "blue_blitz",
+SMODS.Achievement { key = "blue_blitz",
 	order = 2,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -43,8 +41,7 @@ SMODS.Achievement{
 ------------------
 -- Yellow Yearlong
 ------------------
-SMODS.Achievement{
-	key = "yellow_yearlong",
+SMODS.Achievement { key = "yellow_yearlong",
 	order = 3,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -60,8 +57,7 @@ SMODS.Achievement{
 ----------------------
 -- Groundless Greenery
 ----------------------
-SMODS.Achievement{
-	key = "groundless_greenery",
+SMODS.Achievement { key = "groundless_greenery",
 	order = 4,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -80,8 +76,7 @@ SMODS.Achievement{
 --------------------
 -- Bleakest Blackout
 --------------------
-SMODS.Achievement{
-	key = "bleakest_blackout",
+SMODS.Achievement { key = "bleakest_blackout",
 	order = 5,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -97,8 +92,7 @@ SMODS.Achievement{
 ----------------
 -- Magic Malaise
 ----------------
-SMODS.Achievement{
-	key = "magic_malaise",
+SMODS.Achievement { key = "magic_malaise",
 	order = 6,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -118,8 +112,7 @@ SMODS.Achievement{
 -----------------
 -- Negated Nebula
 -----------------
-SMODS.Achievement{
-	key = "negated_nebula",
+SMODS.Achievement { key = "negated_nebula",
 	order = 7,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -139,8 +132,7 @@ SMODS.Achievement{
 ---------------
 -- Ghostly Gall
 ---------------
-SMODS.Achievement{
-	key = "ghostly_gall",
+SMODS.Achievement { key = "ghostly_gall",
 	order = 8,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -160,8 +152,7 @@ SMODS.Achievement{
 ----------------
 -- Absolved Abandonment
 ----------------
-SMODS.Achievement{
-	key = "absolved_abandonment",
+SMODS.Achievement { key = "absolved_abandonment",
 	order = 9,
 	unlock_condition = function (self, args)
 		if args.type == 'win' and cdeck_cond("b_abandoned") then
@@ -173,8 +164,7 @@ SMODS.Achievement{
 -----------------------
 -- Absolved Abandonment
 -----------------------
-SMODS.Achievement{
-	key = "checkered_changeling",
+SMODS.Achievement { key = "checkered_changeling",
 	order = 10,
 	unlock_condition = function (self, args)
 		if args.type == 'win' and cdeck_cond("b_checkered") then
@@ -186,8 +176,7 @@ SMODS.Achievement{
 ----------------
 -- Zodiac Zenith
 ----------------
-SMODS.Achievement{
-	key = "zodiac_zenith",
+SMODS.Achievement { key = "zodiac_zenith",
 	order = 11,
 	unlock_condition = function (self, args)
 		if args.type == 'win' and cdeck_cond("b_zodiac") then
@@ -205,8 +194,7 @@ SMODS.Achievement{
 ------------------
 -- Painted Paladin
 ------------------
-SMODS.Achievement{
-	key = "painted_paladin",
+SMODS.Achievement { key = "painted_paladin",
 	order = 12,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -222,8 +210,7 @@ SMODS.Achievement{
 ------------------------
 -- Anticipated Anaglyphs
 ------------------------
-SMODS.Achievement{
-	key = "anticipated_anaglyphs",
+SMODS.Achievement { key = "anticipated_anaglyphs",
 	order = 13,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -244,8 +231,7 @@ SMODS.Achievement{
 ----------------
 -- Plasma Plight
 ----------------
-SMODS.Achievement{
-	key = "plasma_plight",
+SMODS.Achievement { key = "plasma_plight",
 	order = 14,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -262,8 +248,7 @@ SMODS.Achievement{
 -------------------
 -- Erratic Eruption
 -------------------
-SMODS.Achievement{
-	key = "erratic_eruption",
+SMODS.Achievement { key = "erratic_eruption",
 	order = 15,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -278,8 +263,7 @@ SMODS.Achievement{
 ------------------
 -- Ocular Overseer
 ------------------
-SMODS.Achievement{
-	key = "ocular_overseer",
+SMODS.Achievement { key = "ocular_overseer",
 	order = 16,
 	unlock_condition = function(self, args)
 		if args.type == 'win' then
@@ -303,8 +287,7 @@ SMODS.Achievement{
 ------------------
 -- Autocannibalism
 ------------------
-SMODS.Achievement{
-	key = "autocannibalism",
+SMODS.Achievement { key = "autocannibalism",
 	order = 19,
 	unlock_condition = function (self, args)
 		if (
@@ -319,8 +302,7 @@ SMODS.Achievement{
 -------------
 -- Ace Combat
 -------------
-SMODS.Achievement{
-	key = "ace_combat",
+SMODS.Achievement { key = "ace_combat",
 	order = 20,
 	unlock_condition = function(self, args)
 		local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
@@ -332,8 +314,7 @@ SMODS.Achievement{
 --------------------------------------
 -- Super Spectre Singular Strike Salvo
 --------------------------------------
-SMODS.Achievement{
-	key = "singular_strike",
+SMODS.Achievement { key = "singular_strike",
 	order = 21,
 	unlock_condition = function (self, args)
 		if args.type == 'ovn_airstrike_release' then
@@ -346,8 +327,7 @@ SMODS.Achievement{
 ---------------------------
 -- Yanking an Exposed Nerve
 ---------------------------
-SMODS.Achievement{
-	key = "exposed_nerve",
+SMODS.Achievement { key = "exposed_nerve",
 	order = 22,
 	unlock_condition = function (self, args)
 		if args.type == 'hand' then
@@ -373,8 +353,7 @@ SMODS.Achievement{
 --------------------------------
 -- This Entire Quest Was Bananas
 --------------------------------
-SMODS.Achievement{
-	key = "bananas",
+SMODS.Achievement { key = "bananas",
 	order = 24,
 	unlock_condition = function (self, args)
 		return (args.type == 'ovn_natural_aeon')
@@ -384,8 +363,7 @@ SMODS.Achievement{
 -----------
 -- Dark Web
 -----------
-SMODS.Achievement{
-	key = "darkweb",
+SMODS.Achievement { key = "darkweb",
 	order = 25,
 	unlock_condition = function (self, args)
 		return (args.type == 'ovn_big_database')
@@ -395,8 +373,7 @@ SMODS.Achievement{
 -----------------------------------------
 -- Unstoppable Force Vs. Immovable Object
 -----------------------------------------
-SMODS.Achievement{
-	key = "unstoppableforce",
+SMODS.Achievement { key = "unstoppableforce",
 	order = 26,
 	unlock_condition = function (self, args)
 		return (args.type == 'ovn_lol_lmao_even')
@@ -406,8 +383,7 @@ SMODS.Achievement{
 ----------------
 -- That Tickled!
 ----------------
-SMODS.Achievement{
-	key = "tickled",
+SMODS.Achievement { key = "tickled",
 	order = 28,
 	unlock_condition = function (self, args)
 		return (args.type == 'ovn_ticklish_quip')
