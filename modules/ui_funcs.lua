@@ -216,6 +216,9 @@ function Ovn_f.localize_desc(desc, args)
 	args.empty_line_space = args.empty_line_space or 0.15
 	args.padding = args.padding or 0.03
 	args.text_colour = args.text_colour or G.C.UI.TEXT_LIGHT
+	args.align = args.align or "left"
+
+	local align = "center-"..args.align
 
 	local row_nodes = {}
 	for _,row_text in ipairs(desc) do
@@ -227,11 +230,12 @@ function Ovn_f.localize_desc(desc, args)
 				scale = args.scale,
 			})
 		end
-		local row_ui = {"row", style={padding = row_text_parsed and args.padding or args.empty_line_space}, row_ui_text}
+		local padding = row_text_parsed and args.padding or args.empty_line_space
+		local row_ui = {"row", style={padding = padding, align = align}, row_ui_text}
 		table.insert(row_nodes, row_ui)
 	end
 
-	return {"row", row_nodes}
+	return {"row", style={align = align}, row_nodes}
 end
 
 
