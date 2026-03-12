@@ -52,9 +52,82 @@ function Ovn_f.f_f(normal, censored)
 	return Oblivion.config.family_friendly and censored or normal
 end
 
+---@return nil
 function Ovn_f.reload_localization()
 	SMODS.load_mod_localization(Oblivion.mod_path, Oblivion.obj.id)
-	return init_localization()
+	init_localization()
+end
+
+-- Determines whether the player is holding the Joker of specified card key.
+---@param card_key string
+---@return boolean
+Ovn_f.has_joker = function(card_key)
+	return next(SMODS.find_card(card_key)) and true or false
+end
+
+-- Run a sequence of events, with defineable delays.
+---@param event_func_list [number, function][]
+---@param delay? number
+---@param offset? number
+---@return nil
+Ovn_f.event_sequence = function(event_func_list, delay, offset)
+	delay = delay or 0
+	offset = offset or 1
+	local event_def = event_func_list[offset]
+	if not event_def then return end
+
+	local event_delay = event_def[1] or 0
+	local event_func  = event_def[2]
+
+	delay = delay + event_delay
+	add_simple_event("after", delay, function()
+		if event_func then event_func() end
+		-- :(
+		Ovn_f.event_sequence(event_func_list, delay, offset + 1)
+	end)
+end
+
+-- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a table.
+---@param input_table any[] Values correspond to table keys.
+---@return any
+Ovn_f.descend_table = function(input_table)
+	local tablee = input_table[1]
+	for i = 2, #input_table do
+		local key = input_table[i]
+		tablee = tablee[key]
+		if not tablee then return nil end
+	end
+	return tablee
+end
+
+-- Copies a table and any table it contains.
+---@param tbl table
+---@return table
+Ovn_f.bi_shallow_copy = function(tbl)
+	local new_table = SMODS.shallow_copy(tbl)
+	for i,item in pairs(new_table) do
+		new_table[i] = type(item) == "table" and SMODS.shallow_copy(item) or item
+	end
+	return new_table
+end
+
+-- Compile a list of credited users and their contributions.
+---@return {string: string[]}
+Ovn_f.credited_users = function()
+	local users = {}
+	for key,center in pairs(G.P_CENTERS) do
+		if center.credits then
+			for role,usernames in pairs(center.credits) do
+				local split_usernames = usernames:gmatch("([^,]+)")
+				for username in split_usernames do
+					username = username:gsub("^ +", ""):gsub(" +$", "")
+					users[username] = users[username] or {}
+					table.insert(users[username], role .. " - " .. key)
+				end
+			end
+		end
+	end
+	return users
 end
 
 
@@ -374,17 +447,6 @@ end
 ---- MASTER OF PUPPETS ----
 ---------------------------
 
--- Copies a table and any table it contains.
----@param tbl table
----@return table
-Ovn_f.bi_shallow_copy = function(tbl)
-	local new_table = SMODS.shallow_copy(tbl)
-	for i,item in pairs(new_table) do
-		new_table[i] = type(item) == "table" and SMODS.shallow_copy(item) or item
-	end
-	return new_table
-end
-
 -- Prepares a list of applicable modifiers for Master of Puppets.
 ---@param rarity integer|string The key of a rarity. Vanilla rarities still use integer values.
 ---@return {string: string[]}
@@ -474,9 +536,9 @@ end
 
 
 
------------------------
----- MISCELLANEOUS ----
------------------------
+------------------------
+---- OTHER GAMEPLAY ----
+------------------------
 
 -- Changes blind requirement.
 ---@param mod number
@@ -492,13 +554,6 @@ Ovn_f.ease_blind_requirement = function(mod)
 		G.HUD_blind:recalculate()
 		blind_req_UI:juice_up()
 	end)
-end
-
--- Determines whether the player is holding the Joker of specified card key.
----@param card_key string
----@return boolean
-Ovn_f.has_joker = function(card_key)
-	return next(SMODS.find_card(card_key)) and true or false
 end
 
 -- Temporarily changes hand size, just for the round.
@@ -590,58 +645,4 @@ Ovn_f.update_hands_last_played = function(scoring_name)
 	if scoring_name then
 		G.GAME.hands_last_played[scoring_name] = 0
 	end
-end
-
--- Run a sequence of events, with defineable delays.
----@param event_func_list [number, function][]
----@param delay? number
----@param offset? number
----@return nil
-Ovn_f.event_sequence = function(event_func_list, delay, offset)
-	delay = delay or 0
-	offset = offset or 1
-	local event_def = event_func_list[offset]
-	if not event_def then return end
-
-	local event_delay = event_def[1] or 0
-	local event_func  = event_def[2]
-
-	delay = delay + event_delay
-	add_simple_event("after", delay, function()
-		if event_func then event_func() end
-		-- :(
-		Ovn_f.event_sequence(event_func_list, delay, offset + 1)
-	end)
-end
-
--- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a table.
----@param input_table string[] Strings correspond to table keys.
----@return any
-Ovn_f.descend_table = function(input_table)
-	local tablee = input_table[1]
-	for i = 2, #input_table do
-		local key = input_table[i]
-		tablee = tablee[key]
-		if not tablee then return nil end
-	end
-	return tablee
-end
-
--- Compile a list of credited users and their contributions.
----@return {string: string[]}
-Ovn_f.credited_users = function()
-	local users = {}
-	for key,center in pairs(G.P_CENTERS) do
-		if center.credits then
-			for role,usernames in pairs(center.credits) do
-				local split_usernames = usernames:gmatch("([^,]+)")
-				for username in split_usernames do
-					username = username:gsub("^ +", ""):gsub(" +$", "")
-					users[username] = users[username] or {}
-					table.insert(users[username], role .. " - " .. key)
-				end
-			end
-		end
-	end
-	return users
 end
