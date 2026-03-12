@@ -196,17 +196,21 @@ local function uidef_usesellbtn_hook_pure_visage(card)
 			scale = 0.4,
 			shadow = true
 		},
-		["button-btmtext1"] = {
+		[".button-btmtext1"] = {
 			colour = G.C.WHITE,
 			shadow = true,
 			scale = 0.4
 		},
-		["button-btmtext2"] = {
+		[".button-btmtext2"] = {
 			colour = G.C.WHITE,
 			shadow = true,
 			scale = 0.55
 		},
 	}
+
+	local button_btmtext2_ref_table = Ovn_f.on_deck('c_green') and card.ability or card
+	local button_btmtext2_ref_value = Ovn_f.on_deck('c_green') and 'complex_sell_label' or 'sell_cost_label'
+
 	local sell_button =
 	{"column", style={align="center-right"}, {
 		{"column", reftable=card, class="button", onclick="sell_card", ondraw="can_sell_card", {
@@ -215,11 +219,10 @@ local function uidef_usesellbtn_hook_pure_visage(card)
 				{"row", style={align="center-middle", maxWidth=1.25}, {
 					{"text", class="button-toptext", text=localize("b_sell")}
 				}},
-				-- no idea why jtml for this doesnt work so here
-				{n=G.UIT.R, config={align = "cm"}, nodes={
-					{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
-					{n=G.UIT.T, config={ref_table = Ovn_f.on_deck('c_green') and card.ability or card, ref_value = Ovn_f.on_deck('c_green') and 'complex_sell_label' or 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
-				}}
+				{"row", style={align="center-middle"}, {
+					{"text", class="button-btmtext1", text = localize('$')},
+					{"text", class="button-btmtext2", reftable=button_btmtext2_ref_table, refvalue=button_btmtext2_ref_value}
+				}},
 			}}
 		}}
 	}}
