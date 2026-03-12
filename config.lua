@@ -1,4 +1,4 @@
 return {
-    ["family_friendly"] = true,
-    ["disable_c_erratic_shader"] = true,
+    ["family_friendly"] = false,
+    ["disable_c_erratic_shader"] = false,
 }
