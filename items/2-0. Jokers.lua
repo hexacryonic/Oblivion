@@ -107,9 +107,6 @@ SMODS.Joker { key = 'john',
 				message_card = card
 			}
 		end
-		if context.before then
-			print(context.scoring_name)
-		end
 	end,
 }
 
