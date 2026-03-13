@@ -223,8 +223,15 @@ end
 ---- UI FUNCTIONS ----
 ----------------------
 
+---@class add_complex_roundeval_row.Config
+---@field dollars? number
+---@field name? string
+---@field disp? string|number
+---@field bonus? boolean
+---@field pitch? number
+
 -- Adds a round evaluation row for complex values.
----@param config table
+---@param config add_complex_roundeval_row.Config
 ---@return nil
 Ovn_f.add_complex_roundeval_row = function(config)
 	config = config or {}
@@ -304,6 +311,11 @@ Ovn_f.add_complex_roundeval_row = function(config)
 	end)
 end
 
+---@class add_complex_cashout_button.Config
+---@field dollars? number
+---@field dollars_i? number
+---@field pitch? number
+
 -- Adds the cashout button, which has a complex value.
 ---@param config table
 ---@return nil
@@ -353,7 +365,7 @@ G.FUNCS.evaluate_round = function()
 		return
 	end
 
-	total_cashout_rows = 0
+	local total_cashout_rows = 0
 	local pitch = 0.95
 	local dollars = 0
 	local dollars_i = 0

@@ -73,6 +73,7 @@ local table_ui_style = {
 }
 
 ---@param tbl any[][]
+---@return any[][]
 local function transpose_table(tbl)
 	local tbl_T = {}
 	for _,row in ipairs(tbl) do
@@ -85,17 +86,23 @@ local function transpose_table(tbl)
 	return tbl_T
 end
 
+---@class generate_table_ui.Config
+---@field no_header? boolean If true, the first row of the table will not have a gray background.
+---@field default_text_colour? Balatro.Colour The default colour for all uncoloured text.
+---@field text_scale? number Size of text.
+---@field outline_colour? Balatro.Colour The colour of cell borders.
+
+---@class generate_table_ui.Text
+---@field text? string
+---@field colour? Balatro.Colour
+---@field align? "left" | "center" | "middle" | "right"
+
 -- Generates the UIBox table for a table of text, like with rows and columns and cells n shit
----@param table_def string[][]
----@param config? {string: any}
+---@param table_def (string|generate_table_ui.Text)[][]
+---@param config? generate_table_ui.Config
 ---@return Balatro.UIBoxDefinition
 function Ovn_f.generate_table_ui(table_def, config)
 	config = config or {}
-	-- Valid config:
-		-- no_header
-		-- default_text_colour
-		-- text_scale (default 0.32)
-		-- outline_colour
 
 	-- Fill in empty spots
 	local max_row_length = 0
@@ -206,19 +213,26 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 	end end
 end
 
+---@class localize_desc.Config
+---@field scale? number Size of text.
+---@field empty_line_space? number Height of empty lines.
+---@field padding? number Size of spacing around text.
+---@field text_colour? Balatro.Colour Default colour for uncoloured text.
+---@field align? "left" | "center" | "middle" | "right" Alignment of all text.
+
 -- Automatically formats a list of localization strings into a JTML element.
 ---@param desc string[]
----@param args? table
+---@param config? localize_desc.Config
 ---@return JTML.JTML
-function Ovn_f.localize_desc(desc, args)
-	args = args or {}
-	args.scale = args.scale or 1.125
-	args.empty_line_space = args.empty_line_space or 0.15
-	args.padding = args.padding or 0.03
-	args.text_colour = args.text_colour or G.C.UI.TEXT_LIGHT
-	args.align = args.align or "left"
+function Ovn_f.localize_desc(desc, config)
+	config = config or {}
+	config.scale = config.scale or 1.125
+	config.empty_line_space = config.empty_line_space or 0.15
+	config.padding = config.padding or 0.03
+	config.text_colour = config.text_colour or G.C.UI.TEXT_LIGHT
+	config.align = config.align or "left"
 
-	local align = "center-"..args.align
+	local align = "center-"..config.align
 
 	local row_nodes = {}
 	for _,row_text in ipairs(desc) do
@@ -226,11 +240,11 @@ function Ovn_f.localize_desc(desc, args)
 		local row_ui_text
 		if row_text_parsed then
 			row_ui_text = SMODS.localize_box(row_text_parsed, {
-				text_colour = args.text_colour,
-				scale = args.scale,
+				text_colour = config.text_colour,
+				scale = config.scale,
 			})
 		end
-		local padding = row_text_parsed and args.padding or args.empty_line_space
+		local padding = row_text_parsed and config.padding or config.empty_line_space
 		local row_ui = {"row", style={padding = padding, align = align}, row_ui_text}
 		table.insert(row_nodes, row_ui)
 	end
