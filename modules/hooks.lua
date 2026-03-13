@@ -19,13 +19,14 @@ local lvluphand_hook = level_up_hand
 function level_up_hand(card, hand, instant, amount)
 	local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
 	if #all_event_horizons > 0 then
+		amount = amount or 1
 		local mult  = G.GAME.hands[hand].l_mult
 		local chips = G.GAME.hands[hand].l_chips
 		for i,event_horizon in ipairs(all_event_horizons) do
 			local former_form = event_horizon.ability.ovn_former_form or "j_supernova"
 			local scale_mult = event_horizon.ability.extra.scalemult[former_form]
-			event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + mult*scale_mult
-			event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + chips*scale_mult
+			event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + mult*scale_mult*amount
+			event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + chips*scale_mult*amount
 
 			if not instant then
 				local speed = 1 + (i-1)*0.1
@@ -35,7 +36,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(mult*scale_mult),
+						message = "+"..(mult*scale_mult*amount),
 						colour = G.C.MULT,
 						instant = true
 					})
@@ -46,7 +47,7 @@ function level_up_hand(card, hand, instant, amount)
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
 					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(chips*scale_mult),
+						message = "+"..(chips*scale_mult*amount),
 						colour = G.C.CHIPS,
 						instant = true
 					})

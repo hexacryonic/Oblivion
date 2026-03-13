@@ -87,6 +87,39 @@ SMODS.Consumable:take_ownership('black_hole', {
 	end
 }, true)
 
+-- Ownership of Orbital Tag for Event Horizon effect
+SMODS.Tag:take_ownership('orbital', {
+	apply = function(self, tag, context)
+		if context.type == 'immediate' then
+			local lock = tag.ID
+			local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
+			if #all_event_horizons > 0 then
+				level_up_hand(tag, tag.ability.orbital_hand, nil, tag.config.levels)
+				tag:yep('+', G.C.MONEY,function() 
+					G.CONTROLLER.locks[lock] = nil
+					return true
+				end)
+				tag.triggered = true
+				return true
+			else
+				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {
+					handname= tag.ability.orbital_hand,
+					chips = G.GAME.hands[tag.ability.orbital_hand].chips,
+					mult = G.GAME.hands[tag.ability.orbital_hand].mult,
+					level= G.GAME.hands[tag.ability.orbital_hand].level})
+				level_up_hand(tag, tag.ability.orbital_hand, nil, tag.config.levels)
+				update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+				tag:yep('+', G.C.MONEY,function() 
+					G.CONTROLLER.locks[lock] = nil
+					return true
+				end)
+				tag.triggered = true
+				return true
+			end
+		end
+	end
+})
+
 -- Ownership of all default JimboQuips to use THE SHOW NEVER ENDS
 for i=1,10 do
 	SMODS.JimboQuip:take_ownership('lq_' .. i, {
