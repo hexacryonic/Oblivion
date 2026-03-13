@@ -1822,7 +1822,7 @@ SMODS.Joker { key = "apache_tears",
 ----------------------
 SMODS.Joker { key = 'showneverends',
 	credits = {
-		concept = "HexaCryonic",
+		concept = "SyntaxTsundere, HexaCryonic",
 		code = "HexaCryonic",
 		art = "HexaCryonic",
 	},
