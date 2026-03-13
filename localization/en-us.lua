@@ -80,6 +80,20 @@ local loc =  {
 					'into {C:ovn_corrupted}unique{} versions',
 				},
 			},
+			ovn_library_of_babel_last_played = {
+				name = "Current hand last played",
+				text = {
+					"{C:attention}#1# {}last played",
+					"{C:attention}#2# {}hands ago"
+				}
+			},
+			ovn_library_of_babel_last_played_never = {
+				name = "Current hand last played",
+				text = {
+					"{C:attention}#1# {}never played",
+					"(not within last {C:attention}#2# {}hands)"
+				}
+			},
 			ovn_placeholder_sprite = {
 				name = "Placeholder sprite",
 				text = {

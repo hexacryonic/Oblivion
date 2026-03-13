@@ -672,7 +672,9 @@ end
 ---@return nil
 Ovn_f.update_hands_last_played = function(scoring_name)
 	for key,count in pairs(G.GAME.hands_last_played) do
-		G.GAME.hands_last_played[key] = count + 1
+		if G.GAME.hands_last_played[key] ~= -1 then
+			G.GAME.hands_last_played[key] = count + 1
+		end
 	end
 	if scoring_name then
 		G.GAME.hands_last_played[scoring_name] = 0

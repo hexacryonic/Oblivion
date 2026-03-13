@@ -997,6 +997,21 @@ SMODS.Joker { key = 'library_of_babel',
 	},
 
 	loc_vars = function (self, info_queue, card)
+		local highlighted_cards = Ovn_f.descend_table{G, "hand", "highlighted"}
+		if highlighted_cards then
+			local current_hand = G.FUNCS.get_poker_hand_info(highlighted_cards)
+			if current_hand ~= "NULL" then
+				local hand_last_played = G.GAME.hands_last_played[current_hand]
+				table.insert(info_queue, {
+					key = hand_last_played == -1 and 'ovn_library_of_babel_last_played_never' or 'ovn_library_of_babel_last_played',
+					set = 'Other',
+					vars = {
+						localize(current_hand, "poker_hands"),
+						hand_last_played == -1 and card.ability.extra.last_played_threshold or (hand_last_played + 1)
+					}
+				})
+			end
+		end
 		return {vars = {
 			card.ability.extra.xmult_set[card.ability.ovn_former_form or "j_todo_list"],
 			card.ability.extra.last_played_threshold,
@@ -1031,7 +1046,11 @@ SMODS.Joker { key = 'library_of_babel',
 	calculate = function (self, card, context)
 		if context.before and not context.blueprint then
 			local hand = context.scoring_name
-			if G.GAME.hands_last_played[hand] >= card.ability.extra.last_played_threshold then
+			local threshold = card.ability.extra.last_played_threshold
+			if (
+				G.GAME.hands_last_played[hand] >= threshold
+				or G.GAME.hands_last_played[hand] == -1
+			) then
 				former_form_scale(card, "xmult", "xmult_set", G.C.MULT)
 			end
 		end

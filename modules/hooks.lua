@@ -301,7 +301,7 @@ function Game:start_run(args)
 	if not G.GAME.hands_last_played then
 		G.GAME.hands_last_played = {}
 		for key in pairs(SMODS.PokerHands) do
-			G.GAME.hands_last_played[key] = 0
+			G.GAME.hands_last_played[key] = -1
 		end
 	end
 	if Ovn_f.on_deck('c_green') then
