@@ -1025,9 +1025,8 @@ SMODS.Joker { key = 'library_of_babel',
 		}
 	},
 
-	atlas = 'placeholder',
-	pos = {x=0, y=0},
-	uses_placeholder_sprite = true,
+	atlas = 'jokers_corrupt',
+	pos = {x=4, y=4},
 
 	blueprint_compat = true,
 	eternal_compat = true,
