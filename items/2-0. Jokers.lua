@@ -230,7 +230,7 @@ SMODS.Joker { key = 'ice_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "TBD"
+		art = "Oinite"
 	},
 
 	loc_vars = function(self, info_queue, card)
@@ -249,10 +249,8 @@ SMODS.Joker { key = 'ice_joker',
 		}
 	},
 
-	-- placeholder
-	atlas = "enhancements",
-	pos = { x=0, y=0 },
-	uses_placeholder_sprite = true,
+    atlas = 'jokers',
+	pos  = { x=0, y=2 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
