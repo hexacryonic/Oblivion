@@ -988,7 +988,7 @@ SMODS.Joker { key = 'library_of_babel',
 	credits = {
 		concept = "NinjaBanana, HexaCryonic",
 		code = "Oinite",
-		art = "TBD",
+		art = "Oinite",
 	},
 
 	loc_vars = function (self, info_queue, card)
