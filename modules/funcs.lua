@@ -374,6 +374,22 @@ Ovn_f.corrupt_modifiers = function(card)
 	end
 end
 
+-- Transmutes a playing card's regular enhancement_key into it corrupted variant.
+---@param card Card
+---@return nil
+Ovn_f.corrupt_enhancement = function(card)
+	local enhancement_key = card.config.center.key
+	local cenh = Oblivion.enhancement_corrupt
+	local new_enhancement = cenh[enhancement_key]
+	if new_enhancement then
+		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
+		add_simple_event('immediate', nil, function()
+			play_sound('ovn_optic', 1, 1.1)
+			card:juice_up(0.5, 0.5)
+		end)
+	end
+end
+
 -- Transmutes a playing card's corrupted modifiers into their regular variants.
 ---@param card Card
 ---@return nil
@@ -399,6 +415,22 @@ Ovn_f.purify_modifiers = function(card)
 	end
 
 	if transmuted then
+		add_simple_event('immediate', nil, function()
+			play_sound('ovn_purifying', 1, 1.1)
+			card:juice_up(0.5, 0.5)
+		end)
+	end
+end
+
+-- Transmutes a playing card's corrupted enhancement_key into its regular variant.
+---@param card Card
+---@return nil
+Ovn_f.purify_enhancement = function(card)
+	local enhancement_key = card.config.center.key
+	local penh = Oblivion.enhancement_purify
+	local new_enhancement = penh[enhancement_key]
+	if new_enhancement then
+		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
