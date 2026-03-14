@@ -377,7 +377,7 @@ SMODS.Consumable { key = "eidolon",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Oinite (idea: Airtoum)"
+		art = {"Oinite", "idea: Airtoum"}
 	},
 
     loc_vars = function(self, info_queue, card)

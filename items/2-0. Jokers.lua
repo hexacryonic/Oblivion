@@ -895,7 +895,7 @@ SMODS.Joker { key = 'aeon',
 ----------------
 SMODS.Joker { key = 'event_horizon',
 	credits = {
-		concept = "NinjaBanana, HexaCryonic",
+		concept = {"NinjaBanana", "HexaCryonic"},
 		code = "Oinite",
 		art = "Oinite",
 	},
@@ -986,7 +986,7 @@ SMODS.Joker { key = 'sludge',
 -------------------
 SMODS.Joker { key = 'library_of_babel',
 	credits = {
-		concept = "NinjaBanana, HexaCryonic",
+		concept = {"NinjaBanana", "HexaCryonic"},
 		code = "Oinite",
 		art = "Oinite",
 	},
@@ -1125,10 +1125,10 @@ SMODS.Joker { key = 'cultivar',
 -----------------
 SMODS.Joker { key = 'apartfalling',
 	credits = {
-		concept = "HexaCryonic, Zero (null)",
-		code = "HexaCryonic, Oinite",
+		concept = {"HexaCryonic", "Zero (null)"},
+		code = {"HexaCryonic", "Oinite"},
 		art = "Oinite",
-		music = '"A Part Falling" - Hakita for ULTRAKILL',
+		music = {'"A Part Falling"', 'by Hakita for ULTRAKILL'},
 	},
 
 	loc_vars = function(self, info_queue, card)
@@ -1834,7 +1834,7 @@ SMODS.Joker { key = "apache_tears",
 ----------------------
 SMODS.Joker { key = 'showneverends',
 	credits = {
-		concept = "SyntaxTsundere, HexaCryonic",
+		concept = {"SyntaxTsundere", "HexaCryonic"},
 		code = "HexaCryonic",
 		art = "HexaCryonic",
 	},
@@ -1907,7 +1907,7 @@ SMODS.Joker { key = 'infinitesimal',
 --------------------
 SMODS.Joker { key = 'master_of_puppets',
 	credits = {
-		concept = "AlexZGreat, HexaCryonic",
+		concept = {"AlexZGreat", "HexaCryonic"},
 		code = "Oinite",
 		art = "HexaCryonic",
 	},
@@ -1942,7 +1942,7 @@ SMODS.Joker { key = 'master_of_puppets',
 
 		local rarity_id_to_key = {"Common", "Uncommon", "Rare"}
 
-		local rarity_modifier_table = {{"Rarity", "Modifier"}}
+		local rarity_modifier_table = {{{text="Rarity"}, {text="Modifier"}}}
 		for _,key in ipairs(rarity_modifier_list) do
 			local rarity_modi_def = rarity_modi_map[key]
 			if not rarity_modi_def.hidden then

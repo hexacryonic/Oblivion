@@ -117,7 +117,7 @@ SMODS.Enhancement { key = 'dynamo',
 ---------------
 SMODS.Enhancement { key = "coord",
 	credits = {
-		concept = "HexaCryonic, AlexZGreat",
+		concept = {"HexaCryonic", "AlexZGreat"},
 		code = "HexaCryonic",
 		art = "Lil Mr. Slipstream",
 	},
@@ -700,9 +700,9 @@ SMODS.Seal { key = 'iolite_mark',
 SMODS.Edition { key = "miasma",
 	credits = {
 		concept = "HexaCryonic",
-		code = "HexaCryonic, Oinite",
+		code = {"HexaCryonic", "Oinite"},
 		shader = "cassknows",
-		sound = "PONOS Corp. for The Battle Cats",
+		sound = {"PONOS Corp.", "for The Battle Cats"},
 	},
 
 	config = {

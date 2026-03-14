@@ -93,12 +93,13 @@ end
 ---@field outline_colour? Balatro.Colour The colour of cell borders.
 
 ---@class generate_table_ui.Text
----@field text? string
+---@field text? string|string[]
 ---@field colour? Balatro.Colour
 ---@field align? "left" | "center" | "middle" | "right"
+---@field element? Balatro.UIBoxDefinition|JTML.JTML
 
 -- Generates the UIBox table for a table of text, like with rows and columns and cells n shit
----@param table_def (string|generate_table_ui.Text)[][]
+---@param table_def generate_table_ui.Text[][]
 ---@param config? generate_table_ui.Config
 ---@return Balatro.UIBoxDefinition
 function Ovn_f.generate_table_ui(table_def, config)
@@ -119,30 +120,37 @@ function Ovn_f.generate_table_ui(table_def, config)
 	-- need to first transpose into a table of COLUMNS
 	local table_def_cols = transpose_table(table_def)
 
+	-- Prepare each column
 	local columns = {}
 	for _,col_def in ipairs(table_def_cols) do
 		local entries = {}
 		for i,cell_def in ipairs(col_def) do
 			-- Prepare cell config
-			local text, colour, align
-			if type(cell_def) == "table" then
-				text = cell_def.text
-				colour = cell_def.colour or config.default_text_colour
-				align = cell_def.align
-			else
-				text = cell_def
-				colour = config.default_text_colour
-			end
+			local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text}
+			local colour = cell_def.colour or config.default_text_colour
+			local align = cell_def.align
+			local element = cell_def.element
 
 			-- Prepare classes
 			local cell_header_class = (not config.no_header) and i == 1 and " cell_header" or ""
 			local align_class = " align-" .. (align or "left")
 
+			-- Prepare UI elements, particularly text
+			local cell_ui_nodes = {}
+			if element then
+				table.insert(cell_ui_nodes, element)
+			else
+				for _,a_text in ipairs(text) do
+					local text_el = {"text", class="table_text", style={colour=colour, scale = config.text_scale}, text=a_text}
+					if #text > 1 then
+						text_el = {"row", {text_el}}
+					end
+					table.insert(cell_ui_nodes, text_el)
+				end
+			end
+
 			-- Define UI
-			local cell_ui =
-			{"row", class="table_cell" .. cell_header_class .. align_class, style={outlineColour = config.outline_colour}, {
-				{"text", class="table_text", style={colour=colour, scale = config.text_scale}, text=text}
-			}}
+			local cell_ui = {"row", class="table_cell" .. cell_header_class .. align_class, style={outlineColour = config.outline_colour}, cell_ui_nodes}
 			table.insert(entries, cell_ui)
 		end
 
@@ -150,14 +158,46 @@ function Ovn_f.generate_table_ui(table_def, config)
 		table.insert(columns, column_ui)
 	end
 
-	local table_ui =
-	{"row", class="table_container", {
-		-- Required to remove gaps between elements
-		{"row", class="table_body", columns}
+	-- Generate UIBox of table
+	local table_ui_jtml =
+	{"root", style={fillColour=G.C.CLEAR}, {
+		{"row", class="table_container", {
+			-- Required to remove gaps between elements
+			{"row", class="table_body", columns}
+		}}
 	}}
-	return Ovn_f.jtml_to_uiboxdef(table_ui, table_ui_style)
-end
+	local table_ui = Ovn_f.jtml_to_uiboxdef(table_ui_jtml, table_ui_style)
+	local uibox = UIBox{definition = table_ui, config={}}
+	local uiel  = uibox.UIRoot
 
+	-- Change heights of cells to line up with left-right-adjacent cells
+	local row_count = #table_def
+	local col_count = #table_def_cols
+	for r=1,row_count do
+		local cell_heights = {}
+
+		for c=1,col_count do
+			local column = uiel.children[1].children[1].children[c]
+			local cell = column.children[r]
+			table.insert(cell_heights, cell.T.h)
+		end
+
+		local max_cell_height = math.max(unpack(cell_heights))
+
+		for c=1,col_count do
+			local column = uiel.children[1].children[1].children[c]
+			local cell = column.children[r]
+			cell.T.h = max_cell_height
+			cell.config.h = max_cell_height
+			cell.config.minh = max_cell_height
+		end
+	end
+	uibox:recalculate()
+
+	-- Finally ready
+	local final_return = {n=G.UIT.O, config={object=uibox}}
+	return final_return
+end
 
 
 
@@ -346,6 +386,7 @@ local function primary_contributors()
 			colour = G.C.BLUE,
 			align = "right"
 		}
+		row[2] = {text = row[2]}
 	end
 	return Ovn_f.generate_table_ui(credits_copy, table_config)
 end
@@ -363,6 +404,7 @@ local function additional_credits()
 			colour = G.C.ORANGE,
 			align = "center"
 		}
+		row[3] = {text = row[3]}
 	end
 	return Ovn_f.generate_table_ui(credits_copy, table_config)
 end

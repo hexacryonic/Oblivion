@@ -176,7 +176,10 @@ Oblivion.DescriptionDummy {
 				colour = G.C.BLUE,
 				align = "right"
 			}
-			local right = specific_vars[label_key]
+			local right
+			if specific_vars[label_key] then
+				right = {text = specific_vars[label_key]}
+			end
 			if right then
 				table.insert(table_rows, {left, right})
 			end
