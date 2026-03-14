@@ -1065,7 +1065,7 @@ SMODS.Joker { key = 'cultivar',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
-		art = "TBD",
+		art = "Oinite",
 	},
 
 	loc_vars = function(self, info_queue, card)
@@ -1081,9 +1081,8 @@ SMODS.Joker { key = 'cultivar',
 		odds = 4
 	}},
 
-	atlas = 'placeholder',
-	pos = { x = 0, y = 0 },
-	uses_placeholder_sprite = true,
+	atlas = 'jokers_corrupt',
+	pos = {x=5, y=4},
 
 	blueprint_compat = true,
 	eternal_compat = false,

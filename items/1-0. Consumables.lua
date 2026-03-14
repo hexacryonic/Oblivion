@@ -377,7 +377,7 @@ SMODS.Consumable { key = "eidolon",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "TBD"
+		art = "Oinite (idea: Airtoum)"
 	},
 
     loc_vars = function(self, info_queue, card)
@@ -385,9 +385,8 @@ SMODS.Consumable { key = "eidolon",
     end,
 	config = { extra = { seal = 'ovn_indigo' }, max_highlighted = 1 },
 
-	atlas = "placeholder",
-	pos = {x=1, y=2},
-	uses_placeholder_sprite = true,
+	atlas = "consumables",
+	pos = {x=2, y=2},
 
 	cost = 4,
 
