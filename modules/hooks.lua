@@ -217,24 +217,19 @@ function Card:change_suit(new_suit)
 		G.GAME.ovn_has_ocular = true
 	end
 
-	local transmute_type = "none"
-	-- Non-Optics -> Optics - Corrupt modifiers
-	if (
+	local transmute_func
+	if ( -- Non-Optics -> Optics - Corrupt modifiers
 		self.base.suit ~= "ovn_Optics"
 		and new_suit == "ovn_Optics"
-	) then transmute_type = "corrupt"
-	-- Optics -> Non-Optics - Purify modifiers
-	elseif (
+	) then transmute_func = Ovn_f.corrupt_modifiers
+	elseif ( -- Optics -> Non-Optics - Purify modifiers
 		self.base.suit == "ovn_Optics"
 		and new_suit ~= "ovn_Optics"
-	) then transmute_type = "purify"
+	) then transmute_func = Ovn_f.purify_modifiers
 	end
 
 	card_changesuit_hook(self, new_suit)
-
-	if transmute_type ~= "none" then
-		Ovn_f[transmute_type .. "_modifiers"](self)
-	end
+	if transmute_func then transmute_func(self) end
 end
 
 -- Hook for:
