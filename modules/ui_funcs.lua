@@ -129,6 +129,7 @@ function Ovn_f.generate_table_ui(table_def, config)
 			local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text}
 			local colour = cell_def.colour or config.default_text_colour
 			local align = cell_def.align
+			local scale = cell_def.scale or config.default_text_scale
 			local element = cell_def.element
 
 			-- Prepare classes
@@ -141,7 +142,7 @@ function Ovn_f.generate_table_ui(table_def, config)
 				table.insert(cell_ui_nodes, element)
 			else
 				for _,a_text in ipairs(text) do
-					local text_el = {"text", class="table_text", style={colour=colour, scale = config.text_scale}, text=a_text}
+					local text_el = {"text", class="table_text", style={colour=colour, scale = scale}, text=a_text}
 					if #text > 1 then
 						text_el = {"row", {text_el}}
 					end
@@ -298,33 +299,49 @@ end
 ---- CONFIG ----
 -----------------
 
-Oblivion.obj.config_tab = function ()
-	local config_ui =
-	{"root", style={
-		align = "center-middle",
-		padding = 0.2,
-		fillColour = G.C.BLACK,
-		roundness = 0.1,
-		emboss = 0.05,
-	}, {
-		{"row", {
-			create_toggle {
-				label = localize("k_cfg_family_friendly"),
-				ref_table = Oblivion.config,
-				ref_value = "family_friendly",
-				callback = Ovn_f.reload_localization
-			}
-		}},
-		{"row", {
-			create_toggle {
-				label = localize("k_cfg_disable_c_erratic_shader"),
-				ref_table = Oblivion.config,
-				ref_value = "disable_c_erratic_shader"
-			}
-		}},
+local function generate_config_row(key, callback)
+	local loc = G.localization.misc.config["ovn_" .. key]
+	local toggle = {element = create_toggle {
+		hide_label = true,
+		ref_table = Oblivion.config,
+		ref_value = key,
+		callback = callback
 	}}
+	local label = {text = loc.name}
+	local desc = {text = loc.text}
+	return {toggle, label, desc}
+end
 
-	return Ovn_f.jtml_to_uiboxdef(config_ui, {})
+Oblivion.obj.config_tab = function ()
+	local jtml_style = {
+		[".root"] = {
+			align = "center-middle",
+			padding = 0.2,
+			fillColour = G.C.BLACK,
+			roundness = 0.1,
+			emboss = 0.05,
+		}
+	}
+
+	local header_row = {
+		{text=localize("k_toggle"), colour=G.C.UI.TEXT_DARK, scale=0.5},
+		{text=localize("k_name"), colour=G.C.UI.TEXT_DARK, scale=0.5},
+		{text=localize("k_description"), colour=G.C.UI.TEXT_DARK, scale=0.5}
+	}
+
+	local tbl = Ovn_f.generate_table_ui({
+		header_row,
+		generate_config_row("family_friendly", Ovn_f.reload_localization),
+		generate_config_row("c_erratic_shader")
+	}, {
+		default_text_colour = G.C.WHITE,
+		default_text_scale = 0.4
+	})
+
+	local config_ui =
+	{"root", class="root", {tbl}}
+
+	return Ovn_f.jtml_to_uiboxdef(config_ui, jtml_style)
 end
 
 
@@ -374,7 +391,7 @@ end
 local table_config = {
 	no_header = true,
 	default_text_colour = G.C.UI.TEXT_LIGHT,
-	text_scale = 0.36,
+	default_text_scale = 0.36,
 	outline_colour = darken(G.C.JOKER_GREY, 0.5)
 }
 

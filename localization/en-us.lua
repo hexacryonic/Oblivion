@@ -355,14 +355,36 @@ local loc =  {
 			k_ovn_other_rarity = "(other)",
 			k_ovn_random_modifier = "(random)",
 
-			k_cfg_family_friendly = "Family friendly mode",
-			k_cfg_disable_c_erratic_shader = "Disable Corrupt Erratic shader"
+			k_toggle = "Toggle",
+			k_name = "Name",
+			k_description = "Description",
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
 			remaining_discard_money_i = "Remaining Discards ($#1#i each)",
 			interest_i = "#1#i interest per $#2#i (#3#i max)",
 		},
+		config = {
+			ovn_family_friendly = {
+				name = "Family friendly mode",
+				text = {
+					"Removes vulgar and",
+					"suggestive language."
+				}
+			},
+			ovn_c_erratic_shader = {
+				name = {
+					"Reduce Corrupt",
+					"Erratic visuals"
+				},
+				text = {
+					"Removes the glitch/matrix",
+					"shader, and slows down",
+					"glitched text."
+				}
+			}
+		},
+		config_desc = {},
 			-- Developer's note: Corrupt Challenge names are based on vanilla challenges; localization should try to reflect such to the best of one's ability
 			-- E.g. The Omlette -> Corrupt Omlette
 			-- E.g. On a Knife's Edge -> Corrupt Edge
