@@ -357,13 +357,13 @@ function Game:start_run(args)
 end
 
 -- Hook to apply c.Erratic color changes to main menu
-local mainmenu_hook = Game.main_menu
+local game_menu_hook = Game.main_menu
 function Game:main_menu(context)
 	if self.C_BACKUP then
 		self.C = self.C_BACKUP
 	end
 
-	return mainmenu_hook(self, context)
+	return game_menu_hook(self, context)
 end
 
 

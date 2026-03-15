@@ -65,6 +65,15 @@ local loc =  {
 		},
 
 		Other = {
+			ovn_first_install_notif = {
+				name = {"Thank you for", "installing {C:ovn_corrupted}Oblivion{}!"},
+				text = {
+					"{C:attention}Credits {}can be found",
+					"in the {C:attention}Collection{},",
+					"and {C:attention}configuration {}can be found",
+					"in {C:attention}Mods > Oblivion > Config{}."
+				}
+			},
 			ovn_corruptible = {
 				name = "Corruptible",
 				text = {
@@ -384,7 +393,6 @@ local loc =  {
 				}
 			}
 		},
-		config_desc = {},
 			-- Developer's note: Corrupt Challenge names are based on vanilla challenges; localization should try to reflect such to the best of one's ability
 			-- E.g. The Omlette -> Corrupt Omlette
 			-- E.g. On a Knife's Edge -> Corrupt Edge

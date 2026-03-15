@@ -310,7 +310,7 @@ function G.UIDEF.card_h_popup(card)
 			scale = scale/0.32,
 			align = "middle"
 		})
-		table.insert(name_rows, Ovn_f.jtml_to_uiboxdef(corrupted_from_row, {}))
+		table.insert(name_rows, corrupted_from_row)
 	end
 	return ret_val
 end

@@ -356,6 +356,24 @@ function Game:update(dt)
 	if dt_track >= 1 then dt_track = dt_track - 1 end
 end
 
+-- Hook for spawning the first-install notification
+local game_menu_hook = Game.main_menu
+function Game:main_menu(context)
+	game_menu_hook(self, context)
+	if not Oblivion.config.first_install_notif then
+		Ovn_f.add_simple_event(nil, nil, function ()
+			local loc = G.localization.descriptions.Other.ovn_first_install_notif
+			Ovn_f.notification({
+				{"row", style={fillColor=G.C.WHITE,padding=0.2,roundness=0.1}, {
+					Ovn_f.localize_desc(loc.name, {scale=1.5, text_colour=G.C.UI.TEXT_DARK}),
+					Ovn_f.localize_desc(loc.text, {text_colour=G.C.UI.TEXT_DARK})
+				}}
+			}, 10)
+			Oblivion.config.first_install_notif = true
+		end)
+	end
+end
+
 
 
 --------------------------

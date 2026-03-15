@@ -264,7 +264,7 @@ end
 -- Automatically formats a list of localization strings into a JTML element.
 ---@param desc string[]
 ---@param config? localize_desc.Config
----@return JTML.JTML
+---@return Balatro.UIBoxDefinition
 function Ovn_f.localize_desc(desc, config)
 	config = config or {}
 	config.scale = config.scale or 1.125
@@ -290,7 +290,91 @@ function Ovn_f.localize_desc(desc, config)
 		table.insert(row_nodes, row_ui)
 	end
 
-	return {"row", style={align = align}, row_nodes}
+	return Ovn_f.jtml_to_uiboxdef({"row", style={align = align}, row_nodes}, {})
+end
+
+local function notif_event(delay, func, dont_trigger_after)
+	G.E_MANAGER:add_event(Event {
+		no_delete = true,
+		pause_force = true,
+		timer = 'UPTIME',
+		trigger = not dont_trigger_after and 'after' or nil,
+		delay = delay,
+		func = function()
+			func()
+			return true
+		end,
+	}, 'achievement')
+end
+
+-- Spawns a notification, similar in behavior to achievements.
+---@param nodes (JTML.JTML|Balatro.UIBoxDefinition)[]
+---@return nil
+function Ovn_f.notification(nodes, sustain)
+	local style = {
+		[".root"] = {
+			align = "center-left",
+			roundness = 0.1,
+			padding = 0.06,
+			fillColour = G.C.UI.TRANSPARENT_DARK
+		},
+		[".notif_container"] = {
+			align = "center-left",
+			padding = 0.2,
+			minWidth = 20,
+			roundness = 0.1,
+			fillColour = G.C.BLACK,
+			outlineWidth = 1.5,
+			outlineColour = G.C.GREY
+		},
+		[".node_container"] = {
+			align = "center-middle",
+			roundness = 0.1
+		}
+	}
+
+	local def =
+	{"root", class="root", {
+		{"row", class="notif_container", {
+			{"row", class="node_container", nodes}
+		}}
+	}}
+
+	notif_event(nil, function ()
+		if G.achievement_notification then
+			G.achievement_notification:remove()
+			G.achievement_notification = nil
+		end
+		G.achievement_notification = G.achievement_notification or UIBox{
+			definition = Ovn_f.jtml_to_uiboxdef(def, style),
+			config = {
+				align = 'cr',
+				offset = {x=20,y=0},
+				major = G.ROOM_ATTACH,
+				bond = 'Weak'
+			}
+		}
+	end, true)
+	notif_event(0.1, function ()
+		G.achievement_notification.alignment.offset.x = (
+			G.ROOM.T.x
+			- G.achievement_notification.UIRoot.children[1].children[1].T.w
+			- 0.8
+		)
+	end)
+	notif_event(0.1, function ()
+		play_sound('highlight1', nil, 0.5)
+		play_sound('foil2', 0.5, 0.4)
+	end)
+	notif_event(sustain or 3, function ()
+		G.achievement_notification.alignment.offset.x = 20
+	end)
+	notif_event(0.5, function ()
+		if G.achievement_notification then
+			G.achievement_notification:remove()
+			G.achievement_notification = nil
+		end
+	end)
 end
 
 

@@ -151,7 +151,7 @@ return {
 			"{E:ovn_c_erratic_desc}with {C:ovn_corrupted}Corruption...{}",
 			"{E:ovn_c_erratic_desc}Its reach is {C:ovn_corrupted}Endless...",
 			"{C:attention}{C:red}!! SEIZURE WARNING !!",
-			"{C:attention}Mods > Oblivion > Config",
+			"{C:attention}Reduce visuals in config",
 		},
 		unlock = {
 			"{s:0.9}On {s:0.9,C:attention}Erratic{s:0.9} Deck with",
