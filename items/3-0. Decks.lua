@@ -1,3 +1,5 @@
+local add_simple_event = Ovn_f.add_simple_event
+
 local function achievement_get(key)
 	return SMODS.Achievements["ach_ovn_" .. key].earned
 end
