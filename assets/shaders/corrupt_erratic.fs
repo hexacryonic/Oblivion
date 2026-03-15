@@ -107,8 +107,8 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
 
     tex = tex + ((larger - tex)*matrix_intensity);
 
-    tex -= 0.1;
-    // tex = normalize(tex);
+    //tex -= 0.1; // This made things darker and bumped contrast a bit
+    //tex = normalize(tex);
 
     return tex*color;
 }

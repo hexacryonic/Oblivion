@@ -391,9 +391,27 @@ SMODS.DynaTextEffect { key = "c_erratic_desc",
 		local og_char = dynatext.strings[1].letters[index].char
 		if og_char == " " then return end
 
-		local rnd = math.random(33, 126)
-		local char = string.char(rnd)
-		letter.letter:set(char)
+		-- Slowing mechanisms for accessibility toggles
+		local timing_mag = 8
+		local timing_req = timing_mag*((index%3) + 1)
+		letter.timing = (letter.timing or (index%timing_mag)) + 1
+
+		local reduce_speed = (
+			Oblivion.config.disable_c_erratic_shader
+			or G.SETTINGS.reduced_motion
+		)
+		local do_change = true
+		if reduce_speed then
+			do_change = letter.timing >= timing_req
+		end
+
+		if do_change then
+			local rnd = math.random(33, 126)
+			local char = string.char(rnd)
+			letter.letter:set(char)
+		end
+
+		if letter.timing >= timing_req then letter.timing = 0 end
 	end,
 }
 
@@ -403,7 +421,7 @@ SMODS.ScreenShader {
 	order = 99,
 
 	should_apply = function(self)
-		return G.GAME.override_crt and not Oblivion.config.disable_c_erratic_shader
+		return G.GAME.override_crt and not (Oblivion.config.disable_c_erratic_shader or G.SETTINGS.reduced_motion)
 	end,
 	send_vars = function(self)
 		return {

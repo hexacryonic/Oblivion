@@ -151,7 +151,6 @@ return {
 			"{E:ovn_c_erratic_desc}with {C:ovn_corrupted}Corruption...{}",
 			"{E:ovn_c_erratic_desc}Its reach is {C:ovn_corrupted}Endless...",
 			"{C:attention}{C:red}!! SEIZURE WARNING !!",
-			"{C:attention}Toggle harsh visuals in",
 			"{C:attention}Mods > Oblivion > Config",
 		},
 		unlock = {

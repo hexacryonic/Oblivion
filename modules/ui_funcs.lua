@@ -332,7 +332,7 @@ Oblivion.obj.config_tab = function ()
 	local tbl = Ovn_f.generate_table_ui({
 		header_row,
 		generate_config_row("family_friendly", Ovn_f.reload_localization),
-		generate_config_row("c_erratic_shader")
+		generate_config_row("disable_c_erratic_shader")
 	}, {
 		default_text_colour = G.C.WHITE,
 		default_text_scale = 0.4

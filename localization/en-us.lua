@@ -372,15 +372,15 @@ local loc =  {
 					"suggestive language."
 				}
 			},
-			ovn_c_erratic_shader = {
+			ovn_disable_c_erratic_shader = {
 				name = {
 					"Reduce Corrupt",
 					"Erratic visuals"
 				},
 				text = {
-					"Removes the glitch/matrix",
-					"shader, and slows down",
-					"glitched text."
+					"Removes the glitch/matrix shader,",
+					"and slows down glitched text.",
+					"(Reduced motion also enables this)"
 				}
 			}
 		},
