@@ -450,8 +450,8 @@ local loc =  {
 		},
 			-- Developer's note: Please only translate the second and third item of each tuple
 		credits = {
-			{"HexaCryonic", "Creator, Lead Developer"},
-			{"Oinite", "Developer"},
+			{"HexaCryonic", {"Creator", "Lead Developer"}},
+			{"Oinite", {"Developer", "Artist"}},
 			{"Lil Mr. Slipstream", "Artist"},
 		},
 		credits_additional = {
