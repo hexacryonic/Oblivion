@@ -372,6 +372,8 @@ function Game:main_menu(context)
 			Oblivion.config.first_install_notif = true
 		end)
 	end
+
+	Oblivion.ovn_c_erratic_warn = localize("k_ovn_c_erratic_warn_1")
 end
 
 

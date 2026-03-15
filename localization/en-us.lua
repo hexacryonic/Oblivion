@@ -367,6 +367,10 @@ local loc =  {
 			k_toggle = "Toggle",
 			k_name = "Name",
 			k_description = "Description",
+
+			k_ovn_c_erratic_warn_1 = "Are you sure? Select again to confirm",
+			k_ovn_c_erratic_warn_2 = "Are you REALLY sure? Select again to confirm",
+			k_ovn_c_erratic_warn_3 = "I warned you. Select again to confirm",
 		},
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
