@@ -97,4 +97,8 @@ Oblivion.obj.calculate = function (self, context)
         G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0
         G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0
     end
+
+    if context.ovn_run_started then
+        ease_background_colour_blind()
+    end
 end
