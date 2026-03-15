@@ -151,8 +151,8 @@ SMODS.Consumable { key = 'ganymede',
 	set = 'Planet',
 	credits = {
 		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "TBD"
+		art = "Oinite",
+		code = "HexaCryonic"
 	},
 
 	loc_vars = planet_loc_vars,
@@ -160,7 +160,6 @@ SMODS.Consumable { key = 'ganymede',
 
 	atlas = 'consumables',
 	pos = {x = 0, y = 1 },
-	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -175,8 +174,8 @@ SMODS.Consumable { key = 'callisto',
 	set = 'Planet',
 	credits = {
 		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "TBD"
+		art = "Oinite",
+		code = "HexaCryonic"
 	},
 
 	loc_vars = planet_loc_vars,
@@ -184,7 +183,6 @@ SMODS.Consumable { key = 'callisto',
 
 	atlas = 'consumables',
 	pos = {x = 1, y = 1 },
-	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -199,8 +197,8 @@ SMODS.Consumable { key = 'io',
 	set = 'Planet',
 	credits = {
 		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "TBD"
+		art = "Oinite",
+		code = "HexaCryonic"
 	},
 
 	loc_vars = planet_loc_vars,
@@ -208,7 +206,6 @@ SMODS.Consumable { key = 'io',
 
 	atlas = 'consumables',
 	pos = {x = 2, y = 1 },
-	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
@@ -223,8 +220,8 @@ SMODS.Consumable { key = 'europa',
 	set = 'Planet',
 	credits = {
 		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "TBD"
+		art = "Oinite",
+		code = "HexaCryonic"
 	},
 
 	loc_vars = planet_loc_vars,
@@ -232,7 +229,6 @@ SMODS.Consumable { key = 'europa',
 
 	atlas = 'consumables',
 	pos = {x = 3, y = 1 },
-	uses_placeholder_sprite = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
