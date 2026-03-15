@@ -26,11 +26,22 @@ Oblivion.obj.optional_features = {
 	}
 }
 
--- talisman compat
--- but you should really be using amulet
--- (might depreciate talisman sometime down the line)
-to_big = to_big or function(x)
-	return x
+-- Talisman incompat
+-- You should really be using Amulet
+if SMODS.Mods["Talisman"] and SMODS.Mods["Talisman"].can_load then
+	error([[TALISMAN detected!
+
+
+
+
+====== HOW TO FIX THIS CRASH ======
+1. Uninstall Talisman
+2. Install Amulet
+https://github.com/frostice482/amulet/tree/main
+
+
+
+]])
 end
 
 -- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\

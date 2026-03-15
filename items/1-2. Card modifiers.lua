@@ -1,10 +1,4 @@
---------------------------
--- Supplementary functions
---------------------------
 local add_simple_event = Ovn_f.add_simple_event
-to_big = to_big or function(x)
-	return x
-end
 
 local function change_rank(card, new_rank)
 	local new_code = ({
