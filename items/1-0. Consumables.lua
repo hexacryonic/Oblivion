@@ -316,6 +316,7 @@ SMODS.Consumable { key = "oblivion",
 	pos = {x=1, y=2},
 
 	cost = 2,
+	corrupts_jokers = true,
 
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
