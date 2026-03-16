@@ -149,9 +149,9 @@ return {
 	j_ovn_collapsing_world = {
 		name = "Edge of a Collapsing World",
 		text = {
-			"The {C:attention}rightmost and leftmost {}cards",
-			"discarded in the {C:attention}final discard",
-			"of the round are {C:red}destroyed,",
+			"On the {C:attention}final discard,",
+			"the {C:attention}rightmost and leftmost",
+			"discarded cards are {C:red}destroyed{},",
 			"then this Joker gains {C:mult}+#1# {}Mult",
 			"{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
 		},

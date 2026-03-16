@@ -506,7 +506,7 @@ local loc =  {
 		credits = {
 			{"HexaCryonic", {"Creator", "Lead Developer"}},
 			{"Oinite", {"Developer", "Artist"}},
-			{"Lil Mr. Slipstream", "Artist"},
+			{"Lil. Mr. Slipstream", "Artist"},
 		},
 		credits_additional = {
 			{"thaun0",         "Concept",  "Database"},
@@ -524,6 +524,12 @@ local loc =  {
 		},
 		credits_long = {
 			"Corrupt Deck music composed by {C:blue}HexaCryonic",
+			"",
+			'Deck Skins "Nova Drift" and "ACGT Series"',
+			'created by {C:blue}HexaCryonic',
+			"",
+			'Deck Skin "In Sound Mind"',
+			"created by {C:purple}Lil. Mr. Slipstream",
 			"",
 			'Music used by A Part Falling is "A Part Falling",',
 			"composed by {C:red}Hakita {}for {C:hearts}ULTRAKILL",

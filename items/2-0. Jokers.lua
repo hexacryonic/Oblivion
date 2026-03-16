@@ -111,7 +111,7 @@ SMODS.Joker { key = 'ovn',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream"
+		art = "Lil. Mr. Slipstream"
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -429,7 +429,7 @@ SMODS.Joker { key = 'purifier',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream"
+		art = "Lil. Mr. Slipstream"
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -1860,7 +1860,7 @@ SMODS.Joker { key = 'infinitesimal',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 
 	atlas = 'jokers_corrupt',
@@ -2109,7 +2109,7 @@ SMODS.Joker { key = 'nexus_point',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 
 	atlas = 'jokers_corrupt',

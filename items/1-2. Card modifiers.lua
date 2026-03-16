@@ -36,7 +36,7 @@ SMODS.Enhancement { key = "radiant",
 	credits = {
 		concept = "",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 	config = {extra = {bonus_chips = 0}},
 
@@ -75,7 +75,7 @@ SMODS.Enhancement { key = 'dynamo',
 	credits = {
 		concept = "",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -113,7 +113,7 @@ SMODS.Enhancement { key = "coord",
 	credits = {
 		concept = {"HexaCryonic", "AlexZGreat"},
 		code = "HexaCryonic",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 	loc_vars = function(self, info_queue, card)
 		return { }
@@ -249,7 +249,7 @@ SMODS.Enhancement { key = "crystal",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.plays_left }}
@@ -347,7 +347,7 @@ SMODS.Enhancement { key = "ion",
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream",
+		art = "Lil. Mr. Slipstream",
 		sound = "HexaCryonic",
 	},
 	loc_vars = function(self, info_queue, card)
@@ -629,7 +629,7 @@ SMODS.Seal { key = 'amethyst_mark',
 	credits = {
 		concept = "QueenChloe",
 		code = "Oinite",
-		art = "Lil Mr. Slipstream"
+		art = "Lil. Mr. Slipstream"
 	},
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, { key = 'c_fool', set = 'Tarot' })

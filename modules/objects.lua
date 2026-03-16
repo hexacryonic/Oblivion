@@ -118,7 +118,7 @@ SMODS.Tag:take_ownership('orbital', {
 			end
 		end
 	end
-})
+}, true)
 
 -- Ownership of all default JimboQuips to use THE SHOW NEVER ENDS
 for i=1,10 do
