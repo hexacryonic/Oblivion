@@ -1,3 +1,5 @@
+local add_simple_event = Ovn_f.add_simple_event
+
 ---@param card Card
 ---@param target string
 ---@param scalar string
