@@ -152,7 +152,7 @@ SMODS.Joker { key = 'radiant_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "TBD"
+		art = "Oinite"
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -169,9 +169,8 @@ SMODS.Joker { key = 'radiant_joker',
 		}
 	},
 
-	atlas = "enhancements",
-	pos = { x=3, y=0 },
-	uses_placeholder_sprite = true,
+    atlas = 'jokers',
+	pos  = { x=2, y=2 },
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -280,7 +279,7 @@ SMODS.Joker { key = 'crystal_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "TBD",
+		art = "Oinite",
 	},
 	loc_vars = function (self, info_queue, card)
 		table.insert(info_queue, G.P_CENTERS.m_ovn_crystal)
@@ -294,10 +293,8 @@ SMODS.Joker { key = 'crystal_joker',
 		}
 	},
 
-	-- placeholder
-	atlas = "enhancements",
-	pos = { x=1, y=1 },
-	uses_placeholder_sprite = true,
+    atlas = 'jokers',
+	pos  = { x=3, y=2 },
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -345,7 +342,7 @@ SMODS.Joker { key = 'ion_joker',
 	credits = {
 		concept = "HexaCryonic",
 		code = "Oinite",
-		art = "TBD"
+		art = "Oinite"
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -360,10 +357,8 @@ SMODS.Joker { key = 'ion_joker',
 		}
 	},
 
-	-- placeholder
-	atlas = "enhancements",
-	pos = { x=3, y=1 },
-	uses_placeholder_sprite = true,
+    atlas = 'jokers',
+	pos  = { x=1, y=2 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
