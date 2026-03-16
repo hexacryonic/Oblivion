@@ -388,7 +388,13 @@ function G.FUNCS.can_play(e)
 			break
 		end
 	end
-	funcs_canplay_hook(e)
+
+	if has_unob then
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+	else
+		funcs_canplay_hook(e)
+	end
 end
 
 -- Hook to reset played hand status for the round
