@@ -2,7 +2,6 @@ local function corrupt_juice_eval(card)
     return (
         G.GAME.ovn_abyss_juicing
         and Ovn_f.joker_is_corruptible(card.config.center.key)
-        and not G.RESET_JIGGLES
     )
 end
 
