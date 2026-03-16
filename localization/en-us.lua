@@ -395,6 +395,26 @@ local loc =  {
 					"and slows down glitched text.",
 					"(Reduced motion also enables this)"
 				}
+			},
+			ovn_disable_c_erratic_warning = {
+				name = {
+					"Disable Corrupt",
+					"Erratic play warning"
+				},
+				text = {
+					"Disables the extra click",
+					"to play the deck."
+				}
+			},
+			ovn_disable_a_part_falling_music = {
+				name = {
+					"Disable A Part",
+					"Falling music"
+				},
+				text = {
+					"(The music is",
+					"stream-friendly!)"
+				}
 			}
 		},
 			-- Developer's note: Corrupt Challenge names are based on vanilla challenges; localization should try to reflect such to the best of one's ability

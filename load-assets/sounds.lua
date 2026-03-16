@@ -109,8 +109,10 @@ SMODS.Sound {
 	volume = 0.6,
 
 	select_music_track = function()
-	return G.GAME and (
-		Ovn_f.has_joker('j_ovn_apartfalling')
+	return (
+		not Oblivion.config.disable_a_part_falling_music
+		and G.GAME
+		and Ovn_f.has_joker('j_ovn_apartfalling')
 		and (
 			G.shop
 			or G.booster_pack
@@ -131,8 +133,10 @@ SMODS.Sound {
 	volume = 0.5,
 
 	select_music_track = function()
-		return G.GAME and (
-			Ovn_f.has_joker('j_ovn_apartfalling')
+		return (
+			not Oblivion.config.disable_a_part_falling_music
+			and G.GAME
+			and Ovn_f.has_joker('j_ovn_apartfalling')
 			and G.GAME.blind
 		)
 	end,

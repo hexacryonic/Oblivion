@@ -306,7 +306,12 @@ end
 -- Hook for Corrupt Erratic Deck warning
 local funcs_setuprun_hook = G.FUNCS.start_setup_run
 function G.FUNCS.start_setup_run(e)
-	if not e or G.GAME.viewed_back.name ~= "b_ovn_c_erratic" or G.SETTINGS.current_setup == 'Continue' then
+	if (
+		Oblivion.config.disable_c_erratic_warning
+		or not e
+		or G.GAME.viewed_back.name ~= "b_ovn_c_erratic"
+		or G.SETTINGS.current_setup == 'Continue'
+	) then
 		funcs_setuprun_hook(e)
 		return
 	end
