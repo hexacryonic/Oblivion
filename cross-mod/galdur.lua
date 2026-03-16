@@ -17,11 +17,16 @@ end
 -- Hook for Corrupt Erratic Deck warning
 local funcs_deckselectnext_hook = G.FUNCS.deck_select_next
 function G.FUNCS.deck_select_next(e)
+    local new_page = math.min(math.max(Galdur.run_setup.current_page + e.config.ref_value, 1), #Galdur.run_setup.pages+1)
+    local warning_text = e.UIBox:get_UIE_by_ID('warning_text_deck')
     if (
 		Oblivion.config.disable_c_erratic_warning
 		or Galdur.run_setup.choices.deck.name ~= "b_ovn_c_erratic"
-        or Galdur.run_setup.current_page ~= #Galdur.run_setup.pages
+        or new_page <= #Galdur.run_setup.pages
     ) then
+        e.warning_countdown = nil
+        warning_text.config.colour = G.C.CLEAR
+        warning_text.config.shadow = false
         funcs_deckselectnext_hook(e)
         return
     end
@@ -40,7 +45,6 @@ function G.FUNCS.deck_select_next(e)
 
     -- Oblivion.ovn_c_erratic_warn = localize("k_ovn_c_erratic_warn_" .. e.warning_countdown)
 
-	local warning_text = e.UIBox:get_UIE_by_ID('warning_text_deck')
 	warning_text:juice_up()
     warning_text.config.colour = G.C.WHITE
     warning_text.config.shadow = true
