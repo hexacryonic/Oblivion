@@ -183,6 +183,8 @@ SMODS.Scoring_Parameter { key = 'instability',
 				Oblivion.play_instability_noise = false
 			end
 		end
+
+		self.current = G.GAME.ovn_instability
 	end,
 }
 
