@@ -282,6 +282,7 @@ function create_UIBox_HUD()
 	return ret
 end
 
+-- Hook to add the warning text element
 local uidef_runsetup_hook = G.UIDEF.run_setup_option
 function G.UIDEF.run_setup_option(type)
 	local t = uidef_runsetup_hook(type)
