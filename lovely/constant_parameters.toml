@@ -9,7 +9,6 @@ priority = 0
 
 [vars] # To change which parameter to exclude, change this conditional
 parameter_conditional = 'name ~= "ovn_instability"'
-parameter_conditional_inv = 'name == "ovn_instability"'
 
 # ----
 
@@ -111,8 +110,28 @@ return SMODS.Scoring_Parameters[key].current or SMODS.Scoring_Parameters[key].de
 '''
 position = 'before'
 payload = '''
-if {{lovely:parameter_conditional_inv}} then
+if key == "ovn_instability" then
   return G.GAME.ovn_instability
+end
+'''
+match_indent = true
+
+# ----
+
+# All following patches target function SMODS.upgrade_poker_hands
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '''
+p.current = G.GAME.hands[hand][name] or p.default_value
+update_hand_text({nopulse = nil, delay = 0}, {[name] = p.current})
+'''
+position = 'at'
+payload = '''
+if {{lovely:parameter_conditional}} then
+  p.current = G.GAME.hands[hand][name] or p.default_value
+  update_hand_text({nopulse = nil, delay = 0}, {[name] = p.current})
 end
 '''
 match_indent = true
