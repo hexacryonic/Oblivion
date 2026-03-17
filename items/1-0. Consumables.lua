@@ -451,7 +451,7 @@ SMODS.Voucher { key = "call_of_the_void",
 	},
 
 	atlas = "vouchers",
-	pos = {x=0, y=1},
+	pos = {x=1, y=0},
 	cost = 10,
 
 	redeem = function(self, card)
