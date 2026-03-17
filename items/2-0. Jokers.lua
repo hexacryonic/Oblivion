@@ -842,7 +842,7 @@ SMODS.Joker { key = 'aeon',
 	credits = {
 		concept = "HexaCryonic",
 		code = "HexaCryonic",
-		art = "TBD",
+		art = "Oinite",
 	},
 
 	config = { extra = { Xmult = 4} },
@@ -853,9 +853,8 @@ SMODS.Joker { key = 'aeon',
 		}}
 	end,
 
-	atlas = 'placeholder',
-	pos = { x = 0, y = 0 },
-	uses_placeholder_sprite = true,
+	atlas = 'jokers_corrupt',
+	pos = { x = 1, y = 5 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
