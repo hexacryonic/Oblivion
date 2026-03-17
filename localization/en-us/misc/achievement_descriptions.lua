@@ -31,4 +31,5 @@ return {
 	["ach_ovn_unstoppableforce"]      = "Have your held hand full of Unobtanium Cards when you can't discard",
 	["ach_ovn_tickled"]               = "I'm a deck of my word! Here's your achievement",
 	["ach_ovn_eventhoz_scale"]        = "Scale Event Horizon to at least +193 Mult and +1730 Chips",
+	["ach_ovn_slumbering_beast"]      = "Obtain Nyarlathotep",
 }

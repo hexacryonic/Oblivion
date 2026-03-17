@@ -57,6 +57,11 @@ map["j_arrowhead"]           = "j_ovn_apache_tears"
 map["j_bloodstone"]          = "j_ovn_apache_tears"
 map["j_onyx_agate"]          = "j_ovn_apache_tears"
 map["j_rough_gem"]           = "j_ovn_apache_tears"
+map["j_caino"] --[[sic]]     = "j_ovn_nyarlathotep"
+map["j_triboulet"]           = "j_ovn_nyarlathotep"
+map["j_yorick"]              = "j_ovn_nyarlathotep"
+map["j_chicot"]              = "j_ovn_nyarlathotep"
+map["j_perkeo"]              = "j_ovn_nyarlathotep"
 
 Oblivion.corruption_condition = Oblivion.corruption_condition or {}
 Oblivion.corruption_condition["j_gros_michel"] = function()

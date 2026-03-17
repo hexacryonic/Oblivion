@@ -27,4 +27,5 @@ return {
 	["ach_ovn_unstoppableforce"]      = "Unstoppable Force Vs. Immovable Object",
 	["ach_ovn_tickled"]               = "That Tickled!",
 	["ach_ovn_eventhoz_scale"]        = "Reach for the Sun and Burn! Burn! Burn!",
+	["ach_ovn_slumbering_beast"]      = "The Slumbering Beast Awakens",
 }

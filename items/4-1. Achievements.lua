@@ -399,3 +399,13 @@ SMODS.Achievement { key = "eventhoz_scale",
 		return (args.type == 'ovn_eventhoz_scale')
 	end
 }
+
+-------------------------------
+-- The Slumbering Beast Awakens
+-------------------------------
+SMODS.Achievement { key = "slumbering_beast",
+	order = 30,
+	unlock_condition = function (self, args)
+		return (args.type == 'ovn_slumbering_beast')
+	end
+}

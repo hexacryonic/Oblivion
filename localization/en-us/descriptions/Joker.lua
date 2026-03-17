@@ -480,4 +480,17 @@ return {
 			"{C:attention}Purifier {}or {C:attention}Nexus Point"
 		}
 	},
+	j_ovn_nyarlathotep = {
+		name = "Nyarlathotep",
+		text = {
+			"{C:attention}Retrigger {}all scoring cards",
+			"once {C:attention}per held Corrupted Joker",
+			"{C:inactive}(Currently {C:attention}#1# {C:inactive}retriggers)",
+			"Scoring cards gain",
+			"{C:white,X:mult}+X#2# {} Mult per trigger",
+		},
+		corrupted_from = {
+			"the {C:attention}Legendary Jokers"
+		}
+	},
 }

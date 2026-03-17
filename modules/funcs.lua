@@ -189,6 +189,10 @@ Ovn_f.corrupt_joker = function(card)
 	-- as Apache Tears "absorbs" the corrupted card instead
 	end
 
+	if corrupted_card_key == "j_ovn_nyarlathotep" then
+		check_for_unlock{type="ovn_slumbering_beast"}
+	end
+
     add_simple_event(nil, nil, function()
         play_sound("ovn_corrupting_joker")
 

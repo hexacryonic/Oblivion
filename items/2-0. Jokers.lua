@@ -2135,3 +2135,73 @@ SMODS.Joker { key = 'nexus_point',
 		end
 	end
 }
+
+---------------
+-- CORRUPTED
+-- Nyarlathotep
+---------------
+
+local function count_corrupt_jokers()
+	if not Ovn_f.descend_table{G, "jokers", "cards"} then return 1 end
+	local count = 0
+	for _,joker in pairs(G.jokers.cards) do
+		local joker_key = joker.config.center.key
+		if Ovn_f.joker_is_purifiable(joker_key) then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+SMODS.Joker { key = 'nyarlathotep',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			count_corrupt_jokers(),
+			card.ability.extra.xmult_mod
+		}}
+	end,
+	config = {
+		extra = {
+			xmult_mod = 0.02
+		}
+	},
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic",
+	},
+
+	atlas = 'jokers_corrupt',
+	pos = {x=1, y=4},
+	soul_pos = {x=2, y=4},
+
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 'ovn_supercorrupted',
+	cost = 20,
+
+	calculate = function (self, card, context)
+		if (
+			context.individual
+			and context.cardarea == G.play
+			and not context.blueprint
+		) then
+			return {
+				pre_func = function()
+					SMODS.scale_card(context.other_card, {
+						ref_table = context.other_card.ability,
+						ref_value = "perma_x_mult",
+						scalar_table = card.ability.extra,
+						scalar_value = "xmult_mod",
+						colour = G.C.MULT
+					})
+				end
+			}
+		end
+
+		if context.repetition and context.cardarea == G.play then
+			return {repetitions = count_corrupt_jokers()}
+		end
+	end
+}
