@@ -411,7 +411,7 @@ SMODS.Consumable { key = "eidolon",
 SMODS.Voucher { key = "wicked_invocation",
 	credits = {
 		concept = "HexaCryonic",
-		art = "TBD",
+		art = "Oinite",
 		code = "Oinite"
 	},
 
@@ -446,7 +446,7 @@ SMODS.Voucher { key = "call_of_the_void",
 	requires = {'v_ovn_wicked_invocation'},
 	credits = {
 		concept = "HexaCryonic",
-		art = "TBD",
+		art = "Oinite",
 		code = "Oinite"
 	},
 
