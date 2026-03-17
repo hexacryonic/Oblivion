@@ -34,7 +34,7 @@ end
 ---------------
 SMODS.Enhancement { key = "radiant",
 	credits = {
-		concept = "",
+		concept = "(TBD)",
 		code = "Oinite",
 		art = "Lil. Mr. Slipstream",
 	},
@@ -73,7 +73,7 @@ SMODS.Enhancement { key = "radiant",
 ---------------
 SMODS.Enhancement { key = 'dynamo',
 	credits = {
-		concept = "",
+		concept = "(TBD)",
 		code = "Oinite",
 		art = "Lil. Mr. Slipstream",
 	},
