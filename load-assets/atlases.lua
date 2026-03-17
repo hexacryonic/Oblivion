@@ -14,6 +14,7 @@ local card_atlases = {
 	"placeholder",
 	"seals",
 	"seals_marks",
+	"vouchers",
 	"itemspecific/apache_tears",
 	"itemspecific/apartfalling",
 	"crossmod/cryptid_planets",

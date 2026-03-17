@@ -1208,7 +1208,7 @@ SMODS.Joker { key = 'philosophers_stone',
 	credits = {
 		concept = "QueenChloe",
 		code = "Oinite",
-		art = "HexaCryonic"
+		art = "Oinite"
 	},
 
 	loc_vars = function (self, info_queue, card)
@@ -1224,9 +1224,8 @@ SMODS.Joker { key = 'philosophers_stone',
 		}
 	},
 
-	atlas = 'placeholder',
-	pos = {x=0, y=0},
-	uses_placeholder_sprite = true,
+	atlas = 'jokers_corrupt',
+	pos = { x = 0, y = 5 },
 
 	blueprint_compat = false,
 	eternal_compat = true,

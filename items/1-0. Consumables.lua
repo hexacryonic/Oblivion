@@ -415,9 +415,8 @@ SMODS.Voucher { key = "wicked_invocation",
 		code = "Oinite"
 	},
 
-	atlas = "placeholder",
-	pos = {x=0, y=1},
-	uses_placeholder_sprite = true,
+	atlas = "vouchers",
+	pos = {x=0, y=0},
 	cost = 10,
 
 	redeem = function(self, card)
@@ -451,9 +450,8 @@ SMODS.Voucher { key = "call_of_the_void",
 		code = "Oinite"
 	},
 
-	atlas = "placeholder",
-	pos = {x=1, y=1},
-	uses_placeholder_sprite = true,
+	atlas = "vouchers",
+	pos = {x=0, y=1},
 	cost = 10,
 
 	redeem = function(self, card)
