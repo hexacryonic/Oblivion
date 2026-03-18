@@ -73,7 +73,7 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 		})
 	end
 
-	if card and card.config.center and G.your_collection and (
+	if card and card.config.center and card.config.center.discovered and G.your_collection and (
 		card.config.center.credits
 		or card.config.center.uses_placeholder_sprite
 	) then for _,collection_area in ipairs(G.your_collection) do
