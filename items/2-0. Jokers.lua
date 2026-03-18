@@ -1544,7 +1544,7 @@ SMODS.Joker { key = 'cigarette_card',
 
 ------------
 -- CORRUPTED
--- Airstrike
+-- Air Strike
 ------------
 SMODS.Joker { key = 'airstrike',
 	loc_vars = function(self, info_queue, center)
@@ -1570,6 +1570,7 @@ SMODS.Joker { key = 'airstrike',
 		if context.individual and context.other_card.base.value == '10' then
 			local c_ability = context.other_card.ability --[[@as table]]
 			if context.cardarea == 'unscored' or context.cardarea == G.hand then
+				local old_xmult = c_ability.perma_x_mult
 				SMODS.scale_card(context.other_card, {
 					ref_table = c_ability,
 					ref_value = "perma_x_mult",
@@ -1577,13 +1578,18 @@ SMODS.Joker { key = 'airstrike',
 					scalar_value = "xmult",
 					colour = G.C.MULT
 				})
+				local new_xmult = c_ability.perma_x_mult
+				local xmult_change = new_xmult - old_xmult
+
+				c_ability.ovn_airstrike_stockpile = (c_ability.ovn_airstrike_stockpile or 0) + xmult_change
 			elseif context.cardarea == G.play then
 				-- displayed mult is 1 + perma_x_mult
 				-- hence this check is X1 less than the required X5
-				if c_ability.perma_x_mult >= 4 then
+				if (c_ability.ovn_airstrike_stockpile or 0) >= 4 then
 					check_for_unlock{type="ovn_airstrike_release"}
 				end
-				c_ability.perma_x_mult = 0
+				c_ability.perma_x_mult = c_ability.perma_x_mult - (c_ability.ovn_airstrike_stockpile or 0)
+				c_ability.ovn_airstrike_stockpile = nil
 			end
 		end
 	end

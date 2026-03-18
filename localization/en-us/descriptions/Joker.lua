@@ -349,14 +349,13 @@ return {
 	j_ovn_airstrike = {
 		name = 'Air Strike',
 		text = {
-			"Held or unscoring {C:attention}10{}s stockpile",
+			"Held or unscoring {C:attention}10s {C:purple}stockpile",
 			"{X:mult,C:white} X#1# {} Mult every hand played",
 			__sp__,
 
-			"When scored, {C:attention}10{}s give",
-			"their stockpiled Mult",
-			"and {C:attention}reset their stockpile",
-			"after the hand",
+			"When scored, {C:attention}10s {}use",
+			"their {C:purple}stockpiled {}XMult,",
+			"which {C:purple}resets {}after scoring",
 		},
 		corrupted_from = {
 			"{C:attention}Walkie Talkie"
