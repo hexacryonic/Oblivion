@@ -28,7 +28,7 @@ Oblivion.obj.optional_features = {
 
 -- Talisman incompat
 -- You should really be using Amulet
-if SMODS.Mods["Talisman"] and SMODS.Mods["Talisman"].can_load then
+if SMODS.Mods["Talisman"] and SMODS.Mods["Talisman"].can_load and not (SMODS.Mods["Amulet"] and SMODS.Mods["Amulet"].can_load) then
 	error([[TALISMAN detected!
 
 
