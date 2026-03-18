@@ -50,7 +50,11 @@ end
 ---@param info_queue table
 ---@return nil
 function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
-	if card and card.config.center and Ovn_f.joker_is_corruptible(card.config.center.key) and card.config.center.discovered then
+	if (
+		card and card.config.center
+		and Ovn_f.joker_is_corruptible(card.config.center.key)
+		and card.config.center.discovered
+	) then
 		table.insert(info_queue, {
 			key = 'ovn_corruptible',
 			set = 'Other',

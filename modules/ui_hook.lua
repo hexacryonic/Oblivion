@@ -357,6 +357,7 @@ function G.UIDEF.card_h_popup(card)
 	local j_locs = G.localization.descriptions.Joker
 	if (
 		Ovn_f.descend_table{card, "config", "center", "key"}
+		and card.config.center.discovered
 		and Ovn_f.descend_table{j_locs, card.config.center.key, "corrupted_from"}
 	) then
 		local corrupted_from_list = SMODS.shallow_copy(j_locs[card.config.center.key].corrupted_from)
@@ -365,7 +366,7 @@ function G.UIDEF.card_h_popup(card)
 		local corrupted_from_row = Ovn_f.localize_desc(corrupted_from_list, {
 			text_colour = G.C.WHITE,
 			scale = scale/0.32,
-			align = "middle"
+			align = "middle",
 		})
 		table.insert(name_rows, corrupted_from_row)
 	end
