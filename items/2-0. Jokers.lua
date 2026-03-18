@@ -2200,7 +2200,7 @@ SMODS.Joker { key = 'nyarlathotep',
 			}
 		end
 
-		if context.repetition and context.cardarea == G.play then
+		if context.repetition and context.cardarea == G.play and not context.retrigger_joker then
 			return {repetitions = count_corrupt_jokers()}
 		end
 	end
