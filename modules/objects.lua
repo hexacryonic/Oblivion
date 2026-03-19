@@ -145,3 +145,19 @@ for i=1,7 do
 		}
 	})
 end
+
+-- Ownership of Jokerless (challenge) to ban The Abyss and Charybdis
+local jokerless_restrictions = SMODS.Challenges.c_jokerless_1.restrictions --[[@as table[] ]]
+table.insert(jokerless_restrictions.banned_cards, {id = 'c_ovn_abyss'})
+table.insert(jokerless_restrictions.banned_cards, {id = 'c_ovn_charybdis'})
+table.insert(jokerless_restrictions.banned_cards, {id = 'v_ovn_wicked_invocation'})
+table.insert(jokerless_restrictions.banned_cards, {id = 'v_ovn_call_of_the_void'})
+table.insert(jokerless_restrictions.banned_tags,  {id = 'tag_ovn_corrtag'})
+table.insert(jokerless_restrictions.banned_tags,  {id = 'tag_ovn_miasmatag'})
+table.insert(jokerless_restrictions.banned_tags,  {id = 'tag_ovn_stygiantag'})
+table.insert(jokerless_restrictions.banned_other, {id = 'bl_ovn_purity', type = 'blind'})
+table.insert(jokerless_restrictions.banned_other, {id = 'bl_ovn_stygian', type = 'blind'})
+
+SMODS.Joker:take_ownership('jokerless_1', {
+	restrictions = jokerless_restrictions
+}, true)

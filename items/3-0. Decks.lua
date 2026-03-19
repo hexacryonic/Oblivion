@@ -293,29 +293,19 @@ SMODS.Back { key = "c_painted",
 		G.GAME.joker_rate = 0
 		G.GAME.starting_params.joker_slots = 0
 		G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size + 5
-		-- Booster Packs
-		G.GAME.banned_keys["p_buffoon_normal_1"] = true
-		G.GAME.banned_keys["p_buffoon_normal_2"] = true
-		G.GAME.banned_keys["p_buffoon_jumbo_1"] = true
-		G.GAME.banned_keys["p_buffoon_mega_1"] = true
-		-- Consumables
-		G.GAME.banned_keys["c_judgement"] = true
-		G.GAME.banned_keys["c_wraith"] = true
-		G.GAME.banned_keys["c_soul"] = true
-		G.GAME.banned_keys["v_antimatter"] = true
-		-- Tags
-		G.GAME.banned_keys["tag_uncommon"] = true
-		G.GAME.banned_keys["tag_rare"] = true
-		G.GAME.banned_keys["tag_negative"] = true
-		G.GAME.banned_keys["tag_foil"] = true
-		G.GAME.banned_keys["tag_holographic"] = true
-		G.GAME.banned_keys["tag_polychrome"] = true
-		G.GAME.banned_keys["tag_buffoon"] = true
-		G.GAME.banned_keys["tag_top_up"] = true
-		-- Blinds
-		G.GAME.banned_keys["bl_final_heart"] = true
-		G.GAME.banned_keys["bl_final_leaf"] = true
-		G.GAME.banned_keys["bl_final_acorn"] = true
+
+		local jokerless_restrictions = SMODS.Challenges.c_jokerless_1.restrictions --[[@as table[] ]]
+		for _,banned_list in pairs(jokerless_restrictions) do
+			for _,banned_item in ipairs(banned_list) do
+				if banned_item.ids then
+					for _,banned_subitem in ipairs(banned_item.ids) do
+						G.GAME.banned_keys[banned_subitem] = true
+					end
+				elseif banned_item.id then
+					G.GAME.banned_keys[banned_item.id] = true
+				end
+			end
+		end
 	end,
 
 	calculate = function(self, card, context)
