@@ -420,3 +420,10 @@ G.FUNCS.use_card = function(e, mute, nosave)
 	funcs_usecard_hook(e, mute, nosave)
 	Oblivion.play_instability_noise = true
 end
+
+-- Hook to resize overlay in Credits menu
+local funcs_changetab_hook = G.FUNCS.change_tab
+function G.FUNCS.change_tab(e)
+	funcs_changetab_hook(e)
+	if G.OVERLAY_MENU then G.OVERLAY_MENU:recalculate() end
+end

@@ -304,17 +304,11 @@ local credits_ui_style = {
 		colour = G.C.UI.TEXT_LIGHT,
 		padding = 0.05,
 	},
-	[".credits_body"] = {align = "center-middle"},
+	[".subroot"] = {
+		fillColour = G.C.CLEAR,
+		align = "center-middle"
+	},
 }
-
-local function header(text)
-	return
-	{"row", style={align="center-middle", padding=0.2}, {
-		{"row", class="credits_header", {
-			{"text", class="credits_header_text", text=text}
-		}}
-	}}
-end
 
 local table_config = {
 	no_header = true,
@@ -357,20 +351,45 @@ end
 function Ovn_f.credits_ui()
 	local credits_ui =
 	{"root", class="credits_ui_style", {
-		{"column", {
-			header(localize("k_primary_contributors")),
-			{"row", class="credits_body", {
-				primary_contributors(),
-			}},
-			header(localize("k_additional_credits")),
-			{"row", class="credits_body", {
-				additional_credits(),
-			}},
-		}},
-		{"column", {
-			header(localize("k_sources")),
-			Ovn_f.localize_desc(G.localization.misc.credits_long),
-		}}
+		create_tabs{
+			snap_to_nav = true,
+			colour = G.C.BLUE,
+			tabs = {
+				{
+					label = localize("k_primary_contributors"),
+					chosen = true,
+					tab_definition_function = function()
+						local def =
+						{"root", class="subroot", {
+							primary_contributors(),
+						}}
+						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
+					end
+				},
+				{
+					label = localize("k_additional_credits"),
+					chosen = false,
+					tab_definition_function = function()
+						local def =
+						{"root", class="subroot", {
+							additional_credits(),
+						}}
+						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
+					end
+				},
+				{
+					label = localize("k_sources"),
+					chosen = false,
+					tab_definition_function = function()
+						local def =
+						{"root", class="subroot", {
+							Ovn_f.localize_desc(G.localization.misc.credits_long)
+						}}
+						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
+					end
+				},
+			}
+		}
 	}}
 
 	return Ovn_f.jtml_to_uiboxdef(credits_ui, credits_ui_style)
