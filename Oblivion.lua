@@ -185,7 +185,7 @@ Oblivion.DescriptionDummy {
 			local left = {
 				text = label_loc[label_key],
 				colour = G.C.BLUE,
-				align = "right"
+				align = "cr"
 			}
 			local right
 			if specific_vars[label_key] then

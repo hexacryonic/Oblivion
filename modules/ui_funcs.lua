@@ -232,7 +232,7 @@ local function generate_config_row(key, callback)
 		ref_table = Oblivion.config,
 		ref_value = key,
 		callback = callback
-	}}
+	}, align = "cm"}
 	local label = {text = loc.name}
 	local desc = {text = loc.text}
 	return {toggle, label, desc}
@@ -323,7 +323,7 @@ local function primary_contributors()
 		row[1] = {
 			text = row[1],
 			colour = G.C.BLUE,
-			align = "right"
+			align = "cr"
 		}
 		row[2] = {text = row[2]}
 	end
@@ -336,12 +336,12 @@ local function additional_credits()
 		row[1] = {
 			text = row[1],
 			colour = G.C.BLUE,
-			align = "right"
+			align = "cr"
 		}
 		row[2] = {
 			text = row[2],
 			colour = G.C.ORANGE,
-			align = "center"
+			align = "cm"
 		}
 		row[3] = {text = row[3]}
 	end

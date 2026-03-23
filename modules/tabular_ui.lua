@@ -1,166 +1,122 @@
----@param tbl any[][]
----@return any[][]
-local function transpose_table(tbl)
-	local tbl_T = {}
-	for _,row in ipairs(tbl) do
-		for i, item in ipairs(row) do
-			tbl_T[i] = tbl_T[i] or {}
-			table.insert(tbl_T[i], item)
-		end
-	end
-
-	return tbl_T
-end
-
-local table_ui_style = {
-	[".table_container"] = {
-		align = "center-middle",
-		padding = 0.05
-	},
-	[".table_body"] = {align = "center-middle"},
-	[".table_column"] = {padding = 0},
-	[".table_cell"] = {
-		outlineWidth = 0.5,
-		outlineColour = G.C.JOKER_GREY,
-		padding = 0.075,
-	},
-	[".table_text"] = {
-		scale = 0.32,
-		colour = G.C.UI.TEXT_DARK,
-		padding = 0.025,
-	},
-
-	[".align-left"] = {align = "center-left"},
-	[".align-right"] = {align = "center-right"},
-	[".align-middle"] = {align = "center-middle"},
-	[".align-center"] = {align = "center-middle"},
-}
-
----@class generate_table_ui.Config
----@field header_fill? Balatro.Colour The background colour of header cells, if enabled.
----@field default_cell_fill? Balatro.Colour The default background colour for all cells.
----@field no_header? boolean If true, the first row of the table will not have a gray background.
----@field default_text_colour? Balatro.Colour The default colour for all uncoloured text.
----@field text_scale? number Size of text.
----@field outline_colour? Balatro.Colour The colour of cell borders.
-
 ---@class generate_table_ui.Text
 ---@field text? string|string[]
----@field colour? Balatro.Colour
----@field align? "left" | "center" | "middle" | "right"
----@field element? Balatro.UIBoxDefinition|JTML.JTML
----@field cell_fill? Balatro.Colour The background colour of the text's cell.
+---@field colour? [number, number, number, number]
+---@field align? string
+---@field element? {n: number, config?: {string: any}, nodes?: table} Overrides `text`.
+---@field cell_fill? [number, number, number, number] The background colour of the text's cell.
 
--- Generates the UIBox table for a table of text, like with rows and columns and cells n shit
+---@class generate_table_ui.Config
+---@field header_fill? [number, number, number, number] The background colour of header cells, if enabled.
+---@field default_cell_fill? [number, number, number, number] The default background colour for all cells.
+---@field no_header? boolean If true, the first row of the table will not have a gray background.
+---@field default_text_colour? [number, number, number, number] The default colour for all uncoloured text.
+---@field text_scale? number Size of text.
+---@field outline_colour? [number, number, number, number] The colour of cell borders.
+
+-- Generates the UIBox definition for tabular UI.
 ---@param table_def generate_table_ui.Text[][]
 ---@param config? generate_table_ui.Config
----@return Balatro.UIBoxDefinition
+---@return {n: 5, config: {object: UIBox}}
 local function generate_tabular_ui(table_def, config)
-	config = config or {}
+    config = config or {}
 
-	-- Fill in empty spots
-	local max_row_length = 0
-	for _,row in ipairs(table_def) do
-		max_row_length = math.max(max_row_length, #row)
-	end
-	for _,row in ipairs(table_def) do
-		for i = 1, max_row_length do
-			row[i] = row[i] or ""
-		end
-	end
+    local max_row_length = 0
+    for _,row in ipairs(table_def) do
+        max_row_length = math.max(max_row_length, #row)
+    end
 
-	-- table_def is a table of ROWS,
-	-- need to first transpose into a table of COLUMNS
-	local table_def_cols = transpose_table(table_def)
+    local rows = {}
+    for r,row_def in ipairs(table_def) do
+        local entries = {}
+        for i = 1, max_row_length do
+            local cell_def = row_def[i] or {}
+            local is_header = (not config.no_header) and r == 1
 
-	-- Prepare each column
-	local columns = {}
-	for _,col_def in ipairs(table_def_cols) do
-		local entries = {}
-		for i,cell_def in ipairs(col_def) do
-            local is_header = (not config.no_header) and i == 1
-
-			-- Prepare cell config
-			local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text}
-			local colour = cell_def.colour or config.default_text_colour
-			local align = cell_def.align
-			local scale = cell_def.scale or config.default_text_scale
-			local element = cell_def.element
+            -- Prepare cell properties
+            local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text} --[[@as {n: number, config?: {string: any}, nodes?: table}]]
+            local colour = cell_def.colour or config.default_text_colour
+            local align = cell_def.align or "cl"
+            local scale = cell_def.scale or config.default_text_scale
+            local element = cell_def.element
             local fill = cell_def.cell_fill
 
-			-- Prepare classes
-			local align_class = " align-" .. (align or "left")
+            -- Prepare UI elements, particularly text
+            local cell_ui_nodes = {}
+            if element then
+                table.insert(cell_ui_nodes, element)
+            else
+                for _,text_line in ipairs(text) do
+                    local text_el_config = {
+                        padding = 0.025,
+                        colour = colour or G.C.UI.TEXT_DARK,
+                        scale = scale or 0.32,
+						align = align,
+                        text = text_line,
+                    }
+                    local text_el = {n=G.UIT.T, config = text_el_config}
+                    -- Row wrapper required for multiline text
+                    if #text > 1 then
+                        text_el = {n=G.UIT.R, nodes = {text_el}}
+                    end
+                    table.insert(cell_ui_nodes, text_el)
+                end
+            end
 
-			-- Prepare UI elements, particularly text
-			local cell_ui_nodes = {}
-			if element then
-				table.insert(cell_ui_nodes, element)
-			else
-				for _,a_text in ipairs(text) do
-					local text_el = {"text", class="table_text", style={colour=colour, scale = scale}, text=a_text}
-					if #text > 1 then
-						text_el = {"row", {text_el}}
-					end
-					table.insert(cell_ui_nodes, text_el)
-				end
-			end
-
-            -- Prepare cell style
+            -- Prepare cell itself
             local header_fill = is_header and (config.header_fill or lighten(G.C.JOKER_GREY, 0.5)) or nil
             local default_fill = config.default_cell_fill
-            local cell_style = {
-                outlineColour = config.outline_colour,
-                fillColour = fill or header_fill or default_fill,
+            local cell_el_config = {
+                outline = 0.5,
+                outline_colour = config.outline_colour or G.C.JOKER_GREY,
+                padding = 0.075,
+                align = align,
+                colour = fill or header_fill or default_fill
             }
-
-			-- Define UI
-			local cell_ui = {"row", class="table_cell" .. align_class, style=cell_style, cell_ui_nodes}
+            local cell_ui = {n=G.UIT.C, config=cell_el_config, nodes=cell_ui_nodes}
 			table.insert(entries, cell_ui)
-		end
+        end
 
-		local column_ui = {"column", class="table_column", entries}
-		table.insert(columns, column_ui)
-	end
+        local row_ui = {n=G.UIT.R, config={padding = 0}, nodes=entries}
+        table.insert(rows, row_ui)
+    end
 
-	-- Generate UIBox of table to allow for direct UI manipulation
-	local table_ui_jtml =
-	{"root", style={fillColour=G.C.CLEAR}, {
-		{"row", class="table_container", {
-			-- Required to remove gaps between elements
-			{"row", class="table_body", columns}
-		}}
-	}}
-	local table_ui = Ovn_f.jtml_to_uiboxdef(table_ui_jtml, table_ui_style)
-	local uibox = UIBox{definition = table_ui, config={}}
-	local uiel  = uibox.UIRoot
+    -- Generate UIBox of table to allow for direct UI manipulation
+    local table_ui = UIBox {
+        config = {},
+        definition =
+        {n=G.UIT.ROOT, config={colour=G.C.CLEAR}, nodes={
+            {n=G.UIT.R, config={align="cm", padding=0.05}, nodes={
+                -- Required to remove gaps between elements
+                {n=G.UIT.R, config={align="cm"}, nodes=rows}
+            }}
+        }}
+    }
+    local uiel = table_ui.UIRoot
 
-	-- Change heights of cells to line up with left-right-adjacent cells
-	local row_count = #table_def
-	local col_count = #table_def_cols
-	for r=1,row_count do
-		local cell_heights = {}
+    -- Change widths of cells to line up with up-down-adjacent cells
+    local row_count = #table_def
+    local col_count = max_row_length
+    for c = 1, col_count do
+        local max_cell_width = 0
 
-		for c=1,col_count do
-			local column = uiel.children[1].children[1].children[c]
-			local cell = column.children[r]
-			table.insert(cell_heights, cell.T.h)
-		end
+        for r = 1, row_count do
+            local row = uiel.children[1].children[1].children[r]
+            local cell = row.children[c]
+            max_cell_width = math.max(cell.T.w, max_cell_width)
+        end
 
-		local max_cell_height = math.max(unpack(cell_heights))
+        for r = 1, row_count do
+            local row = uiel.children[1].children[1].children[r]
+            local cell = row.children[c]
+            cell.T.w = max_cell_width
+            cell.config.w = max_cell_width
+            cell.config.minw = max_cell_width
+        end
+    end
+    table_ui:recalculate()
 
-		for c=1,col_count do
-			local column = uiel.children[1].children[1].children[c]
-			local cell = column.children[r]
-			cell.T.h = max_cell_height
-			cell.config.h = max_cell_height
-			cell.config.minh = max_cell_height
-		end
-	end
-	uibox:recalculate()
-
-	-- Finally ready
-	local final_return = {n=G.UIT.O, config={object=uibox}}
-	return final_return
+    -- Finally ready
+    return {n=G.UIT.O, config={object=table_ui}}
 end
 
 Ovn_f.generate_table_ui = generate_tabular_ui
