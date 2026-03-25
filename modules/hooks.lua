@@ -62,7 +62,7 @@ function level_up_hand(card, hand, instant, amount)
 				and event_horizon.ability.extra.chips >= 1730
 			) then
 				Ovn_f.add_simple_event(nil, nil, function ()
-					check_for_unlock{type="ovn_eventhoz_scale"}
+					check_for_unlock({type = 'ovn_eventhoz_scale'})
 				end)
 			end
 		end
@@ -337,7 +337,7 @@ function Game:update(dt)
 		end
 
 		if unob_tally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
-			check_for_unlock{type="ovn_lol_lmao_even"}
+			check_for_unlock({type = 'ovn_lol_lmao_even'})
 			G.STATE = G.STATES.GAME_OVER
 			G.STATE_COMPLETE = false
 			return true

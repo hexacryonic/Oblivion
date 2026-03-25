@@ -807,7 +807,7 @@ SMODS.Joker { key = 'database',
 			}
 		end
         if card.ability.extra.chips_per*G.GAME.cumulative_unique_joker_count >= 1000 then
-            check_for_unlock{type="ovn_big_database"}
+            check_for_unlock({type = 'ovn_big_database'})
         end
 	end
 }
@@ -864,7 +864,7 @@ SMODS.Joker { key = 'aeon',
 
 	calculate = function(self, card, context)
 		if context.ovn_corrupted_from then
-			check_for_unlock{type="ovn_natural_aeon"}
+      check_for_unlock({type = 'ovn_natural_aeon'})
 		end
 		if context.joker_main then
 			return {
@@ -1325,7 +1325,7 @@ SMODS.Joker { key = 'supplydrop',
 				save_file.ovn_supply_drop = left_joker_key
 				save_file.ovn_supply_drop_edition = left_joker_edition
 				save_file.ovn_supply_drop_sticker = left_joker_stickers
-				check_for_unlock{type="ovn_sell_supply_drop"}
+        check_for_unlock({type = 'ovn_sell_supply_drop'})
 
 				-- i think you can use smods.destroy_cards but idk, too lazy to check -oin
 				add_simple_event('after', 0.1, function ()
@@ -1586,7 +1586,7 @@ SMODS.Joker { key = 'airstrike',
 				-- displayed mult is 1 + perma_x_mult
 				-- hence this check is X1 less than the required X5
 				if (c_ability.ovn_airstrike_stockpile or 0) >= 4 then
-					check_for_unlock{type="ovn_airstrike_release"}
+          check_for_unlock({type = 'ovn_airstrike_release'})
 				end
 				c_ability.perma_x_mult = c_ability.perma_x_mult - (c_ability.ovn_airstrike_stockpile or 0)
 				c_ability.ovn_airstrike_stockpile = nil
