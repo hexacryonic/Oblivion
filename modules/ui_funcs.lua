@@ -51,19 +51,33 @@ end
 ---@return nil
 function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 	if (
-		card and card.config.center
-		and Ovn_f.joker_is_corruptible(card.config.center.key)
+		card
+		and card.config.center
 		and card.config.center.discovered
+		and Ovn_f.joker_has_corruption(card.config.center.key)
 	) then
-		table.insert(info_queue, {
-			key = 'ovn_corruptible',
-			set = 'Other',
-			vars = { localize {
-				type = "name_text",
-				set = "Joker",
-				key = card.config.center.key
-			} }
-		})
+		local j_key = card.config.center.key
+		if Ovn_f.joker_is_corruptible(j_key) then
+			table.insert(info_queue, {
+				key = 'ovn_corruptible',
+				set = 'Other',
+				vars = { localize {
+					type = "name_text",
+					set = "Joker",
+					key = j_key
+				} }
+			})
+		elseif Ovn_f.joker_corruption_condition(j_key) then
+			local condition_key = Ovn_f.joker_corruption_condition(j_key)
+			table.insert(info_queue, {
+				key = 'ovn_almost_corruptible',
+				set = 'Other',
+			})
+			table.insert(info_queue, {
+				key = 'ovn_corrupt_condition_' .. condition_key,
+				set = 'Other'
+			})
+		end
 	end
 
 	if card and card.base and card.base.suit == "ovn_Optics" then

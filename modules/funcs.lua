@@ -264,16 +264,37 @@ end
 ---- JOKER TRANSMUTATION STATES ----
 ------------------------------------
 
+-- Determines whether a Joker has a defined corruption.
+---@param card_key string
+---@return boolean
+Ovn_f.joker_has_corruption = function(card_key)
+	return Oblivion.corruption_map[card_key] ~= nil
+end
+
+-- Determines the key of a Joker's corruption condition.
+---@param card_key string
+---@return string|nil
+Ovn_f.joker_corruption_condition = function(card_key)
+	if Oblivion.corruption_map[card_key] == nil then return end
+
+	local condition_def = Oblivion.corruption_condition[card_key]
+	if condition_def == nil then return end
+
+	local condition_key = condition_def[1]
+	return condition_key
+end
+
 -- Determines whether a Joker is corruptible based on its defined corruption conditions.
 ---@param card_key string
 ---@return boolean
 Ovn_f.joker_is_corruptible = function(card_key)
 	if Oblivion.corruption_map[card_key] == nil then return false end
 
-	local condition_func = Oblivion.corruption_condition[card_key]
-	if condition_func == nil then return true end
+	local condition_def = Oblivion.corruption_condition[card_key]
+	if condition_def == nil then return true end
 
-	return condition_func()
+	local condition_func = condition_def[2]
+	return condition_func() and true or false
 end
 
 -- Determines whether a Joker is purifiable.

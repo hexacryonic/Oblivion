@@ -81,6 +81,14 @@ local loc =  {
 					'{C:ovn_corrupted}corruption potential{}',
 				},
 			},
+			ovn_almost_corruptible = {
+				name = "Corruptible",
+				text = {
+					"{C:ovn_corrupted}The Abyss {}shows interest",
+					"in this Joker... But it",
+					"needs {C:ovn_corrupted}something more{}."
+				},
+			},
 			ovn_opticinfo = {
 				name = "Optic Suit",
 				text = {
@@ -171,6 +179,20 @@ local loc =  {
 			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal,
 			p_ovn_wicked_normal_4 = macro.p_ovn_wicked_normal,
+			ovn_corrupt_condition_has_optic = {
+				name = "Corruption condition",
+				text = {
+					"{E:ovn_betterfloat}Let {E:ovn_betterfloat,C:ovn_optic}prying eyes",
+					"{E:ovn_betterfloat,C:ovn_optic}perceive {E:ovn_betterfloat}your deck."
+				}
+			},
+			ovn_corrupt_condition_gros_michel = {
+				name = "Corruption condition",
+				text = {
+					"{E:ovn_betterfloat}Make a {E:ovn_betterfloat,C:ovn_corrupted}strange",
+					"{E:ovn_betterfloat,C:ovn_corrupted}banana {E:ovn_betterfloat}extinct."
+				}
+			},
 		},
 
 		Blind = {

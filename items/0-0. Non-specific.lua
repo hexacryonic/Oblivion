@@ -240,6 +240,17 @@ SMODS.Scoring_Calculation { key = "instable",
 
 ------------------
 -- DYNATEXT EFFECT
+-- BetterFloat
+------------------
+SMODS.DynaTextEffect { key = "betterfloat",
+	func = function(self, k, letter)
+		-- taken from vanilla source
+		letter.offset.y = (G.SETTINGS.reduced_motion and 0 or 1)*math.sqrt(self.scale)*(2+(self.font.FONTSCALE/G.TILESIZE)*2000*math.sin(2.666*G.TIMERS.REAL+200*k)) + 60*(letter.scale-1)
+	end,
+}
+
+------------------
+-- DYNATEXT EFFECT
 -- Glitched
 ------------------
 SMODS.DynaTextEffect { key = "glitched",

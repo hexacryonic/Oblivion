@@ -29,6 +29,7 @@ map["j_crafty"]              = "j_ovn_insightful"
 map["j_tribe"]               = "j_ovn_breach"
 map["j_lusty_joker"]         = "j_ovn_prideful"
 map["j_wrathful_joker"]      = "j_ovn_prideful"
+    --[[sic]]
 map["j_gluttenous_joker"]    = "j_ovn_prideful"
 map["j_greedy_joker"]        = "j_ovn_prideful"
 map["j_cavendish"]           = "j_ovn_cultivar"
@@ -57,13 +58,28 @@ map["j_arrowhead"]           = "j_ovn_apache_tears"
 map["j_bloodstone"]          = "j_ovn_apache_tears"
 map["j_onyx_agate"]          = "j_ovn_apache_tears"
 map["j_rough_gem"]           = "j_ovn_apache_tears"
-map["j_caino"] --[[sic]]     = "j_ovn_nyarlathotep"
+    --[[sic]]
+map["j_caino"]               = "j_ovn_nyarlathotep"
 map["j_triboulet"]           = "j_ovn_nyarlathotep"
 map["j_yorick"]              = "j_ovn_nyarlathotep"
 map["j_chicot"]              = "j_ovn_nyarlathotep"
 map["j_perkeo"]              = "j_ovn_nyarlathotep"
 
+local has_optic = function() return G.GAME and G.GAME.ovn_has_ocular end
+
 Oblivion.corruption_condition = Oblivion.corruption_condition or {}
-Oblivion.corruption_condition["j_gros_michel"] = function()
+local cond = Oblivion.corruption_condition
+cond["j_lusty_joker"]      = {"has_optic",   has_optic}
+cond["j_wrathful_joker"]   = {"has_optic",   has_optic}
+cond["j_gluttenous_joker"] = {"has_optic",   has_optic}
+cond["j_greedy_joker"]     = {"has_optic",   has_optic}
+cond["j_droll"]            = {"has_optic",   has_optic}
+cond["j_crafty"]           = {"has_optic",   has_optic}
+cond["j_tribe"]            = {"has_optic",   has_optic}
+cond["j_arrowhead"]        = {"has_optic",   has_optic}
+cond["j_bloodstone"]       = {"has_optic",   has_optic}
+cond["j_onyx_agate"]       = {"has_optic",   has_optic}
+cond["j_rough_gem"]        = {"has_optic",   has_optic}
+cond["j_gros_michel"]      = {"gros_michel", function()
 	return G.GAME and G.GAME.corruptiblemichel
-end
+end}
