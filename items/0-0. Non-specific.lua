@@ -238,10 +238,78 @@ SMODS.Scoring_Calculation { key = "instable",
 	end
 }
 
----------
--- SHADER
--- Miasma
----------
-SMODS.Shader { key = 'miasma',
-	path = 'miasma.fs'
+------------------
+-- DYNATEXT EFFECT
+-- Glitched
+------------------
+SMODS.DynaTextEffect { key = "glitched",
+	func = function(dynatext, index, letter)
+		-- ignore spaces
+		local og_char = dynatext.strings[1].letters[index].char
+		if og_char == " " then return end
+
+		-- Slowing mechanisms for accessibility toggles
+		local timing_mag = 8
+		local timing_req = timing_mag*((index%3) + 1)
+		letter.timing = (letter.timing or (index%timing_mag)) + 1
+
+		local reduce_speed = (
+			Oblivion.config.disable_c_erratic_shader
+			or G.SETTINGS.reduced_motion
+		)
+		local do_change = true
+		if reduce_speed then
+			do_change = letter.timing >= timing_req
+		end
+
+		if do_change then
+			local rnd = math.random(33, 126)
+			local char = string.char(rnd)
+			letter.letter:set(char)
+		end
+
+		if letter.timing >= timing_req then letter.timing = 0 end
+	end,
+}
+
+--------------------
+-- DESCRIPTION DUMMY
+-- Instability
+--------------------
+Oblivion.DescriptionDummy { key = "instability_description" }
+
+--------------------
+-- DESCRIPTION DUMMY
+-- Card credits
+--------------------
+Oblivion.DescriptionDummy {
+	key = "credits",
+	generate_ui = function (self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+		-- specific_vars is sent by generate_card_ui (patched by corruption.toml)
+		-- It is a string-keyed table based on a card's `credits` value
+		if not card then card = self:create_fake_card() end
+
+		local label_loc = G.localization.descriptions.DescriptionDummy.dd_ovn_credits.labels
+		local label_order = {"concept", "art", "shader", "music", "sound", "code"}
+
+		local table_rows = {}
+		for _,label_key in ipairs(label_order) do
+			local left = {
+				text = label_loc[label_key],
+				colour = G.C.BLUE,
+				align = "cr"
+			}
+			local right
+			if specific_vars[label_key] then
+				right = {text = specific_vars[label_key]}
+			end
+			if right then
+				table.insert(table_rows, {left, right})
+			end
+		end
+
+		local credits_ui = Ovn_f.generate_table_ui(table_rows, {no_header = true})
+		desc_nodes.name = localize{type = 'name_text', key = 'dd_ovn_credits', set = "DescriptionDummy"}
+		table.insert(desc_nodes, {credits_ui})
+	end
 }

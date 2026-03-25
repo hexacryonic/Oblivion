@@ -4,7 +4,6 @@ dump_lua = true
 priority = 0
 
 # lovely/miscellaneous.toml
-# Implementation of some Joker effects
 
 # ----
 
@@ -66,5 +65,23 @@ local num = G.GAME.current_round.current_hand[e.config.type] or SMODS.Scoring_Pa
 if (e.config.type == "ovn_instability") and (num <= 10) and (tonumber(("%.2f"):format(num)) ~= tonumber(("%.3f"):format(num))) then
   new_mult_text = ("%.3f"):format(num)
 end
+'''
+match_indent = true
+
+# ----
+
+# function create_UIBox_blind_choice
+# Makes blind requirement glitchy on Corrupt Erratic Deck
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.T, config={text = number_format(blind_amt), scale = score_number_scale(0.9, blind_amt), colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.RED, shadow =  not disabled}}
+'''
+position = "before"
+payload = '''
+G.GAME.c_erratic and
+SMODS.localize_box(loc_parse_string("{C:red,E:ovn_glitched}????"), {scale=score_number_scale(0.9,6666)/0.32})[1]
+or
 '''
 match_indent = true

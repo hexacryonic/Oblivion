@@ -1,51 +1,50 @@
-local card_atlases = {
-	-- For atlases with px = 71, py = 95
-	-- Must match file name exactly
-	"booster_packs",
-	"consumables",
-	"decks",
-	"decks_corrupt",
-	"enhancements",
-	"jokers",
-	"jokers_corrupt",
-	"mutations",
-	"optics",
-	"optics_hc",
-	"placeholder",
-	"seals",
-	"seals_marks",
-	"vouchers",
-	"itemspecific/apache_tears",
-	"itemspecific/apartfalling",
-	"crossmod/cryptid_planets",
+local at = {
+	Card = function(key) return {key, 71, 95} end,
+	Tag  = function(key) return {key, 34, 34} end,
+	Suit = function(key) return {key, 18, 18} end
+}
+
+-- lua allows parenthesis exclusion for singular arguments
+local atlases = {
+	at.Card  "booster_packs",
+	at.Card  "consumables",
+	at.Card  "decks",
+	at.Card  "decks_corrupt",
+	at.Card  "enhancements",
+	at.Card  "jokers",
+	at.Card  "jokers_corrupt",
+	at.Tag   "modicon",
+	at.Card  "mutations",
+	at.Card  "optics",
+	at.Card  "optics_hc",
+	at.Card  "placeholder",
+	at.Card  "seals",
+	at.Card  "seals_marks",
+	at.Suit  "suits",
+	at.Suit  "suits_hc",
+	at.Tag   "tags",
+	at.Card  "vouchers",
+	at.Card  "itemspecific/apache_tears",
+	at.Card  "itemspecific/apartfalling",
+	at.Card  "crossmod/cryptid_planets",
 	-- Deck skin atlases are found in items/0-3. Deck skins.lua
 }
 
-for _,path in ipairs(card_atlases) do
+for _,def in ipairs(atlases) do
+	local path = def[1]
+	local px = def[2]
+	local py = def[3]
 	local file_name = path .. ".png"
 	local key = path:gsub("/", "_")
 	SMODS.Atlas {
 		key = key,
 		path = file_name,
-		px = 71,
-		py = 95
+		px = px,
+		py = py
 	}
 end
 
 ----
-
-SMODS.Atlas {
-	key = "modicon",
-	path = "modicon.png",
-    px = 34, py = 34,
-}
-
-SMODS.Atlas {
-	key = "tags",
-	path = "tags.png",
-	px = 34,
-	py = 34
-}
 
 SMODS.Atlas {
 	key = "blinds",
@@ -58,46 +57,16 @@ SMODS.Atlas {
 
 ----
 
-SMODS.Atlas {
-	key = 'optics',
-	path = 'optics.png',
-	px = 71,
-	py = 95
-}
-
-SMODS.Atlas {
-	key = 'optics_hc',
-	path = 'optics_hc.png',
-	px = 71,
-	py = 95
-}
-
-SMODS.Atlas{
-	key = 'suits',
-	path = 'suits.png',
-	px = 18,
-	py = 18
-}
-
-SMODS.Atlas{
-	key = 'suits_hc',
-	path = 'suits_hc.png',
-	px = 18,
-	py = 18
-}
-
-----
-
 --[[
 
 Note on ApacheTears.png
 Cards must be layed out such that each sprite corresponds
 to the following card states:
 
----- S--- -H-- SH--
---D- S-D- -HD- SHD-
----C S--C -H-C SH-C
---DC S-DC -HDC SHDC
+----   S---   -H--   SH--
+--D-   S-D-   -HD-   SHD-
+---C   S--C   -H-C   SH-C
+--DC   S-DC   -HDC   SHDC
 
 Where if a state contains:
 - S, Spades/Arrowhead is activated

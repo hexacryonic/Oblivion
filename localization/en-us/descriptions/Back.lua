@@ -147,9 +147,9 @@ return {
 	b_ovn_c_erratic = {
 		name = 'Corrupt Erratic Deck',
 		text = {
-			"{E:ovn_c_erratic_desc,C:red}Infects{E:ovn_c_erratic_desc} everything you know",
-			"{E:ovn_c_erratic_desc}with {C:ovn_corrupted}Corruption...{}",
-			"{E:ovn_c_erratic_desc}Its reach is {C:ovn_corrupted}Endless...",
+			"{E:ovn_glitched,C:red}Infects{E:ovn_glitched} everything you know",
+			"{E:ovn_glitched}with {C:ovn_corrupted}Corruption...{}",
+			"{E:ovn_glitched}Its reach is {C:ovn_corrupted}Endless...",
 			"{C:attention}{C:red}!! SEIZURE WARNING !!",
 			"{C:attention}Reduce visuals in config",
 		},

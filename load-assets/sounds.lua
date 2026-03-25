@@ -28,69 +28,45 @@ end
 
 
 
+--------------------------
+---- MUSIC CONDITIONS ----
+--------------------------
+local not_removed = function(tbl)
+	return tbl and not tbl.REMOVED
+end
+
+local desired_track = function()
+	return -- taken from vanilla source
+	(not_removed(G.booster_pack_sparkles) and 'music_booster')
+	or (not_removed(G.booster_pack_meteors) and 'music_planets')
+	or (not_removed(G.booster_pack) and 'music_booster')
+	or (not_removed(G.shop) and 'music_shop')
+	or (G.GAME.blind and G.GAME.blind.boss and 'music_boss')
+	or ('music_normal')
+end
+
+
 -----------------------
 ---- REGULAR MUSIC ----
 -----------------------
 local standard_music = {
-	music_corrupt = function()
-		return (
-			G.GAME
-			and Ovn_f.deck_is_corrupt()
-			and not G.shop
-			and not G.booster_pack
-			and not G.booster_pack_sparkles
-			and not G.booster_pack_meteors
-			and not (G.GAME.blind and G.GAME.blind.boss)
-			and not Ovn_f.has_joker('j_ovn_apartfalling')
-		)
-	end,
-	music_corrupt_shop = function()
-		return (
-			G.GAME
-			and Ovn_f.deck_is_corrupt()
-			and G.shop
-			and not G.shop.REMOVED
-			and not G.booster_pack
-			and not G.booster_pack_sparkles
-			and not G.booster_pack_meteors
-			and not Ovn_f.has_joker('j_ovn_apartfalling')
-		)
-	end,
-	music_corrupt_pack1 = function()
-		return (
-			G.GAME
-			and Ovn_f.deck_is_corrupt()
-			and G.booster_pack
-			and not G.booster_pack.REMOVED
-			and not G.booster_pack_meteors
-			and not Ovn_f.has_joker('j_ovn_apartfalling')
-		)
-	end,
-	music_corrupt_pack2 = function()
-		return G.GAME and (
-			Ovn_f.deck_is_corrupt()
-			and G.booster_pack_meteors
-			and not G.booster_pack_meteors.REMOVED
-			and not G.booster_pack_sparkles
-			and not Ovn_f.has_joker('j_ovn_apartfalling')
-		)
-	end,
-	music_corrupt_boss = function()
-		return G.GAME and (
-			Ovn_f.deck_is_corrupt()
-			and G.GAME.blind
-			and G.GAME.blind.boss
-			and not Ovn_f.has_joker('j_ovn_apartfalling')
-		)
-	end,
+	music_corrupt       = "music_normal",
+	music_corrupt_shop  = "music_shop",
+	music_corrupt_pack1 = "music_booster",
+	music_corrupt_pack2 = "music_planets",
+	music_corrupt_boss  = "music_boss",
 }
 
-for key,select_music_track in pairs(standard_music) do
+for key,track_type in pairs(standard_music) do
 	SMODS.Sound({
 		key = key,
 		path = "music/" .. key .. ".ogg",
 		pitch = 1,
-		select_music_track = select_music_track
+		select_music_track = function()
+			return G.GAME
+			and Ovn_f.deck_is_corrupt()
+			and desired_track() == track_type
+		end
 	})
 end
 
@@ -109,18 +85,12 @@ SMODS.Sound {
 	volume = 0.6,
 
 	select_music_track = function()
-	return (
-		not Oblivion.config.disable_a_part_falling_music
-		and G.GAME
-		and Ovn_f.has_joker('j_ovn_apartfalling')
-		and (
-			G.shop
-			or G.booster_pack
-			or not G.GAME.blind
-			or G.blind_select
-			or G.round_eval
-		)
-	)
+		return (
+			not Oblivion.config.disable_a_part_falling_music
+			and G.GAME
+			and Ovn_f.has_joker('j_ovn_apartfalling')
+			and desired_track() ~= "music_boss"
+		) and 5 or false
 	end,
 }
 
@@ -137,8 +107,8 @@ SMODS.Sound {
 			not Oblivion.config.disable_a_part_falling_music
 			and G.GAME
 			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and G.GAME.blind
-		)
+			and desired_track() == "music_boss"
+		) and 5 or false
 	end,
 }
 
