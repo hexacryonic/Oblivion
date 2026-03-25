@@ -26,6 +26,17 @@ local function change_rank(card, new_rank)
 	card:flip()
 end
 
+local function play_or_sludgehand(center, card, context)
+	return (
+		card.area == G.play
+		and context.cardarea == G.play
+	) or (
+		card.area == G.hand
+		and context.cardarea == G.hand
+		and Ovn_f.has_joker("j_ovn_sludge")
+	)
+end
+
 ----------------
 
 ---------------
@@ -175,10 +186,10 @@ SMODS.Enhancement { key = "ice",
 		is_melting = false
 	}},
 
-	calculate = function(self,card,context)
+	calculate = function(self, card, context)
 		local c_extra = card.ability.extra
 
-		if context.cardarea == G.play and context.main_scoring then
+		if context.main_scoring and play_or_sludgehand(self, card, context) then
 			c_extra.is_melting = true
 			return { x_mult = c_extra.current_x_mult }
 		end
@@ -790,13 +801,7 @@ SMODS.Edition { key = "miasma",
 		end
 
 		-- Corrupt non-Optic cards
-		if context.after and (
-			context.cardarea == G.play
-			or (
-				context.cardarea == G.hand
-				and Ovn_f.has_joker("j_ovn_sludge")
-			)
-		) then
+		if context.after and play_or_sludgehand(self, card, context) then
 			if card.base.suit ~= 'ovn_Optics' then
 				add_simple_event('after', 0.1, function ()
 					card:set_edition(nil)
