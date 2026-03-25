@@ -272,6 +272,21 @@ function Card:set_seal(_seal, silent, immediate)
 	end
 end
 
+-- Hook for stop_drag context and Coordinate Card rank change
+local card_stopdrag_hook = Card.stop_drag
+function Card:stop_drag()
+	card_stopdrag_hook(self)
+
+    SMODS.calculate_context {
+        ovn_stop_drag = true,
+        card = self
+    }
+
+	-- Update hand when dragging card
+	-- (Needed for Coordinate Cards)
+	if G.hand and self.area == G.hand then G.hand:parse_highlighted() end
+end
+
 
 
 ---------------------

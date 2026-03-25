@@ -125,22 +125,28 @@ SMODS.Enhancement { key = "coord",
 	config = { },
 
 	calculate = function(self, card, context)
-		if context.modify_scoring_hand or context.check then
+		if (
+			context.modify_scoring_hand
+			or context.check
+			or context.ovn_stop_drag
+			or context.hand_drawn
+			or context.other_drawn
+			or context.ovn_corrupted_from
+		) then
 			local card_table = G.hand.cards
-			local card_index = -1
+			local card_index = card.rank
 
-			for i,hand_card in ipairs(card_table) do
-				if hand_card == card then card_index = i end
-			end
+			local other_card = card_table[card_index - 1]
+			if not other_card then return end
 
-			if card_index > 1 then
 				local other_card_value = card_table[card_index - 1].base.value
 				if card.base.value == other_card_value then return end
+
 				change_rank(card, other_card_value)
-			end
 		end
 	end,
 }
+-- Additional functionality in Card:stop_drag hook
 
 ---------------
 -- ENHANCEMENT

@@ -361,9 +361,10 @@ Ovn_f.corrupt_modifiers = function(card)
 	end
 
 	local seal_key = card.seal
+	local cseal, new_seal
 	if seal_key then
-		local cseal = Oblivion.seal_corrupt
-		local new_seal = cseal[seal_key]
+		cseal = Oblivion.seal_corrupt
+		new_seal = cseal[seal_key]
 		if new_seal then
 			card:set_seal(new_seal)
 			transmuted = true
@@ -374,6 +375,34 @@ Ovn_f.corrupt_modifiers = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
+
+			if new_enhancement then
+				card:calculate_enhancement{
+					ovn_corrupted_from = true,
+					ovn_former_form_key = enhancement_key,
+				}
+
+				SMODS.calculate_context({
+					ovn_corruption_occurred = true,
+					ovn_corruption_type = "Enhancement",
+					ovn_former_form_key = enhancement_key,
+					ovn_corrupted_card = card
+				})
+			end
+
+			if new_seal then
+				card:calculate_seal{
+					ovn_corrupted_from = true,
+					ovn_former_form_key = seal_key
+				}
+
+				SMODS.calculate_context({
+					ovn_corruption_occurred = true,
+					ovn_corruption_type = "Seal",
+					ovn_former_form_key = seal_key,
+					ovn_corrupted_card = card
+				})
+			end
 		end)
 	end
 end
@@ -390,6 +419,18 @@ Ovn_f.corrupt_enhancement = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
+
+			card:calculate_enhancement{
+				ovn_corrupted_from = true,
+				ovn_former_form_key = enhancement_key,
+			}
+
+			SMODS.calculate_context({
+				ovn_corruption_occurred = true,
+				ovn_corruption_type = "Enhancement",
+				ovn_former_form_key = enhancement_key,
+				ovn_corrupted_card = card
+			})
 		end)
 	end
 end
@@ -409,9 +450,10 @@ Ovn_f.purify_modifiers = function(card)
 	end
 
 	local seal_key = card.seal
+	local pseal, new_seal
 	if seal_key then
-		local pseal = Oblivion.seal_purify
-		local new_seal = pseal[seal_key]
+		pseal = Oblivion.seal_purify
+		new_seal = pseal[seal_key]
 		if new_seal then
 			card:set_seal(new_seal)
 			transmuted = true
@@ -422,6 +464,34 @@ Ovn_f.purify_modifiers = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
+
+			if new_enhancement then
+				card:calculate_enhancement{
+					ovn_purified_from = true,
+					ovn_former_form_key = enhancement_key,
+				}
+
+				SMODS.calculate_context({
+					ovn_purification_occurred = true,
+					ovn_purification_type = "Enhancement",
+					ovn_former_form_key = enhancement_key,
+					ovn_purified_card = card
+				})
+			end
+
+			if new_seal then
+				card:calculate_seal{
+					ovn_purified_from = true,
+					ovn_former_form_key = seal_key
+				}
+
+				SMODS.calculate_context({
+					ovn_purification_occurred = true,
+					ovn_purification_type = "Seal",
+					ovn_former_form_key = seal_key,
+					ovn_purified_card = card
+				})
+			end
 		end)
 	end
 end
@@ -438,6 +508,18 @@ Ovn_f.purify_enhancement = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
+
+			card:calculate_enhancement{
+				ovn_purified_from = true,
+				ovn_former_form_key = enhancement_key,
+			}
+
+			SMODS.calculate_context({
+				ovn_purification_occurred = true,
+				ovn_purification_type = "Enhancement",
+				ovn_former_form_key = enhancement_key,
+				ovn_purified_card = card
+			})
 		end)
 	end
 end
