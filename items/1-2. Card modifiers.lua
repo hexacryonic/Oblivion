@@ -112,7 +112,7 @@ SMODS.Enhancement { key = 'dynamo',
 SMODS.Enhancement { key = "coord",
 	credits = {
 		concept = {"HexaCryonic", "AlexZGreat"},
-		code = "HexaCryonic",
+		code = {"HexaCryonic", "ellestuff"},
 		art = "Lil. Mr. Slipstream",
 	},
 	loc_vars = function(self, info_queue, card)
@@ -139,10 +139,10 @@ SMODS.Enhancement { key = "coord",
 			local other_card = card_table[card_index - 1]
 			if not other_card then return end
 
-				local other_card_value = card_table[card_index - 1].base.value
-				if card.base.value == other_card_value then return end
+			local other_card_value = card_table[card_index - 1].base.value
+			if card.base.value == other_card_value then return end
 
-				change_rank(card, other_card_value)
+			change_rank(card, other_card_value)
 		end
 	end,
 }
@@ -778,8 +778,7 @@ SMODS.Edition { key = "miasma",
 			elseif (
 				card.config.center.rarity == 'ovn_corrupted'
 				or card.config.center.rarity == 'ovn_supercorrupted'
-			) then
-				-- nothing :P
+			) then -- nothing :P
 
 			-- Card cannot be corrupted, self-destruct
 			else
@@ -791,7 +790,13 @@ SMODS.Edition { key = "miasma",
 		end
 
 		-- Corrupt non-Optic cards
-		if context.after and context.cardarea == G.play then
+		if context.after and (
+			context.cardarea == G.play
+			or (
+				context.cardarea == G.hand
+				and Ovn_f.has_joker("j_ovn_sludge")
+			)
+		) then
 			if card.base.suit ~= 'ovn_Optics' then
 				add_simple_event('after', 0.1, function ()
 					card:set_edition(nil)

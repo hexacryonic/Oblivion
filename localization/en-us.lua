@@ -510,8 +510,8 @@ local loc =  {
 		},
 		credits_additional = {
 			{"thaun0",         "Concept",  "Database"},
-			{"Zero (null)",    "Concept",  "A Part Falling"},
 			{"SyntaxTsundere", "Concept",  "THE SHOW NEVER ENDS"},
+			{"Zero (null)",    "Concept",  "A Part Falling"},
 			{"AlexZGreat",     "Concepts", {"Master of Puppets", "Coordinate Cards"}},
 			{"Inspector_Bee",  "Concepts", {"Corrupt Yellow Deck", "Cigarette Card"}},
 			{"NinjaBanana",    "Concepts", {"Library of Babel", "Event Horizon"}},
@@ -519,6 +519,7 @@ local loc =  {
 			{"Andromeda",      "Art",      {"Airstrike", "Sludge"}},
 			{"cassknows",      "Shader",   "Miasma"},
 			{"Airtoum",        "Code",     "Prosopometamorphopsia"},
+			{"ellestuff",      "Code",     "Coordinate Cards (additional)"},
 			{"Lily",           "Code",     "Corrupt Erratic Deck (initial)"},
 			{"MathIsFun_",     "Code",     "Corrupt Plasma Deck (initial)"},
 		},
