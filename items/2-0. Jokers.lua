@@ -2209,5 +2209,9 @@ SMODS.Joker { key = 'nyarlathotep',
 		if context.repetition and context.cardarea == G.play and not context.retrigger_joker then
 			return {repetitions = count_corrupt_jokers()}
 		end
+
+		if context.ovn_corrupted_from then
+			check_for_unlock({type="ovn_slumbering_beast"})
+		end
 	end
 }

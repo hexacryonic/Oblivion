@@ -16,6 +16,8 @@ Oblivion.config = Oblivion.obj.config
 -- Function object
 Ovn_f = {}
 
+print(SMODS.current_mod.path)
+
 Oblivion.obj.optional_features = {
 	retrigger_joker = true,
 	post_trigger = true,
@@ -28,7 +30,10 @@ Oblivion.obj.optional_features = {
 
 -- Talisman incompat
 -- You should really be using Amulet
-if SMODS.Mods["Talisman"] and SMODS.Mods["Talisman"].can_load and not (SMODS.Mods["Amulet"] and SMODS.Mods["Amulet"].can_load) then
+if (
+	(SMODS.Mods["Talisman"] or {}).can_load
+	and not (SMODS.Mods["Amulet"] or {}).can_load
+) then
 	error([[TALISMAN detected!
 
 
@@ -37,7 +42,7 @@ if SMODS.Mods["Talisman"] and SMODS.Mods["Talisman"].can_load and not (SMODS.Mod
 ====== HOW TO FIX THIS CRASH ======
 1. Uninstall Talisman
 2. Install Amulet
-https://github.com/frostice482/amulet/tree/main
+https://github.com/frostice482/amulet
 
 
 
@@ -78,7 +83,7 @@ function Ovn_f.load_directory(folder_name, condition_function)
 			print("[OBLIVION] Loading file " .. file_name)
 			local file_format = "%s/%s"
 			local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
-			if err then error(err) end --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
+			if err then error(err) end
 			if file_func then file_func() end
 		end
 	end end

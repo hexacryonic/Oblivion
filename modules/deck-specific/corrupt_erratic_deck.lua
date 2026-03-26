@@ -310,7 +310,7 @@ end
 ---@param e any
 ---@return nil
 function G.FUNCS.give_quip_achievement(e)
-	check_for_unlock{type="ovn_ticklish_quip"}
+	check_for_unlock({type="ovn_ticklish_quip"})
 end
 
 

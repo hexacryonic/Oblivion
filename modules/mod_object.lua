@@ -35,6 +35,9 @@ local function check_stop_juice_corruptibles()
 end
 
 Oblivion.obj.calculate = function (self, context)
+	---------------------------
+	-- On adding a playing card
+	---------------------------
     if context.playing_card_added then
         -- Increase instability when Optic playing cards are added
         local optics_count = 0
@@ -46,12 +49,26 @@ Oblivion.obj.calculate = function (self, context)
         Ovn_f.optic_instability(optics_count)
     end
 
+	-----------------
+	-- On suit change
+	-----------------
     if context.change_suit and context.new_suit == "ovn_Optics" then
         -- Increase instability when playing card converted to Optics
         Ovn_f.optic_instability(1)
     end
 
+	---------------------
+	-- On adding any card
+	---------------------
     if context.card_added then
+		-- Update cumulative unique Joker tracking
+		if context.card.ability.set == "Joker" then
+			if not G.GAME.cumulative_unique_jokers[context.card.config.center.key] then
+				G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count + 1
+				G.GAME.cumulative_unique_jokers[context.card.config.center.key] = true
+			end
+		end
+
         -- Increase instability when corrupt Joker is added, or Joker corruption occurs
         if context.card.config.center.rarity == "ovn_corrupted" then
             Ovn_f.corruption_instability(1)
@@ -68,12 +85,19 @@ Oblivion.obj.calculate = function (self, context)
         end
     end
 
-    if context.ovn_card_removed then -- This is a custom context, please see docs
+	------------------------------------
+	-- On removing any card (Ovn-custom)
+	------------------------------------
+    if context.ovn_card_removed then
         -- Stop juicing corruptible Jokers if no more corrupting consumables are present
         check_stop_juice_corruptibles()
     end
 
+	--------------------------------
+	-- On entering shop/On rerolling
+	--------------------------------
     if context.starting_shop or context.reroll_shop then
+		-- If shop contains corrupting items, juice corruptibles
         Ovn_f.add_simple_event(nil, nil, function ()
             local stop_juice = true
             for _,card in ipairs(G.shop_jokers.cards) do
@@ -87,13 +111,20 @@ Oblivion.obj.calculate = function (self, context)
         end)
     end
 
+	------------------
+	-- On exiting shop
+	------------------
     if context.ending_shop then
+		-- In case only the shop contained corrupting items
         check_stop_juice_corruptibles()
     end
 
+	---------------------
+	-- On opening booster
+	---------------------
     if context.open_booster then
         -- Juice Jokers when a booster pack contains a corrupting consumable
-        -- Event necessary since G.pack_cards is nil when context.open_booster is sent
+        -- Event delay necessary since G.pack_cards is nil when context.open_booster is sent
         Ovn_f.add_simple_event(nil, nil, function ()
             for _,card in ipairs(G.pack_cards.cards) do
                 if card.config.center.corrupts_jokers then
@@ -104,11 +135,17 @@ Oblivion.obj.calculate = function (self, context)
         end)
     end
 
+	---------------------
+	-- On leaving booster
+	---------------------
     if context.ending_booster then
         -- Stop juicing corruptible Jokers after ending booster pack, if appropriate
         check_stop_juice_corruptibles()
     end
 
+	------------------------------
+	-- On individual playing cards
+	------------------------------
     if (
         context.individual
         and context.cardarea == G.play
@@ -118,6 +155,9 @@ Oblivion.obj.calculate = function (self, context)
         context.other_card.ovn_apache_counted = nil
     end
 
+	--------------------------------
+	-- On NEW run start (Ovn-custom)
+	--------------------------------
     if context.ovn_run_started and context.new_run then
         -- Reverse Wicked Invocation effect
         G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0
@@ -126,6 +166,9 @@ Oblivion.obj.calculate = function (self, context)
         G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0
     end
 
+	--------------------
+	-- On run start/load
+	--------------------
     if context.ovn_run_started then
         ease_background_colour_blind()
     end
@@ -228,10 +271,6 @@ local credits_ui_style = {
 		colour = G.C.UI.TEXT_LIGHT,
 		padding = 0.05,
 	},
-	[".subroot"] = {
-		fillColour = G.C.CLEAR,
-		align = "center-middle"
-	},
 }
 
 local credits_table_config = {
@@ -272,6 +311,19 @@ local function additional_credits()
 	return Ovn_f.generate_table_ui(credits_copy, credits_table_config)
 end
 
+local function define_tab(loc_key, def_func, is_chosen)
+	return {
+		label = localize(loc_key),
+		chosen = is_chosen or false,
+		tab_definition_function = function ()
+			return
+			{n=G.UIT.ROOT, config={colour=G.C.CLEAR, align="cm"}, nodes={
+				def_func()
+			}}
+		end
+	}
+end
+
 Oblivion.obj.credits_tab = function ()
     local credits_ui =
 	{"root", class="credits_ui_style", {
@@ -279,39 +331,11 @@ Oblivion.obj.credits_tab = function ()
 			snap_to_nav = true,
 			colour = G.C.BLUE,
 			tabs = {
-				{
-					label = localize("k_primary_contributors"),
-					chosen = true,
-					tab_definition_function = function()
-						local def =
-						{"root", class="subroot", {
-							primary_contributors(),
-						}}
-						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
-					end
-				},
-				{
-					label = localize("k_additional_credits"),
-					chosen = false,
-					tab_definition_function = function()
-						local def =
-						{"root", class="subroot", {
-							additional_credits(),
-						}}
-						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
-					end
-				},
-				{
-					label = localize("k_sources"),
-					chosen = false,
-					tab_definition_function = function()
-						local def =
-						{"root", class="subroot", {
-							Ovn_f.localize_desc(G.localization.misc.credits_long)
-						}}
-						return Ovn_f.jtml_to_uiboxdef(def, credits_ui_style)
-					end
-				},
+				define_tab("k_primary_contributors", primary_contributors, true),
+				define_tab("k_additional_credits", additional_credits),
+				define_tab("k_sources", function()
+					return Ovn_f.localize_desc(G.localization.misc.credits_long)
+				end),
 			}
 		}
 	}}

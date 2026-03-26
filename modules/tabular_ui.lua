@@ -16,7 +16,7 @@
 -- Generates the UIBox definition for tabular UI.
 ---@param table_def generate_table_ui.Text[][]
 ---@param config? generate_table_ui.Config
----@return {n: 5, config: {object: UIBox}}
+---@return {n: G.UIT.O, config: {object: UIBox}}
 local function generate_tabular_ui(table_def, config)
     config = config or {}
 
@@ -27,13 +27,13 @@ local function generate_tabular_ui(table_def, config)
 
     local rows = {}
     for r,row_def in ipairs(table_def) do
-        local entries = {}
+        local cells_in_row = {}
         for i = 1, max_row_length do
             local cell_def = row_def[i] or {}
             local is_header = (not config.no_header) and r == 1
 
             -- Prepare cell properties
-            local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text} --[[@as {n: number, config?: {string: any}, nodes?: table}]]
+            local text = type(cell_def.text) == "table" and cell_def.text or {cell_def.text} --[[@as table]]
             local colour = cell_def.colour or config.default_text_colour
             local align = cell_def.align or "cl"
             local scale = cell_def.scale or config.default_text_scale
@@ -54,7 +54,7 @@ local function generate_tabular_ui(table_def, config)
                         text = text_line,
                     }
                     local text_el = {n=G.UIT.T, config = text_el_config}
-                    -- Row wrapper required for multiline text
+                    -- Row wrapper required for multiline tuitext
                     if #text > 1 then
                         text_el = {n=G.UIT.R, nodes = {text_el}}
                     end
@@ -73,11 +73,11 @@ local function generate_tabular_ui(table_def, config)
                 colour = fill or header_fill or default_fill
             }
             local cell_ui = {n=G.UIT.C, config=cell_el_config, nodes=cell_ui_nodes}
-			table.insert(entries, cell_ui)
+			table.insert(cells_in_row, cell_ui)
         end
 
-        local row_ui = {n=G.UIT.R, config={padding = 0}, nodes=entries}
-        table.insert(rows, row_ui)
+        local current_row = {n=G.UIT.R, config={padding = 0}, nodes=cells_in_row}
+        table.insert(rows, current_row)
     end
 
     -- Generate UIBox of table to allow for direct UI manipulation

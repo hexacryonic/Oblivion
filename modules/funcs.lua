@@ -87,17 +87,20 @@ Ovn_f.event_sequence = function(event_func_list, delay, offset)
 	end)
 end
 
--- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a table.
+-- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a chain of tables.
 ---@param input_table any[] Values correspond to table keys.
----@return any
+---@return any The value of the final key in `input_table`.
 Ovn_f.descend_table = function(input_table)
-	local tablee = input_table[1]
+	local current_table = input_table[1]
 	for i = 2, #input_table do
 		local key = input_table[i]
-		tablee = tablee[key]
-		if not tablee then return nil end
+		current_table = current_table[key]
+		if ( -- True if not indexable (includes nil)
+			type(current_table) ~= "table"
+			and i ~= input_table
+		) then return nil end
 	end
-	return tablee
+	return current_table
 end
 
 -- Copies a table and any table it contains.
@@ -189,29 +192,16 @@ Ovn_f.corrupt_joker = function(card)
 	-- as Apache Tears "absorbs" the corrupted card instead
 	end
 
-	if corrupted_card_key == "j_ovn_nyarlathotep" then
-		check_for_unlock{type="ovn_slumbering_beast"}
-	end
-
     add_simple_event(nil, nil, function()
         play_sound("ovn_corrupting_joker")
 
 		if not card_destroyed then
 			card:juice_up(0.3, 0.5)
 			card.ability.ovn_former_form = card_key
-			card:calculate_joker{
-				ovn_corrupted_from = true,
-				ovn_former_form_key = card_key,
-				ovn_former_form_ability = ability
-			}
+			card:calculate_joker(Ovn_f.calculate_corrupted_from(card_key, ability))
 		end
 
-		SMODS.calculate_context({
-			ovn_corruption_occurred = true,
-			ovn_corruption_type = "Joker",
-			ovn_former_form_key = card_key,
-			ovn_corrupted_card = card_destroyed and nil or card
-		})
+		SMODS.calculate_context(Ovn_f.calculate_corruption_occurred("Joker", card_key, card_destroyed and nil or card))
 
         G.GAME.corruptingJoker = false
     end)
@@ -242,18 +232,8 @@ Ovn_f.purify_joker = function(card)
     add_simple_event(nil, nil, function()
         play_sound("ovn_purifying")
 		card:juice_up(0.3, 0.5)
-
-		card:calculate_joker{
-			ovn_purified_from = true,
-			ovn_former_form_key = card_key,
-			ovn_former_form_ability = ability
-		}
-		SMODS.calculate_context({
-			ovn_purification_occurred = true,
-			ovn_purification_type = "Joker",
-			ovn_former_form_key = card_key,
-			ovn_purified_card = card
-		})
+		card:calculate_joker(Ovn_f.calculate_purified_from(card_key, ability))
+		SMODS.calculate_context(Ovn_f.calculate_purification_occurred("Joker", card_key, card))
     end)
 	add_simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
 end
@@ -398,31 +378,13 @@ Ovn_f.corrupt_modifiers = function(card)
 			card:juice_up(0.5, 0.5)
 
 			if new_enhancement then
-				card:calculate_enhancement{
-					ovn_corrupted_from = true,
-					ovn_former_form_key = enhancement_key,
-				}
-
-				SMODS.calculate_context({
-					ovn_corruption_occurred = true,
-					ovn_corruption_type = "Enhancement",
-					ovn_former_form_key = enhancement_key,
-					ovn_corrupted_card = card
-				})
+				card:calculate_enhancement(Ovn_f.calculate_corrupted_from(enhancement_key))
+				SMODS.calculate_context(Ovn_f.calculate_corruption_occurred("Enhancement", enhancement_key, card))
 			end
 
 			if new_seal then
-				card:calculate_seal{
-					ovn_corrupted_from = true,
-					ovn_former_form_key = seal_key
-				}
-
-				SMODS.calculate_context({
-					ovn_corruption_occurred = true,
-					ovn_corruption_type = "Seal",
-					ovn_former_form_key = seal_key,
-					ovn_corrupted_card = card
-				})
+				card:calculate_seal(Ovn_f.calculate_corrupted_from(seal_key))
+				SMODS.calculate_context(Ovn_f.calculate_corruption_occurred("Seal", seal_key, card))
 			end
 		end)
 	end
@@ -440,18 +402,8 @@ Ovn_f.corrupt_enhancement = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
-
-			card:calculate_enhancement{
-				ovn_corrupted_from = true,
-				ovn_former_form_key = enhancement_key,
-			}
-
-			SMODS.calculate_context({
-				ovn_corruption_occurred = true,
-				ovn_corruption_type = "Enhancement",
-				ovn_former_form_key = enhancement_key,
-				ovn_corrupted_card = card
-			})
+			card:calculate_enhancement(Ovn_f.calculate_corrupted_from(enhancement_key))
+			SMODS.calculate_context(Ovn_f.calculate_corruption_occurred("Enhancement", enhancement_key, card))
 		end)
 	end
 end
@@ -487,31 +439,13 @@ Ovn_f.purify_modifiers = function(card)
 			card:juice_up(0.5, 0.5)
 
 			if new_enhancement then
-				card:calculate_enhancement{
-					ovn_purified_from = true,
-					ovn_former_form_key = enhancement_key,
-				}
-
-				SMODS.calculate_context({
-					ovn_purification_occurred = true,
-					ovn_purification_type = "Enhancement",
-					ovn_former_form_key = enhancement_key,
-					ovn_purified_card = card
-				})
+				card:calculate_enhancement(Ovn_f.calculate_purified_from(enhancement_key))
+				SMODS.calculate_context(Ovn_f.calculate_purification_occurred("Enhancement", enhancement_key, card))
 			end
 
 			if new_seal then
-				card:calculate_seal{
-					ovn_purified_from = true,
-					ovn_former_form_key = seal_key
-				}
-
-				SMODS.calculate_context({
-					ovn_purification_occurred = true,
-					ovn_purification_type = "Seal",
-					ovn_former_form_key = seal_key,
-					ovn_purified_card = card
-				})
+				card:calculate_seal(Ovn_f.calculate_purified_from(seal_key))
+				SMODS.calculate_context(Ovn_f.calculate_purification_occurred("Seal", seal_key, card))
 			end
 		end)
 	end
@@ -529,18 +463,8 @@ Ovn_f.purify_enhancement = function(card)
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
-
-			card:calculate_enhancement{
-				ovn_purified_from = true,
-				ovn_former_form_key = enhancement_key,
-			}
-
-			SMODS.calculate_context({
-				ovn_purification_occurred = true,
-				ovn_purification_type = "Enhancement",
-				ovn_former_form_key = enhancement_key,
-				ovn_purified_card = card
-			})
+			card:calculate_enhancement(Ovn_f.calculate_purified_from(enhancement_key))
+			SMODS.calculate_context(Ovn_f.calculate_purification_occurred("Enhancement", enhancement_key, card))
 		end)
 	end
 end
@@ -671,6 +595,88 @@ Ovn_f.get_puppet_jacks = function(rarity)
 	end
 
 	return jack_list
+end
+
+
+
+----------------------------
+---- CALCULATION MACROS ----
+----------------------------
+
+
+
+---@class CorruptedFromContext
+---@field ovn_corrupted_from true
+---@field ovn_former_form_key string Corresponds to the key of an item.
+---@field ovn_former_form_ability {string: any}|nil If Joker was corrupted into something new, this is its ability table prior to corruption.
+
+---@class CorruptionOccurredContext
+---@field ovn_corruption_occurred true
+---@field ovn_corruption_type "Joker"|"Enhancement"|"Seal"
+---@field ovn_former_form_key string Corresponds to the key an item.
+---@field ovn_corrupted_card Card|nil The card that experienced the corruption.
+
+---@class PurifiedFromContext
+---@field ovn_corrupted_from true
+---@field ovn_former_form_key string Corresponds to the key of an item.
+---@field ovn_former_form_ability {string: any}|nil If Joker was purified into something new, this is its ability table prior to purification.
+
+---@class PurificationOccurredContext
+---@field ovn_purification_occurred true
+---@field ovn_purification_type "Joker"|"Enhancement"|"Seal"
+---@field ovn_former_form_key string Corresponds to the key an item.
+---@field ovn_purified_card Card|nil The card that experienced the purification.
+
+-- Prepares a context table corresponding to `ovn_corrupted_from`.
+---@param key string
+---@param ability? {string: any}
+---@return CorruptedFromContext
+Ovn_f.calculate_corrupted_from = function(key, ability)
+	return {
+		ovn_corrupted_from = true,
+		ovn_former_form_key = key,
+		ovn_former_form_ability = ability
+	}
+end
+
+-- Prepares a context table corresponding to `ovn_corruption_occurred`.
+---@param corruption_type string
+---@param key string
+---@param corrupted_card? Card
+---@return CorruptionOccurredContext
+Ovn_f.calculate_corruption_occurred = function(corruption_type, key, corrupted_card)
+	return {
+		ovn_corruption_occurred = true,
+		ovn_corruption_type = corruption_type,
+		ovn_former_form_key = key,
+		ovn_corrupted_card = corrupted_card
+	}
+end
+
+-- Prepares a context table corresponding to `ovn_purified_from`.
+---@param key string
+---@param ability? {string: any}
+---@return PurifiedFromContext
+Ovn_f.calculate_purified_from = function(key, ability)
+	return {
+		ovn_purified_from = true,
+		ovn_former_form_key = key,
+		ovn_former_form_ability = ability
+	}
+end
+
+-- Prepares a context table corresponding to `ovn_purification_occurred`.
+---@param purification_type string
+---@param key string
+---@param purified_card? Card
+---@return PurificationOccurredContext
+Ovn_f.calculate_purification_occurred = function(purification_type, key, purified_card)
+	return {
+		ovn_purification_occurred = true,
+		ovn_purification_type = purification_type,
+		ovn_former_form_key = key,
+		ovn_purified_card = purified_card
+	}
 end
 
 

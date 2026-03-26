@@ -57,6 +57,7 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 		and Ovn_f.joker_has_corruption(card.config.center.key)
 	) then
 		local j_key = card.config.center.key
+		-- "Joker is corruptible"
 		if Ovn_f.joker_is_corruptible(j_key) then
 			table.insert(info_queue, {
 				key = 'ovn_corruptible',
@@ -67,6 +68,8 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 					key = j_key
 				} }
 			})
+		-- "Joker requires condition for corruption"
+		-- "This is that condition"
 		elseif Ovn_f.joker_corruption_condition(j_key) then
 			local condition_key = Ovn_f.joker_corruption_condition(j_key)
 			table.insert(info_queue, {
@@ -80,6 +83,7 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 		end
 	end
 
+	-- "Optics give double chips"
 	if card and card.base and card.base.suit == "ovn_Optics" then
 		table.insert(info_queue, {
 			key = 'ovn_opticinfo',
@@ -92,12 +96,14 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 		or card.config.center.uses_placeholder_sprite
 	) then for _,collection_area in ipairs(G.your_collection) do
 		if card.area == collection_area then
+			-- Credits
 			if card.config.center.credits then
 				-- Only way to attach vars to send to the description dummy
 				G.P_CENTERS['dd_ovn_credits'].specific_vars = card.config.center.credits
 				table.insert(info_queue, G.P_CENTERS['dd_ovn_credits'])
 			end
 
+			-- Placeholder note
 			if card.config.center.uses_placeholder_sprite then
 				table.insert(info_queue, {
 					key = 'ovn_placeholder_sprite',

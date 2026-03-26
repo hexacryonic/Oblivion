@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 -- These functions append certain behaviors onto existing functions
 -- in a manner easier than patching
 
@@ -18,63 +19,60 @@ local add_simple_event = Ovn_f.add_simple_event
 local lvluphand_hook = level_up_hand
 function level_up_hand(card, hand, instant, amount)
 	local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
-	if #all_event_horizons > 0 then
-		amount = amount or 1
-		local mult  = G.GAME.hands[hand].l_mult
-		local chips = G.GAME.hands[hand].l_chips
-		for i,event_horizon in ipairs(all_event_horizons) do
-			local former_form = event_horizon.ability.ovn_former_form or "j_supernova"
-			local scale_mult = event_horizon.ability.extra.scalemult[former_form]
-			event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + mult*scale_mult*amount
-			event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + chips*scale_mult*amount
-
-			if not instant then
-				local speed = 1 + (i-1)*0.1
-				-- Mult
-				Ovn_f.add_simple_event('after', 0.2/speed, function ()
-					play_sound('tarot1')
-					if card then card:juice_up(0.8, 0.5) end
-					event_horizon:juice_up(0.8, 0.5)
-					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(mult*scale_mult*amount),
-						colour = G.C.MULT,
-						instant = true
-					})
-				end)
-				-- Chip
-				Ovn_f.add_simple_event('after', 0.9/speed, function ()
-					play_sound('tarot1')
-					if card then card:juice_up(0.8, 0.5) end
-					event_horizon:juice_up(0.8, 0.5)
-					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
-						message = "+"..(chips*scale_mult*amount),
-						colour = G.C.CHIPS,
-						instant = true
-					})
-				end)
-				if i == #all_event_horizons then
-					speed = 1
-				end
-				delay(1.3/speed)
-			end
-			if (
-				event_horizon.ability.extra.mult >= 193
-				and event_horizon.ability.extra.chips >= 1730
-			) then
-				Ovn_f.add_simple_event(nil, nil, function ()
-					check_for_unlock({type = 'ovn_eventhoz_scale'})
-				end)
-			end
-		end
-	else
+	if #all_event_horizons <= 0 then
 		lvluphand_hook(card, hand, instant, amount)
+		return
+	end
+
+	amount = amount or 1
+	local mult  = G.GAME.hands[hand].l_mult
+	local chips = G.GAME.hands[hand].l_chips
+
+	for i,event_horizon in ipairs(all_event_horizons) do
+		local former_form = event_horizon.ability.ovn_former_form or "j_supernova"
+		local scale_mult = event_horizon.ability.extra.scalemult[former_form]
+		event_horizon.ability.extra.mult  = event_horizon.ability.extra.mult  + mult*scale_mult*amount
+		event_horizon.ability.extra.chips = event_horizon.ability.extra.chips + chips*scale_mult*amount
+
+		if not instant then
+			local speed = 1 + (i-1)*0.1
+
+			local function juice_param_ui(event_delay, param, colour)
+				Ovn_f.add_simple_event('after', event_delay/speed, function()
+					play_sound('tarot1')
+					if card then card:juice_up(0.8, 0.5) end
+					event_horizon:juice_up(0.8, 0.5)
+					card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
+						message = "+"..(param*scale_mult*amount),
+						colour = colour,
+						instant = true
+					})
+				end)
+			end
+
+			juice_param_ui(0.2,mult, G.C.MULT)
+			juice_param_ui(0.9,chips, G.C.CHIPS)
+
+			if i == #all_event_horizons then
+				speed = 1
+			end
+			delay(1.3/speed)
+		end
+		if (
+			event_horizon.ability.extra.mult >= 193
+			and event_horizon.ability.extra.chips >= 1730
+		) then
+			Ovn_f.add_simple_event(nil, nil, function ()
+				check_for_unlock({type = 'ovn_eventhoz_scale'})
+			end)
+		end
 	end
 end
 
 -- Hook for transmuting modifiers on created Optic cards
 local createcard_hook = create_card
-function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-	local card = createcard_hook(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+function create_card(...)
+	local card = createcard_hook(...)
 	if card and card.base.suit == "ovn_Optics" then
 		G.GAME.ovn_has_ocular = true
 		-- Only occurs if conditionals within function are true
@@ -108,11 +106,14 @@ function get_highest(hand)
 		) then highest = card end
 	end
 
-	-- For cases where all played cards never score,
-	-- we still need something to send back.
-	-- Without this hook, a never-scoring card can still be
-	-- the highest card, even if it never scores
-	-- hence this fallback.
+	--[[
+		For cases where all played cards never score,
+		we still need something to send back.
+
+		Without this hook, a never-scoring card can still be
+		the highest card, even if it never scores,
+		hence this fallback.
+	]]
 	if not highest then return gethighest_hook(hand) end
 
 	if #hand > 0 then return {{highest}} else return {} end
@@ -132,11 +133,7 @@ function Card:calculate_joker(context)
 
 	-- PMO functionality
 	-- Credit to Airtoum for initial code
-	if has_pmo and (
-		context.other_card
-		and context.other_card.base
-		and context.other_card.base.id
-	) then
+	if has_pmo and Ovn_f.descend_table{context, 'other_card', 'base', 'id'} then
 		local card_base = context.other_card.base
 		local start_rank = has_pareidolia and 2 or 11
 		local end_rank = 13
@@ -196,10 +193,9 @@ function Card:update(dt)
 		local card_key = self.config.center.key
 		if not card_key then return end
 
-		if Ovn_f.is_corruptbanished(card_key) and not (
-			self.ability.extra
-			and type(self.ability.extra) == "table"
-			and self.ability.extra.getting_corrupt_banished
+		if (
+			Ovn_f.is_corruptbanished(card_key)
+			and not Ovn_f.descend_table{self.ability, "extra", "getting_corrupt_banished"}
 		) then
 			SMODS.destroy_cards(self)
 			if not self.ability.extra or type(self.ability.extra) ~= "table" then
@@ -230,19 +226,6 @@ function Card:change_suit(new_suit)
 
 	card_changesuit_hook(self, new_suit)
 	if transmute_func then transmute_func(self) end
-end
-
--- Hook for:
----- Counting unique Jokers
-local card_addtodeck_hook = Card.add_to_deck
-function Card:add_to_deck(from_debuff)
-	card_addtodeck_hook(self, from_debuff)
-	if self.ability.set == "Joker" then
-		if not G.GAME.cumulative_unique_jokers[self.config.center.key] then
-			G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count + 1
-			G.GAME.cumulative_unique_jokers[self.config.center.key] = true
-		end
-	end
 end
 
 -- Hook for corrupting enhancements on Optic cards if set (by Tarots, etc)
@@ -334,7 +317,9 @@ function Game:start_run(args)
 	})
 end
 
--- Hook for losing if all held cards are Unobtainium
+-- Hook for:
+---- Losing if all held cards are Unobtainium
+---- Creating quips on C.Erratic deck
 local dt_track = 0
 local game_upd8_hook = Game.update
 function Game:update(dt)
@@ -372,7 +357,7 @@ function Game:update(dt)
 	if dt_track >= 1 then dt_track = dt_track - 1 end
 end
 
--- Hook for spawning the first-install notification
+-- Hook for creating the first-install notification
 local game_menu_hook = Game.main_menu
 function Game:main_menu(context)
 	game_menu_hook(self, context)

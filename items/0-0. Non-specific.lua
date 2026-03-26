@@ -243,9 +243,19 @@ SMODS.Scoring_Calculation { key = "instable",
 -- BetterFloat
 ------------------
 SMODS.DynaTextEffect { key = "betterfloat",
-	func = function(self, k, letter)
+	func = function(self, index, letter)
 		-- taken from vanilla source
-		letter.offset.y = (G.SETTINGS.reduced_motion and 0 or 1)*math.sqrt(self.scale)*(2+(self.font.FONTSCALE/G.TILESIZE)*2000*math.sin(2.666*G.TIMERS.REAL+200*k)) + 60*(letter.scale-1)
+		-- and modified to be a bit more readable
+
+		local enable_motion = G.SETTINGS.reduced_motion and 0 or 1
+		local oscillation   = math.sin(2.666*G.TIMERS.REAL + 200*index)
+		local apparent_size = self.font.FONTSCALE/G.TILESIZE
+
+		letter.offset.y = 60*(letter.scale - 1) + (
+			enable_motion
+			*math.sqrt(self.scale)
+			*(2 + (2000*oscillation*apparent_size))
+		)
 	end,
 }
 
@@ -254,9 +264,9 @@ SMODS.DynaTextEffect { key = "betterfloat",
 -- Glitched
 ------------------
 SMODS.DynaTextEffect { key = "glitched",
-	func = function(dynatext, index, letter)
+	func = function(self, index, letter)
 		-- ignore spaces
-		local og_char = dynatext.strings[1].letters[index].char
+		local og_char = self.strings[1].letters[index].char
 		if og_char == " " then return end
 
 		-- Slowing mechanisms for accessibility toggles
