@@ -26,6 +26,9 @@ Oblivion.obj.optional_features = {
 	}
 }
 
+-- Used by lovely/increase_deck_preview_size.toml
+Oblivion.suit_display_count = 5
+
 -- Talisman incompat
 -- You should really be using Amulet
 if (

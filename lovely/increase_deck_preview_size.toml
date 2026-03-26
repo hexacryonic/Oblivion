@@ -1,0 +1,67 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/increase_deck_preview_size.toml
+# All patches here change G.UIDEF.view_deck in SMODS src/overrides.lua
+# to display 5 suits
+
+[vars] # To change which parameter to exclude, change this conditional
+count = 'Oblivion.suit_display_count'
+
+# ----
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''
+if (j >= 1 and j <= 4) or num_suits <= 4 then
+'''
+position = 'at'
+payload = '''
+if (j >= 1 and j <= {{lovely:count}}) or num_suits <= {{lovely:count}} then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''
+while i <= math.min(4, #visible_suit) do
+'''
+position = 'at'
+payload = '''
+while i <= math.min({{lovely:count}}, #visible_suit) do
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''
+for i = 1, math.ceil(#visible_suit / 4) do
+    table.insert(suit_options,
+        localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#visible_suit / 4)))
+end
+'''
+position = 'at'
+payload = '''
+for i = 1, math.ceil(#visible_suit / {{lovely:count}}) do
+    table.insert(suit_options,
+        localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#visible_suit / {{lovely:count}})))
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''
+#visible_suit > 4 and {n = G.UIT.R, config = {align = "cm", padding = 0 }, nodes = {
+'''
+position = 'at'
+payload = '''
+#visible_suit > {{lovely:count}} and {n = G.UIT.R, config = {align = "cm", padding = 0 }, nodes = {
+'''
+match_indent = true
