@@ -16,8 +16,6 @@ Oblivion.config = Oblivion.obj.config
 -- Function object
 Ovn_f = {}
 
-print(SMODS.current_mod.path)
-
 Oblivion.obj.optional_features = {
 	retrigger_joker = true,
 	post_trigger = true,
