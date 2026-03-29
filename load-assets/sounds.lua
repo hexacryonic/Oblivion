@@ -31,18 +31,33 @@ end
 --------------------------
 ---- MUSIC CONDITIONS ----
 --------------------------
+
 local not_removed = function(tbl)
 	return tbl and not tbl.REMOVED
 end
 
-local desired_track = function()
-	return -- taken from vanilla source
-	(not_removed(G.booster_pack_sparkles) and 'music_booster')
-	or (not_removed(G.booster_pack_meteors) and 'music_planets')
-	or (not_removed(G.booster_pack) and 'music_booster')
-	or (not_removed(G.shop) and 'music_shop')
-	or (G.GAME.blind and G.GAME.blind.boss and 'music_boss')
-	or ('music_normal')
+local desired_track = function ()
+	if not_removed(G.booster_pack_sparkles) then
+		return 'music_booster'
+	end
+
+	if not_removed(G.booster_pack_meteors) then
+		return 'music_planets'
+	end
+
+	if not_removed(G.booster_pack) then
+		return 'music_booster'
+	end
+
+	if not_removed(G.shop) then
+		return 'music_shop'
+	end
+
+	if G.GAME.blind and G.GAME.blind.boss then
+		return 'music_boss'
+	end
+
+	return 'music_normal'
 end
 
 
@@ -65,7 +80,11 @@ for key,track_type in pairs(standard_music) do
 		select_music_track = function()
 			return G.GAME
 			and Ovn_f.deck_is_corrupt()
-			and desired_track() == track_type
+			and (
+				type(track_type) == "table"
+				and track_type[desired_track()]
+				or track_type == desired_track()
+			)
 		end
 	})
 end
@@ -89,7 +108,10 @@ SMODS.Sound {
 			not Oblivion.config.disable_a_part_falling_music
 			and G.GAME
 			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and desired_track() ~= "music_boss"
+			and not (
+				desired_track() == "music_normal"
+				or desired_track() == "music_boss"
+			)
 		) and 5 or false
 	end,
 }
@@ -107,7 +129,10 @@ SMODS.Sound {
 			not Oblivion.config.disable_a_part_falling_music
 			and G.GAME
 			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and desired_track() == "music_boss"
+			and (
+				desired_track() == "music_normal"
+				or desired_track() == "music_boss"
+			)
 		) and 5 or false
 	end,
 }
