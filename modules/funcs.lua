@@ -695,7 +695,7 @@ Ovn_f.ease_blind_requirement = function(mod)
 		mod = mod or 0
 
 		G.GAME.blind.chips = G.GAME.blind.chips + mod
-		G.GAME.blind.chip_text = G.GAME.blind.chips
+		G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
 		G.HUD_blind:recalculate()
 		blind_req_UI:juice_up()
 	end)
