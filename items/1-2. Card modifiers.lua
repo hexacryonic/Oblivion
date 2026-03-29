@@ -143,7 +143,7 @@ SMODS.Enhancement { key = "coord",
 			or context.hand_drawn
 			or context.other_drawn
 			or context.ovn_corrupted_from
-		) then
+		) and card.area == G.hand then
 			local card_table = G.hand.cards
 			local card_index = card.rank
 
