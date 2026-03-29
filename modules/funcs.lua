@@ -97,7 +97,7 @@ Ovn_f.descend_table = function(input_table)
 		current_table = current_table[key]
 		if ( -- True if not indexable (includes nil)
 			type(current_table) ~= "table"
-			and i ~= input_table
+			and i ~= #input_table
 		) then return nil end
 	end
 	return current_table
