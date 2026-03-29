@@ -85,3 +85,19 @@ SMODS.localize_box(loc_parse_string("{C:red,E:ovn_glitched}????"), {scale=score_
 or
 '''
 match_indent = true
+
+# ----
+
+# In Steamodded:
+# function SMODS.clean_up_children
+# Implement SMODS #1228 fix - REMOVE ON SMODS NEW RELEASE
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/card_draw.lua"]'''
+pattern = '''
+local ignore = {center = true, shadow = true, back = true, h_popup = true}
+'''
+position = "at"
+payload = '''
+local ignore = {center = true, shadow = true, back = true, h_popup = true, front = true}'''
+match_indent = true
