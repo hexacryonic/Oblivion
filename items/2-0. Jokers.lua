@@ -7,12 +7,19 @@ local add_simple_event = Ovn_f.add_simple_event
 ---@param message_key? string
 ---@return nil
 local function simple_scale(card, target, scalar, colour, message_key)
+	local no_message = false
+	if message_key == "NOMESSAGE" then
+		message_key = nil
+		colour = nil
+		no_message = true
+	end
 	SMODS.scale_card(card, {
 		ref_table = card.ability.extra,
 		ref_value = target,
 		scalar_value = scalar,
 		message_key = message_key,
-		message_colour = colour
+		message_colour = colour,
+		no_message = no_message
 	})
 end
 
@@ -23,13 +30,20 @@ end
 ---@param message_key? string
 ---@return nil
 local function former_form_scale(card, target, scalar, colour, message_key)
+	local no_message = false
+	if message_key == "NOMESSAGE" then
+		message_key = nil
+		colour = nil
+		no_message = true
+	end
 	SMODS.scale_card(card, {
 		ref_table = card.ability.extra,
 		ref_value = target,
 		scalar_table = card.ability.extra[scalar],
 		scalar_value = card.ability.ovn_former_form,
 		message_key = message_key,
-		message_colour = colour
+		message_colour = colour,
+		no_message = no_message
 	})
 end
 
@@ -1878,7 +1892,11 @@ SMODS.Joker { key = 'infinitesimal',
 			and context.other_card.base.value == "3"
 			and not context.blueprint
 		) then
-			simple_scale(card, "mult", "mult_gain", G.C.MULT)
+			simple_scale(card, "mult", "mult_gain", G.C.MULT, "NOMESSAGE")
+			return {
+				message = localize('k_upgrade_ex'),
+				message_card = card
+			}
 		end
 
 		if context.joker_main then
