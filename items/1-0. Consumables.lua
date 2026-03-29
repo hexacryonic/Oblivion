@@ -135,6 +135,10 @@ local function planet_loc_vars(self, info_queue, card)
 	}}
 end
 
+local function galilean_moon_badge(self, card, badges)
+	badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
+end
+
 -----------
 -- PLANET
 -- Ganymede
@@ -153,9 +157,7 @@ SMODS.Consumable { key = 'ganymede',
 	atlas = 'consumables',
 	pos = {x = 0, y = 1 },
 
-	set_card_type_badge = function(self, card, badges)
-		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
-	end,
+	set_card_type_badge = galilean_moon_badge,
 }
 
 -----------
@@ -176,9 +178,7 @@ SMODS.Consumable { key = 'callisto',
 	atlas = 'consumables',
 	pos = {x = 1, y = 1 },
 
-	set_card_type_badge = function(self, card, badges)
-		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
-	end,
+	set_card_type_badge = galilean_moon_badge,
 }
 
 ---------
@@ -199,9 +199,7 @@ SMODS.Consumable { key = 'io',
 	atlas = 'consumables',
 	pos = {x = 2, y = 1 },
 
-	set_card_type_badge = function(self, card, badges)
-		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
-	end,
+	set_card_type_badge = galilean_moon_badge,
 }
 
 ---------
@@ -222,9 +220,7 @@ SMODS.Consumable { key = 'europa',
 	atlas = 'consumables',
 	pos = {x = 3, y = 1 },
 
-	set_card_type_badge = function(self, card, badges)
-		badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
-	end,
+	set_card_type_badge = galilean_moon_badge,
 }
 
 ----------------
