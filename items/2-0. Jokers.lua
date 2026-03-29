@@ -1622,9 +1622,9 @@ SMODS.Joker { key = 'yolo',
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
 			ease_hands_played(-G.GAME.current_round.hands_left)
-			G.GAME.current_round.hands_left = 'nan'
-			G.GAME.yolo = true
-			return nil, true
+			add_simple_event(nil, nil, function ()
+				G.GAME.current_round.hands_left = '-nan'
+			end)
 		end
 
 		if context.individual and context.cardarea == G.play then
@@ -1635,18 +1635,13 @@ SMODS.Joker { key = 'yolo',
 			}
 		end
 
-		if G.GAME.yolo then
-			if G.GAME.current_round.hands_played > 0 and G.GAME.chips/G.GAME.blind.chips < 1 then
-				G.STATE = G.STATES.GAME_OVER
-				G.STATE_COMPLETE = false
-				G.GAME.yolo = false
-				return nil, true
-			end
-
-			if context.end_of_round and context.cardarea == G.jokers and not context.game_over then
-				G.GAME.yolo = false
-				return nil, true
-			end
+		if context.after then
+			add_simple_event(nil, nil, function ()
+				if G.GAME.chips < G.GAME.blind.chips then
+					G.STATE = G.STATES.GAME_OVER
+					G.STATE_COMPLETE = false
+				end
+			end)
 		end
 	end,
 }
