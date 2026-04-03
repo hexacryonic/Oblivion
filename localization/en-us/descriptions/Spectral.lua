@@ -9,8 +9,8 @@ return {
 	c_ovn_charybdis = {
 		name = 'Charybdis',
 		text = {
-			"Create {C:attention}#1#{} random",
-			"{C:ovn_corrupted}Corrupted{} {C:attention}Jokers{}",
+			"Create {C:attention}#1#{} random {C:dark_edition}Negative{}",
+			"{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
 			"Destroy all other {C:attention}Jokers{}"
 		}
 	},

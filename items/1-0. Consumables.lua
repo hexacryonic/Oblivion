@@ -238,6 +238,7 @@ SMODS.Consumable { key = "charybdis",
 		code = "HexaCryonic"
 	},
 	loc_vars = function(self, info_queue, card)
+	  table.insert(info_queue, G.P_CENTERS.e_negative)
 		return { vars = { self.config.create } }
 	end,
 
@@ -248,18 +249,13 @@ SMODS.Consumable { key = "charybdis",
 		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
 
-	config = { create = 2 },
+	config = { create = 1 },
 	cost = 4,
 
 	can_use = function(self, card)
-		return #G.jokers.cards < G.jokers.config.card_limit
+		return #G.jokers.cards <= G.jokers.config.card_limit
 	end,
 	use = function(self, card, area, copier)
-		local create_count = self.config.create
-		local empty_joker_slot_count = G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer)
-		local jokers_to_create_count = math.min(create_count, empty_joker_slot_count)
-
-		G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create_count
 		local deletable_jokers = {}
 		for _,held_joker in pairs(G.jokers.cards) do
 			if not held_joker.ability.eternal then
@@ -268,10 +264,16 @@ SMODS.Consumable { key = "charybdis",
 		end
 
 		if #deletable_jokers > 0 then
-			add_simple_event(nil, nil, function ()
+			add_simple_event('before', 0, function ()
 				SMODS.destroy_cards(deletable_jokers)
 			end)
 		end
+
+		local create_count = self.config.create
+		local empty_joker_slot_count = G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer)
+		local jokers_to_create_count = math.min(create_count, empty_joker_slot_count)
+
+		G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create_count
 
 		add_simple_event('after', 0.4, function ()
 			for _=1,jokers_to_create_count do
@@ -279,6 +281,7 @@ SMODS.Consumable { key = "charybdis",
 					set = 'Joker',
 					area = G.joker,
 					rarity = 'ovn_corrupted',
+					edition = 'e_negative',
 					skip_materialize = false,
 					key_append = 'ovn_charybdis'
 				}
