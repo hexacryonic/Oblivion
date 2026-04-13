@@ -92,6 +92,7 @@ end
 ---@return any The value of the final key in `input_table`.
 Ovn_f.descend_table = function(input_table)
 	local current_table = input_table[1]
+	if type(current_table) ~= "table" then return nil end
 	for i = 2, #input_table do
 		local key = input_table[i]
 		current_table = current_table[key]

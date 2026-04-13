@@ -50,52 +50,47 @@ end
 ---@param info_queue table
 ---@return nil
 function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
-	if (
-		card
-		and card.config.center
-		and card.config.center.discovered
-		and Ovn_f.joker_has_corruption(card.config.center.key)
-	) then
-		local j_key = card.config.center.key
-		-- "Joker is corruptible"
-		if Ovn_f.joker_is_corruptible(j_key) then
-			table.insert(info_queue, {
-				key = 'ovn_corruptible',
-				set = 'Other',
-				vars = { localize {
-					type = "name_text",
-					set = "Joker",
-					key = j_key
-				} }
-			})
-		-- "Joker requires condition for corruption"
-		-- "This is that condition"
-		elseif Ovn_f.joker_corruption_condition(j_key) then
-			local condition_key = Ovn_f.joker_corruption_condition(j_key)
-			table.insert(info_queue, {
-				key = 'ovn_almost_corruptible',
-				set = 'Other',
-			})
-			table.insert(info_queue, {
-				key = 'ovn_corrupt_condition_' .. condition_key,
-				set = 'Other'
-			})
-		end
-	end
+	if not card then return end
 
 	-- "Optics give double chips"
-	if card and card.base and card.base.suit == "ovn_Optics" then
+	if Ovn_f.descend_table{card, "base", "suit"} == "ovn_Optics" then
 		table.insert(info_queue, {
 			key = 'ovn_opticinfo',
 			set = 'Other',
 		})
 	end
 
-	if card and card.config.center and card.config.center.discovered and G.your_collection and (
-		card.config.center.credits
-		or card.config.center.uses_placeholder_sprite
-	) then for _,collection_area in ipairs(G.your_collection) do
-		if card.area == collection_area then
+	-- Cards with centers
+	if Ovn_f.descend_table{card, "config", "center", "discovered"} then
+		if Ovn_f.joker_has_corruption(card.config.center.key) then
+			local j_key = card.config.center.key
+			-- "Joker is corruptible"
+			if Ovn_f.joker_is_corruptible(j_key) then
+				table.insert(info_queue, {
+					key = 'ovn_corruptible',
+					set = 'Other',
+					vars = { localize {
+						type = "name_text",
+						set = "Joker",
+						key = j_key
+					} }
+				})
+			-- "Joker requires condition for corruption"
+			-- "This is that condition"
+			elseif Ovn_f.joker_corruption_condition(j_key) then
+				local condition_key = Ovn_f.joker_corruption_condition(j_key)
+				table.insert(info_queue, {
+					key = 'ovn_almost_corruptible',
+					set = 'Other',
+				})
+				table.insert(info_queue, {
+					key = 'ovn_corrupt_condition_' .. condition_key,
+					set = 'Other'
+				})
+			end
+		end
+
+		if Ovn_f.descend_table{card.area, "config", "collection"} then
 			-- Credits
 			if card.config.center.credits then
 				-- Only way to attach vars to send to the description dummy
@@ -110,10 +105,27 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 					set = 'Other'
 				})
 			end
-
-			break
 		end
-	end end
+	end
+
+	-- Cards with seals
+	if card.seal then
+		local select_seal = SMODS.Seals[card.seal]
+		-- Credits
+		if select_seal.credits then
+			-- Only way to attach vars to send to the description dummy
+			G.P_CENTERS['dd_ovn_credits'].specific_vars = select_seal.credits
+			table.insert(info_queue, G.P_CENTERS['dd_ovn_credits'])
+		end
+
+		-- Placeholder note
+		if select_seal.uses_placeholder_sprite then
+			table.insert(info_queue, {
+				key = 'ovn_placeholder_sprite',
+				set = 'Other'
+			})
+		end
+	end
 end
 
 ---@class localize_desc.Config

@@ -475,6 +475,11 @@ SMODS.Seal { key = 'indigo',
 -- Mark of Ruby
 ---------------
 SMODS.Seal { key = 'ruby_mark',
+	credits = {
+		concept = "-- TBD --",
+		code = "Oinite",
+		art = "Lil. Mr. Slipstream"
+	},
 	config = { extra = {retriggers = 2} },
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
@@ -512,6 +517,11 @@ SMODS.Seal { key = 'ruby_mark',
 -- Mark of Sapphire
 -------------------
 SMODS.Seal { key = 'sapphire_mark',
+	credits = {
+		concept = "-- TBD --",
+		code = "Oinite",
+		art = "Lil. Mr. Slipstream"
+	},
 	badge_colour = darken(G.C.BLUE, 0.1),
 
     atlas = "seals_marks",
@@ -587,6 +597,11 @@ SMODS.Seal { key = 'sapphire_mark',
 -- Mark of Citrine
 ------------------
 SMODS.Seal { key = 'citrine_mark',
+	credits = {
+		concept = "NinjaBanana",
+		code = "Oinite",
+		art = "Lil. Mr. Slipstream"
+	},
 	config = { extra = {
 		seal_cash = 1,
 		mark_cash = 3
@@ -681,6 +696,11 @@ SMODS.Seal { key = 'amethyst_mark',
 -- Mark of Iolite
 -----------------
 SMODS.Seal { key = 'iolite_mark',
+	credits = {
+		concept = {"NinjaBanana", "HexaCryonic"},
+		code = "Oinite",
+		art = "Lil. Mr. Slipstream"
+	},
 	badge_colour = darken(HEX('252fe3'), 0.1),
 
     atlas = "seals_marks",
