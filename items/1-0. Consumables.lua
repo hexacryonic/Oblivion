@@ -269,24 +269,15 @@ SMODS.Consumable { key = "charybdis",
 			end)
 		end
 
-		local create_count = self.config.create
-		local empty_joker_slot_count = G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer)
-		local jokers_to_create_count = math.min(create_count, empty_joker_slot_count)
-
-		G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create_count
-
 		add_simple_event('after', 0.4, function ()
-			for _=1,jokers_to_create_count do
-				SMODS.add_card{
-					set = 'Joker',
-					area = G.joker,
-					rarity = 'ovn_corrupted',
-					edition = 'e_negative',
-					skip_materialize = false,
-					key_append = 'ovn_charybdis'
-				}
-				G.GAME.joker_buffer = 0
-			end
+			SMODS.add_card{
+				set = 'Joker',
+				area = G.joker,
+				rarity = 'ovn_corrupted',
+				edition = 'e_negative',
+				skip_materialize = false,
+				key_append = 'ovn_charybdis'
+			}
 		end)
 		delay(0.6)
 	end,
