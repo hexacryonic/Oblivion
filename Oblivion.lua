@@ -50,6 +50,12 @@ https://github.com/frostice482/amulet
 ]])
 end
 
+-- PlayLog compatibility
+PlayLog = PlayLog or {
+	log = function() end,
+	LogType = function() end,
+}
+
 -- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
 -- Event function will always return true, so "return true" is not required.\
 -- Consequently, do not use this function if the event function needs to return a non-true value\

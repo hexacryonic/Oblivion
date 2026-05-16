@@ -334,3 +334,33 @@ Oblivion.DescriptionDummy {
 		table.insert(desc_nodes, {credits_ui})
 	end
 }
+
+----------------
+-- PlayLog TYPE
+-- transmutation
+----------------
+PlayLog.LogType { key = "transmute_joker",
+	group = "effects",
+	get_message = function(self, args)
+		local loc_key
+		if args.transmute_type == "corrupt" then
+			loc_key = args.from == args.to and "plog_recorrupt" or "plog_corrupt"
+		elseif args.transmute_type == "purify" then
+			loc_key = args.from == args.to and "plog_repurify" or "plog_purify"
+		end
+		return PlayLog.localize(loc_key, {PlayLog.format_object(args.from), PlayLog.loc_list(PlayLog.format_object(args.to)) })
+	end
+}
+
+PlayLog.LogType { key = "transmute_modifiers",
+	group = "effects",
+	get_message = function (self, args)
+		local loc_key
+		if args.transmute_type == "corrupt" then
+			loc_key = "plog_corrupt_modifiers"
+		elseif args.transmute_type == "purify" then
+			loc_key = "plog_purify_modifiers"
+		end
+		return PlayLog.localize(loc_key, {PlayLog.format_object(args.card), PlayLog.loc_list(PlayLog.format_objects(args.from)), PlayLog.loc_list(PlayLog.format_objects(args.to)) })
+	end
+}

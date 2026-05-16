@@ -524,6 +524,14 @@ local loc =  {
 				"What the actual fuck is wrong with you?",
 			}
 		},
+		playlog = {
+			plog_corrupt = "#1#{} corrupted into #2#",
+			plog_purify = "#1#{} purified into #2#",
+			plog_recorrupt = "#1# {}re-corrupted",
+			plog_repurify = "#1#{} re-purified",
+			plog_corrupt_modifiers = "#1#{} corrupted #2#{} into #3#",
+			plog_purify_modifiers = "#1#{} purified #2#{} into #3#",
+		},
 			-- Developer's note: Please only translate the second and third item of each tuple
 		credits = {
 			{"HexaCryonic", {"Creator", "Lead Developer"}},

@@ -462,9 +462,10 @@ SMODS.Seal { key = 'indigo',
 		) then
 			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 			add_simple_event('before', 0, function ()
-				SMODS.add_card({ set = 'Spectral' })
+				local created_spectral = SMODS.add_card({ set = 'Spectral' })
 				card:juice_up(0.3, 0.5)
 				G.GAME.consumeable_buffer = 0
+				PlayLog.log{ type = "creates", card = card, created = { created_spectral } }
 			end)
 		end
 	end

@@ -193,6 +193,7 @@ Ovn_f.corrupt_joker = function(card)
 	-- as Apache Tears "absorbs" the corrupted card instead
 	end
 
+	PlayLog.log{ type = "ovn_transmute_joker", transmute_type = "corrupt", from = card_key, to = corrupted_card_key }
     add_simple_event(nil, nil, function()
         play_sound("ovn_corrupting_joker")
 
@@ -230,6 +231,8 @@ Ovn_f.purify_joker = function(card)
 	if pure_card_key ~= card_key then
 		card:set_ability(G.P_CENTERS[pure_card_key])
 	end
+
+	PlayLog.log{ type = "ovn_transmute_joker", transmute_type = "purify", from = card_key, to = pure_card_key }
     add_simple_event(nil, nil, function()
         play_sound("ovn_purifying")
 		card:juice_up(0.3, 0.5)
@@ -353,6 +356,8 @@ end
 ---@return nil
 Ovn_f.corrupt_modifiers = function(card)
 	local transmuted = false
+	local corrupt_keys = {}
+	local old_keys = {}
 
 	local enhancement_key = card.config.center.key
 	local cenh = Oblivion.enhancement_corrupt
@@ -360,6 +365,8 @@ Ovn_f.corrupt_modifiers = function(card)
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
 		transmuted = true
+		table.insert(corrupt_keys, new_enhancement)
+		table.insert(old_keys, enhancement_key)
 	end
 
 	local seal_key = card.seal
@@ -370,10 +377,14 @@ Ovn_f.corrupt_modifiers = function(card)
 		if new_seal then
 			card:set_seal(new_seal)
 			transmuted = true
+			table.insert(corrupt_keys, new_seal)
+			table.insert(old_keys, seal_key)
 		end
 	end
 
 	if transmuted then
+		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "corrupt", card = card, from = old_keys, to = corrupt_keys }
+
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
@@ -400,6 +411,7 @@ Ovn_f.corrupt_enhancement = function(card)
 	local new_enhancement = cenh[enhancement_key]
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
+		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "corrupt", card = card, from = enhancement_key, to = new_enhancement }
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
@@ -414,6 +426,8 @@ end
 ---@return nil
 Ovn_f.purify_modifiers = function(card)
 	local transmuted = false
+	local pure_keys = {}
+	local old_keys = {}
 
 	local enhancement_key = card.config.center.key
 	local penh = Oblivion.enhancement_purify
@@ -421,6 +435,8 @@ Ovn_f.purify_modifiers = function(card)
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
 		transmuted = true
+		table.insert(old_keys, enhancement_key)
+		table.insert(pure_keys, new_enhancement)
 	end
 
 	local seal_key = card.seal
@@ -431,10 +447,14 @@ Ovn_f.purify_modifiers = function(card)
 		if new_seal then
 			card:set_seal(new_seal)
 			transmuted = true
+			table.insert(old_keys, seal_key)
+			table.insert(pure_keys, new_seal)
 		end
 	end
 
 	if transmuted then
+		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "purify", card = card, from = old_keys, to = pure_keys }
+
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
@@ -461,6 +481,7 @@ Ovn_f.purify_enhancement = function(card)
 	local new_enhancement = penh[enhancement_key]
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
+		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "purify", card = card, from = enhancement_key, to = new_enhancement }
 		add_simple_event('immediate', nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)

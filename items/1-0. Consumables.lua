@@ -85,40 +85,6 @@ SMODS.Consumable { key = "perception",
 	set_card_type_badge = function(self, card, badges)
 		badges[1] = create_badge('Parallel Tarot', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
-
-	use = function(self)
-		local all_highlighted_cards = G.hand.highlighted
-
-		for i,highlighted_card in ipairs(all_highlighted_cards) do
-			local percent = 1.15 - (i - 0.999)/(#all_highlighted_cards - 0.998)*0.3
-			add_simple_event('after', 0.15, function()
-				G.GAME.corruptingCard = true
-				highlighted_card:flip()
-				play_sound('card1', percent)
-				highlighted_card:juice_up(0.3, 0.3)
-				G.GAME.corruptingCard = false
-			end)
-			G.GAME.corruptingCard = false
-		end
-
-		delay(0.2)
-
-		for _,highlighted_card in ipairs(all_highlighted_cards) do
-			add_simple_event('after', 0.1, function() highlighted_card:change_suit(self.config.suit_conv) end)
-		end
-
-		for i,highlighted_card in ipairs(all_highlighted_cards) do
-			local percent = 0.85 + ( i - 0.999 ) / ( #all_highlighted_cards - 0.998 ) * 0.3
-			add_simple_event('after', 0.15, function()
-				highlighted_card:flip()
-				play_sound('ovn_optic', percent, 1.1)
-				highlighted_card:juice_up(0.3, 0.3)
-			end)
-		end
-		add_simple_event('after', 0.2, function() G.hand:unhighlight_all() end)
-
-		delay(0.5)
-	end,
 }
 
 ----------------
@@ -274,10 +240,11 @@ SMODS.Consumable { key = "charybdis",
 			add_simple_event('before', 0, function ()
 				SMODS.destroy_cards(deletable_jokers)
 			end)
+			PlayLog.log{ type = "destroys", card = card, destroyed = deletable_jokers }
 		end
 
 		add_simple_event('after', 0.4, function ()
-			SMODS.add_card{
+			local created_card = SMODS.add_card{
 				set = 'Joker',
 				area = G.joker,
 				rarity = 'ovn_corrupted',
@@ -285,6 +252,7 @@ SMODS.Consumable { key = "charybdis",
 				skip_materialize = false,
 				key_append = 'ovn_charybdis'
 			}
+			PlayLog.log { type = "creates", card = self, created = { created_card } }
 		end)
 		delay(0.6)
 	end,
@@ -349,6 +317,7 @@ SMODS.Consumable { key = "oblivion",
 				target_card:juice_up(0.3, 0.5)
 				target_card.area:remove_from_highlighted(target_card)
 			end
+			PlayLog.log{ type = "applied", card = self, applied = selected_cards, edition = {ovn_miasma = true} }
 		end)
 	end,
 }
@@ -391,6 +360,7 @@ SMODS.Consumable { key = "eidolon",
 
 		add_simple_event('after', 0.1, function ()
 			converted_card:set_seal(card.ability.extra.seal, nil, true)
+			PlayLog.log{ type = "applied", card = card, applied = { converted_card }, seal = card.ability.extra.seal }
 		end)
 		delay(0.5)
 		add_simple_event('after', 0.2, function ()
