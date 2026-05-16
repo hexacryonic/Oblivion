@@ -68,7 +68,14 @@ SMODS.Consumable { key = "perception",
 		code = "HexaCryonic"
 	},
 
-    config = {max_highlighted = 3, suit_conv = 'ovn_Optics'},
+    config = {
+		max_highlighted = 3,
+		suit_conv = 'ovn_Optics',
+		conv_sound = {
+			key = 'ovn_optic',
+			vol = 1.1
+		}
+	},
 	loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
 	atlas = "consumables",
