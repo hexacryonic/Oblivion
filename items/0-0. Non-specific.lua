@@ -310,7 +310,7 @@ Oblivion.DescriptionDummy {
 		-- It is a string-keyed table based on a card's `credits` value
 		if not card then card = self:create_fake_card() end
 
-		local label_loc = G.localization.descriptions.DescriptionDummy.dd_ovn_credits.labels
+		local label_loc = G.localization.misc.credits_labels
 		local label_order = {"concept", "art", "shader", "music", "sound", "code"}
 
 		local table_rows = {}

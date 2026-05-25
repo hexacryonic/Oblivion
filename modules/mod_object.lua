@@ -245,6 +245,34 @@ end
 ---- CREDITS TAB ----
 ---------------------
 
+-- List, each item is a list:
+	-- 1. Username
+	-- 2. One of following strings:
+		-- art, code, concept, concept_pl,
+		-- shader, shader_pl, sound, music
+
+local credits_data = {
+	"HexaCryonic",
+	"Oinite",
+	"Lil. Mr. Slipstream"
+}
+
+local additional_credits_data = {
+	{"thaun0",         "concept"},
+	{"SyntaxTsundere", "concept"},
+	{"Zero (null)",    "concept"},
+	{"AlexZGreat",     "concept_pl"},
+	{"Inspector_Bee",  "concept_pl"},
+	{"NinjaBanana",    "concept_pl"},
+	{"QueenChloe",     "concept_pl"},
+	{"Andromeda",      "art"},
+	{"cassknows",      "shader"},
+	{"Airtoum",        "code"},
+	{"ellestuff",      "code"},
+	{"Lily",           "code"},
+	{"MathIsFun_",     "code"},
+}
+
 local credits_ui_style = {
 	[".credits_ui_style"] = {
 		align = "center-middle",
@@ -281,34 +309,49 @@ local credits_table_config = {
 }
 
 local function primary_contributors()
-	local credits_copy = Ovn_f.bi_shallow_copy(G.localization.misc.credits)
-	for _,row in ipairs(credits_copy) do
-		row[1] = {
-			text = row[1],
-			colour = G.C.BLUE,
-			align = "cr"
+	local credits_loc = G.localization.misc.credits
+	local rows = {}
+	for _,username in ipairs(credits_data) do
+		local current_row = {
+			{
+				text = username,
+				colour = G.C.BLUE,
+				align = "cr"
+			},
+			{
+				text = credits_loc[username]
+			}
 		}
-		row[2] = {text = row[2]}
+		table.insert(rows, current_row)
 	end
-	return Ovn_f.generate_table_ui(credits_copy, credits_table_config)
+	return Ovn_f.generate_table_ui(rows, credits_table_config)
 end
 
 local function additional_credits()
-	local credits_copy = Ovn_f.bi_shallow_copy(G.localization.misc.credits_additional)
-	for _, row in ipairs(credits_copy) do
-		row[1] = {
-			text = row[1],
-			colour = G.C.BLUE,
-			align = "cr"
+	local additional_credits_loc = G.localization.misc.credits_additional
+	local label_loc = G.localization.misc.credits_labels
+	local rows = {}
+	for _, current_credit_data in ipairs(additional_credits_data) do
+		local username = current_credit_data[1]
+		local contrib_label = current_credit_data[2]
+		local current_row = {
+			{
+				text = username,
+				colour = G.C.BLUE,
+				align = "cr"
+			},
+			{
+				text = label_loc[contrib_label],
+				colour = G.C.ORANGE,
+				align = "cm"
+			},
+			{
+				text = additional_credits_loc[username]
+			}
 		}
-		row[2] = {
-			text = row[2],
-			colour = G.C.ORANGE,
-			align = "cm"
-		}
-		row[3] = {text = row[3]}
+		table.insert(rows, current_row)
 	end
-	return Ovn_f.generate_table_ui(credits_copy, credits_table_config)
+	return Ovn_f.generate_table_ui(rows, credits_table_config)
 end
 
 local function define_tab(loc_key, def_func, is_chosen)

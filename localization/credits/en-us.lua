@@ -2,26 +2,38 @@ return { misc = {
 
 -----------------
 
+-- this is just here for rapid reference
+credits_labels = {
+    art = "Art",
+    code = "Code",
+    concept = "Concept",
+    concept_pl = "Concepts",
+    shader = "Shader",
+    shader_pl = "Shaders",
+    sound = "Sounds",
+    music = "Music",
+},
+
 credits = {
-    {"HexaCryonic", {"Creator", "Lead Developer"}},
-    {"Oinite", {"Developer", "Artist"}},
-    {"Lil. Mr. Slipstream", "Artist"},
+    ["HexaCryonic"]         = {"Creator", "Lead Developer"},
+    ["Oinite"]              = {"Developer", "Artist"},
+    ["Lil. Mr. Slipstream"] = "Artist",
 },
 
 credits_additional = {
-    {"thaun0",         "Concept",  "Database"},
-    {"SyntaxTsundere", "Concept",  "THE SHOW NEVER ENDS"},
-    {"Zero (null)",    "Concept",  "A Part Falling"},
-    {"AlexZGreat",     "Concepts", {"Master of Puppets", "Coordinate Cards"}},
-    {"Inspector_Bee",  "Concepts", {"Corrupt Yellow Deck", "Cigarette Card"}},
-    {"NinjaBanana",    "Concepts", {"Library of Babel", "Event Horizon"}},
-    {"QueenChloe",     "Concepts", {"Mark of Amethyst", "Philosopher's Stone"}},
-    {"Andromeda",      "Art",      {"Airstrike", "Sludge"}},
-    {"cassknows",      "Shader",   "Miasma"},
-    {"Airtoum",        "Code",     "Prosopometamorphopsia"},
-    {"ellestuff",      "Code",     "Coordinate Cards (additional)"},
-    {"Lily",           "Code",     "Corrupt Erratic Deck (initial)"},
-    {"MathIsFun_",     "Code",     "Corrupt Plasma Deck (initial)"},
+    ["thaun0"]         = "Database",
+    ["SyntaxTsundere"] = "THE SHOW NEVER ENDS",
+    ["Zero (null)"]    = "A Part Falling",
+    ["AlexZGreat"]     = {"Master of Puppets", "Coordinate Cards"},
+    ["Inspector_Bee"]  = {"Corrupt Yellow Deck", "Cigarette Card"},
+    ["NinjaBanana"]    = {"Library of Babel", "Event Horizon"},
+    ["QueenChloe"]     = {"Mark of Amethyst", "Philosopher's Stone"},
+    ["Andromeda"]      = {"Airstrike", "Sludge"},
+    ["cassknows"]      = "Miasma",
+    ["Airtoum"]        = "Prosopometamorphopsia",
+    ["ellestuff"]      = "Coordinate Cards (additional)",
+    ["Lily"]           = "Corrupt Erratic Deck (initial)",
+    ["MathIsFun_"]     = "Corrupt Plasma Deck (initial)",
 },
 
 credits_long = {

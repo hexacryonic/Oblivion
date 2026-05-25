@@ -42,15 +42,6 @@ return {
 			dd_ovn_credits = {
 				name = "Credits",
 				text = {""},
-				-- this is just here for rapid reference
-				labels = {
-					art = "Art",
-					code = "Code",
-					concept = "Concept",
-					shader = "Shader",
-					sound = "Sounds",
-					music = "Music"
-				}
 			},
 			dd_ovn_instability_description = {
 				name = "Instability",
@@ -64,7 +55,10 @@ return {
 
 		Other = {
 			ovn_first_install_notif = {
-				name = {"Thank you for", "installing {C:ovn_corrupted}Oblivion{}!"},
+				name = {
+					"Thank you for",
+					"installing {C:ovn_corrupted}Oblivion{}!"
+				},
 				text = {
 					"{C:attention}Credits {}can be found",
 					"in the {C:attention}Collection{},",
