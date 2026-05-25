@@ -1,3 +1,13 @@
+local function corrupt_deck_unlock()
+    return {
+        "Win a run with",
+        "{C:attention}#1# {}on at least",
+        "{V:1}#2# {}difficulty"
+    }
+end
+
+
+
 return { descriptions = { Back = {
 
 ----------------------------------
@@ -17,12 +27,7 @@ b_ovn_c_red = {
         "After a hand, {C:mult}discard{} up to",
         "{C:attention}5{} held cards at random"
     },
-    unlock = {
-        "On {C:attention}Red {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win without discarding whilst",
-        "holding {C:attention}Spiral of Addiction"
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_blue = {
     name = 'Corrupt Blue Deck',
@@ -31,12 +36,7 @@ b_ovn_c_blue = {
         "Hands {C:mult}never reset{}",
         "{C:chips}+3{} Hands when {C:attention}Boss Blind{} defeated",
     },
-    unlock = {
-        "On {C:attention}Blue {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win whilst having beaten",
-        "every played blind in 1 hand"
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_yellow = {
     name = 'Corrupt Yellow Deck',
@@ -48,11 +48,7 @@ b_ovn_c_yellow = {
         "{s:0.3} {}",
         "At less than {C:money}$1{}, {C:mult}Game Over{}",
     },
-    unlock = {
-        "On {C:attention}Yellow {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "with at least {C:money}$365 {}in bank",
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_green = {
     name = 'Corrupt Green Deck',
@@ -63,12 +59,7 @@ b_ovn_c_green = {
         "{s:0.3} {}",
         "Shop prices are {C:green}complex",
     },
-    unlock = {
-        "On {C:attention}Green {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win with {C:attention}Seed Money",
-        "and {C:attention}Money Tree",
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_black = {
     name = 'Corrupt Black Deck',
@@ -80,12 +71,7 @@ b_ovn_c_black = {
         "{s:0.3} {}",
         "{C:inactive,s:0.7}(Yeah, this one's just cruel)"
     },
-    unlock = {
-        "On {C:attention}Black {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win whilst never having more",
-        "than 4 Jokers at a time",
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_ghost = {
     name = 'Corrupt Ghost Deck',
@@ -95,12 +81,7 @@ b_ovn_c_ghost = {
         "When starting a round, a {C:attention}random",
         "{C:spectral}Spectral {}card is used against you"
     },
-    unlock = {
-        "On {C:attention}Ghost {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win without using",
-        "any {C:spectral}Spectral {}cards,"
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_abandoned = {
     name = 'Corrupt Abandoned Deck',
@@ -108,12 +89,7 @@ b_ovn_c_abandoned = {
         "Starting deck has {C:attention}no cards{}",
         "Start with {C:attention}#1# {C:attention,T:tag_standard}#2#s"
     },
-    unlock = {
-        "On {C:attention}Abandoned {}Deck with",
-        "{C:blue}Blue Stake {}or higher, win",
-        "whilst having played a {C:attention}Royal Flush{}",
-        "during a {C:attention}Showdown Boss Blind",
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_painted = {
     name = 'Corrupt Painted Deck',
@@ -122,12 +98,7 @@ b_ovn_c_painted = {
         "{C:attention}+5{} hand size",
         "{C:mult}Jokerless{}"
     },
-    unlock = {
-        "On {C:attention}Painted {}Deck with",
-        "{C:blue}Blue Stake {}or higher,",
-        "win whilst holding {C:attention}7",
-        "or more Jokers at once"
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_plasma = {
     name = 'Corrupt Plasma Deck',
@@ -138,14 +109,7 @@ b_ovn_c_plasma = {
         "Start with {C:attention,T:j_joker}#2#{},",
         "{C:attention,T:c_ovn_abyss}#3#{}, and {C:attention,T:c_ovn_perception}#4#{}"
     },
-    unlock = {
-        "{s:0.9}On {s:0.9,C:attention}Plasma {s:0.9}Deck with",
-        "{s:0.9,C:blue}Blue Stake {s:0.9}or higher,",
-        "{s:0.9}win with a score at least",
-        "{s:0.9,C:attention}20 {s:0.9}times greater than",
-        "{s:0.9}the Showdown Boss",
-        "{s:0.9}Blind requirement"
-    }
+    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_erratic = {
     name = 'Corrupt Erratic Deck',
@@ -156,13 +120,8 @@ b_ovn_c_erratic = {
         "{C:attention}{C:red}!! SEIZURE WARNING !!",
         "{C:attention}Reduce visuals in config",
     },
-    unlock = {
-        "{s:0.9}On {s:0.9,C:attention}Erratic{s:0.9} Deck with",
-        "{s:0.9,C:blue}Blue Stake {s:0.9}or higher,",
-        "{s:0.9}succeed a {s:0.9,C:green}1 in 8{s:0.9}",
-        "{s:0.9}chance upon winning",
-    }
-}
+    unlock = corrupt_deck_unlock()
+},
 
 ----------------------------------
 

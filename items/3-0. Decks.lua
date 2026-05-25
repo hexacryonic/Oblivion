@@ -1,8 +1,32 @@
 local add_simple_event = Ovn_f.add_simple_event
 
-local function achievement_get(key)
-	return SMODS.Achievements["ach_ovn_" .. key].earned
+local function corrupt_deck_unlock(self, args)
+	return (
+		args.type == "win_deck"
+		and get_deck_win_stake(self.ovn_pure_deck) >= 4 -- Black Stake or greater
+	)
 end
+
+local function corrupt_deck_lockedvars(self, info_queue, card)
+		local other_name = localize('k_unknown')
+		if G.P_CENTERS[self.ovn_pure_deck].unlocked then
+			other_name = localize {
+				type = 'name_text',
+				set = 'Back',
+				key = self.ovn_pure_deck
+			}
+		end
+
+		return {
+			vars = {
+				other_name,
+				localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
+				colours = {
+					get_stake_col(4)
+				}
+			}
+		}
+	end
 
 ----------------
 
@@ -31,9 +55,14 @@ SMODS.Back { key = "ocular",
 -------------------
 SMODS.Back { key = "c_red",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_red",
 
 	atlas = "decks_corrupt",
 	pos = { x = 0, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	calculate = function(self, card, context)
 		if context.after then add_simple_event(nil, nil, function ()
@@ -65,6 +94,7 @@ SMODS.Back { key = "c_red",
 --------------------
 SMODS.Back { key = "c_blue",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_blue",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 0 },
@@ -72,6 +102,10 @@ SMODS.Back { key = "c_blue",
 	apply = function(self)
 		G.GAME.starting_params.hands = G.GAME.starting_params.hands + 2
 	end,
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	calculate = function(self, card, context)
 		G.GAME.round_resets.hands = G.GAME.current_round.hands_left --[[@as integer]]
@@ -86,6 +120,7 @@ SMODS.Back { key = "c_blue",
 ----------------------
 SMODS.Back { key = "c_yellow",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_yellow",
 
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 0 },
@@ -106,6 +141,10 @@ SMODS.Back { key = "c_yellow",
 			ease_dollars(G.GAME.cy_dollarsperante)
 		end)
 	end,
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	calculate = function(self, card, context)
 		if context.before then
@@ -144,9 +183,14 @@ SMODS.Back { key = "c_yellow",
 ---------------------
 SMODS.Back { key = "c_green",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_green",
 
 	atlas = "decks_corrupt",
 	pos = { x = 3, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self)
 		G.GAME.dollars_i = 0
@@ -162,9 +206,14 @@ SMODS.Back { key = "c_green",
 ---------------------
 SMODS.Back { key = "c_black",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_black",
 
 	atlas = "decks_corrupt",
     pos = { x = 4, y = 0 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
         G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots + 4
@@ -180,10 +229,15 @@ SMODS.Back { key = "c_black",
 ---------------------
 SMODS.Back { key = "c_ghost",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_ghost",
 	config = { spectral_rate = 6 },
 
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
 		G.GAME.ovn_cghost = true
@@ -217,6 +271,7 @@ SMODS.Back { key = "c_ghost",
 -----------------------
 SMODS.Back { key = "c_abandoned",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_abandoned",
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			self.config.tag_count,
@@ -230,6 +285,10 @@ SMODS.Back { key = "c_abandoned",
 
 	atlas = "decks_corrupt",
     pos = { x = 3, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self)
 		add_simple_event('immediate', nil, function()
@@ -245,9 +304,14 @@ SMODS.Back { key = "c_abandoned",
 -----------------------
 SMODS.Back { key = "c_painted",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_painted",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 2 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
 		G.GAME.joker_rate = 0
@@ -283,6 +347,7 @@ SMODS.Back { key = "c_painted",
 ----------------------
 SMODS.Back { key = "c_plasma",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_plasma",
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
 			localize { type = 'name_text', key = 'dd_ovn_instability_description', set = 'DescriptionDummy' },
@@ -299,6 +364,10 @@ SMODS.Back { key = "c_plasma",
 		consumables = {'c_ovn_abyss', 'c_ovn_perception'},
 		jokers = {'j_joker'}
 	},
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
 		G.GAME.corrumod = 0.2
@@ -326,8 +395,14 @@ SMODS.Back { key = "c_plasma",
 SMODS.Back {
 	key = "c_erratic",
 	ovn_corrupt_deck = true,
+	ovn_pure_deck = "b_erratic",
+
 	atlas = "decks_corrupt",
 	pos = { x = 4, y = 2 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
 		G.GAME.c_erratic = true -- good luck.
