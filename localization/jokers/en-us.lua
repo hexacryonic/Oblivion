@@ -286,9 +286,10 @@ return {
             j_ovn_philosophers_stone = {
                 name = "Philosopher's Stone",
                 text = {
-                    "After playing, each scoring {C:attention}numbered {}card",
-                    "has a {C:green}#1# in #2# {}chance to have",
-                    "their enhancement {C:attention}transmuted",
+                    "After playing, each scoring",
+                    "{C:attention}numbered {}card has a {C:green}#1# in #2#",
+                    "chance to have their",
+                    "enhancement {C:attention}transmuted"
                 },
                 corrupted_from = {
                     "{C:attention}Midas Mask"

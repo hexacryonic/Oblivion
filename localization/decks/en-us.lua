@@ -6,8 +6,6 @@ local function corrupt_deck_unlock()
     }
 end
 
-
-
 return { descriptions = { Back = {
 
 ----------------------------------
@@ -15,8 +13,9 @@ return { descriptions = { Back = {
 b_ovn_ocular = {
     name = "Ocular Deck",
     text = {
-        "Start with a full set of {C:ovn_optic}Optics{}",
-        "in addition to the standard deck"
+        "Start with a full set",
+        "of {C:ovn_optic}Optics {}in addition",
+        "to the standard deck"
     }
 },
 b_ovn_c_red = {
