@@ -108,11 +108,11 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     );
     noise = fract(sin(noise) * 0.0); //143758.5453);
 
-    vec2 offset = 1/image_details*vec2(1,0);
+    vec2 offset = 1./image_details*vec2(1.,0.);
     vec4 tex = Texel(texture, texture_coords);
     tex.r = Texel(texture,texture_coords+offset).r;
     tex.rgb += vec3(0.0,-0.1,0.2)-miasma.x*0.1;
-    tex.rgb += max(0, pow(noise.x*noise.y,8));
+    tex.rgb += max(0., pow(noise.x*noise.y,8.));
 	number low = min(tex.r, min(tex.g, tex.b));
     number high = max(tex.r, max(tex.g, tex.b));
 	number delta = high - low;
@@ -139,13 +139,13 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 	q6 = q6*q6;
 	q6 = q6*q6;
 	q6 = q6*q6;
-	float q3 = 2.0 * (floor(0.5 + t2/2.0) - floor(t2/2.0)) - 1;
+	float q3 = 2.0 * (floor(0.5 + t2/2.0) - floor(t2/2.0)) - 1.;
 	float q4 = sin((3.0 * t2/1.73 + 1.0 + field * 5.0))/2.5 + sin(3.0 * t2/2.63 + miasma.x*4.0)/10.0 + 0.5;
-	float res = (q3*q6 - floor(q3*q6))*q4 + (1-(q3*q6 - floor(q3*q6)))*(1-q4);
+	float res = (q3*q6 - floor(q3*q6))*q4 + (1.-(q3*q6 - floor(q3*q6)))*(1.-q4);
 
 	vec4 pixel = Texel(texture, texture_coords);
 
-	hsl.z = min(1, 1.0*hsl.z + res*res*res*res*0.4);
+	hsl.z = min(1., 1.0*hsl.z + res*res*res*res*0.4);
 	float qalph = 0.7 + 0.3 * res*res;
 
 	// obv changes
@@ -186,6 +186,6 @@ vec4 position( mat4 transform_projection, vec4 vertex_position )
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0.,0.,0.,scale);
 }
 #endif

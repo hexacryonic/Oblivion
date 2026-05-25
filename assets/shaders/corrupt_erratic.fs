@@ -87,8 +87,8 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     float diff = fract(iTime);
     float rndx = random(rtn(screen_coords.x,block_size+diff));
     float rndy = random(rtn(screen_coords.y,block_size+diff));
-    if ((rndx+rndy) <= (block_probability*2)) {
-        float dirMod = (rndx + rndy) * 7;
+    if ((rndx+rndy) <= (block_probability*2.)) {
+        float dirMod = (rndx + rndy) * 7.;
 
         float x = rtn(cos(iTime+dirMod)*block_offset, 0.5);
         float y = rtn(sin(iTime+dirMod)*block_offset, 0.5);
@@ -99,11 +99,11 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
 
     vec4 tex = Texel(texture, texture_coords);
 
-    vec3 str = matrix(screen_coords / max(resolution.x, resolution.y), 0)*matrix_color.rgb;
-    vec3 str_bg = matrix(screen_coords / max(resolution.x, resolution.y), 25)*(matrix_color.rgb - 0.1);
-    str *= 3;
-    str_bg *= 2;
-    vec4 larger = maxvec(tex, vec4(str,0)+vec4(str_bg,0));
+    vec3 str = matrix(screen_coords / max(resolution.x, resolution.y), 0.)*matrix_color.rgb;
+    vec3 str_bg = matrix(screen_coords / max(resolution.x, resolution.y), 25.)*(matrix_color.rgb - 0.1);
+    str *= 3.;
+    str_bg *= 2.;
+    vec4 larger = maxvec(tex, vec4(str,0.)+vec4(str_bg,0.));
 
     tex = tex + ((larger - tex)*matrix_intensity);
 
@@ -130,6 +130,6 @@ vec4 position( mat4 transform_projection, vec4 vertex_position )
     MY_HIGHP_OR_MEDIUMP float scale = 0.002*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0.,0.,0.,scale);
 }
 #endif
