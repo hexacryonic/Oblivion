@@ -38,6 +38,98 @@ function G.FUNCS.rotate_node(e)
 	e.T.r = e.config.rotate
 end
 
+-- Release the Joker stored by Supply Drop.
+function G.FUNCS.supply_empty(e)
+	local card = e.config.ref_table
+	card.area:remove_from_highlighted(card)
+	if card.config.center.key ~= "j_ovn_supplydrop" then return end
+
+	local save_file = G.PROFILES[G.SETTINGS.profile]
+	local stored_joker_key = save_file.ovn_supply_drop
+	local stored_joker_edition = save_file.ovn_supply_drop_edition
+	local stored_joker_sticker = save_file.ovn_supply_drop_sticker
+
+	SMODS.add_card{
+		set = 'Joker',
+		area = G.joker,
+		key = stored_joker_key,
+		edition = stored_joker_edition,
+		stickers = stored_joker_sticker
+	}
+
+	Ovn_f.add_simple_event('after', 0.1, function ()
+		SMODS.calculate_effect({
+			message = localize("empty"),
+			colour = G.C.DARK_EDITION
+		}, card)
+	end)
+
+	save_file.ovn_supply_drop = nil
+	save_file.ovn_supply_drop_edition = nil
+	save_file.ovn_supply_drop_sticker = nil
+end
+
+-- Determine whether Supply Drop can release its stored Joker.
+function G.FUNCS.supply_can_empty(e)
+	local has_room = #G.jokers.cards < G.jokers.config.card_limit
+	if has_room then
+		e.config.colour = G.C.DARK_EDITION
+		e.config.button = "supply_empty"
+	else
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	end
+end
+
+-- Store a target Joker into Supply Drop.
+function G.FUNCS.supply_store(e)
+	local card = e.config.ref_table
+	card.area:remove_from_highlighted(card)
+	if card.config.center.key ~= "j_ovn_supplydrop" then return end
+
+	local save_file = G.PROFILES[G.SETTINGS.profile]
+	-- this gives a card's position in a card area, not ace, king, 10 etc
+	-- (that would be card.base.id or whatever)
+	local card_index = card.rank
+	if card_index == 1 then return end
+
+	local left_joker = G.jokers.cards[card_index-1]
+	local left_joker_key = left_joker.config.center.key
+	local left_joker_edition = left_joker.edition and left_joker.edition.key
+	local left_joker_stickers = {}
+	for sticker_key in pairs(SMODS.Stickers) do
+		if left_joker.ability[sticker_key] then
+			table.insert(left_joker_stickers, sticker_key)
+		end
+	end
+
+	save_file.ovn_supply_drop = left_joker_key
+	save_file.ovn_supply_drop_edition = left_joker_edition
+	save_file.ovn_supply_drop_sticker = left_joker_stickers
+	check_for_unlock({type = 'ovn_sell_supply_drop'})
+
+	-- i think you can use smods.destroy_cards but idk, too lazy to check -oin
+	Ovn_f.add_simple_event('after', 0.1, function ()
+		left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
+		SMODS.calculate_effect({
+			message = localize("stored"),
+			colour = G.C.DARK_EDITION
+		}, card)
+	end)
+end
+
+-- Determine whether Supply Drop can store a target Joker.
+function G.FUNCS.supply_can_store(e)
+	local card = e.config.ref_table
+	if card.rank == 1 then -- Leftmost card
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	else
+		e.config.colour = G.C.DARK_EDITION
+		e.config.button = "supply_store"
+	end
+end
+
 
 
 -----------------------

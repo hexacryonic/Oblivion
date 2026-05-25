@@ -297,17 +297,16 @@ return {
             j_ovn_supplydrop = {
                 name = 'Supply Drop',
                 text = {
-                    "Sell this Joker to {C:attention}store{} the",
-                    "Joker to its left, if its rarity",
-                    "is not higher than {C:red}Rare{}",
+                    "Click side button to {C:attention}store",
+                    "the Joker to the {C:attention}left",
                     Oblivion.sp,
-
-                    "When this Joker is sold",
-                    "again, {C:attention}even between runs,",
-                    "{C:attention}create {}the stored Joker",
-                    "and remove it from storage",
+                    "If a Joker is already",
+                    "stored, {C:attention}release {}it instead",
                     Oblivion.sp,
-
+                    "Selling this Joker also",
+                    "gives {C:money}dollars {}equal to",
+                    "the stored Joker's cost",
+                    Oblivion.sp,
                     "{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
                 },
                 corrupted_from = {

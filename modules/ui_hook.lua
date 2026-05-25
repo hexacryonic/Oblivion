@@ -176,38 +176,46 @@ local function hud_ui_c_green(ret)
 	}
 end
 
--- Generates the UIBox definition for Pure Visage switch/sell buttons.
----@param card Card
----@return Balatro.UIBoxDefinition
-local function uidef_usesellbtn_hook_pure_visage(card)
-	local button_jtml_stylesheet = {
-		[".button"] = {
-			align = "center-right",
-			padding = 0.1,
-			roundness = 0.08,
-			minWidth = 1.25,
-			hover = true,
-			shadow = true,
-			fillColour = G.C.UI.BACKGROUND_INACTIVE,
-			onePress = true,
-		},
-		[".button-toptext"] = {
-			colour = G.C.UI.TEXT_LIGHT,
-			scale = 0.4,
-			shadow = true
-		},
-		[".button-btmtext1"] = {
-			colour = G.C.WHITE,
-			shadow = true,
-			scale = 0.4
-		},
-		[".button-btmtext2"] = {
-			colour = G.C.WHITE,
-			shadow = true,
-			scale = 0.55
-		},
-	}
+local button_jtml_stylesheet = {
+	[".button"] = {
+		align = "center-right",
+		padding = 0.1,
+		roundness = 0.08,
+		minWidth = 1.25,
+		hover = true,
+		shadow = true,
+		fillColour = G.C.UI.BACKGROUND_INACTIVE,
+		onePress = true,
+	},
+	[".button-toptext"] = {
+		colour = G.C.UI.TEXT_LIGHT,
+		scale = 0.4,
+		shadow = true
+	},
+	[".button-btmtext1"] = {
+		colour = G.C.WHITE,
+		shadow = true,
+		scale = 0.4
+	},
+	[".button-btmtext2"] = {
+		colour = G.C.WHITE,
+		shadow = true,
+		scale = 0.55
+	},
+}
 
+---@class sell_and_other_buttons.args
+---@field card Card
+---@field other_order? "first"|"last"
+---@field other_on_click? string
+---@field other_on_draw? string
+---@field other_label? string
+
+---@param args table
+---@return Balatro.UIBoxDefinition
+local function sell_and_other_buttons(args)
+	args.other_order = args.other_order or "first"
+	local card = args.card
 	local button_btmtext2_ref_table = Ovn_f.on_deck('c_green') and card.ability or card
 	local button_btmtext2_ref_value = Ovn_f.on_deck('c_green') and 'complex_sell_label' or 'sell_cost_label'
 
@@ -226,30 +234,40 @@ local function uidef_usesellbtn_hook_pure_visage(card)
 			}}
 		}}
 	}}
-	local switch_button =
+
+	local other_button =
 	{"column", style={align="center-right"}, {
-		{"column", reftable=card, class="button", onclick="transmute_card", ondraw="can_transmute", {
+		{"column", reftable=card, class="button", onclick=args.other_on_click, ondraw=args.other_on_draw, {
 			{"box", style={width=0.2, height=0.6}},
 			{"column", style={align="center-middle"}, {
 				{"row", style={align="center-middle", maxWidth=1.25}, {
-					{"text", class="button-toptext", text="Switch"}
+					{"text", class="button-toptext", text=args.other_label}
 				}},
 			}}
 		}}
 	}}
 
-	local function button_row(jtml)
-		return {"row", style={align="center-left"}, {jtml}}
+	local spacing = {"row", style={minHeight=0.1, fillColour=G.C.CLEAR}}
+	local nodes
+	if args.other_order == "first" then
+		nodes = {
+			{"row", style={align="center-left"}, {other_button}},
+			-- spacing
+			spacing,
+			{"row", style={align="center-left"}, {sell_button}},
+		}
+	elseif args.other_order == "last" then
+		nodes = {
+			{"row", style={align="center-left"}, {sell_button}},
+			-- spacing
+			spacing,
+			{"row", style={align="center-left"}, {other_button}},
+		}
 	end
 
 	local container =
 	{"root", style={padding=0, fillColour=G.C.CLEAR}, {
-		{"column", style={padding=0, align="center-left"}, {
-			button_row(switch_button),
-			-- spacing
-			{"row", style={minHeight=0.1, fillColour=G.C.CLEAR}},
-			button_row(sell_button),
-		}}
+		{"column", style={padding=0, align="center-left"}, nodes}
 	}}
 
 	return Ovn_f.jtml_to_uiboxdef(container, button_jtml_stylesheet)
@@ -373,12 +391,36 @@ function G.UIDEF.card_h_popup(card)
 	return ret_val
 end
 
--- Hook to insert an additional button for Pure Visage
+-- Hook to insert additional buttons for several Jokers
 local uidef_usesellbtn_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
-	if card.area ~= G.jokers then return uidef_usesellbtn_hook(card) end
 	if card.config.center.key == "j_ovn_pure_visage" then
-		return uidef_usesellbtn_hook_pure_visage(card)
+		return sell_and_other_buttons{
+			card = card,
+			other_on_click = "transmute_card",
+			other_on_draw = "can_transmute",
+			other_label = localize("b_ovn_switch"),
+			other_order = "first"
+		}
+	elseif card.config.center.key == "j_ovn_supplydrop" then
+		local label = localize("b_ovn_store")
+		local on_draw = "supply_can_store"
+		local on_click = "supply_store"
+
+		local save_file = G.PROFILES[G.SETTINGS.profile]
+		if save_file.ovn_supply_drop then
+			label = localize("b_ovn_empty")
+			on_draw = "supply_can_empty"
+			on_click = "supply_empty"
+		end
+
+		return sell_and_other_buttons{
+			card = card,
+			other_on_click = on_click,
+			other_on_draw = on_draw,
+			other_label = label,
+			other_order = "first"
+		}
 	end
 
 	return uidef_usesellbtn_hook(card)

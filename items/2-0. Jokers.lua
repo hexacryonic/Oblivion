@@ -1371,16 +1371,6 @@ SMODS.Joker { key = 'supplydrop',
 
 		return { vars = { stored } }
 	end,
-	config = {
-		extra = {
-			storable_rarities = {
-				[1] = true,
-				[2] = true,
-				[3] = true,
-				["ovn_corrupted"] = true
-			}
-		}
-	},
 
 	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 1 },
@@ -1392,66 +1382,30 @@ SMODS.Joker { key = 'supplydrop',
 	cost = 8,
 
 	calculate = function(self, card, context)
-		if context.selling_self and not context.retrigger_joker and not context.blueprint then
+		if context.selling_self then
 			local save_file = G.PROFILES[G.SETTINGS.profile]
-			if not save_file.ovn_supply_drop then
-				-- this gives a card's position in a card area, not ace, king, 10 etc
-				-- (that would be card.base.id or whatever)
-				local card_index = card.rank
-				if card_index == 1 then return end
+			if not save_file.ovn_supply_drop then return end
 
-				local left_joker = G.jokers.cards[card_index-1]
-				local left_joker_rarity = left_joker.config.center.rarity
-				local storable_rarities = card.ability.extra.storable_rarities
-				if not storable_rarities[left_joker_rarity] then return end
+			local stored_joker_key = save_file.ovn_supply_drop
+			local stored_joker_edition = save_file.ovn_supply_drop_edition
 
-				local left_joker_key = left_joker.config.center.key
-				local left_joker_edition = left_joker.edition and left_joker.edition.key
-				local left_joker_stickers = {}
-				for sticker_key in pairs(SMODS.Stickers) do
-					if left_joker.ability[sticker_key] then
-						table.insert(left_joker_stickers, sticker_key)
-					end
-				end
-
-				save_file.ovn_supply_drop = left_joker_key
-				save_file.ovn_supply_drop_edition = left_joker_edition
-				save_file.ovn_supply_drop_sticker = left_joker_stickers
-        check_for_unlock({type = 'ovn_sell_supply_drop'})
-
-				-- i think you can use smods.destroy_cards but idk, too lazy to check -oin
-				add_simple_event('after', 0.1, function ()
-					left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
-				end)
-
-				return {
-					message = localize("stored"),
-					colour = G.C.DARK_EDITION
-				}
-			else
-				local stored_joker_key = save_file.ovn_supply_drop
-				local stored_joker_edition = save_file.ovn_supply_drop_edition
-				local stored_joker_sticker = save_file.ovn_supply_drop_sticker
-
-				SMODS.add_card{
-					set = 'Joker',
-					area = G.joker,
-					key = stored_joker_key,
-					edition = stored_joker_edition,
-					stickers = stored_joker_sticker
-				}
-
-				save_file.ovn_supply_drop = nil
-				save_file.ovn_supply_drop_edition = nil
-				save_file.ovn_supply_drop_sticker = nil
-
-				return {
-					message = localize("empty"),
-					colour = G.C.DARK_EDITION
-				}
+			local payout = G.P_CENTERS[stored_joker_key].cost
+			if stored_joker_edition then
+				payout = payout + G.P_CENTERS[stored_joker_edition].extra_cost
 			end
+
+			return {
+				dollars = payout
+			}
 		end
 	end,
+	-- Additional functionality in:
+		-- modules/ui_funcs.lua
+			-- G.FUNCS.supply_empty
+			-- G.FUNCS.supply_can_empty
+			-- G.FUNCS.supply_store
+			-- G.FUNCS.supply_can_store
+		-- modules/ui_hooks.lua - G.UIDEF.use_and_sell_buttons hook
 }
 
 ------------------------

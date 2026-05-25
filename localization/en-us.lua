@@ -132,7 +132,6 @@ return {
     },
 
     misc = {
-
 		labels = {
 				-- Developer's note: Corrupted and Supercorrupted are superficially equivalent, hence they should have the same text
 			k_ovn_corrupted = "Corrupted",
@@ -140,6 +139,9 @@ return {
 		},
 
 		dictionary = {
+			b_ovn_switch = "SWITCH",
+			b_ovn_store = "STORE",
+			b_ovn_empty = "EMPTY",
 			stored = "Stored!",
 			empty = "Emptied!",
 			k_ovn_corrupted = "Corrupted",
