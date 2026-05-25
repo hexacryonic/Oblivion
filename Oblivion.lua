@@ -26,6 +26,9 @@ Oblivion.obj.optional_features = {
 	}
 }
 
+-- Used in localization
+Oblivion.sp = "{s:0.3} "
+
 -- Used by lovely/increase_deck_preview_size.toml
 Oblivion.suit_display_count = 5
 

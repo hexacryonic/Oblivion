@@ -17,33 +17,6 @@
 
 local add_simple_event = Ovn_f.add_simple_event
 
--- Compiles all localization present in the directory <lang>, usually the name of the localization folder.\
--- I.e. on en-us.lua, <lang> = "en-us", load files in the directory \en-us.
----@param loc_table table
----@param lang string
----@return nil
-function Ovn_f.compile_localization(loc_table, lang)
-	local loc_folder = ("localization/%s/"):format(lang)
-	local loc_path = Oblivion.mod_path .. loc_folder
-	local loc_sections = {"descriptions", "misc"}
-
-	for _,section in ipairs(loc_sections) do
-		loc_table[section] = loc_table[section] or {}
-		local files = SMODS.NFS.getDirectoryItems(loc_path .. section)
-		local folder = loc_folder .. section
-		for __,file_name in ipairs(files) do
-			local subsection_name = file_name:gsub(".lua", "")
-			local loc_func, err = SMODS.load_file(folder .. "/" .. file_name, "Oblivion")
-			if err then error(err) end
-
-			if loc_func then
-				local subloc_table = loc_func()
-				loc_table[section][subsection_name] = subloc_table
-			end
-		end
-	end
-end
-
 -- Returns `censored` if family friendly is enabled, else returns `normal`.
 ---@param normal any
 ---@param censored any
