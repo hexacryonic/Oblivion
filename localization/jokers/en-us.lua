@@ -322,9 +322,9 @@ return {
             j_ovn_perpendicular = {
                 name = 'Perpendicular Parking',
                 text = {
-                    "Scored cards earn {C:attention}$#1#{}",
-                    "if another card of its",
-                    "{C:attention}same rank{} is held in hand",
+                    "Scored cards earn {C:money}$#1#",
+                    "per card of the {C:attention}same",
+                    "{C:attention}rank {}held in hand",
                 },
                 corrupted_from = {
                     "{C:attention}Reserved Parking"

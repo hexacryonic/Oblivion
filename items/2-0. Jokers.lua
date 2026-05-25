@@ -1483,15 +1483,16 @@ SMODS.Joker { key = 'perpendicular',
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card then
 			local scored_card_rank = SMODS.Ranks[context.other_card.base.value].key
-
+			local shared_rank_count = 0
 			for _,held_card in ipairs(G.hand.cards) do
-				local held_card_rank = held_card.base.value
-
-				if scored_card_rank == held_card_rank then
-					return {
-						dollars = card.ability.extra.money,
-					}
+				if scored_card_rank == held_card.base.value then
+					shared_rank_count = shared_rank_count + 1
 				end
+			end
+			if shared_rank_count > 0 then
+				return {
+					dollars = card.ability.extra.money*shared_rank_count,
+				}
 			end
 		end
 	end
