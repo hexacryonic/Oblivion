@@ -57,6 +57,10 @@ local desired_track = function ()
 		return 'music_boss'
 	end
 
+	if G.STATE == G.STATES.BLIND_SELECT then
+		return 'music_blind_select'
+	end
+
 	return 'music_normal'
 end
 
@@ -65,7 +69,10 @@ end
 ---- REGULAR MUSIC ----
 -----------------------
 local standard_music = {
-	music_corrupt       = "music_normal",
+	music_corrupt       = {
+		["music_normal"] = true,
+		["music_blind_select"] = true
+	},
 	music_corrupt_shop  = "music_shop",
 	music_corrupt_pack1 = "music_booster",
 	music_corrupt_pack2 = "music_planets",
@@ -108,10 +115,12 @@ SMODS.Sound {
 			not Oblivion.config.disable_a_part_falling_music
 			and G.GAME
 			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and not (
-				desired_track() == "music_normal"
-				or desired_track() == "music_boss"
-			)
+			and ({
+				["music_booster"] = true,
+				["music_planets"] = true,
+				["music_shop"] = true,
+				["music_blind_select"] = true,
+			})[desired_track()]
 		) and 5 or false
 	end,
 }
@@ -125,14 +134,15 @@ SMODS.Sound {
 	volume = 0.5,
 
 	select_music_track = function()
+		local track = desired_track()
 		return (
 			not Oblivion.config.disable_a_part_falling_music
 			and G.GAME
 			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and (
-				desired_track() == "music_normal"
-				or desired_track() == "music_boss"
-			)
+			and ({
+				["music_boss"] = true,
+				["music_normal"] = true,
+			})[desired_track()]
 		) and 5 or false
 	end,
 }
