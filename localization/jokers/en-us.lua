@@ -297,17 +297,22 @@ return {
             j_ovn_supplydrop = {
                 name = 'Supply Drop',
                 text = {
-                    "Click side button to {C:attention}store",
-                    "the Joker to the {C:attention}left",
-                    Oblivion.sp,
-                    "If a Joker is already",
-                    "stored, {C:attention}release {}it instead",
-                    Oblivion.sp,
-                    "Selling this Joker also",
-                    "gives {C:money}dollars {}equal to",
-                    "the stored Joker's cost",
-                    Oblivion.sp,
-                    "{s:0.8}Currently storing: {C:attention,s:0.8}#1#",
+                    {
+                        "Click the side button to",
+                        "{C:attention}store {}the Joker to the {C:attention}left",
+                        Oblivion.sp,
+                        "If a Joker is already stored,",
+                        "{C:dark_edition}even between runs{},",
+                        "{C:attention}release {}it instead",
+                    },
+                    {
+                        "Selling this Joker also",
+                        "gives {C:money}dollars {}equal to",
+                        "the stored Joker's cost",
+                    },
+                    {
+                        "Currently storing:",
+                    }
                 },
                 corrupted_from = {
                     "{C:attention}Gift Card"

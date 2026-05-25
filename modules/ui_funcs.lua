@@ -50,11 +50,12 @@ function G.FUNCS.supply_empty(e)
 	local stored_joker_sticker = save_file.ovn_supply_drop_sticker
 
 	SMODS.add_card{
-		set = 'Joker',
 		area = G.joker,
 		key = stored_joker_key,
 		edition = stored_joker_edition,
-		stickers = stored_joker_sticker
+		no_edition = true,
+		stickers = stored_joker_sticker,
+		force_stickers = true,
 	}
 
 	Ovn_f.add_simple_event('after', 0.1, function ()

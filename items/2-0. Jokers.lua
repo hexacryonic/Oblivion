@@ -1352,24 +1352,72 @@ SMODS.Joker { key = 'supplydrop',
 		art = "HexaCryonic",
 	},
 	loc_vars = function(self, info_queue, center)
-		local stored
-		local stored_joker = G.PROFILES[G.SETTINGS.profile].ovn_supply_drop
+		local store_info_strings = {}
+		local save_file = G.PROFILES[G.SETTINGS.profile]
+		local stored_joker = save_file.ovn_supply_drop
 
 		if stored_joker then
 			-- Preventing recursion
 			if stored_joker ~= "j_ovn_supplydrop" then
 				table.insert(info_queue, G.P_CENTERS[stored_joker])
 			end
-			stored = localize{
+			local joker_name_string = "{C:attention}" .. localize{
 				type = "name_text",
 				set = "Joker",
 				key = stored_joker
 			}
+
+			local stored_joker_edition = save_file.ovn_supply_drop_edition
+			local stored_joker_sticker = save_file.ovn_supply_drop_sticker
+
+			if stored_joker_edition then
+				if not center.edition or center.edition.key ~= stored_joker_edition then
+					table.insert(info_queue, G.P_CENTERS[stored_joker_edition])
+				end
+				joker_name_string = "{C:dark_edition}" .. localize{
+					type = "name_text",
+					set = "Edition",
+					key = stored_joker_edition
+				} .. " " .. joker_name_string
+			end
+
+			table.insert(store_info_strings, joker_name_string)
+
+			if stored_joker_sticker and #stored_joker_sticker > 0 then
+				local sticker_pre_concat = {}
+				for _,sticker_key in ipairs(stored_joker_sticker) do
+					local sticker_vars
+					if sticker_key == "perishable" then
+						sticker_vars = {5, 5}
+					elseif sticker_key == "rental" then
+						sticker_vars = {3}
+					end
+					table.insert(info_queue, {
+						set = "Other",
+						key = sticker_key,
+						vars = sticker_vars
+					})
+					table.insert(sticker_pre_concat, localize{
+						type = "name_text",
+						set = "Other",
+						key = sticker_key
+					})
+				end
+				local sticker_string = "{C:attention}" .. table.concat(sticker_pre_concat, ", ")
+				table.insert(store_info_strings, sticker_string)
+			end
 		else
-			stored = localize("k_none")
+			table.insert(store_info_strings, "{C:inactive}"..localize("k_none"))
 		end
 
-		return { vars = { stored } }
+
+		local store_info_ui = Ovn_f.localize_desc(store_info_strings, {
+			text_colour = G.C.UI.TEXT_DARK,
+			scale = 1,
+			align = "middle",
+		})
+
+		return {box_ends = {[2] = {store_info_ui} } }
 	end,
 
 	atlas = 'jokers_corrupt',
