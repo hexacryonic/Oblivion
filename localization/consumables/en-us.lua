@@ -63,7 +63,7 @@ Spectral = {
         text = {
             "Create {C:attention}#1#{} random {C:dark_edition}Negative{}",
             "{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
-            "Destroy all other {C:attention}Jokers{}"
+            "Destroy {C:attention}1{} other {C:attention}Joker{}"
         }
     },
     c_ovn_oblivion = {

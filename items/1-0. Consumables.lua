@@ -211,8 +211,10 @@ SMODS.Consumable { key = "charybdis",
 		code = "HexaCryonic"
 	},
 	loc_vars = function(self, info_queue, card)
-	  table.insert(info_queue, G.P_CENTERS.e_negative)
-		return { vars = { self.config.create } }
+	  	table.insert(info_queue, G.P_CENTERS.e_negative)
+		return { vars = {
+			card.ability.extra.create
+		} }
 	end,
 
 	atlas = "consumables",
@@ -222,37 +224,39 @@ SMODS.Consumable { key = "charybdis",
 		badges[1] = create_badge('Phantasmal Spectral', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 	end,
 
-	config = { create = 1 },
+	config = { extra = {
+		create = 1,
+	} },
 	cost = 4,
 
-	can_use = function(self, card)
-		return #G.jokers.cards <= G.jokers.config.card_limit
-	end,
 	use = function(self, card, area, copier)
 		local deletable_jokers = {}
 		for _,held_joker in pairs(G.jokers.cards) do
-			if not held_joker.ability.eternal then
+			if not SMODS.is_eternal(held_joker, card) then
 				table.insert(deletable_jokers, held_joker)
 			end
 		end
 
 		if #deletable_jokers > 0 then
+			local target_delete_joker = pseudorandom_element(deletable_jokers, "ovn_charybdis_DIE")
 			add_simple_event('before', 0, function ()
-				SMODS.destroy_cards(deletable_jokers)
+				SMODS.destroy_cards(target_delete_joker)
 			end)
-			PlayLog.log{ type = "destroys", card = card, destroyed = deletable_jokers }
+			PlayLog.log{ type = "destroys", card = card, destroyed = target_delete_joker }
 		end
 
 		add_simple_event('after', 0.4, function ()
-			local created_card = SMODS.add_card{
-				set = 'Joker',
-				area = G.joker,
-				rarity = 'ovn_corrupted',
-				edition = 'e_negative',
-				skip_materialize = false,
-				key_append = 'ovn_charybdis'
-			}
-			PlayLog.log { type = "creates", card = self, created = { created_card } }
+			for i = 1, math.floor(card.ability.extra.create) do
+				local created_card = SMODS.add_card{
+					set = 'Joker',
+					area = G.joker,
+					rarity = 'ovn_corrupted',
+					edition = 'e_negative',
+					skip_materialize = false,
+					key_append = 'ovn_charybdis'
+				}
+				PlayLog.log { type = "creates", card = self, created = { created_card } }
+			end
 		end)
 		delay(0.6)
 	end,
