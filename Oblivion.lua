@@ -23,7 +23,8 @@ Oblivion.obj.optional_features = {
 		unscored = true,
 		deck = true,
 		discard = true,
-	}
+	},
+	object_weights = true,
 }
 
 -- Used in localization

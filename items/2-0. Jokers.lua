@@ -423,6 +423,45 @@ SMODS.Joker { key = 'trolley_problem',
 	end
 }
 
+--------
+-- Prism
+--------
+
+SMODS.Joker { key = 'prism',
+	credits = {
+		concept = {"NinjaBanana", "HexaCryonic"},
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.increased_odds
+		}}
+	end,
+	config = { extra = {
+		increased_odds = 2
+	} },
+
+	atlas = 'jokers',
+	pos   = { x=2, y=0 },
+
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 1,
+	cost = 4,
+
+	calculate = function (self, card, context)
+		if context.modify_weights and context.pool_types["Tarot"] then
+			for _,pool_item in ipairs(context.pool) do
+				if Oblivion.suit_changing_tarots[pool_item.key] then
+					pool_item.weight = pool_item.weight*card.ability.extra.increased_odds
+				end
+			end
+		end
+	end
+}
+
 -----------
 -- Purifier
 -----------
@@ -2064,6 +2103,31 @@ SMODS.Joker { key = 'breach',
 			}
 		end
 	end
+}
+
+-------------
+-- CORRUPTED
+-- Blacklight
+-------------
+SMODS.Joker { key = 'blacklight',
+	credits = {
+		concept = "HexaCryonic",
+		code = "Oinite",
+		art = "HexaCryonic"
+	},
+	loc_vars = function (self, info_queue, card)
+		table.insert(info_queue, G.P_CENTERS['c_ovn_perception'])
+	end,
+	atlas = 'jokers_corrupt',
+	pos = {x=1, y=1},
+
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = "ovn_corrupted",
+	cost = 8,
+
+	-- Additional functionality in SMODS.poll_object hook
 }
 
 --------------------------

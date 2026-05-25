@@ -52,6 +52,14 @@ G.E_MANAGER:add_event(Event {
 			rarity_modi_def.modifiers = all_modis
 		end
 
+		-- Generate list of suit-changing tarots for Prism
+		Oblivion.suit_changing_tarots = {}
+		for _,tarot_proto in ipairs(G.P_CENTER_POOLS.Tarot) do
+			if Ovn_f.descend_table{tarot_proto, "config", "suit_conv"} then
+				Oblivion.suit_changing_tarots[tarot_proto.key] = true
+			end
+		end
+
 		return true
 	end
 })

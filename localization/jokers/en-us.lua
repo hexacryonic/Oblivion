@@ -83,6 +83,14 @@ return {
                     'are {C:red}destroyed'
                 }
             },
+            j_ovn_prism = {
+                name = "Prism",
+                text = {
+                    "Tarot cards that {C:tarot}change",
+                    "{C:tarot}suit {}are {C:attention}#1#X {}more",
+                    "likely to appear"
+                }
+            },
             j_ovn_purifier = {
                 name = "Purifier",
                 text = {
@@ -456,6 +464,17 @@ return {
                 },
                 corrupted_from = {
                     "{C:attention}The Tribe"
+                }
+            },
+            j_ovn_blacklight = {
+                name = "Blacklight",
+                text = {
+                    "{C:tarot}Perception {}replaces",
+                    "all Tarot cards that",
+                    "{C:tarot}change suits"
+                },
+                corrupted_from = {
+                    "{C:attention}Prism"
                 }
             },
             j_ovn_bottled_ship_of_theseus = {

@@ -494,3 +494,16 @@ function SMODS.score_card(card, context)
     end
     return smods_scorecard_hook(card, context)
 end
+
+-- Hook to replace suit-changing Tarots with Perception
+local smods_pollobj_hook = SMODS.poll_object
+function SMODS.poll_object(...)
+	local key = smods_pollobj_hook(...)
+	if (
+		Oblivion.suit_changing_tarots[key]
+		and next(SMODS.find_card('j_ovn_blacklight'))
+	) then
+		key = "c_ovn_perception"
+	end
+	return key
+end
