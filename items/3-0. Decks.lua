@@ -3,17 +3,17 @@ local add_simple_event = Ovn_f.add_simple_event
 local function corrupt_deck_unlock(self, args)
 	return (
 		args.type == "win_deck"
-		and get_deck_win_stake(self.ovn_pure_deck) >= 4 -- Black Stake or greater
+		and get_deck_win_stake(self.ovn_pure_version) >= 4 -- Black Stake or greater
 	)
 end
 
 local function corrupt_deck_lockedvars(self, info_queue, card)
 		local other_name = localize('k_unknown')
-		if G.P_CENTERS[self.ovn_pure_deck].unlocked then
+		if G.P_CENTERS[self.ovn_pure_version].unlocked then
 			other_name = localize {
 				type = 'name_text',
 				set = 'Back',
-				key = self.ovn_pure_deck
+				key = self.ovn_pure_version
 			}
 		end
 
@@ -53,7 +53,7 @@ SMODS.Back { key = "ocular",
 -------------------
 SMODS.Back { key = "c_red",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_red",
+	ovn_pure_version = "b_red",
 
 	atlas = "decks_corrupt",
 	pos = { x = 0, y = 0 },
@@ -92,7 +92,7 @@ SMODS.Back { key = "c_red",
 --------------------
 SMODS.Back { key = "c_blue",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_blue",
+	ovn_pure_version = "b_blue",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 0 },
@@ -118,7 +118,7 @@ SMODS.Back { key = "c_blue",
 ----------------------
 SMODS.Back { key = "c_yellow",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_yellow",
+	ovn_pure_version = "b_yellow",
 
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 0 },
@@ -181,7 +181,7 @@ SMODS.Back { key = "c_yellow",
 ---------------------
 SMODS.Back { key = "c_green",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_green",
+	ovn_pure_version = "b_green",
 
 	atlas = "decks_corrupt",
 	pos = { x = 3, y = 0 },
@@ -204,7 +204,7 @@ SMODS.Back { key = "c_green",
 ---------------------
 SMODS.Back { key = "c_black",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_black",
+	ovn_pure_version = "b_black",
 
 	atlas = "decks_corrupt",
     pos = { x = 4, y = 0 },
@@ -227,7 +227,7 @@ SMODS.Back { key = "c_black",
 ---------------------
 SMODS.Back { key = "c_ghost",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_ghost",
+	ovn_pure_version = "b_ghost",
 	config = { spectral_rate = 6 },
 
 	atlas = "decks_corrupt",
@@ -269,7 +269,7 @@ SMODS.Back { key = "c_ghost",
 -----------------------
 SMODS.Back { key = "c_abandoned",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_abandoned",
+	ovn_pure_version = "b_abandoned",
 	loc_vars = function (self, info_queue, card)
 		return {vars = {
 			self.config.tag_count,
@@ -302,7 +302,7 @@ SMODS.Back { key = "c_abandoned",
 -----------------------
 SMODS.Back { key = "c_painted",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_painted",
+	ovn_pure_version = "b_painted",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 2 },
@@ -345,7 +345,7 @@ SMODS.Back { key = "c_painted",
 ----------------------
 SMODS.Back { key = "c_plasma",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_plasma",
+	ovn_pure_version = "b_plasma",
 	loc_vars = function(self, info_queue, back)
 		return { vars = {
 			localize { type = 'name_text', key = 'dd_ovn_instability_description', set = 'DescriptionDummy' },
@@ -393,7 +393,7 @@ SMODS.Back { key = "c_plasma",
 SMODS.Back {
 	key = "c_erratic",
 	ovn_corrupt_deck = true,
-	ovn_pure_deck = "b_erratic",
+	ovn_pure_version = "b_erratic",
 
 	atlas = "decks_corrupt",
 	pos = { x = 4, y = 2 },

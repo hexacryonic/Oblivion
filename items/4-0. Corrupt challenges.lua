@@ -4,11 +4,19 @@ local __new__ = { id = 'ovn_new'    }
 local _but_   = { id = 'ovn_but'    }
 local _spacer = { id = 'ovn_spacer' }
 
+local function corrupt_challenge_unlock(self)
+	local pure_challenge_key = self.ovn_pure_version
+	local challenge_is_completed = G.PROFILES[G.SETTINGS.profile].challenge_progress.completed[pure_challenge_key]
+	return challenge_is_completed
+end
+
 -------------------
 -- Corrupt Omelette
 -------------------
 local c_egg = { id = 'j_egg', edition = 'negative' }
 SMODS.Challenge { key = 'corrupt_omelette',
+	ovn_corrupt_challenge = true,
+	ovn_pure_version = "c_omelette_1",
     rules = {
         custom = {
 			__og__,
@@ -53,13 +61,16 @@ SMODS.Challenge { key = 'corrupt_omelette',
 			selected_egg:juice_up()
 			play_sound('generic1')
 		end
-	end
+	end,
+	unlocked = corrupt_challenge_unlock
 }
 
 ---------------
 -- Corrupt Edge
 ---------------
 SMODS.Challenge { key = 'corrupt_edge',
+	ovn_corrupt_challenge = true,
+	ovn_pure_version = "c_knife_1",
 	rules = {
 		custom = {
 			__new__,
@@ -84,7 +95,8 @@ SMODS.Challenge { key = 'corrupt_edge',
 		banned_tags = { },
 		banned_other = {
 		}
-	}
+	},
+	unlocked = corrupt_challenge_unlock
 }
 
 ----------------
@@ -107,6 +119,8 @@ local function corrupt_world_deck_cards()
 end
 
 SMODS.Challenge { key = 'corrupt_world',
+	ovn_corrupt_challenge = true,
+	ovn_pure_version = "c_mad_world_1",
 	rules = {
 		custom = {
 			__og__,
@@ -141,13 +155,16 @@ SMODS.Challenge { key = 'corrupt_world',
 		banned_other = {
 			{id = 'bl_plant', type = 'blind'},
 		}
-	}
+	},
+	unlocked = corrupt_challenge_unlock
 }
 
 -------------------
 -- Corrupt Eternity
 -------------------
 SMODS.Challenge { key = 'corrupt_eternity',
+	ovn_corrupt_challenge = true,
+	ovn_pure_version = "c_non_perishable_1",
     rules = {
         custom = {
 			__og__,
@@ -188,13 +205,16 @@ SMODS.Challenge { key = 'corrupt_eternity',
     },
 	apply = function (self)
 		G.GAME.perishable_rounds = 2
-	end
+	end,
+	unlocked = corrupt_challenge_unlock
 }
 
 ------------------
 -- Corrupt Quintet
 ------------------
 SMODS.Challenge { key = 'corrupt_quintet',
+	ovn_corrupt_challenge = true,
+	ovn_pure_version = "c_five_card_1",
     rules = {
 		custom = {
 			__new__,
@@ -222,5 +242,6 @@ SMODS.Challenge { key = 'corrupt_quintet',
             { id = 'j_troubadour' },
             { id = 'j_turtle_bean' },
         }
-    }
+    },
+	unlocked = corrupt_challenge_unlock
 }
