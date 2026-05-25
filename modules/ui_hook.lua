@@ -394,6 +394,8 @@ end
 -- Hook to insert additional buttons for several Jokers
 local uidef_usesellbtn_hook = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
+	local uidef = uidef_usesellbtn_hook(card)
+	if card.area ~= G.jokers then return uidef end
 	if card.config.center.key == "j_ovn_pure_visage" then
 		return sell_and_other_buttons{
 			card = card,
@@ -423,7 +425,7 @@ function G.UIDEF.use_and_sell_buttons(card)
 		}
 	end
 
-	return uidef_usesellbtn_hook(card)
+	return uidef
 end
 
 -- Hook to prevent playing if an Unobtainium card is selected
