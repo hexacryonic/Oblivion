@@ -59,7 +59,7 @@ function level_up_hand(card, hand, instant, amount)
 			delay(1.3/speed)
 		end
 		if (
-			event_horizon.ability.extra.mult >= 193
+			event_horizon.ability.extra.mult >= 198
 			and event_horizon.ability.extra.chips >= 1730
 		) then
 			Ovn_f.add_simple_event(nil, nil, function ()
