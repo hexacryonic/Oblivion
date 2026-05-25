@@ -159,6 +159,111 @@ SMODS.Joker { key = 'ovn',
 	end
 }
 
+------------------
+-- Bombastic Joker
+------------------
+SMODS.Joker { key = 'bombastic',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
+	loc_vars = function(self, info_queue, center)
+		return { vars = { center.ability.extra.mult } }
+	end,
+	config = { extra = { mult = 13 } },
+
+	atlas = 'jokers',
+	pos = { x = 0, y = 3 },
+
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 1,
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
+			return {
+				mult = card.ability.extra.mult,
+			}
+		end
+	end,
+	in_pool = function (self, args)
+		return G.GAME and G.GAME.ovn_has_ocular
+	end
+}
+
+-------------------
+-- Insightful Joker
+-------------------
+SMODS.Joker { key = 'insightful',
+	credits = {
+		concept = "HexaCryonic",
+		art = "HexaCryonic",
+		code = "HexaCryonic"
+	},
+	loc_vars = function(self, info_queue, center)
+		return { vars = { center.ability.extra.chips } }
+	end,
+	config = { extra = { chips = 110 } },
+
+	atlas = 'jokers',
+	pos = { x = 1, y = 3 },
+
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 1,
+	cost = 4,
+
+	calculate = function(self, card, context)
+		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
+			return {
+				chips = card.ability.extra.chips,
+			}
+		end
+	end,
+	in_pool = function (self, args)
+		return G.GAME and G.GAME.ovn_has_ocular
+	end
+}
+
+-------------
+-- The Breach
+-------------
+SMODS.Joker { key = 'breach',
+	credits = {
+		concept = "HexaCryonic",
+		code = "HexaCryonic",
+		art = "HexaCryonic",
+	},
+	loc_vars = function(self, info_queue, center)
+		return { vars = { center.ability.extra.xmult } }
+	end,
+	config = { extra = { xmult = 4 } },
+
+	atlas = 'jokers',
+	pos = { x = 2, y = 3 },
+
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 3,
+	cost = 8,
+
+	calculate = function(self, card, context)
+		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
+			return {
+				xmult = card.ability.extra.xmult,
+			}
+		end
+	end,
+	in_pool = function (self, args)
+		return G.GAME and G.GAME.ovn_has_ocular
+	end
+}
+
 ----------------
 -- Radiant Joker
 ----------------
@@ -646,72 +751,6 @@ SMODS.Joker { key = 'prideful',
 		) then
 			return {
 				mult = card.ability.extra.mult,
-			}
-		end
-	end
-}
-
-------------------
--- CORRUPTED
--- Bombastic Joker
-------------------
-SMODS.Joker { key = 'bombastic',
-	credits = {
-		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "HexaCryonic"
-	},
-	loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.mult } }
-	end,
-	config = { extra = { mult = 13 } },
-
-	atlas = 'jokers_corrupt',
-	pos = { x = 2, y = 2 },
-
-	blueprint_compat = true,
-	eternal_compat = true,
-	perishable_compat = true,
-	rarity = "ovn_corrupted",
-	cost = 5,
-
-	calculate = function(self, card, context)
-		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
-			return {
-				mult = card.ability.extra.mult,
-			}
-		end
-	end
-}
-
--------------------
--- CORRUPTED
--- Insightful Joker
--------------------
-SMODS.Joker { key = 'insightful',
-	credits = {
-		concept = "HexaCryonic",
-		art = "HexaCryonic",
-		code = "HexaCryonic"
-	},
-	loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.chips } }
-	end,
-	config = { extra = { chips = 110 } },
-
-	atlas = 'jokers_corrupt',
-	pos = { x = 3, y = 2 },
-
-	blueprint_compat = true,
-	eternal_compat = true,
-	perishable_compat = true,
-	rarity = "ovn_corrupted",
-	cost = 5,
-
-	calculate = function(self, card, context)
-		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
-			return {
-				chips = card.ability.extra.chips,
 			}
 		end
 	end
@@ -2070,39 +2109,6 @@ SMODS.Joker { key = 'master_of_puppets',
 		end
 	end,
 	-- Additional functionality found in "modules/item-specific/master_of_puppets.lua"
-}
-
--------------
--- CORRUPTED
--- The Breach
--------------
-SMODS.Joker { key = 'breach',
-	credits = {
-		concept = "HexaCryonic",
-		code = "HexaCryonic",
-		art = "HexaCryonic",
-	},
-	loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.xmult } }
-	end,
-	config = { extra = { xmult = 4 } },
-
-	atlas = 'jokers_corrupt',
-	pos = { x = 2, y = 1 },
-
-	blueprint_compat = true,
-	eternal_compat = true,
-	perishable_compat = true,
-	rarity = "ovn_corrupted",
-	cost = 9,
-
-	calculate = function(self, card, context)
-		if context.joker_main and context.poker_hands and next(context.poker_hands["ovn_Spectrum"]) then
-			return {
-				xmult = card.ability.extra.xmult,
-			}
-		end
-	end
 }
 
 -------------

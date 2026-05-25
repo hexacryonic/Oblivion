@@ -39,6 +39,30 @@ return {
                     '{C:inactive,s:0.8}the cold Joker of out hot eat the Joker"'
                 }
             },
+            j_ovn_bombastic = {
+                name = 'Bombastic Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains",
+                    "a {C:attention}Spectrum{}",
+                },
+            },
+            j_ovn_insightful = {
+                name = 'Insightful Joker',
+                text = {
+                    "{C:chips}+#1#{} Chips if played",
+                    "hand contains",
+                    "a {C:attention}Spectrum{}",
+                },
+            },
+            j_ovn_breach = {
+                name = 'The Breach',
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult if played",
+                    "hand contains",
+                    "a {C:attention}Spectrum{}",
+                },
+            },
             j_ovn_radiant_joker = {
                 name = "Radiant Joker",
                 text = {
@@ -136,28 +160,6 @@ return {
                 },
                 corrupted_from = {
                     "the {C:attention}Sinful Jokers"
-                }
-            },
-            j_ovn_bombastic = {
-                name = 'Bombastic Joker',
-                text = {
-                    "{C:mult}+#1#{} Mult if played",
-                    "hand contains",
-                    "a {C:attention}Spectrum{}",
-                },
-                corrupted_from = {
-                    "{C:attention}Droll Joker"
-                }
-            },
-            j_ovn_insightful = {
-                name = 'Insightful Joker',
-                text = {
-                    "{C:chips}+#1#{} Chips if played",
-                    "hand contains",
-                    "a {C:attention}Spectrum{}",
-                },
-                corrupted_from = {
-                    "{C:attention}Crafty Joker"
                 }
             },
             j_ovn_collapsing_world = {
@@ -453,17 +455,6 @@ return {
                 },
                 corrupted_from = {
                     "{C:attention}Hit the Road"
-                }
-            },
-            j_ovn_breach = {
-                name = 'The Breach',
-                text = {
-                    "{X:mult,C:white} X#1# {} Mult if played",
-                    "hand contains",
-                    "a {C:attention}Spectrum{}",
-                },
-                corrupted_from = {
-                    "{C:attention}The Tribe"
                 }
             },
             j_ovn_blacklight = {
