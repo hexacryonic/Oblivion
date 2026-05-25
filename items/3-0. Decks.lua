@@ -35,11 +35,6 @@ SMODS.Back { key = "c_red",
 	atlas = "decks_corrupt",
 	pos = { x = 0, y = 0 },
 
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("red_rum") then return true end
-	end,
-
 	calculate = function(self, card, context)
 		if context.after then add_simple_event(nil, nil, function ()
 			local any_selected = nil
@@ -74,11 +69,6 @@ SMODS.Back { key = "c_blue",
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 0 },
 
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("blue_blitz") then return true end
-	end,
-
 	apply = function(self)
 		G.GAME.starting_params.hands = G.GAME.starting_params.hands + 2
 	end,
@@ -99,11 +89,6 @@ SMODS.Back { key = "c_yellow",
 
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 0 },
-
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("yellow_yearlong") then return true end
-	end,
 
 	apply = function(self)
 		G.GAME.cy_dollarsperante = 120
@@ -163,11 +148,6 @@ SMODS.Back { key = "c_green",
 	atlas = "decks_corrupt",
 	pos = { x = 3, y = 0 },
 
-	unlocked = false,
-	check_for_unlock = function (self, args)
-		if achievement_get("groundless_greenery") then return true end
-	end,
-
 	apply = function (self)
 		G.GAME.dollars_i = 0
 		G.GAME.dollars_complex = tostring(G.GAME.dollars)
@@ -185,11 +165,6 @@ SMODS.Back { key = "c_black",
 
 	atlas = "decks_corrupt",
     pos = { x = 4, y = 0 },
-
-	unlocked = false,
-	check_for_unlock = function (self, args)
-        if achievement_get("bleakest_blackout") then return true end
-	end,
 
 	apply = function(self)
         G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots + 4
@@ -209,11 +184,6 @@ SMODS.Back { key = "c_ghost",
 
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 1 },
-
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("ghostly_gall") then return true end
-	end,
 
 	apply = function(self)
 		G.GAME.ovn_cghost = true
@@ -261,11 +231,6 @@ SMODS.Back { key = "c_abandoned",
 	atlas = "decks_corrupt",
     pos = { x = 3, y = 1 },
 
-	unlocked = false,
-	check_for_unlock = function (self, args)
-        if achievement_get("absolved_abandonment") then return true end
-	end,
-
 	apply = function (self)
 		add_simple_event('immediate', nil, function()
 			for _ = 1, self.config.tag_count do
@@ -283,11 +248,6 @@ SMODS.Back { key = "c_painted",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 2 },
-
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("painted_paladin") then return true end
-	end,
 
 	apply = function(self)
 		G.GAME.joker_rate = 0
@@ -335,11 +295,6 @@ SMODS.Back { key = "c_plasma",
 	atlas = "decks_corrupt",
 	pos = { x = 3, y = 2 },
 
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("plasma_plight") then return true end
-	end,
-
 	config = {
 		consumables = {'c_ovn_abyss', 'c_ovn_perception'},
 		jokers = {'j_joker'}
@@ -373,13 +328,6 @@ SMODS.Back {
 	ovn_corrupt_deck = true,
 	atlas = "decks_corrupt",
 	pos = { x = 4, y = 2 },
-
-	unlocked = false,
-	check_for_unlock = function(self, args)
-		if achievement_get("erratic_eruption") then
-			return true
-		end
-	end,
 
 	apply = function(self)
 		G.GAME.c_erratic = true -- good luck.
