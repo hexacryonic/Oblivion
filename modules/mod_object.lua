@@ -257,6 +257,8 @@ local credits_data = {
 	"Lil. Mr. Slipstream"
 }
 
+-- Valid keys for second item can be found in
+-- the credits_labels table, localization/credits/*.lua
 local additional_credits_data = {
 	{"thaun0",         "concept"},
 	{"SyntaxTsundere", "concept"},
@@ -269,7 +271,7 @@ local additional_credits_data = {
 	{"cassknows",      "shader"},
 	{"Airtoum",        "code"},
 	{"ellestuff",      "code"},
-	{"Lily",           "code"},
+	{"lily.felli",     "code"},
 	{"MathIsFun_",     "code"},
 }
 

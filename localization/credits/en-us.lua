@@ -32,7 +32,7 @@ credits_additional = {
     ["cassknows"]      = "Miasma",
     ["Airtoum"]        = "Prosopometamorphopsia",
     ["ellestuff"]      = "Coordinate Cards (additional)",
-    ["Lily"]           = "Corrupt Erratic Deck (initial)",
+    ["lily.felli"]     = "Corrupt Erratic Deck (initial)",
     ["MathIsFun_"]     = "Corrupt Plasma Deck (initial)",
 },
 
