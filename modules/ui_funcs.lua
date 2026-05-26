@@ -138,7 +138,7 @@ end
 -----------------------
 
 -- Applies additional tooltips to the hovered card.
----@param _c SMODS.Center
+---@param _c SMODS.Center honestly idek what the types are
 ---@param card Card
 ---@param info_queue table
 ---@return nil
@@ -213,6 +213,25 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 
 		-- Placeholder note
 		if select_seal.uses_placeholder_sprite then
+			table.insert(info_queue, {
+				key = 'ovn_placeholder_sprite',
+				set = 'Other'
+			})
+		end
+	end
+
+	-- Tags
+	if getmetatable(card) == Tag and card.for_collection then
+		local tag_proto = SMODS.Tags[card.key]
+		-- Credits
+		if tag_proto.credits then
+			-- Only way to attach vars to send to the description dummy
+			G.P_CENTERS['dd_ovn_credits'].specific_vars = tag_proto.credits
+			table.insert(info_queue, G.P_CENTERS['dd_ovn_credits'])
+		end
+
+		-- Placeholder note
+		if tag_proto.uses_placeholder_sprite then
 			table.insert(info_queue, {
 				key = 'ovn_placeholder_sprite',
 				set = 'Other'

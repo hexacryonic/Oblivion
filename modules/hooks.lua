@@ -272,6 +272,18 @@ end
 
 
 
+--------------------
+---- TAG OBJECT ----
+--------------------
+
+local tag_init_hook = Tag.init
+function Tag:init(_tag, for_collection, _blind_type)
+	tag_init_hook(self, _tag, for_collection, _blind_type)
+	if for_collection then self.for_collection = true end
+end
+
+
+
 ---------------------
 ---- GAME OBJECT ----
 ---------------------
