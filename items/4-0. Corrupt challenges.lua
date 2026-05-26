@@ -94,6 +94,8 @@ SMODS.Challenge { key = 'corrupt_edge',
 		banned_cards = { },
 		banned_tags = { },
 		banned_other = {
+			{id = 'bl_final_heart', type = 'blind'},
+			{id = 'bl_final_leaf', type = 'blind'},
 		}
 	},
 	unlocked = corrupt_challenge_unlock
