@@ -229,6 +229,10 @@ SMODS.Consumable { key = "charybdis",
 	} },
 	cost = 4,
 
+	can_use = function(self, card)
+		return true
+	end,
+
 	use = function(self, card, area, copier)
 		local deletable_jokers = {}
 		for _,held_joker in pairs(G.jokers.cards) do
