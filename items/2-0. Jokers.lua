@@ -1732,6 +1732,9 @@ SMODS.Joker { key = 'yolo',
 
 		if context.after then
 			add_simple_event(nil, nil, function ()
+				G.GAME.current_round.hands_left = 0
+			end)
+			add_simple_event(nil, nil, function ()
 				if G.GAME.chips < G.GAME.blind.chips then
 					G.STATE = G.STATES.GAME_OVER
 					G.STATE_COMPLETE = false
