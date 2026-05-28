@@ -22,6 +22,33 @@ Oblivion.DescriptionDummy = SMODS.Center:extend {
 ---- OBJECT OWNERSHIP ----
 --------------------------
 
+-- Ownership of Sigil to properly trigger transmutations via change_suit
+SMODS.Consumable:take_ownership('sigil', {
+	use = function (self, card, area, copier)
+    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+      play_sound('tarot1')
+      if card then card:juice_up(0.3, 0.5) end
+      return true end }))
+    local _suit = pseudorandom_element({'Spades','Hearts','Diamonds','Clubs','ovn_Optics'}, pseudoseed('sigil'))
+    for i=1, #G.hand.cards do
+      local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
+      G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.cards[i]:flip();play_sound('card1', percent);G.hand.cards[i]:juice_up(0.3, 0.3);return true end }))
+    end
+    delay(0.2)
+    for i=1, #G.hand.cards do
+      G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0,func = function() G.hand.cards[i]:change_suit(_suit);return true end }))
+      local percent2 = 0.85 + (i-0.999)/(#G.hand.cards-0.998)*0.3
+      if _suit ~= 'ovn_Optics' then
+        G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.cards[i]:flip();play_sound('tarot2', percent2, 0.6);G.hand.cards[i]:juice_up(0.3, 0.3);return true end }))
+      end
+      if _suit == 'ovn_Optics' then
+        G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.cards[i]:flip();play_sound('ovn_optic', percent2, 1.1);G.hand.cards[i]:juice_up(0.3, 0.3);return true end }))
+      end
+    end
+    delay(0.5)
+	end
+}, true)
+
 -- Ownership of Black Hole for Event Horizon effect
 SMODS.Consumable:take_ownership('black_hole', {
 	use = function (self, card, area, copier)
@@ -95,7 +122,7 @@ SMODS.Tag:take_ownership('orbital', {
 			local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
 			if #all_event_horizons > 0 then
 				level_up_hand(tag, tag.ability.orbital_hand, nil, tag.config.levels)
-				tag:yep('+', G.C.MONEY,function() 
+				tag:yep('+', G.C.MONEY,function()
 					G.CONTROLLER.locks[lock] = nil
 					return true
 				end)
@@ -109,7 +136,7 @@ SMODS.Tag:take_ownership('orbital', {
 					level= G.GAME.hands[tag.ability.orbital_hand].level})
 				level_up_hand(tag, tag.ability.orbital_hand, nil, tag.config.levels)
 				update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
-				tag:yep('+', G.C.MONEY,function() 
+				tag:yep('+', G.C.MONEY,function()
 					G.CONTROLLER.locks[lock] = nil
 					return true
 				end)
