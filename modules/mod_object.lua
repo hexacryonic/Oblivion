@@ -5,6 +5,8 @@
 -- 3. CONFIGURATION TAB
 -- 4. CREDITS TAB
 
+local JTML = Ovn_f.JTML
+
 -------------------
 ---- CALCULATE ----
 -------------------
@@ -206,24 +208,21 @@ local function generate_config_row(key, callback)
 end
 
 Oblivion.obj.config_tab = function ()
+	---@type JTML.flex.style
 	local jtml_style = {
-		[".root"] = {
-			align = "center-middle",
-			padding = 0.2,
-			fillColour = G.C.BLACK,
-			roundness = 0.1,
-			emboss = 0.05,
-		}
-	}
-
-	local header_row = {
-		{text=localize("k_toggle"), colour=G.C.UI.TEXT_DARK, scale=0.5},
-		{text=localize("k_name"), colour=G.C.UI.TEXT_DARK, scale=0.5},
-		{text=localize("k_description"), colour=G.C.UI.TEXT_DARK, scale=0.5}
+		align = "center-middle",
+		padding = 0.2,
+		colour = G.C.BLACK,
+		roundCorners = true,
+		emboss = 0.05,
 	}
 
 	local tbl = Ovn_f.generate_table_ui({
-		header_row,
+		{
+			{text=localize("k_toggle"), colour=G.C.UI.TEXT_DARK, scale=0.5},
+			{text=localize("k_name"), colour=G.C.UI.TEXT_DARK, scale=0.5},
+			{text=localize("k_description"), colour=G.C.UI.TEXT_DARK, scale=0.5}
+		},
 		generate_config_row("family_friendly", Ovn_f.reload_localization),
 		generate_config_row("disable_c_erratic_shader"),
 		generate_config_row("disable_c_erratic_warning"),
@@ -233,10 +232,7 @@ Oblivion.obj.config_tab = function ()
 		default_text_scale = 0.4
 	})
 
-	local config_ui =
-	{"root", class="root", {tbl}}
-
-	return Ovn_f.jtml_to_uiboxdef(config_ui, jtml_style)
+	return JTML.flex{style=jtml_style, {tbl}}
 end
 
 
@@ -276,31 +272,12 @@ local additional_credits_data = {
 }
 
 local credits_ui_style = {
-	[".credits_ui_style"] = {
-		align = "center-middle",
-		padding = 0.2,
-		fillColour = G.C.BLACK,
-		roundness = 0.1,
-		emboss = 0.05,
-		minWidth = 6,
-		minHeight = 6
-	},
-	[".credits_header"] = {
-		align = "center-middle",
-		padding = 0.2,
-		outlineColour = G.C.JOKER_GREY,
-		roundness = 0.1,
-		outlineWidth = 1
-	},
-	[".credits_header_text"] = {
-		scale = 0.45,
-		colour = G.C.UI.TEXT_LIGHT
-	},
-	[".credits_text"] = {
-		scale = 0.4,
-		colour = G.C.UI.TEXT_LIGHT,
-		padding = 0.05,
-	},
+	align = "center-middle",
+	padding = 0.2,
+	colour = G.C.BLACK,
+	roundCorners = true,
+	emboss = 0.05,
+	WH = {6, 6},
 }
 
 local credits_table_config = {
@@ -370,8 +347,8 @@ local function define_tab(loc_key, def_func, is_chosen)
 end
 
 Oblivion.obj.credits_tab = function ()
-    local credits_ui =
-	{"root", class="credits_ui_style", {
+	return
+	JTML.flex{mode="row", style=credits_ui_style, {
 		create_tabs{
 			snap_to_nav = true,
 			colour = G.C.BLUE,
@@ -384,6 +361,4 @@ Oblivion.obj.credits_tab = function ()
 			}
 		}
 	}}
-
-	return Ovn_f.jtml_to_uiboxdef(credits_ui, credits_ui_style)
 end

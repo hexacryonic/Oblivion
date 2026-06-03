@@ -1,7 +1,7 @@
 -- These functions are used by UI elements, usually those in lib/ui_hook.lua
 -- this was a bit more full before i moved deck stuff to their own files
 
-
+local JTML = Ovn_f.JTML
 
 -------------------------
 ---- G.FUNCS ENTRIES ----
@@ -244,13 +244,13 @@ end
 ---@field scale? number Size of text.
 ---@field empty_line_space? number Height of empty lines.
 ---@field padding? number Size of spacing around text.
----@field text_colour? Balatro.Colour Default colour for uncoloured text.
+---@field text_colour? Colour Default colour for uncoloured text.
 ---@field align? "left" | "center" | "middle" | "right" Alignment of all text.
 
 -- Automatically formats a list of localization strings into a JTML element.
 ---@param desc string[]
 ---@param config? localize_desc.Config
----@return Balatro.UIBoxDefinition
+---@return UINode
 function Ovn_f.localize_desc(desc, config)
 	config = config or {}
 	config.scale = config.scale or 1.125
@@ -272,11 +272,12 @@ function Ovn_f.localize_desc(desc, config)
 			})
 		end
 		local padding = row_text_parsed and config.padding or config.empty_line_space
-		local row_ui = {"row", style={padding = padding, align = align}, row_ui_text}
+		local row_ui = JTML.flex{mode="column", style={padding=padding, align=align}, row_ui_text}
 		table.insert(row_nodes, row_ui)
 	end
 
-	return Ovn_f.jtml_to_uiboxdef({"row", style={align = align}, row_nodes}, {})
+	return
+	JTML.flex{self_mode=(config.node_type or "row"), mode="row", style={align=align}, row_nodes}
 end
 
 local function notif_event(delay, func, dont_trigger_after)
@@ -294,35 +295,34 @@ local function notif_event(delay, func, dont_trigger_after)
 end
 
 -- Spawns a notification, similar in behavior to achievements.
----@param nodes (JTML.JTML|Balatro.UIBoxDefinition)[]
+---@param nodes UINode[]
 ---@return nil
 function Ovn_f.notification(nodes, sustain)
 	local style = {
-		[".root"] = {
+		["root"] = { ---@type JTML.flex.style
 			align = "center-left",
-			roundness = 0.1,
+			roundCorners = true,
 			padding = 0.06,
-			fillColour = G.C.UI.TRANSPARENT_DARK
+			colour = G.C.UI.TRANSPARENT_DARK
 		},
-		[".notif_container"] = {
+		["notif_container"] = {
 			align = "center-left",
 			padding = 0.2,
-			minWidth = 20,
-			roundness = 0.1,
-			fillColour = G.C.BLACK,
-			outlineWidth = 1.5,
-			outlineColour = G.C.GREY
+			WH = {20, nil},
+			roundCorners = true,
+			colour = G.C.BLACK,
+			outline = {1.5, G.C.GREY},
 		},
-		[".node_container"] = {
+		["node_container"] = {
 			align = "center-middle",
-			roundness = 0.1
+			roundCorners = true,
 		}
 	}
 
 	local def =
-	{"root", class="root", {
-		{"row", class="notif_container", {
-			{"row", class="node_container", nodes}
+	JTML.flex{mode="row", style=style.root, {
+		JTML.flex{mode="row", style=style.notif_container, {
+			JTML.flex{mode="row", style=style.node_container, nodes}
 		}}
 	}}
 
@@ -332,7 +332,7 @@ function Ovn_f.notification(nodes, sustain)
 			G.achievement_notification = nil
 		end
 		G.achievement_notification = G.achievement_notification or UIBox{
-			definition = Ovn_f.jtml_to_uiboxdef(def, style),
+			definition = def,
 			config = {
 				align = 'cr',
 				offset = {x=20,y=0},

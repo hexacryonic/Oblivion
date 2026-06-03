@@ -378,7 +378,7 @@ function Game:main_menu(context)
 		Ovn_f.add_simple_event(nil, nil, function ()
 			local loc = G.localization.descriptions.Other.ovn_first_install_notif
 			Ovn_f.notification({
-				{"row", style={fillColor=G.C.WHITE,padding=0.2,roundness=0.1}, {
+				Ovn_f.JTML.flex{mode="row", style={colour=G.C.WHITE,padding=0.2,roundCorners=true}, {
 					Ovn_f.localize_desc(loc.name, {scale=1.5, text_colour=G.C.UI.TEXT_DARK}),
 					Ovn_f.localize_desc(loc.text, {text_colour=G.C.UI.TEXT_DARK})
 				}}

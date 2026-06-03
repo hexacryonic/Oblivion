@@ -5,110 +5,98 @@
 -- 2. UI DEFINITION HOOKS
 -- 3. UI FUNCTION HOOKS
 
-
+local JTML = Ovn_f.JTML
 
 ---------------------------------
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
 
 -- Generates the UIBox definition for Corrupted Red Deck play/discard buttons.
----@return Balatro.UIBoxDefinition
+---@return UINode
 local uiboxbuttons_hook_c_red = function()
 	-- This is NOT based on the regular functions/UI_definitions.lua
 	-- It is instead based on the Lovely dump of functions/UI_definitions.lua with Steamodded installed
 	local text_scale = 0.45
 	local button_height = 1.3
 
-	local jtml_stylesheet = {
-		[".action_button"] = {
+	local styles = {
+		["action_button"] = { ---@type JTML.flex.style
 			align = "top-middle",
-			minimumWidth = 2.5,
+			WH = {2.5, button_height},
 			padding = 0.3,
-			roundness = 0.1,
+			roundCorners = true,
 			hover = true,
-			onePress = true,
 			shadow = true,
-			minimumHeight = button_height
 		},
-		[".row_styles"] = { align = "center-middle", padding = 0 },
-		[".top_label"]   = { scale = text_scale, color = G.C.UI.TEXT_LIGHT, },
-		[".bottom_label"] = { scale = text_scale * 0.65, color = G.C.UI.TEXT_LIGHT },
-		[".playdiscard_root"] = {
+		["row_styles"] = { align = "center-middle", padding = 0 },
+		---@type JTML.text.style
+		["top_label"]   = { scale = text_scale, color = G.C.UI.TEXT_LIGHT, },
+		---@type JTML.text.style
+		["bottom_label"] = { scale = text_scale * 0.65, color = G.C.UI.TEXT_LIGHT },
+		["playdiscard_root"] = { ---@type JTML.flex.style
+			WH = {1, 0.3},
 			align = "center-middle",
-			minimumWidth = 1,
-			minimumHeight = 0.3,
 			padding = 0.15,
-			roundness = 0.1,
-			fillColour = G.C.CLEAR
+			roundCorners = true,
+			colour = G.C.CLEAR
 		},
-		[".other_actions"] = {
+		["other_actions"] = { ---@type JTML.flex.style
 			align = "center-middle",
 			padding = 0.1,
-			roundness = 0.1,
-			fillColour = G.C.UI.TRANSPARENT_DARK,
-			outlineWidth = 1.5,
-			outlineColour = mix_colours(G.C.WHITE, G.C.JOKER_GREY, 0.7),
-			lineEmboss = 1
+			roundCorners = true,
+			clour = G.C.UI.TRANSPARENT_DARK,
+			outline = {1.5, mix_colours(G.C.WHITE, G.C.JOKER_GREY, 0.7), 1}
 		},
-		[".sorthand_text"] = { scale = text_scale*0.8, colour = G.C.UI.TEXT_LIGHT },
-		[".sorthand_button"] = {
+		---@type JTML.text.style
+		["sorthand_text"] = { scale = text_scale*0.8, colour = G.C.UI.TEXT_LIGHT },
+		["sorthand_button"] = { ---@type JTML.flex.style
 			align = "center-middle",
-			minimumHeight = 0.7,
-			minimumWidth = 0.9,
+			WH = {0.9, 0.7},
 			padding = 0.1,
-			roundness = 0.1,
+			roundCorners = true,
 			hover = true,
-			fillColour = G.C.ORANGE,
+			colour = G.C.ORANGE,
 			shadow = true
 		},
-		[".sorthand_button__text"] = { scale = text_scale*0.7, colour = G.C.UI.TEXT_LIGHT }
+		---@type JTML.text.style
+		["sorthand_button__text"] = { scale = text_scale*0.7, colour = G.C.UI.TEXT_LIGHT }
 	}
 
 	local hand_sort_options =
-	{"column", class="other_actions", {
-		{"row", class="row_styles", {
-			{"row", class="row_styles", {
-				{"text", class="sorthand_text", text=localize('b_sort_hand')}
-			}},
-			{"row", class="row_styles", style={padding=0.1}, {
-				{"column", class="sorthand_button", onclick="sort_hand_value", {
-					{"text", class="sorthand_button__text", text=localize('k_rank')}
+	JTML.flex{mode="row", style=styles.other_actions, {
+		JTML.flex{mode="row", style=styles.row_styles, {
+			JTML.text{style={styles.row_styles, styles.sorthand_text}, text=localize('b_sort_hand')},
+			JTML.flex{mode="column", style={styles.row_styles, {padding=0.1}}, {
+				JTML.flex{style=styles.sorthand_button, on_click="sort_hand_value", {
+					JTML.text{style=styles.sorthand_button__text, text=localize('k_rank')}
 				}},
-				{"column", class="sorthand_button", onclick="sort_hand_suit", {
-					{"text", class="sorthand_button__text", text=localize('k_suit')}
+				JTML.flex{style=styles.sorthand_button, on_click="sort_hand_suit", {
+					JTML.text{style=styles.sorthand_button__text, text=localize('k_suit')}
 				}},
 			}}
 		}}
 	}}
 
+	local play_click = {"play_cards_from_highlighted", one_press=true}
 	local play_button =
-	{"column", id="play_button", class="action_button", onclick="play_cards_from_highlighted", ondraw="can_play", style={fillColour = G.C.BLUE}, {
-		{"row", class="row_styles", {
-			{"text", class="top_label", text=localize('b_play_hand'), ondraw='set_button_pip', style={focus = {button = 'x', orientation = 'bm'}}}
-		}},
-		{"row", class="row_styles", {
-			{"text", class="bottom_label", reftable=SMODS.hand_limit_strings, refvalue="play"}
-		}}
+	JTML.flex{mode="row", id="play_button", style={styles.action_button, {fillColour=G.C.BLUE}}, on_click=play_click, on_draw="can_play", {
+		JTML.text{style={styles.row_styles, styles.top_label}, on_draw='set_button_pip', gamepad_focus={button='x', orientation='bm'}, text=localize('b_play_hand')},
+		JTML.text{style={styles.row_styles, styles.bottom_label}, reference={SMODS.hand_limit_strings, "play"}}
 	}}
 
+	local discard_click = {"discard_cards_from_held", one_press=true}
 	local discard_button =
-	{"column", id="discard_button", class="action_button", onclick="discard_cards_from_held", ondraw="can_weirddiscard", style={fillColour = G.C.RED}, {
-		{"row", class="row_styles", {
-			{"text", class="top_label", text=localize('b_ovn_datcard'), ondraw='set_button_pip', style={focus = {button = 'y', orientation = 'bm'}}}
-		}},
-		{"row", class="row_styles", {
-			{"text", class="bottom_label", reftable=SMODS.hand_limit_strings, refvalue="discard"}
-		}}
+	JTML.flex{mode="row", id="discard_button", style={styles.action_button, {fillColour=G.C.RED}}, on_click=discard_click, on_draw="can_weirddiscard", {
+		JTML.text{style={styles.row_styles, styles.top_label}, on_draw='set_button_pip', gamepad_focus={button='y', orientation='bm'}, text=localize('b_ovn_datcard')},
+		JTML.text{style={styles.row_styles, styles.bottom_label}, reference={SMODS.hand_limit_strings, "discard"}}
 	}}
 
-	local jtml =
-	{"root", class="playdiscard_root", {
+	return
+	JTML.flex{mode="column", style=styles.playdiscard_root, {
 		G.SETTINGS.play_button_pos == 1 and discard_button or play_button,
 		hand_sort_options,
 		G.SETTINGS.play_button_pos == 1 and play_button or discard_button,
 	}}
-
-	return Ovn_f.jtml_to_uiboxdef(jtml, jtml_stylesheet)
 end
 
 -- On Corrupt Yellow Deck, replaces the hand/discard count display with a hand/discard COST display.
@@ -176,34 +164,6 @@ local function hud_ui_c_green(ret)
 	}
 end
 
-local button_jtml_stylesheet = {
-	[".button"] = {
-		align = "center-right",
-		padding = 0.1,
-		roundness = 0.08,
-		minWidth = 1.25,
-		hover = true,
-		shadow = true,
-		fillColour = G.C.UI.BACKGROUND_INACTIVE,
-		onePress = true,
-	},
-	[".button-toptext"] = {
-		colour = G.C.UI.TEXT_LIGHT,
-		scale = 0.4,
-		shadow = true
-	},
-	[".button-btmtext1"] = {
-		colour = G.C.WHITE,
-		shadow = true,
-		scale = 0.4
-	},
-	[".button-btmtext2"] = {
-		colour = G.C.WHITE,
-		shadow = true,
-		scale = 0.55
-	},
-}
-
 ---@class sell_and_other_buttons.args
 ---@field card Card
 ---@field other_order? "first"|"last"
@@ -212,65 +172,81 @@ local button_jtml_stylesheet = {
 ---@field other_label? string
 
 ---@param args table
----@return Balatro.UIBoxDefinition
+---@return UINode
 local function sell_and_other_buttons(args)
 	args.other_order = args.other_order or "first"
 	local card = args.card
-	local button_btmtext2_ref_table = Ovn_f.on_deck('c_green') and card.ability or card
-	local button_btmtext2_ref_value = Ovn_f.on_deck('c_green') and 'complex_sell_label' or 'sell_cost_label'
+	local sell_button_ref = (
+		Ovn_f.on_deck('c_green')
+		and {card.ability, 'complex_sell_label'}
+		or {card, 'sell_cost_label'}
+	)
+
+	local styles = {
+		["button"] = {
+			align = "center-right",
+			padding = 0.1,
+			roundCorners = true,
+			WH = {1.25,nil},
+			hover = true,
+			shadow = true,
+			colour = G.C.UI.BACKGROUND_INACTIVE,
+		},
+		["toptext"] = {
+			colour = G.C.UI.TEXT_LIGHT,
+			scale = 0.4,
+			shadow = true
+		},
+		["btmtext1"] = {
+			colour = G.C.WHITE,
+			shadow = true,
+			scale = 0.4
+		},
+		["btmtext2"] = {
+			colour = G.C.WHITE,
+			shadow = true,
+			scale = 0.55
+		},
+	}
 
 	local sell_button =
-	{"column", style={align="center-right"}, {
-		{"column", reftable=card, class="button", onclick="sell_card", ondraw="can_sell_card", {
-			{"box", style={width=0.1, height=0.6}},
-			{"column", style={align="top-middle"}, {
-				{"row", style={align="center-middle", maxWidth=1.25}, {
-					{"text", class="button-toptext", text=localize("b_sell")}
+	JTML.flex{mode="column", style={align="center-right"}, {
+		JTML.flex{mode="column", style={styles.button}, reference={card, nil}, on_click={"sell_card", one_press=true}, on_draw="can_sell_card", {
+			JTML.flex{style={WH={0.1, 0.6}}},
+			JTML.flex{mode="row", style={align="center-middle"}, {
+				JTML.flex{style={align="center-middle", wh={1.25,nil}}, {
+					JTML.text{style=styles.toptext, text=localize("b_sell")}
 				}},
-				{"row", style={align="center-middle"}, {
-					{"text", class="button-btmtext1", text = localize('$')},
-					{"text", class="button-btmtext2", reftable=button_btmtext2_ref_table, refvalue=button_btmtext2_ref_value}
-				}},
+				JTML.flex{style={align="center-middle"}, {
+					JTML.text{style=styles.btmtext1, text=localize('$')},
+					JTML.text{style=styles.btmtext2, reference=sell_button_ref},
+				}}
 			}}
 		}}
 	}}
 
 	local other_button =
-	{"column", style={align="center-right"}, {
-		{"column", reftable=card, class="button", onclick=args.other_on_click, ondraw=args.other_on_draw, {
-			{"box", style={width=0.2, height=0.6}},
-			{"column", style={align="center-middle"}, {
-				{"row", style={align="center-middle", maxWidth=1.25}, {
-					{"text", class="button-toptext", text=args.other_label}
-				}},
+	JTML.flex{mode="column", style={align="center-right"}, {
+		JTML.flex{mode="column", style={styles.button}, reference={card, nil}, on_click={args.other_on_click, one_press=true}, on_draw=args.other_on_draw, {
+			JTML.flex{style={WH={0.2, 0.6}}},
+			JTML.flex{mode="row", style={align="center-middle"}, {
+				JTML.flex{style={align="center-middle", wh={1.25,nil}}, {
+					JTML.text{style=styles.toptext, text=args.other_label}
+				}}
 			}}
 		}}
 	}}
 
-	local spacing = {"row", style={minHeight=0.1, fillColour=G.C.CLEAR}}
-	local nodes
-	if args.other_order == "first" then
-		nodes = {
-			{"row", style={align="center-left"}, {other_button}},
-			-- spacing
-			spacing,
-			{"row", style={align="center-left"}, {sell_button}},
-		}
-	elseif args.other_order == "last" then
-		nodes = {
-			{"row", style={align="center-left"}, {sell_button}},
-			-- spacing
-			spacing,
-			{"row", style={align="center-left"}, {other_button}},
-		}
-	end
-
-	local container =
-	{"root", style={padding=0, fillColour=G.C.CLEAR}, {
-		{"column", style={padding=0, align="center-left"}, nodes}
+	local top_button = args.other_order == "last" and sell_button or other_button
+	local btm_button = args.other_order == "last" and other_button or sell_button
+	return
+	JTML.flex{mode="column", style={padding=0, colour=G.C.CLEAR}, {
+		JTML.flex{mode="row", style={padding=0, align="center-left"}, {
+			JTML.flex{mode="column", style={align="center-left"}, {top_button}},
+			JTML.flex{style={WH={nil,0.1}, colour=G.C.CLEAR}},
+			JTML.flex{mode="column", style={align="center-left"}, {btm_button}},
+		}}
 	}}
-
-	return Ovn_f.jtml_to_uiboxdef(container, button_jtml_stylesheet)
 end
 
 
