@@ -218,11 +218,13 @@ function Card:change_suit(new_suit)
 	if ( -- Non-Optics -> Optics - Corrupt modifiers
 		self.base.suit ~= "ovn_Optics"
 		and new_suit == "ovn_Optics"
-	) then transmute_func = Ovn_f.corrupt_modifiers
+	) then
+		transmute_func = Ovn_f.corrupt_modifiers
 	elseif ( -- Optics -> Non-Optics - Purify modifiers
 		self.base.suit == "ovn_Optics"
 		and new_suit ~= "ovn_Optics"
-	) then transmute_func = Ovn_f.purify_modifiers
+	) then
+		transmute_func = Ovn_f.purify_modifiers
 	end
 
 	card_changesuit_hook(self, new_suit)
@@ -519,4 +521,28 @@ function SMODS.poll_object(...)
 		key = "c_ovn_perception"
 	end
 	return key
+end
+
+-- Hook to transmute modifiers on cards with changed suits 2: Eleectric Boogaloo
+local smods_changebase_hook = SMODS.change_base
+function SMODS.change_base(card, new_suit, ...)
+	if new_suit == "ovn_Optics" then
+		G.GAME.ovn_has_ocular = true
+	end
+
+	local transmute_func
+	if ( -- Non-Optics -> Optics - Corrupt modifiers
+		card.base.suit ~= "ovn_Optics"
+		and new_suit == "ovn_Optics"
+	) then
+		transmute_func = Ovn_f.corrupt_modifiers
+	elseif ( -- Optics -> Non-Optics - Purify modifiers
+		card.base.suit == "ovn_Optics"
+		and new_suit ~= "ovn_Optics"
+	) then
+		transmute_func = Ovn_f.purify_modifiers
+	end
+
+	smods_changebase_hook(card, new_suit, ...)
+	if transmute_func then transmute_func(card) end
 end
