@@ -1406,7 +1406,7 @@ SMODS.Joker { key = 'supplydrop',
 						key = sticker_key
 					})
 				end
-				local sticker_string = "{C:attention}" .. table.concat(sticker_pre_concat, ", ")
+				local sticker_string = "{C:blue}" .. table.concat(sticker_pre_concat, ", ")
 				table.insert(store_info_strings, sticker_string)
 			end
 		else
