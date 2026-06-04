@@ -1016,7 +1016,10 @@ SMODS.Joker { key = 'event_horizon',
 			}
 		end
 	end
-	-- Additional funcitonality in level_up_hand hook and Black Hole ownership
+	-- Additional funcitonality in:
+		-- level_up_hand hook
+		-- Ovn_f.blackhole_upgrade_eventhorizon
+		-- Card:use_consumeable patch, joker_effects.toml
 }
 
 ---------

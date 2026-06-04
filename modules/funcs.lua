@@ -7,7 +7,8 @@
 -- 5. MODIFIER TRANSMUTATION
 -- 6. INSTABILITY
 -- 7. MASTER OF PUPPETS
--- 8. MISCELLANEOUS
+-- 8. CALCULATION MACROS
+-- 9. OTHER GAMEPLAY
 
 
 
@@ -786,5 +787,44 @@ Ovn_f.update_hands_last_played = function(scoring_name)
 	end
 	if scoring_name then
 		G.GAME.hands_last_played[scoring_name] = 0
+	end
+end
+
+-- Plays the Event Horizon juice animation when Black Hole is used.
+---@param card Card
+---@param all_event_horizons Card[]
+---@return nil
+Ovn_f.blackhole_upgrade_eventhorizon = function(card, all_event_horizons)
+	for i,event_horizon in ipairs(all_event_horizons) do
+		local speed = 1 + (i-1)*0.1
+		-- Mult
+		Ovn_f.add_simple_event('after', 0.2/speed, function ()
+			play_sound('tarot1')
+			if card then card:juice_up(0.8, 0.5) end
+			event_horizon:juice_up(0.8, 0.5)
+			card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				instant = true
+			})
+		end)
+		-- Chip
+		Ovn_f.add_simple_event('after', 0.9/speed, function ()
+			play_sound('tarot1')
+			if card then card:juice_up(0.8, 0.5) end
+			event_horizon:juice_up(0.8, 0.5)
+			card_eval_status_text(event_horizon, 'extra', nil, nil, nil, {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.CHIPS,
+				instant = true
+			})
+		end)
+		if i == #all_event_horizons then
+			speed = 1
+		end
+		delay(1.3/speed)
+	end
+	for hand_key in pairs(G.GAME.hands) do
+		level_up_hand(card, hand_key, true)
 	end
 end

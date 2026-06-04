@@ -74,3 +74,36 @@ if G.GAME.modifiers.ovn_eternal_extra_perishable then
 end
 '''
 match_indent = true
+
+# ----
+
+# function Card:use_consumeable
+# Event Horizon effect for Black Hole
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.name == 'Black Hole' then
+'''
+position = "after"
+payload = '''
+local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
+if #all_event_horizons > 0 then
+    Ovn_f.blackhole_upgrade_eventhorizon(self, all_event_horizons)
+else
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+'''
+position = "after"
+payload = '''
+end
+'''
+match_indent = true
+
+# ----
