@@ -108,6 +108,16 @@ Ovn_f.credited_users = function()
 	return users
 end
 
+Ovn_f.calling_func = function()
+	local traceback = debug.traceback()
+	local lines = {}
+	for str in traceback:gmatch("[^\n]+") do
+		table.insert(lines, str)
+	end
+	local lowest_stack_i_guess_question_mark = lines[4]:gsub("^ +", "")
+	print(lowest_stack_i_guess_question_mark)
+end
+
 
 
 -------------------------

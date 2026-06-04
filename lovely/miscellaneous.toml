@@ -124,3 +124,41 @@ payload = '''
 v.button_colour = v.button_colour or (v.ovn_corrupt_challenge and G.C.RARITY['ovn_corrupted']) or nil
 '''
 match_indent = true
+
+# ----
+
+# function G.FUNCS.draw_from_deck_to_hand
+# Tungsten Card fix
+# (Actually a card_limit fix with SMODS in general)
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if cards_to_draw[i] and cards_to_draw[i].ability and cards_to_draw[i].ability.extra_slots_used then
+    SMODS.cards_to_draw = SMODS.cards_to_draw + cards_to_draw[i].ability.extra_slots_used
+    G.E_MANAGER:add_event(Event({
+        trigger = 'immediate',
+        func = function()                
+            SMODS.cards_to_draw = SMODS.cards_to_draw - cards_to_draw[i].ability.extra_slots_used
+            return true
+        end
+    }))
+end
+draw_card(G.deck,G.hand, i*100/hand_space,'up', true, cards_to_draw[i])
+'''
+payload = '''
+if cards_to_draw[i] and cards_to_draw[i].ability and (cards_to_draw[i].ability.extra_slots_used or cards_to_draw[i].ability.card_limit) then
+    SMODS.cards_to_draw = SMODS.cards_to_draw + (cards_to_draw[i].ability.extra_slots_used or 0) - (cards_to_draw[i].ability.card_limit or 0)
+    G.E_MANAGER:add_event(Event({
+        trigger = 'immediate',
+        func = function()                
+            SMODS.cards_to_draw = SMODS.cards_to_draw - (cards_to_draw[i].ability.extra_slots_used or 0) + (cards_to_draw[i].ability.card_limit or 0)
+            return true
+        end
+    }))
+end
+draw_card(G.deck,G.hand, i*100/hand_space,'up', true, cards_to_draw[i])
+'''
