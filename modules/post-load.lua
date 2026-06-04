@@ -49,7 +49,9 @@ G.E_MANAGER:add_event(Event {
 		end
 
 		for _,rarity_modi_def in pairs(Oblivion.rarity_modifier_map) do
-			rarity_modi_def.modifiers = all_modis
+			if rarity_modi_def.modifiers == "*" then
+				rarity_modi_def.modifiers = all_modis
+			end
 		end
 
 		-- Generate list of suit-changing tarots for Prism

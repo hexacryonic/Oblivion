@@ -600,6 +600,7 @@ Ovn_f.get_puppet_jacks = function(rarity)
 			playing_card.base.value == "Jack"
 			and not SMODS.has_no_rank(playing_card)
 			and has_no_modifiers
+			and not playing_card.ovn_targetted_by_master -- flag added by Master
 		) then
 			table.insert(jack_list, playing_card)
 		end
