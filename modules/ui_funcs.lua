@@ -269,6 +269,7 @@ function Ovn_f.localize_desc(desc, config)
 			row_ui_text = SMODS.localize_box(row_text_parsed, {
 				text_colour = config.text_colour,
 				scale = config.scale,
+				shadow = config.shadow
 			})
 		end
 		local padding = row_text_parsed and config.padding or config.empty_line_space

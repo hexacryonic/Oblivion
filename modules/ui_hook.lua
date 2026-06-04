@@ -361,6 +361,7 @@ function G.UIDEF.card_h_popup(card)
 			text_colour = G.C.WHITE,
 			scale = scale/0.32,
 			align = "middle",
+			shadow = true
 		})
 		table.insert(name_rows, corrupted_from_row)
 	end
