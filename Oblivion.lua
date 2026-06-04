@@ -102,7 +102,10 @@ end
 
 Ovn_f.load_directory("modules")
 Ovn_f.load_directory("load-assets")
-Ovn_f.load_directory("items")
+Ovn_f.load_directory("items", function (file_name)
+	-- Stasis purposefully does not get loaded, so skip it here
+	return file_name ~= "-1-0. Stasis.lua"
+end)
 Ovn_f.load_directory("data")
 Ovn_f.load_directory("cross-mod", function (file_name)
 	-- Cross-mod files (named with mod ID) only loaded if mod is loaded
