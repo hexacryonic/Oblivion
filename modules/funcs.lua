@@ -89,7 +89,7 @@ Ovn_f.bi_shallow_copy = function(tbl)
 	return new_table
 end
 
--- Compile a list of credited users and their contributions.
+-- DEBUG: Compile a list of credited users and their contributions.
 ---@return {string: string[]}
 Ovn_f.credited_users = function()
 	local users = {}
@@ -108,14 +108,19 @@ Ovn_f.credited_users = function()
 	return users
 end
 
+-- DEBUG: Call this function inside a function to see exactly where this function is being called from.
+-- It is recommended to print the return value.
+---@return string
 Ovn_f.calling_func = function()
 	local traceback = debug.traceback()
 	local lines = {}
 	for str in traceback:gmatch("[^\n]+") do
 		table.insert(lines, str)
+		if #lines == 4 then break end
 	end
-	local lowest_stack_i_guess_question_mark = lines[4]:gsub("^ +", "")
-	print(lowest_stack_i_guess_question_mark)
+	if #lines ~= 4 then return "???" end
+	local function_thats_calling_the_function_this_function_is_in_ig = lines[4]:gsub("^ +", "")
+	return function_thats_calling_the_function_this_function_is_in_ig
 end
 
 
