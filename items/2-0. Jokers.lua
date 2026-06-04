@@ -697,7 +697,7 @@ SMODS.Joker { key = 'corrupt_visage',
 		}
 	},
 	atlas = 'jokers_corrupt',
-	pos  = { x=0, y=3 },
+	pos  = { x=3, y=2 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -735,7 +735,7 @@ SMODS.Joker { key = 'prideful',
 	config = { extra = { mult = 6 } },
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 4, y = 2 },
+	pos = { x = 1, y = 2 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -783,7 +783,7 @@ SMODS.Joker { key = 'collapsing_world',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=0, y=4},
+	pos = {x=3, y=3},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -884,7 +884,7 @@ SMODS.Joker { key = 'database',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=3, y=3},
+	pos = {x=0, y=3},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -946,7 +946,7 @@ SMODS.Joker { key = 'aeon',
 	end,
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 1, y = 5 },
+	pos = { x = 4, y = 4 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1000,7 +1000,7 @@ SMODS.Joker { key = 'event_horizon',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=3, y=4},
+	pos = {x=0, y=4},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1109,7 +1109,7 @@ SMODS.Joker { key = 'library_of_babel',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=4, y=4},
+	pos = {x=1, y=4},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1165,7 +1165,7 @@ SMODS.Joker { key = 'cultivar',
 	}},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=5, y=4},
+	pos = {x=2, y=4},
 
 	blueprint_compat = true,
 	eternal_compat = false,
@@ -1319,7 +1319,7 @@ SMODS.Joker { key = 'philosophers_stone',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 0, y = 5 },
+	pos = { x = 3, y = 4 },
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -1424,7 +1424,7 @@ SMODS.Joker { key = 'supplydrop',
 	end,
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 3, y = 1 },
+	pos = { x = 2, y = 1 },
 
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -1512,7 +1512,7 @@ SMODS.Joker { key = 'migraine',
 		art = "HexaCryonic"
 	},
 	atlas = 'jokers_corrupt',
-	pos = {x=2, y=3},
+	pos = {x=5, y=2},
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -1549,7 +1549,7 @@ SMODS.Joker { key = 'spiral_of_addiction',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=5, y=3},
+	pos = {x=2, y=3},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1620,7 +1620,7 @@ SMODS.Joker { key = 'cigarette_card',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=4, y=3},
+	pos = {x=1, y=3},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1656,7 +1656,7 @@ SMODS.Joker { key = 'airstrike',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 0, y = 2 },
+	pos = { x = 5, y = 1 },
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -1709,7 +1709,7 @@ SMODS.Joker { key = 'yolo',
 	config = { extra = { xmult = 1.5 } },
 
 	atlas = 'jokers_corrupt',
-	pos = { x = 4, y = 1 },
+	pos = { x = 3, y = 1 },
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -1928,7 +1928,7 @@ SMODS.Joker { key = 'showneverends',
 		art = "HexaCryonic",
 	},
 	atlas = 'jokers_corrupt',
-	pos = { x = 1, y = 2 },
+	pos = { x = 0, y = 2 },
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -1964,7 +1964,7 @@ SMODS.Joker { key = 'infinitesimal',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=1, y=3},
+	pos = {x=4, y=2},
 
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -2062,7 +2062,7 @@ SMODS.Joker { key = 'master_of_puppets',
 	end,
 
 	atlas = 'jokers_corrupt',
-	pos = {x=5, y=1},
+	pos = {x=4, y=1},
 
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -2156,7 +2156,7 @@ SMODS.Joker { key = 'bottled_ship_of_theseus',
 		art = "HexaCryonic"
 	},
 	atlas = 'jokers_corrupt',
-	pos = {x=5, y=2},
+	pos = {x=2, y=2},
 	uses_placeholder_sprite = true,
 
 	blueprint_compat = false,
@@ -2270,8 +2270,8 @@ SMODS.Joker { key = 'nyarlathotep',
 	},
 
 	atlas = 'jokers_corrupt',
-	pos = {x=1, y=4},
-	soul_pos = {x=2, y=4},
+	pos = {x=4, y=3},
+	soul_pos = {x=5, y=3},
 
 	blueprint_compat = true,
 	eternal_compat = true,
