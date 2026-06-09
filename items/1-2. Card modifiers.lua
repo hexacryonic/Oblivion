@@ -477,7 +477,7 @@ SMODS.Seal { key = 'indigo',
 ---------------
 SMODS.Seal { key = 'ruby_mark',
 	credits = {
-		concept = "-- TBD --",
+		concept = {"AlexZGreat", "HexaCryonic"},
 		code = "Oinite",
 		art = "Lil. Mr. Slipstream"
 	},
@@ -519,7 +519,7 @@ SMODS.Seal { key = 'ruby_mark',
 -------------------
 SMODS.Seal { key = 'sapphire_mark',
 	credits = {
-		concept = "-- TBD --",
+		concept = {"AlexZGreat", "HexaCryonic"},
 		code = "Oinite",
 		art = "Lil. Mr. Slipstream"
 	},
