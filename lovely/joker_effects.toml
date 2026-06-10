@@ -84,25 +84,17 @@ match_indent = true
 target = "card.lua"
 pattern = '''
 if self.ability.name == 'Black Hole' then
+    update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
 '''
-position = "after"
+position = "at"
 payload = '''
-local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
-if #all_event_horizons > 0 then
-    Ovn_f.blackhole_upgrade_eventhorizon(self, all_event_horizons)
-else
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''
-update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
-'''
-position = "after"
-payload = '''
-end
+if self.ability.name == 'Black Hole' then
+    local all_event_horizons = SMODS.find_card('j_ovn_event_horizon')
+    if #all_event_horizons > 0 then
+        Ovn_f.blackhole_upgrade_eventhorizon(self, all_event_horizons)
+    else
+        update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+    end
 '''
 match_indent = true
 
