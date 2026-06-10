@@ -54,3 +54,29 @@ if Ovn_f.is_corruptbanished(v.key) then add = nil end
 if v.key == 'j_cavendish' and Ovn_f.has_joker('j_ovn_aeon') then add = true end
 '''
 match_indent = true
+
+# ----
+
+# function copy_card
+# Switch order of set_ability and set_base because causes problems with Death >:(
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+new_card:set_ability(other.config.center)
+new_card.ability.type = other.ability.type
+new_card:set_base(other.config.card)
+'''
+position = "at"
+payload = '''
+if new_card:is_suit("ovn_Optics") then
+    new_card:set_base(other.config.card)
+    new_card:set_ability(other.config.center)
+    new_card.ability.type = other.ability.type
+else
+    new_card:set_ability(other.config.center)
+    new_card.ability.type = other.ability.type
+    new_card:set_base(other.config.card)
+end
+'''
+match_indent = true
