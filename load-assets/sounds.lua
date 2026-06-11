@@ -96,6 +96,17 @@ for key,track_type in pairs(standard_music) do
 	})
 end
 
+SMODS.Sound {
+  key = "music_ovn_menu",
+  path = "music/music_ovn_menu.ogg",
+
+	pitch = 1,
+
+	select_music_track = function()
+		return G.STAGE == G.STAGES.MAIN_MENU
+	end,
+}
+
 
 
 ------------------------
