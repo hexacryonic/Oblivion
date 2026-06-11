@@ -543,6 +543,7 @@ function SMODS.change_base(card, new_suit, ...)
 		transmute_func = Ovn_f.purify_modifiers
 	end
 
-	smods_changebase_hook(card, new_suit, ...)
+	local ret = smods_changebase_hook(card, new_suit, ...)
 	if transmute_func then transmute_func(card) end
+	return ret
 end
