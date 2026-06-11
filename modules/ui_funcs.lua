@@ -202,7 +202,7 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 	end
 
 	-- Cards with seals
-	if card.seal then
+	if card.seal and Ovn_f.descend_table{card.area, "config", "collection"} then
 		local select_seal = SMODS.Seals[card.seal]
 		-- Credits
 		if select_seal.credits then
