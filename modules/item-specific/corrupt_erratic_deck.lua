@@ -215,19 +215,23 @@ function Ovn_f.spawn_erratic_quip(index)
 				T = {0,0,0,0},
 				definition =
 				{n=G.UIT.ROOT, config = {maxw=0, maxh=0, colour=copy_table(G.C.CLEAR)}, nodes={
-					{n=G.UIT.R, config={align="cm", rotate=rotation, func=ondraw, button=onclick}, nodes = {
+					{n=G.UIT.R, config={id="poo", align="cm", rotate=rotation, func=ondraw, button=onclick}, nodes = {
 						{n=G.UIT.O, config={draw_layer = 1, object = text}}
 					}}
 				}},
 				config = {
 					align = 'cm',
 					offset = {
-						x = math.random() * (G.TILE_W - 1) - G.TILE_W / 2,
-						y = math.random() * (G.TILE_H - 1) - G.TILE_H / 2,
+						x = G.TILE_W,
+						y = G.TILE_H,
 					},
 					major = G.play,
 				}
 			}
+			AT:get_UIE_by_ID("poo"):align(
+				(math.random() * (G.TILE_W - 1) - G.TILE_W / 2) - G.TILE_W,
+				(math.random() * (G.TILE_H - 1) - G.TILE_H / 2) - G.TILE_H
+			)
 			AT.attention_text = true
 			text:pulse(0.5)
 			return true
