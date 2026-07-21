@@ -341,6 +341,56 @@ SMODS.Back { key = "c_painted",
 }
 
 ----------------------
+-- Corrupt Anaglyph Deck
+----------------------
+SMODS.Back { key = "c_anaglyph",
+	ovn_corrupt_deck = true,
+	ovn_pure_version = "b_anaglyph",
+
+	atlas = "decks_corrupt",
+	pos = { x = 2, y = 2 },
+
+	config = {
+		tag_count = 1,
+	},
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
+
+	apply = function (self)
+		add_simple_event('immediate', nil, function()
+			for _ = 1, self.config.tag_count do
+				add_tag(Tag("tag_double"))
+			end
+		end)
+	end,
+
+	calculate = function(self, card, context)
+		if context.beat_boss and not G.GAME.countincrease then
+			G.GAME.countincrease = true
+			add_simple_event(nil, nil, function()
+				G.GAME.skiptriggered = false
+				self.config.tag_count = self.config.tag_count + 0.5
+				for _ = 1, self.config.tag_count do
+					add_tag(Tag("tag_double"))
+				end
+			end)
+		end
+
+		if not G.GAME.skiptriggered then
+			if G.STATE == G.STATES.BLIND_SELECT and (G.GAME.blind_on_deck == 'Small') and (G.blind_select.UIRoot.children[1].children[2].config.object:get_UIE_by_ID('tag_desc') ~= nil) then
+			G.GAME.skiptriggered = true
+			G.GAME.countincrease = false
+				add_simple_event(nil, nil, function()
+					Ovn_f.detached_skip_blind()
+				end)
+			end
+		end
+	end,
+}
+
+----------------------
 -- Corrupt Plasma Deck
 ----------------------
 SMODS.Back { key = "c_plasma",

@@ -99,6 +99,18 @@ b_ovn_c_painted = {
     },
     unlock = corrupt_deck_unlock()
 },
+b_ovn_c_anaglyph = {
+    name = 'Corrupt Anaglyph Deck',
+    text = {
+        "Gain a {C:attention,T:tag_double}Double Tag{} each",
+        "{C:attention}Ante{}, and {C:attention}+1{} every",
+        "{C:attention}2 Boss Blinds{} defeated",
+        "{s:0.3} {}",
+        "{C:attention}Small Blinds{} are",
+        "{C:mult}automatically skipped{}"
+    },
+    unlock = corrupt_deck_unlock()
+},
 b_ovn_c_plasma = {
     name = 'Corrupt Plasma Deck',
     text = {
