@@ -379,13 +379,15 @@ SMODS.Back { key = "c_anaglyph",
 		end
 
 		if not G.GAME.skiptriggered then
-			if G.STATE == G.STATES.BLIND_SELECT and (G.GAME.blind_on_deck == 'Small') and (G.blind_select.UIRoot.children[1].children[2].config.object:get_UIE_by_ID('tag_desc') ~= nil) then
-			G.GAME.skiptriggered = true
-			G.GAME.countincrease = false
-				add_simple_event(nil, nil, function()
-					Ovn_f.detached_skip_blind()
-				end)
-			end
+			add_simple_event(nil, nil, function ()
+				if G.STATE == G.STATES.BLIND_SELECT and (G.GAME.blind_on_deck == 'Small') and (G.blind_select.UIRoot.children[1].children[2].config.object:get_UIE_by_ID('tag_desc') ~= nil) then
+					G.GAME.skiptriggered = true
+					G.GAME.countincrease = false
+					add_simple_event(nil, nil, function()
+						Ovn_f.detached_skip_blind()
+					end)
+				end
+			end)
 		end
 	end,
 }
