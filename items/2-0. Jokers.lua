@@ -1347,7 +1347,10 @@ SMODS.Joker { key = 'philosophers_stone',
 	atlas = 'jokers_corrupt',
 	pos = { x = 3, y = 4 },
 
-	attributes = { "rank", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "enhancements", "modify_card" },
+	attributes = {
+		"rank", "two", "three", "four", "five", "six",
+		"seven", "eight", "nine", "ten", "enhancements", "modify_card"
+	},
 	blueprint_compat = false,
 	eternal_compat = true,
 	perishable_compat = true,

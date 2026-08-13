@@ -113,6 +113,17 @@ SMODS.Sound {
 ---- A PART FALLING ----
 ------------------------
 
+local function play_apartfalling(context_list)
+	return function()
+		return (
+			not Oblivion.config.disable_a_part_falling_music
+			and G.GAME
+			and Ovn_f.has_joker('j_ovn_apartfalling')
+			and context_list[desired_track()]
+		) and 5 or false
+	end
+end
+
 SMODS.Sound {
 	key = "music_apf",
 	path = "music/music_apf.ogg",
@@ -121,19 +132,12 @@ SMODS.Sound {
 	pitch = 1,
 	volume = 0.6,
 
-	select_music_track = function()
-		return (
-			not Oblivion.config.disable_a_part_falling_music
-			and G.GAME
-			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and ({
-				["music_booster"] = true,
-				["music_planets"] = true,
-				["music_shop"] = true,
-				["music_blind_select"] = true,
-			})[desired_track()]
-		) and 5 or false
-	end,
+	select_music_track = play_apartfalling({
+		["music_booster"] = true,
+		["music_planets"] = true,
+		["music_shop"] = true,
+		["music_blind_select"] = true,
+	}),
 }
 
 SMODS.Sound {
@@ -144,23 +148,16 @@ SMODS.Sound {
 	pitch = 1,
 	volume = 0.5,
 
-	select_music_track = function()
-		local track = desired_track()
-		return (
-			not Oblivion.config.disable_a_part_falling_music
-			and G.GAME
-			and Ovn_f.has_joker('j_ovn_apartfalling')
-			and ({
-				["music_boss"] = true,
-				["music_normal"] = true,
-			})[desired_track()]
-		) and 5 or false
-	end,
+	select_music_track = play_apartfalling({
+		["music_boss"] = true,
+		["music_normal"] = true,
+	}),
 }
 
 -------------------
 ---- SUPERBOSS ----
 -------------------
+--[[
 SMODS.Sound {
 	key = "music_doom",
 	path = "music/music_doom.ogg",
@@ -191,3 +188,4 @@ SMODS.Sound {
 		return G.GAME and G.GAME.imcoming
 	end,
 }
+]]

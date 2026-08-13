@@ -9,6 +9,7 @@
 	"priority": 69420,
 	"badge_colour": "4168ed",
 	"badge_text_colour": "ffffff",
+	"icon_path": "modicon.png",
 	"version": "0.6.0~DEMO",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-1501a)"
