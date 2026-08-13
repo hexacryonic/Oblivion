@@ -297,6 +297,81 @@ SMODS.Back { key = "c_abandoned",
     end,
 }
 
+SMODS.Back { key = "c_checkered",
+	ovn_corrupt_deck = true,
+	ovn_pure_version = "b_checkered",
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			self.config.increased_odds,
+			self.config.card_count,
+			self.config.lose_condition*100
+		}}
+	end,
+	config = {
+		lose_condition = 0.75,
+		increased_odds = 3,
+		card_count = 2
+	},
+
+	atlas = "decks_corrupt",
+	pos = { x = 4, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
+
+	calculate = function (self, back, context)
+		if context.before then
+			delay(0.25)
+			for _,card in ipairs(G.play.cards) do if not SMODS.has_no_suit(card) then
+				local other_cards = {}
+				for _,other_card in ipairs(G.deck.cards) do
+					if not SMODS.has_no_suit(other_card) and other_card.base.suit ~= card.base.suit then
+						table.insert(other_cards, other_card)
+					end
+				end
+
+				for i=1,self.config.card_count do
+					local target,index = pseudorandom_element(other_cards, "ovn_c_checkered_get_" .. i)
+					if i ~= self.config.card_count then
+						table.remove(other_cards, index)
+					end
+					assert(SMODS.change_base(target, card.base.suit))
+
+					add_simple_event("after", 0.5, function ()
+						card:juice_up()
+						play_sound('tarot1')
+					end)
+				end
+			end end
+			delay(0.75)
+		end
+
+		if context.after then
+			local track_suits = {}
+			for _,card in ipairs(G.deck.cards) do
+				track_suits[card.base.suit] = (track_suits[card.base.suit] or 0) + 1
+				if track_suits[card.base.suit] > (#G.deck.cards*self.config.lose_condition) then
+					print("thing")
+					Ovn_f.nested_event(1, nil, nil, function ()
+						G.STATE = G.STATES.GAME_OVER
+						G.STATE_COMPLETE = false
+					end)
+					break
+				end
+			end
+		end
+
+		if context.modify_weights and context.pool_types["Tarot"] then
+			for _,pool_item in ipairs(context.pool) do
+				if Oblivion.suit_changing_tarots[pool_item.key] then
+					pool_item.weight = pool_item.weight*self.config.increased_odds
+				end
+			end
+		end
+	end
+}
+
 -----------------------
 -- Corrupt Painted Deck
 -----------------------

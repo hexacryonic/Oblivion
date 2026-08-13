@@ -90,6 +90,17 @@ b_ovn_c_abandoned = {
     },
     unlock = corrupt_deck_unlock()
 },
+b_ovn_c_checkered = {
+    name = 'Corrupt Checkered Deck',
+    text = {
+        "{C:tarot}Suit-changing {}Tarots",
+        "appear {C:attention}#1#X {}more often",
+        "Played cards infect {C:attention}#2#",
+        "random cards with their suit",
+        "If {C:red}#3#% {}of cards share",
+        "the same suit, {C:red,E:2}Game Over"
+    }
+},
 b_ovn_c_painted = {
     name = 'Corrupt Painted Deck',
     text = {
