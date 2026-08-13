@@ -359,33 +359,42 @@ SMODS.Back { key = "c_anaglyph",
 	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self)
+		G.GAME.ovn_c_anaglyph_tag_count = self.config.tag_count
 		add_simple_event('immediate', nil, function()
-			for _ = 1, self.config.tag_count do
+			for _ = 1, G.GAME.ovn_c_anaglyph_tag_count do
 				add_tag(Tag("tag_double"))
 			end
 		end)
 	end,
 
 	calculate = function(self, card, context)
-		if context.beat_boss and not G.GAME.countincrease then
-			G.GAME.countincrease = true
+		-- card.skip_triggered required to skip only after boss blind
+		-- card.count_increase required to prevent the following if-block from spamming double tags
+
+		if context.beat_boss and not card.count_increase then
+			card.count_increase = true
 			add_simple_event(nil, nil, function()
-				G.GAME.skiptriggered = false
-				self.config.tag_count = self.config.tag_count + 0.5
-				for _ = 1, self.config.tag_count do
+				card.skip_triggered = false
+				G.GAME.ovn_c_anaglyph_tag_count = G.GAME.ovn_c_anaglyph_tag_count + 0.5
+				for _ = 1, G.GAME.ovn_c_anaglyph_tag_count do
 					add_tag(Tag("tag_double"))
 				end
 			end)
 		end
 
-		if not G.GAME.skiptriggered then
-			if G.STATE == G.STATES.BLIND_SELECT and (G.GAME.blind_on_deck == 'Small') and (G.blind_select.UIRoot.children[1].children[2].config.object:get_UIE_by_ID('tag_desc') ~= nil) then
-				G.GAME.skiptriggered = true
-				G.GAME.countincrease = false
-				add_simple_event(nil, nil, function()
-					Ovn_f.detached_skip_blind()
-				end)
-			end
+		if (
+			not card.skip_triggered -- This line true if `context.beat_boss` was run
+			and (
+				context.ovn_run_started
+				and context.new_run
+				or context.ending_shop
+			)
+		) then
+			card.skip_triggered = true
+			card.count_increase = false
+			Ovn_f.nested_event(3, "after", 1, function ()
+				Ovn_f.detached_skip_blind()
+			end)
 		end
 	end,
 }

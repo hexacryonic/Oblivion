@@ -77,6 +77,18 @@ Ovn_f.add_simple_event = function(trigger, delay, func)
 	})
 end
 
+-- Adds a nested simple event to G.E_MANAGER, allowing the specified function to be cleanly delayed.\
+-- Event function will always return true, so "return true" is not required.\
+Ovn_f.nested_event = function (count, trigger, delay, func)
+	if count == 0 then
+		Ovn_f.add_simple_event(trigger, delay, func)
+	else
+		Ovn_f.add_simple_event(nil, nil, function ()
+			Ovn_f.nested_event(count - 1, trigger, delay, func)
+		end)
+	end
+end
+
 -- Loads all Lua files in a directory.
 ---@param folder_name string
 ---@param condition_function? fun(file_name: string): boolean
