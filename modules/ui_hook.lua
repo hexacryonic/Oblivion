@@ -292,6 +292,55 @@ function G.UIDEF.run_setup_option(type)
 	return t
 end
 
+function Ovn_f.poo()
+	local suit_count = {}
+	local suit_list = {}
+	for _,card in ipairs(G.playing_cards) do
+		if not SMODS.has_no_suit(card) then
+			if not suit_count[card.base.suit] then
+				suit_count[card.base.suit] = 0
+				table.insert(suit_list, card.base.suit)
+			end
+			suit_count[card.base.suit] = suit_count[card.base.suit] + 1
+		end
+	end
+	table.sort(suit_list, function(a,b)
+		return suit_count[a] < suit_count[b] or SMODS.Suits[a].sort_id > SMODS.Suits[b].sort_id
+	end)
+
+	local w,h = 75, 75
+	local c = SMODS.CanvasSprite{
+		W=2,H=2, canvasW=w,canvasH=h, canvasScale=1
+	}
+	love.graphics.push()
+	love.graphics.origin()
+	c.canvas:renderTo(function ()
+		local previous_angle = -math.pi/2
+		for _,suit in ipairs(suit_list) do
+			local colour = lighten(G.C.SUITS[suit], 0.1)
+			local arclength = -2*math.pi*(suit_count[suit]/#G.playing_cards)
+			love.graphics.setColor(unpack(colour))
+			love.graphics.arc("fill", w/2, w/2, w/2, previous_angle, previous_angle + arclength)
+			previous_angle = previous_angle + arclength
+		end
+	end)
+	love.graphics.pop()
+	return
+	{n=G.UIT.C, config={align="cm", padding=0.1}, nodes={
+		{n=G.UIT.O, config={ minw=2, minh=2, colour=G.C.RED, object=c }}
+	}}
+end
+
+-- Hook to show pie chart on Corrupt Checkered Deck
+local uidef_deckpreview_hook = G.UIDEF.deck_preview
+function G.UIDEF.deck_preview(args)
+	local t = uidef_deckpreview_hook(args)
+	if Ovn_f.on_deck("c_checkered") then
+		table.insert(t.nodes[1].nodes[1].nodes, Ovn_f.poo())
+	end
+	return t
+end
+
 
 
 ---------------------------
