@@ -305,7 +305,10 @@ function Ovn_f.poo()
 		end
 	end
 	table.sort(suit_list, function(a,b)
-		return suit_count[a] < suit_count[b] or SMODS.Suits[a].sort_id > SMODS.Suits[b].sort_id
+		if suit_count[a] == suit_count[b] then
+			return SMODS.Suits[a].sort_id > SMODS.Suits[b].sort_id
+		end
+		return suit_count[a] < suit_count[b]
 	end)
 
 	local w,h = 75, 75
