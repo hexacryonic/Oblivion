@@ -49,14 +49,26 @@ Oblivion.obj.calculate = function (self, context)
             end
         end
         Ovn_f.optic_instability(optics_count)
+
+		-- Update suit chart
+		if G.ovn_suit_chart then
+			Ovn_f.update_suit_chart()
+		end
     end
 
 	-----------------
 	-- On suit change
 	-----------------
-    if context.change_suit and context.new_suit == "ovn_Optics" then
-        -- Increase instability when playing card converted to Optics
-        Ovn_f.optic_instability(1)
+    if context.change_suit then
+		-- Increase instability when playing card converted to Optics
+		if context.new_suit == "ovn_Optics" then
+	        Ovn_f.optic_instability(1)
+	    end
+
+		-- Update suit chart
+		if G.ovn_suit_chart then
+			Ovn_f.update_suit_chart()
+		end
     end
 
 	---------------------
@@ -93,6 +105,11 @@ Oblivion.obj.calculate = function (self, context)
     if context.ovn_card_removed then
         -- Stop juicing corruptible Jokers if no more corrupting consumables are present
         check_stop_juice_corruptibles()
+
+		-- Update suit chart
+		if G.ovn_suit_chart and context.card.base and context.card.base.suit then
+			Ovn_f.update_suit_chart()
+		end
     end
 
 	--------------------------------

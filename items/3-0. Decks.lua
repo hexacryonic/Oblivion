@@ -264,9 +264,9 @@ SMODS.Back { key = "c_ghost",
 	end,
 }
 
------------------------
+-------------------------
 -- Corrupt Abandoned Deck
------------------------
+-------------------------
 SMODS.Back { key = "c_abandoned",
 	ovn_corrupt_deck = true,
 	ovn_pure_version = "b_abandoned",
@@ -297,6 +297,9 @@ SMODS.Back { key = "c_abandoned",
     end,
 }
 
+-------------------------
+-- Corrupt Checkered Deck
+-------------------------
 SMODS.Back { key = "c_checkered",
 	ovn_corrupt_deck = true,
 	ovn_pure_version = "b_checkered",
@@ -320,6 +323,11 @@ SMODS.Back { key = "c_checkered",
 	check_for_unlock = corrupt_deck_unlock,
 	locked_loc_vars = corrupt_deck_lockedvars,
 
+	apply = function (self, back)
+		add_simple_event(nil, nil, function ()
+			Ovn_f.initialize_suit_chart()
+		end)
+	end,
 	calculate = function (self, back, context)
 		if context.before then
 			delay(0.25)
@@ -336,12 +344,11 @@ SMODS.Back { key = "c_checkered",
 					if i ~= self.config.card_count then
 						table.remove(other_cards, index)
 					end
-					assert(SMODS.change_base(target, card.base.suit))
-
 					add_simple_event("after", 0.5, function ()
 						card:juice_up()
 						play_sound('tarot1')
 					end)
+					assert(SMODS.change_base(target, card.base.suit))
 				end
 			end end
 			delay(0.75)

@@ -69,6 +69,7 @@ PlayLog = PlayLog or {
 ---@param func function
 ---@return nil
 Ovn_f.add_simple_event = function(trigger, delay, func)
+	if trigger == "instant" then func(); return end
 	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
 	G.E_MANAGER:add_event(Event {
 		trigger = trigger,

@@ -8,8 +8,6 @@
 -- 4. GAME OBJECT
 -- 5. STEAMODDED HOOKS
 
-
-
 --------------------------
 ---- GLOBAL FUNCTIONS ----
 --------------------------
@@ -210,18 +208,19 @@ end
 -- Hook to transmute modifiers on cards with changed suits
 local card_changesuit_hook = Card.change_suit
 function Card:change_suit(new_suit)
+	local old_suit = self.base.suit
 	if new_suit == "ovn_Optics" then
 		G.GAME.ovn_has_ocular = true
 	end
 
 	local transmute_func
 	if ( -- Non-Optics -> Optics - Corrupt modifiers
-		self.base.suit ~= "ovn_Optics"
+		old_suit ~= "ovn_Optics"
 		and new_suit == "ovn_Optics"
 	) then
 		transmute_func = Ovn_f.corrupt_modifiers
 	elseif ( -- Optics -> Non-Optics - Purify modifiers
-		self.base.suit == "ovn_Optics"
+		old_suit == "ovn_Optics"
 		and new_suit ~= "ovn_Optics"
 	) then
 		transmute_func = Ovn_f.purify_modifiers
@@ -526,18 +525,19 @@ end
 -- Hook to transmute modifiers on cards with changed suits 2: Eleectric Boogaloo
 local smods_changebase_hook = SMODS.change_base
 function SMODS.change_base(card, new_suit, ...)
+	local old_suit = card.base.suit
 	if new_suit == "ovn_Optics" then
 		G.GAME.ovn_has_ocular = true
 	end
 
 	local transmute_func
 	if ( -- Non-Optics -> Optics - Corrupt modifiers
-		card.base.suit ~= "ovn_Optics"
+		old_suit ~= "ovn_Optics"
 		and new_suit == "ovn_Optics"
 	) then
 		transmute_func = Ovn_f.corrupt_modifiers
 	elseif ( -- Optics -> Non-Optics - Purify modifiers
-		card.base.suit == "ovn_Optics"
+		old_suit == "ovn_Optics"
 		and new_suit ~= "ovn_Optics"
 	) then
 		transmute_func = Ovn_f.purify_modifiers

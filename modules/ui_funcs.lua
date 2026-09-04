@@ -133,6 +133,121 @@ end
 
 
 
+--------------------
+---- SUIT CHART ----
+--------------------
+
+-- Generates the suit chart.
+---@return nil
+function Ovn_f.initialize_suit_chart()
+	local w = 85
+	local outline = 4
+	local shadow_offset = 6
+	G.ovn_suit_chart_cfg = {
+		w = 85,
+		outline = 4,
+		shadow_offset = 6
+	}
+	local full_w = w + 2*outline + shadow_offset
+
+	local c = SMODS.CanvasSprite{
+		W=G.CARD_W,H=G.CARD_W, canvasW= full_w,canvasH=full_w, canvasScale= 1
+	}
+	love.graphics.push()
+	love.graphics.origin()
+	c.canvas:renderTo(function ()
+		local middle = w/2 + outline
+		local radius = w/2
+		local shadow_colour = {0,0,0,0.4}
+		love.graphics.setColor(unpack(shadow_colour))
+		love.graphics.circle("fill", middle + shadow_offset, middle + shadow_offset, radius + outline)
+	end)
+	love.graphics.pop()
+	G.ovn_suit_chart = UIBox{
+		definition =
+		JTML.flex{mode="column", style={colour={0,0,0,0}}, {
+			JTML.flex{style={align="center-middle", padding=0.1}, {
+				JTML.object{id="canvas", style={WH={G.CARD_W,G.CARD_W}, colour=G.C.RED}, object=c}
+			}}
+		}},
+		config = {
+			major = G.deck,
+			align = 'tm',
+			offset = {x=0.2, y=-0.2},
+			bond = 'Weak'
+		}
+	}
+	Ovn_f.update_suit_chart(true)
+end
+
+-- Updates the suit chart.
+---@param instant? boolean If true, the update will not occur during an event.
+---@return nil
+function Ovn_f.update_suit_chart(instant)
+	-- BUG: improper update when changing cards outside scoring
+	local suit_count = {}
+	local suit_list = {}
+	for _,card in ipairs(G.playing_cards) do
+		if not SMODS.has_no_suit(card) then
+			if not suit_count[card.base.suit] then
+				suit_count[card.base.suit] = 0
+				table.insert(suit_list, card.base.suit)
+			end
+			suit_count[card.base.suit] = suit_count[card.base.suit] + 1
+		end
+	end
+	table.sort(suit_list, function(a,b)
+		if suit_count[a] == suit_count[b] then
+			return SMODS.Suits[a].sort_id > SMODS.Suits[b].sort_id
+		end
+		return suit_count[a] < suit_count[b]
+	end)
+	print(suit_count)
+
+	local w = G.ovn_suit_chart_cfg.w
+	local outline = G.ovn_suit_chart_cfg.outline
+	local shadow_offset = G.ovn_suit_chart_cfg.shadow_offset
+	local full_w = w + 2*outline + shadow_offset
+
+	local c = G.ovn_suit_chart:get_UIE_by_ID("canvas").config.object.canvas
+	Ovn_f.add_simple_event(instant and "instant" or "after", 0, function ()
+		c:renderTo(function ()
+			local middle = w/2 + outline
+			local radius = w/2
+
+			local suitless_colour_under = darken(G.C.UI.BACKGROUND_INACTIVE, 0.6)
+			suitless_colour_under[2] = suitless_colour_under[2]*1.4
+			love.graphics.setColor(unpack(suitless_colour_under))
+			love.graphics.circle("fill", middle, middle, radius + outline)
+
+			local suitless_colour = lighten(G.C.UI.BACKGROUND_INACTIVE, 0.1)
+			love.graphics.setColor(unpack(suitless_colour))
+			love.graphics.circle("fill", middle, middle, radius)
+
+			local previous_angle_under = -math.pi/2
+			for _,suit in ipairs(suit_list) do
+				local colour = darken(G.C.SUITS[suit], 0.6)
+				colour[2] = colour[2]*1.4
+				local arclength = -2*math.pi*(suit_count[suit]/#G.playing_cards)
+				love.graphics.setColor(unpack(colour))
+				love.graphics.arc("fill", middle, middle, radius + outline, previous_angle_under, previous_angle_under + arclength)
+				previous_angle_under = previous_angle_under + arclength
+			end
+
+			local previous_angle = -math.pi/2
+			for _,suit in ipairs(suit_list) do
+				local colour = lighten(G.C.SUITS[suit], 0.1)
+				local arclength = -2*math.pi*(suit_count[suit]/#G.playing_cards)
+				love.graphics.setColor(unpack(colour))
+				love.graphics.arc("fill", middle, middle, radius, previous_angle, previous_angle + arclength)
+				previous_angle = previous_angle + arclength
+			end
+		end)
+	end)
+end
+
+
+
 -----------------------
 ---- MISCELLANEOUS ----
 -----------------------
