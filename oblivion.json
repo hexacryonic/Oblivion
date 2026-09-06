@@ -6,7 +6,7 @@
 	"description": "An expansion to Balatro themed around an otherworldly corruption! Please enable this mod for more information.",
 	"prefix": "ovn",
 	"main_file": "Oblivion.lua",
-	"priority": 69420,
+	"priority": 69,
 	"badge_colour": "4168ed",
 	"badge_text_colour": "ffffff",
 	"icon_path": "modicon.png",
