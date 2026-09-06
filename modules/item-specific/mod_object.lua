@@ -37,6 +37,26 @@ local function check_stop_juice_corruptibles()
 end
 
 Oblivion.obj.calculate = function (self, context)
+	---------------
+	-- MODE
+	-- Costly Hands
+	---------------
+	if G.GAME.ovn_costly_hands then
+		if context.pre_discard and G.GAME.ovn_costly_hands.discard_cost ~= 0 then
+			ease_dollars(-G.GAME.ovn_costly_hands.discard_cost)
+			delay(0.2)
+			Ovn_f.try_punish_unaffordable_hand()
+		end
+
+		if context.before and G.GAME.ovn_costly_hands.hand_cost ~= 0 then
+			ease_dollars(-G.GAME.ovn_costly_hands.hand_cost)
+			delay(0.2)
+		end
+		if context.after then
+			Ovn_f.try_punish_unaffordable_hand()
+		end
+	end
+
 	---------------------------
 	-- On adding a playing card
 	---------------------------
@@ -174,23 +194,35 @@ Oblivion.obj.calculate = function (self, context)
         context.other_card.ovn_apache_counted = nil
     end
 
-	--------------------------------
-	-- On NEW run start (Ovn-custom)
-	--------------------------------
-    if context.ovn_run_started and context.new_run then
-        -- Reverse Wicked Invocation effect
-        G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0
-        G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0
-        G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0
-        G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0
-    end
-
 	--------------------
 	-- On run start/load
 	--------------------
     if context.ovn_run_started then
         ease_background_colour_blind()
     end
+end
+
+----------------------------
+---- RESET GAME GLOBALS ----
+----------------------------
+
+Oblivion.obj.reset_game_globals = function (run_start)
+	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
+	SMODS.Scoring_Parameters["ovn_instability"].current = G.GAME.ovn_instability or 1
+
+	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
+	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
+
+	G.GAME.ovn_cghost_pseudorandom = {}
+
+	if not G.GAME.hands_last_played then
+		G.GAME.hands_last_played = {}
+		for key in pairs(SMODS.PokerHands) do
+			G.GAME.hands_last_played[key] = -1
+		end
+	end
+
+	if not run_start then return end
 end
 
 --------------------------

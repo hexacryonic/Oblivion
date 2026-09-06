@@ -3,7 +3,7 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# lovely/corrupt_green_deck.toml
+# lovely/complex_economy.toml
 # Corrupt Green Deck-specific changes
 # In particular these changes are for complex cost support.
 
@@ -17,7 +17,7 @@ priority = 0
 # FUNDAMENTALS #
 # ------------ #
 
-# function G.FUNCS.cash_out
+# The following two on function G.FUNCS.cash_out
 
 # If on Corrupt Green Deck, then ease_dollars -> Ovn_f.ease_complex_dollars
 [[patches]]
@@ -26,7 +26,7 @@ target = "functions/button_callbacks.lua"
 pattern = "ease_dollars(G.GAME.current_round.dollars)"
 position = "at"
 payload = '''
-if not Ovn_f.on_deck('c_green') then
+if not G.GAME.ovn_complex_economy then
   ease_dollars(G.GAME.current_round.dollars)
 else
   Ovn_f.ease_complex_dollars(G.GAME.current_round.dollars, G.GAME.current_round.dollars_i)
@@ -72,7 +72,7 @@ sell = {n=G.UIT.C, config={align = "cr"}, nodes={
 '''
 position = "after"
 payload = '''
-if Ovn_f.on_deck('c_green') then
+if G.GAME.ovn_complex_economy then
   sell = {n=G.UIT.C, config={align = "cr"}, nodes={
     {n=G.UIT.C, config={ref_table = card, align = "cr",padding = 0.1, r=0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card'}, nodes={
       {n=G.UIT.B, config = {w=0.1,h=0.6}},
@@ -108,7 +108,7 @@ local t1 = {
 '''
 position = "after"
 payload = '''
-if Ovn_f.on_deck('c_green') then
+if G.GAME.ovn_complex_economy then
   t1.nodes[1].nodes[1].config.object:remove()
   t1 = {
       n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
@@ -130,7 +130,7 @@ match_indent = true
 target = "game.lua"
 pattern = "create_shop_card_ui(v)"
 position = "before"
-payload = "if Ovn_f.on_deck('c_green') then Ovn_f.set_complex_cost_labels(v) end"
+payload = "if G.GAME.ovn_complex_economy then v:set_cost() end"
 match_indent = true
 
 
@@ -151,7 +151,7 @@ end
 '''
 position = "at"
 payload = '''
-if not Ovn_f.on_deck('c_green') then
+if not G.GAME.ovn_complex_economy then
   if c1.cost ~= 0 then
     ease_dollars(-c1.cost)
   end
@@ -172,7 +172,7 @@ target = "card.lua"
 pattern = "ease_dollars(self.sell_cost)"
 position = "at"
 payload = '''
-if Ovn_f.on_deck('c_green') then
+if G.GAME.ovn_complex_economy then
   local sell_cost, sell_i = Ovn_f.get_complex_sell_cost(self)
   Ovn_f.ease_complex_dollars(sell_cost, sell_i)
 else
@@ -193,11 +193,108 @@ target = "card.lua"
 pattern = "ease_dollars(-self.cost)"
 position = "at"
 payload = '''
-if Ovn_f.on_deck('c_green') then
+if G.GAME.ovn_complex_economy then
   local cost, cost_i = Ovn_f.get_complex_cost(self)
   Ovn_f.ease_complex_dollars(-cost, -cost_i)
 else
   ease_dollars(-self.cost)
+end
+'''
+match_indent = true
+
+
+
+# ---------------- #
+# ROUND EVALUATION #
+# ---------------- #
+# All following patches, unless otherwise stated,
+# affect the function G.FUNCS.evaluate_round
+
+# Set up dollars_i variable
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "local dollars = 0"
+position = "after"
+payload = "local dollars_i = 0"
+match_indent = true
+
+# Set up per-hand and per-discard imaginary cash-out
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.current_round.hands_left > 0 and not G.GAME.modifiers.no_extra_hand_money then
+    add_round_eval_row({dollars = G.GAME.current_round.hands_left*(G.GAME.modifiers.money_per_hand or 1), disp = G.GAME.current_round.hands_left, bonus = true, name='hands', pitch = pitch})
+    pitch = pitch + 0.06
+    dollars = dollars + G.GAME.current_round.hands_left*(G.GAME.modifiers.money_per_hand or 1)
+end
+if G.GAME.current_round.discards_left > 0 and G.GAME.modifiers.money_per_discard then
+    add_round_eval_row({dollars = G.GAME.current_round.discards_left*(G.GAME.modifiers.money_per_discard), disp = G.GAME.current_round.discards_left, bonus = true, name='discards', pitch = pitch})
+    pitch = pitch + 0.06
+    dollars = dollars +  G.GAME.current_round.discards_left*(G.GAME.modifiers.money_per_discard)
+end
+'''
+position = "after"
+payload = '''
+if G.GAME.ovn_complex_economy then
+    if G.GAME.current_round.hands_left > 0 and G.GAME.modifiers.money_i_per_hand then
+        Ovn_f.add_complex_roundeval_row({dollars = G.GAME.current_round.hands_left*(G.GAME.modifiers.money_i_per_hand), disp = G.GAME.current_round.hands_left, bonus = true, name='hands', pitch = pitch})
+        pitch = pitch + 0.06
+        dollars_i = dollars_i + G.GAME.current_round.hands_left*(G.GAME.modifiers.money_i_per_hand)
+    end
+    if G.GAME.current_round.discards_left > 0 and G.GAME.modifiers.money_i_per_discard then
+        Ovn_f.add_complex_roundeval_row({dollars = G.GAME.current_round.discards_left*(G.GAME.modifiers.money_i_per_discard), disp = G.GAME.current_round.discards_left, bonus = true, name='discards', pitch = pitch})
+        pitch = pitch + 0.06
+        dollars_i = dollars_i +  G.GAME.current_round.discards_left*(G.GAME.modifiers.money_i_per_discard)
+    end
+end
+'''
+match_indent = true
+
+# Set up imaginary interest
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.dollars >= 5 and not G.GAME.modifiers.no_interest then
+    add_round_eval_row({bonus = true, name='interest', pitch = pitch, dollars = G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)})
+    pitch = pitch + 0.06
+    if (not G.GAME.seeded and not G.GAME.challenge) or SMODS.config.seeded_unlocks then
+        if G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5) == G.GAME.interest_amount*G.GAME.interest_cap/5 then 
+            G.PROFILES[G.SETTINGS.profile].career_stats.c_round_interest_cap_streak = G.PROFILES[G.SETTINGS.profile].career_stats.c_round_interest_cap_streak + 1
+        else
+            G.PROFILES[G.SETTINGS.profile].career_stats.c_round_interest_cap_streak = 0
+        end
+    end
+    check_for_unlock({type = 'interest_streak'})
+    dollars = dollars + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
+end
+'''
+position = "after"
+payload = '''
+if G.GAME.ovn_complex_economy and G.GAME.dollars_i >= 5 then
+    local interest_i = math.min(math.floor(G.GAME.dollars_i/5), G.GAME.interest_cap/5)
+    Ovn_f.add_complex_roundeval_row({bonus = true, name = 'interest', pitch = pitch, dollars = interest_i})
+    pitch = pitch + 0.06
+    dollars_i = dollars_i + interest_i
+end
+'''
+match_indent = true
+
+# Override cashout button to use complex dollars
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+add_round_eval_row({name = 'bottom', dollars = dollars})
+'''
+position = "at"
+payload = '''
+if G.GAME.ovn_complex_economy then
+    Ovn_f.add_complex_cashout_button(dollars, dollars_i)
+else
+    add_round_eval_row({name = 'bottom', dollars = dollars})
 end
 '''
 match_indent = true

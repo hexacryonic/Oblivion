@@ -393,25 +393,8 @@ SMODS.Voucher { key = "wicked_invocation",
 	atlas = "vouchers",
 	pos = {x=0, y=0},
 	cost = 10,
-
-	redeem = function(self, card)
-		add_simple_event(nil, nil, function()
-			G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0.6
-		end)
-	end,
-
-	calculate = function (self, card, context)
-		if context.ovn_run_started then
-			G.P_CENTERS["p_ovn_wicked_normal_1"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_2"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_3"].weight = 0.6
-			G.P_CENTERS["p_ovn_wicked_normal_4"].weight = 0.6
-		end
-	end
 }
+-- Functionality in Wicked Packs, get_weight method
 
 -------------------
 -- VOUCHER

@@ -11,98 +11,19 @@ local JTML = Ovn_f.JTML
 ---- SUPPLEMENTARY FUNCTIONS ----
 ---------------------------------
 
--- Generates the UIBox definition for Corrupted Red Deck play/discard buttons.
----@return UINode
-local uiboxbuttons_hook_c_red = function()
-	-- This is NOT based on the regular functions/UI_definitions.lua
-	-- It is instead based on the Lovely dump of functions/UI_definitions.lua with Steamodded installed
-	local text_scale = 0.45
-	local button_height = 1.3
-
-	local styles = {
-		["action_button"] = { ---@type JTML.flex.style
-			align = "top-middle",
-			WH = {2.5, button_height},
-			padding = 0.3,
-			roundCorners = true,
-			hover = true,
-			shadow = true,
-		},
-		["row_styles"] = { align = "center-middle", padding = 0 },
-		---@type JTML.text.style
-		["top_label"]   = { scale = text_scale, color = G.C.UI.TEXT_LIGHT, },
-		---@type JTML.text.style
-		["bottom_label"] = { scale = text_scale * 0.65, color = G.C.UI.TEXT_LIGHT },
-		["playdiscard_root"] = { ---@type JTML.flex.style
-			WH = {1, 0.3},
-			align = "center-middle",
-			padding = 0.15,
-			roundCorners = true,
-			colour = G.C.CLEAR
-		},
-		["other_actions"] = { ---@type JTML.flex.style
-			align = "center-middle",
-			padding = 0.1,
-			roundCorners = true,
-			clour = G.C.UI.TRANSPARENT_DARK,
-			outline = {1.5, mix_colours(G.C.WHITE, G.C.JOKER_GREY, 0.7), 1}
-		},
-		---@type JTML.text.style
-		["sorthand_text"] = { scale = text_scale*0.8, colour = G.C.UI.TEXT_LIGHT },
-		["sorthand_button"] = { ---@type JTML.flex.style
-			align = "center-middle",
-			WH = {0.9, 0.7},
-			padding = 0.1,
-			roundCorners = true,
-			hover = true,
-			colour = G.C.ORANGE,
-			shadow = true
-		},
-		---@type JTML.text.style
-		["sorthand_button__text"] = { scale = text_scale*0.7, colour = G.C.UI.TEXT_LIGHT }
-	}
-
-	local hand_sort_options =
-	JTML.flex{mode="row", style=styles.other_actions, {
-		JTML.flex{mode="row", style=styles.row_styles, {
-			JTML.text{style={styles.row_styles, styles.sorthand_text}, text=localize('b_sort_hand')},
-			JTML.flex{mode="column", style={styles.row_styles, {padding=0.1}}, {
-				JTML.flex{style=styles.sorthand_button, on_click="sort_hand_value", {
-					JTML.text{style=styles.sorthand_button__text, text=localize('k_rank')}
-				}},
-				JTML.flex{style=styles.sorthand_button, on_click="sort_hand_suit", {
-					JTML.text{style=styles.sorthand_button__text, text=localize('k_suit')}
-				}},
-			}}
-		}}
-	}}
-
-	local play_click = {"play_cards_from_highlighted", one_press=true}
-	local play_button =
-	JTML.flex{mode="row", id="play_button", style={styles.action_button, {fillColour=G.C.BLUE}}, on_click=play_click, on_draw="can_play", {
-		JTML.text{style={styles.row_styles, styles.top_label}, on_draw='set_button_pip', gamepad_focus={button='x', orientation='bm'}, text=localize('b_play_hand')},
-		JTML.text{style={styles.row_styles, styles.bottom_label}, reference={SMODS.hand_limit_strings, "play"}}
-	}}
-
-	local discard_click = {"discard_cards_from_held", one_press=true}
-	local discard_button =
-	JTML.flex{mode="row", id="discard_button", style={styles.action_button, {fillColour=G.C.RED}}, on_click=discard_click, on_draw="can_weirddiscard", {
-		JTML.text{style={styles.row_styles, styles.top_label}, on_draw='set_button_pip', gamepad_focus={button='y', orientation='bm'}, text=localize('b_ovn_datcard')},
-		JTML.text{style={styles.row_styles, styles.bottom_label}, reference={SMODS.hand_limit_strings, "discard"}}
-	}}
-
-	return
-	JTML.flex{mode="column", style=styles.playdiscard_root, {
-		G.SETTINGS.play_button_pos == 1 and discard_button or play_button,
-		hand_sort_options,
-		G.SETTINGS.play_button_pos == 1 and play_button or discard_button,
-	}}
+-- If datcard is enabled, replaces the functionality of the discard button.
+local function buttons_ui_datcard(ret)
+	local discard_button = G.SETTINGS.play_button_pos == 1 and ret.nodes[1] or ret.nodes[3]
+	discard_button.config.button = "discard_cards_from_held"
+	discard_button.config.func   = "can_weirddiscard"
+	local discard_text = discard_button.nodes[1].nodes[1]
+	discard_text.config.text = localize('b_ovn_datcard')
 end
 
--- On Corrupt Yellow Deck, replaces the hand/discard count display with a hand/discard COST display.
+-- If costly hands are enabled, replaces the hand/discard count display with a hand/discard COST display.
 ---@param ret any
 ---@return nil
-local function hud_ui_c_yellow(ret)
+local function hud_ui_costly_hands(ret)
 	local handdiscard_UI = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes[1].nodes
 
 	local hand_text = handdiscard_UI[1].nodes[2].nodes[1]
@@ -115,8 +36,8 @@ local function hud_ui_c_yellow(ret)
 
 	hand_text.config.object = DynaText {
 		string = {{
-			ref_table = G.GAME.c_yellow_current_round,
-			ref_value = 'hands_cost'
+			ref_table = G.GAME.ovn_costly_hands,
+			ref_value = 'hand_cost_label'
 		}},
 		font = G.LANGUAGES['en-us'].font,
 		colours = {G.C.ORANGE},
@@ -127,8 +48,8 @@ local function hud_ui_c_yellow(ret)
 
 	discard_text.config.object = DynaText {
 		string = {{
-			ref_table = G.GAME.c_yellow_current_round,
-			ref_value = 'discard_cost'
+			ref_table = G.GAME.ovn_costly_hands,
+			ref_value = 'discard_cost_label'
 		}},
 		font = G.LANGUAGES['en-us'].font,
 		colours = {G.C.ORANGE},
@@ -138,17 +59,17 @@ local function hud_ui_c_yellow(ret)
 	}
 end
 
--- On Corrupt Green Deck, replaces the dollar display with a complex dollar display.
+-- If complex economy is enabled, replaces the dollar display with a complex dollar display.
 ---@param ret any
 ---@return nil
-local function hud_ui_c_green(ret)
+local function hud_ui_complex_economy(ret)
 	local scale = 0.4
 	local dollars_txt = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes[3].nodes[1].nodes[1].nodes[1].nodes[1]
 	dollars_txt.config.object:remove()
 	dollars_txt.config.object = DynaText{
 		string = {{
 			ref_table = G.GAME,
-			ref_value = 'dollars_complex',
+			ref_value = 'dollars_complex_label',
 			prefix = localize('$')
 		}},
 		scale_function = function ()
@@ -177,7 +98,7 @@ local function sell_and_other_buttons(args)
 	args.other_order = args.other_order or "first"
 	local card = args.card
 	local sell_button_ref = (
-		Ovn_f.on_deck('c_green')
+		G.GAME.ovn_complex_economy
 		and {card.ability, 'complex_sell_label'}
 		or {card, 'sell_cost_label'}
 	)
@@ -258,8 +179,11 @@ end
 -- Hook to enable Corrupt Red Deck's effect
 local uiboxbuttons_hook = create_UIBox_buttons
 function create_UIBox_buttons()
-	if Ovn_f.on_deck('c_red') then return uiboxbuttons_hook_c_red() end
-	return uiboxbuttons_hook()
+	local ret = uiboxbuttons_hook()
+	if G.GAME.ovn_datcard then
+		buttons_ui_datcard(ret)
+	end
+	return ret
 end
 
 -- Hook to:
@@ -268,10 +192,11 @@ end
 local uiboxhud_hook = create_UIBox_HUD
 function create_UIBox_HUD()
 	local ret = uiboxhud_hook()
-	if Ovn_f.on_deck('c_yellow') then
-		hud_ui_c_yellow(ret)
-	elseif Ovn_f.on_deck('c_green') then
-		hud_ui_c_green(ret)
+	if G.GAME.ovn_costly_hands then
+		hud_ui_costly_hands(ret)
+	end
+	if G.GAME.ovn_complex_economy then
+		hud_ui_complex_economy(ret)
 	end
 	return ret
 end

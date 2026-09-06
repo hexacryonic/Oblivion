@@ -8,23 +8,23 @@ local function corrupt_deck_unlock(self, args)
 end
 
 local function corrupt_deck_lockedvars(self, info_queue, card)
-		local other_name = localize('k_unknown')
-		if G.P_CENTERS[self.ovn_pure_version].unlocked then
-			other_name = localize {
-				type = 'name_text',
-				set = 'Back',
-				key = self.ovn_pure_version
-			}
-		end
-
-		return { vars = {
-			other_name,
-			localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
-			colours = {
-				get_stake_col(4)
-			}
-		} }
+	local other_name = localize('k_unknown')
+	if G.P_CENTERS[self.ovn_pure_version].unlocked then
+		other_name = localize {
+			type = 'name_text',
+			set = 'Back',
+			key = self.ovn_pure_version
+		}
 	end
+
+	return { vars = {
+		other_name,
+		localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
+		colours = {
+			get_stake_col(4)
+		}
+	} }
+end
 
 ----------------
 
@@ -62,6 +62,9 @@ SMODS.Back { key = "c_red",
 	check_for_unlock = corrupt_deck_unlock,
 	locked_loc_vars = corrupt_deck_lockedvars,
 
+	apply = function(self)
+		Ovn_f.enable_datcard()
+	end,
 	calculate = function(self, card, context)
 		if context.after then add_simple_event(nil, nil, function ()
 			local any_selected = nil
@@ -97,18 +100,21 @@ SMODS.Back { key = "c_blue",
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 0 },
 
-	apply = function(self)
-		G.GAME.starting_params.hands = G.GAME.starting_params.hands + 2
-	end,
-
 	unlocked = false,
 	check_for_unlock = corrupt_deck_unlock,
 	locked_loc_vars = corrupt_deck_lockedvars,
 
-	calculate = function(self, card, context)
-		G.GAME.round_resets.hands = G.GAME.current_round.hands_left --[[@as integer]]
-		if G.GAME.round_resets.blind_states.Boss == 'Defeated' then
-			G.GAME.round_resets.hands = G.GAME.round_resets.hands + 3
+	config = {
+		hands = 2,
+		hands_per_ante = 3
+	},
+
+	calculate = function(self, back, context)
+		if context.before then
+			G.GAME.round_resets.hands = G.GAME.current_round.hands_left --[[@as integer]]
+		end
+		if context.end_of_round and context.main_eval and context.beat_boss then
+			G.GAME.round_resets.hands = G.GAME.round_resets.hands + back.effect.config.hands_per_ante
 		end
 	end,
 }
@@ -123,57 +129,46 @@ SMODS.Back { key = "c_yellow",
 	atlas = "decks_corrupt",
 	pos = { x = 2, y = 0 },
 
-	apply = function(self)
-		G.GAME.cy_dollarsperante = 120
-		G.GAME.cy_handcost = 10
-		G.GAME.cy_discardcost = 5
-		G.GAME.modifiers.money_per_hand = 0
-		G.GAME.round_resets.hands = G.GAME.cy_handcost
-		G.GAME.round_resets.discards = G.GAME.cy_discardcost
-		G.GAME.c_yellow_current_round = {
-			hands_cost = "$" .. G.GAME.cy_handcost,
-			discard_cost = "$" .. G.GAME.cy_discardcost
+	apply = function(self, back)
+		Ovn_f.enable_costly_hands{
+			hand_cost = back.effect.config.hand_cost,
+			discard_cost = back.effect.config.discard_cost,
+			punish_unaffordable = true,
+			skip_update_ui = true
 		}
-
-		add_simple_event(nil, nil, function ()
-			ease_dollars(G.GAME.cy_dollarsperante)
-		end)
 	end,
 
 	unlocked = false,
 	check_for_unlock = corrupt_deck_unlock,
 	locked_loc_vars = corrupt_deck_lockedvars,
 
-	calculate = function(self, card, context)
-		if context.before then
-			ease_dollars(-G.GAME.cy_handcost)
-			delay(0.2)
-		end
+	config = {
+		dollars = 120,
+		dollars_per_ante = 120,
+		hand_cost = 10,
+		discard_cost = 5,
+		cost_mult = 1.25
+	},
 
-		if context.pre_discard then
-			ease_dollars(-G.GAME.cy_discardcost)
-		end
+	calculate = function(self, back, context)
+		local hand_cost = G.GAME.ovn_costly_hands.hand_cost
+		local discard_cost = G.GAME.ovn_costly_hands.discard_cost
 
-		if context.starting_shop then
-			G.GAME.gave_money = false
-		end
-
-		if context.beat_boss and not G.GAME.gave_money then
-			add_simple_event(nil, nil, function()
-				Ovn_f.ease_hand_cost(math.floor(G.GAME.cy_handcost * 1.25 - G.GAME.cy_handcost))
+		if context.end_of_round and context.main_eval and context.beat_boss then
+			local cost_mult = back.effect.config.cost_mult
+			Ovn_f.add_simple_event(nil, nil, function()
+				Ovn_f.ease_hand_cost(math.floor(hand_cost*cost_mult - hand_cost))
 				delay(0.75)
-				Ovn_f.ease_discard_cost(math.floor(G.GAME.cy_discardcost * 1.25 - G.GAME.cy_discardcost))
+				Ovn_f.ease_discard_cost(math.floor(discard_cost*cost_mult - discard_cost))
 				delay(1)
-				ease_dollars(G.GAME.cy_dollarsperante)
 			end)
-			G.GAME.gave_money = true
-		end
-
-		if G.GAME.dollars >= (math.floor(G.GAME.dollars) + math.floor(G.GAME.dollars)) then
-			G.STATE = G.STATES.GAME_OVER
-			G.STATE_COMPLETE = false
 		end
 	end,
+	calc_dollar_bonus = function (self, back)
+		if G.GAME.blind.boss then
+			return back.effect.config.dollars_per_ante
+		end
+	end
 }
 
 ---------------------
@@ -191,11 +186,9 @@ SMODS.Back { key = "c_green",
 	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self)
-		G.GAME.dollars_i = 0
-		G.GAME.dollars_complex = tostring(G.GAME.dollars)
-		Ovn_f.ease_complex_dollars(0,0)
+		Ovn_f.enable_complex_economy(true)
 		G.GAME.modifiers.money_per_hand = 1
-        G.GAME.modifiers.money_per_discard = 1 -- i
+        G.GAME.modifiers.money_i_per_discard = 2
 	end
 }
 
@@ -236,12 +229,6 @@ SMODS.Back { key = "c_ghost",
 	unlocked = false,
 	check_for_unlock = corrupt_deck_unlock,
 	locked_loc_vars = corrupt_deck_lockedvars,
-
-	apply = function(self)
-		G.GAME.ovn_cghost = true
-		G.GAME.ovn_cghost_ghostspec = nil
-		G.GAME.ovn_cghost_pseudorandom = {}
-	end,
 
 	calculate = function(self, card, context)
 		if context.setting_blind then
@@ -509,10 +496,10 @@ SMODS.Back { key = "c_plasma",
 	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function(self)
-		G.GAME.corrumod = 0.2
-		G.GAME.opticmod = 0.025
-		G.GAME.opticclamp = 2
-		-- Scoring calculation set in Game:start_run hook
+		Ovn_f.enable_instability()
+		G.GAME.instability_per_c_joker = 0.2
+		G.GAME.instability_per_optic = 0.025
+		G.GAME.instability_clamp = 2
 	end,
 
 	calculate = function(self, card, context)

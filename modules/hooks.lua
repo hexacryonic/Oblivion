@@ -292,39 +292,33 @@ end
 
 -- Hook for:
 ---- context.ovn_run_started
----- G.GAME values:
------- ovn_instability NUMBER
------- cumulative_unique_joker_count INTEGER
------- cumulative_unique_jokers { STRING: BOOLEAN }
------- hands_last_played { STRING: INTEGER }
----- Setting complex costs (display) for all cards (Corrupt Green Deck)
----- Setting Instable scoring calculation (Corrupt Plasma Deck)
+---- Resetting complex costs for all cards if complex economy is enabled
 local game_startrun_hook = Game.start_run
 function Game:start_run(args)
 	game_startrun_hook(self, args)
-	G.GAME.ovn_instability = G.GAME.ovn_instability or 1
-	SMODS.Scoring_Parameters["ovn_instability"].current = G.GAME.ovn_instability or 1
-	G.GAME.cumulative_unique_joker_count = G.GAME.cumulative_unique_joker_count or 0
-	G.GAME.cumulative_unique_jokers = G.GAME.cumulative_unique_jokers or {}
-	if not G.GAME.hands_last_played then
-		G.GAME.hands_last_played = {}
-		for key in pairs(SMODS.PokerHands) do
-			G.GAME.hands_last_played[key] = -1
-		end
-	end
-	if Ovn_f.on_deck('c_green') then
+	if G.GAME.ovn_complex_economy then
 		add_simple_event(nil, nil, function ()
 			for _,joker_card in ipairs(G.jokers.cards) do
-				Ovn_f.set_complex_cost_labels(joker_card)
+				joker_card:set_cost()
 			end
 			for _,cnsm_card in ipairs(G.consumeables.cards) do
-				Ovn_f.set_complex_cost_labels(cnsm_card)
+				cnsm_card:set_cost()
 			end
+			if G.shop_jokers then for _,shop_joker_card in ipairs(G.shop_jokers.cards) do
+				shop_joker_card:set_cost()
+				create_shop_card_ui(shop_joker_card)
+			end end
+			if G.shop_booster then for _,shop_booster_card in ipairs(G.shop_booster.cards) do
+				shop_booster_card:set_cost()
+				create_shop_card_ui(shop_booster_card)
+			end end
+			if G.shop_vouchers then for _,shop_vouchers_card in ipairs(G.shop_vouchers.cards) do
+				shop_vouchers_card:set_cost()
+				create_shop_card_ui(shop_vouchers_card)
+			end end
 		end)
 	end
-	if Ovn_f.on_deck('c_plasma') and not args.savetext then
-		SMODS.set_scoring_calculation("ovn_instable")
-	end
+
 	SMODS.calculate_context({
 		ovn_run_started = true,
 		new_run = not args.savetext
@@ -474,13 +468,6 @@ SMODS.calculate_repetitions = function(card, context, reps)
 	end
 
 	return smods_calcrep_hook(card, context, reps)
-end
-
--- Hook for redirecting Instability scoring parameter value (not stored in SMODS.ScoringParameter)
-local smods_getscoringparam_hook = SMODS.get_scoring_parameter
-function SMODS.get_scoring_parameter(key, flames)
-    if key == "ovn_instability" then return G.GAME.ovn_instability end
-    return smods_getscoringparam_hook(key, flames)
 end
 
 -- Hook to stop played cards from scoring if Sludge is held

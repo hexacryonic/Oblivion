@@ -1,12 +1,13 @@
--- lib/corrupt_red_deck.lua
--- Collection of functions and hooks associated with Corrupt Red Deck
+-- modules/item-specific/datcard.lua
+-- Collection of functions and hooks associated with datcarding
 
--- Other files associated with Corrupt Red Deck:
+-- Other files associated with datcarding/Corrupt Red Deck:
 ---- items/3-0. Decks.lua - Corrupt Red Deck register
 ---- lib/ui_hooks.lua     - function create_UIBox_buttons
 
 -- 1. SUPPLEMENTARY FUNCTIONS
--- 2. UI FUNCTIONS
+-- 2. FUNCTIONS
+-- 3. UI FUNCTIONS
 
 
 
@@ -34,17 +35,18 @@ local function send_discard_contexts(cards_to_discard)
 	-- == used in discard_cards_from_held
 	local discarded_cards = {}
 	local destroyed_cards = {}
-	local current_jokers = G.jokers.cards
 
 	for i, current_card_to_discard in ipairs(cards_to_discard) do
 		current_card_to_discard:calculate_seal({discard = true})
 		local card_is_removed = false
-
-		for _,current_joker in ipairs(current_jokers) do
-			local card_evaluation = current_joker:calculate_joker({discard = true, other_card = current_card_to_discard, full_hand = cards_to_discard})
-			if card_evaluation ~= nil then
-				if card_evaluation.remove then card_is_removed = true end
-				card_eval_status_text(current_joker, 'jokers', nil, 1, nil, card_evaluation)
+		local effects = {}
+		SMODS.calculate_context({discard = true, other_card =  G.hand.highlighted[i], full_hand = G.hand.highlighted, ignore_other_debuff = true}, effects)
+		SMODS.trigger_effects(effects)
+		for _, eval in pairs(effects) do
+			if type(eval) == 'table' then
+				for key, eval2 in pairs(eval) do
+					if key == 'remove' or (type(eval2) == 'table' and eval2.remove) then card_is_removed = true end
+				end
 			end
 		end
 
@@ -52,7 +54,7 @@ local function send_discard_contexts(cards_to_discard)
 
 		if card_is_removed then
 			table.insert(destroyed_cards, current_card_to_discard)
-			if current_card_to_discard.ability.name == 'Glass Card' then
+			if SMODS.shatters(current_card_to_discard) then
 				current_card_to_discard:shatter()
 			else
 				current_card_to_discard:start_dissolve()
@@ -64,13 +66,47 @@ local function send_discard_contexts(cards_to_discard)
 	end
 
 	if #destroyed_cards > 0 then
-		for _,current_joker in ipairs(current_jokers) do
-			eval_card(current_joker, {cardarea = G.jokers, remove_playing_cards = true, removed = destroyed_cards})
-		end
+		SMODS.calculate_context({remove_playing_cards = true, removed = destroyed_cards})
 	end
 
 	G.GAME.round_scores.cards_discarded.amt = G.GAME.round_scores.cards_discarded.amt + #discarded_cards
 	check_for_unlock({type = 'discard_custom', cards = discarded_cards})
+end
+
+
+
+-------------------
+---- FUNCTIONS ----
+-------------------
+
+function Ovn_f.enable_datcard()
+	if G.GAME.ovn_datcard then return end
+	G.GAME.ovn_datcard = true
+	if G.buttons then
+		local discard_button = G.buttons:get_UIE_by_ID("discard_button")
+		discard_button.config.button = "discard_cards_from_held"
+		discard_button.config.func   = "can_weirddiscard"
+		local discard_text = discard_button.children[1].children[1]
+		discard_text.config.text = localize('b_ovn_datcard')
+		-- UIE:update_text (called by UIBox:recalculate) requires a nil text_drawable
+		discard_text.config.text_drawable = nil
+		G.buttons:recalculate()
+	end
+end
+
+function Ovn_f.disable_datcard()
+	if not G.GAME.ovn_datcard then return end
+	G.GAME.ovn_datcard = nil
+	if G.buttons then
+		local discard_button = G.buttons:get_UIE_by_ID("discard_button")
+		discard_button.config.button = "discard_cards_from_highlighted"
+		discard_button.config.func   = "can_discard"
+		local discard_text = discard_button.children[1].children[1]
+		discard_text.config.text = localize('b_discard')
+		-- UIE:update_text (called by UIBox:recalculate) requires a nil text_drawable
+		discard_text.config.text_drawable = nil
+		G.buttons:recalculate()
+	end
 end
 
 
@@ -96,8 +132,9 @@ end
 -- Datcard, or discard all unselected playing cards on hand.\
 -- Primarily used in Corrupt Red Deck.
 ---@param e any
+---@param hook? any ???
 ---@return nil
-G.FUNCS.discard_cards_from_held = function(e)
+G.FUNCS.discard_cards_from_held = function(e, hook)
 	-- == used in b_uibox_corrupt_red_deck
 	stop_use()
 	G.CONTROLLER.interrupt.focus = true
@@ -114,23 +151,14 @@ G.FUNCS.discard_cards_from_held = function(e)
 	-- == Determine which cards need to be discarded
 	local cards_to_discard = get_cards_to_discard()
 	if #cards_to_discard == 0 then return end
-
-	local current_jokers = G.jokers.cards
-
-	update_hand_text(
-		{immediate = true, nopulse = true, delay = 0},
-		{mult = 0, chips = 0, level = '', handname = ''}
-	)
-
 	table.sort(cards_to_discard, function(a,b) return a.T.x < b.T.x end)
+
 	inc_career_stat('c_cards_discarded', #cards_to_discard)
-	for _,current_joker in ipairs(current_jokers) do
-		current_joker:calculate_joker({pre_discard = true, full_hand = cards_to_discard})
-	end
+	SMODS.calculate_context({pre_discard = true, full_hand = cards_to_discard, hook = hook})
 
 	send_discard_contexts(cards_to_discard)
+	if hook then return end
 
-	--if not hook then -- I don't know what this conditional is for - it's always nil -O
 	if G.GAME.modifiers.discard_cost then
 		ease_dollars(-G.GAME.modifiers.discard_cost)
 	end
@@ -144,5 +172,4 @@ G.FUNCS.discard_cards_from_held = function(e)
 			return true
 		end
 	}))
-	--end
 end

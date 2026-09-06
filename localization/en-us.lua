@@ -166,6 +166,7 @@ return {
 
 		v_dictionary = {
 			a_hands_minus = "-#1# Hands",
+			remaining_hand_money_i = "Remaining Hands ($#1#i each)",
 			remaining_discard_money_i = "Remaining Discards ($#1#i each)",
 			interest_i = "#1#i interest per $#2#i (#3#i max)",
 		},
