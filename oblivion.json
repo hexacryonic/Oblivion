@@ -2,16 +2,16 @@
 	"id": "Oblivion",
 	"name": "Oblivion",
 	"display_name": "Oblivion",
-	"author": ["HexaCryonic"],
-	"description": "G.localization.descriptions.Mod[Oblivion]",
+	"author": ["HexaCryonic", "Oinite"],
+	"description": "An expansion to Balatro themed around an otherworldly corruption! Please enable this mod for more information.",
 	"prefix": "ovn",
 	"main_file": "Oblivion.lua",
 	"priority": 69420,
 	"badge_colour": "4168ed",
 	"badge_text_colour": "ffffff",
 	"icon_path": "modicon.png",
-	"version": "0.6.0~DEMO",
+	"version": "0.7.0a~DEMO",
 	"dependencies": [
-		"Steamodded (>=1.0.0~BETA-1501a)"
+		"Steamodded (>=26.829.0)"
 	]
 }
