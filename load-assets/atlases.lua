@@ -9,25 +9,24 @@ local dim = {
 }
 
 local atlases = {
-	{      dim.CARD, "booster_packs" },
-	{      dim.CARD, "consumables" },
-	{      dim.CARD, "decks" },
-	{      dim.CARD, "decks_corrupt" },
-	{      dim.CARD, "enhancements" },
-	{      dim.CARD, "jokers" },
-	{      dim.CARD, "jokers_corrupt" },
-	{      dim.CARD, "mutations" },
-	{      dim.CARD, "optics" },
-	{      dim.CARD, "optics_hc" },
-	{      dim.CARD, "placeholder" },
-	{      dim.CARD, "seals" },
-	{      dim.CARD, "seals_marks" },
-	{ dim.SUIT_ICON, "suits" },
-	{ dim.SUIT_ICON, "suits_hc" },
-	{       dim.TAG, "tags" },
-	{      dim.CARD, "vouchers" },
+	{      dim.CARD, "booster_packs"             },
+	{      dim.CARD, "consumables"               },
+	{      dim.CARD, "decks"                     },
+	{      dim.CARD, "decks_corrupt"             },
+	{      dim.CARD, "enhancements"              },
+	{      dim.CARD, "jokers"                    },
+	{      dim.CARD, "jokers_corrupt"            },
+	{      dim.CARD, "mutations"                 },
+	{      dim.CARD, "optics"                    },
+	{      dim.CARD, "optics_hc"                 },
+	{      dim.CARD, "placeholder"               },
+	{      dim.CARD, "seals"                     },
+	{      dim.CARD, "seals_marks"               },
+	{ dim.SUIT_ICON, "suits"                     },
+	{ dim.SUIT_ICON, "suits_hc"                  },
+	{       dim.TAG, "tags"                      },
+	{      dim.CARD, "vouchers"                  },
 	{      dim.CARD, "itemspecific/apache_tears" },
-	{      dim.CARD, "itemspecific/apartfalling" },
 	--{      dim.CARD, "crossmod/cryptid_planets", cryptid_is_loaded },
 	-- Deck skin atlases are found in load-assets/deckskins.lua
 }
@@ -52,10 +51,17 @@ end
 
 SMODS.Atlas {
 	key = "blinds",
-	atlas_table = "ANIMATION_ATLAS",
 	path = "blinds.png",
 	px = 34, py = 34,
+	atlas_table = "ANIMATION_ATLAS",
 	frames = 21
+}
+
+SMODS.Atlas {
+	key = "itemspecific_apartfalling",
+	path = "itemspecific/apartfalling.png",
+	px = 71, py = 95,
+	atlas_table = "STATE_ATLAS",
 }
 
 ----

@@ -1250,12 +1250,28 @@ SMODS.Joker { key = 'apartfalling',
 			visual_transition = nil, -- if number, play transition animation
 			xmult_increase = 0.75,
 			x_mult = 1,
-			current_screen = 0, -- Needed to prevent repeats (which suck)
+			current_screen = 1, -- Needed to prevent repeats (which suck)
 		},
 	},
 
 	atlas = 'itemspecific_apartfalling',
 	pos = { x = 0, y = 1 },
+	sprite_args = {
+		states = {
+			static = {
+				start_pos = {x=0, y=0},
+				end_pos   = {x=3, y=0},
+				fps = 100,
+				frame_order = {4,3,2,1}
+			},
+			{start_pos = {x=0, y=1}},
+			{start_pos = {x=1, y=1}},
+			{start_pos = {x=2, y=1}},
+			{start_pos = {x=3, y=1}},
+			{start_pos = {x=4, y=1}},
+		},
+		default_state = 1,
+	},
 
 	attributes = { "xmult", "scaling", "ovn_corrupting" },
 	blueprint_compat = true,
@@ -1264,16 +1280,6 @@ SMODS.Joker { key = 'apartfalling',
 	rarity = "ovn_corrupted",
 	cost = 8,
 
-	update = function (self, card, dt)
-		if card.ability.extra.visual_transition then -- should be an int
-			local card_ex = card.ability.extra
-			card_ex.visual_transition = card_ex.visual_transition + 1
-			if card_ex.visual_transition > 3 then
-				card_ex.visual_transition = 0
-			end
-			card.children.center:set_sprite_pos({x = card_ex.visual_transition, y = 0})
-		end
-	end,
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.x_mult > 1 then
 			return {
@@ -1288,34 +1294,23 @@ SMODS.Joker { key = 'apartfalling',
 			and context.ovn_corrupted_card ~= card
 		) then
 			simple_scale(card, "x_mult", "xmult_increase", G.C.MULT, "a_xmult")
-			G.E_MANAGER:add_event(Event {
-				blocking = false,
-				blockable = false,
-				trigger = "after",
-				delay = 0.25,
-				func = function()
-					card.ability.extra.visual_transition = 0
-					return true
-				end
-			})
-			G.E_MANAGER:add_event(Event {
-				blocking = false,
-				blockable = false,
-				trigger = "after",
-				delay = 2,
-				func = function()
-					add_simple_event(nil, nil, function ()
-						local x = pseudorandom('apartfalling_sprite', 0, 4)
-						if x == card.ability.extra.current_screen then
-							x = (x == 4) and (0) or (x + 1)
-						end
-						card.children.center:set_sprite_pos({x = x, y = 1})
-						card.ability.extra.visual_transition = nil
-						card.ability.extra.current_screen = x
-					end)
-					return true
-				end
-			})
+			Ovn_f.unblock_event("after", 0.25, function ()
+				card:set_sprite_state("static")
+			end)
+			Ovn_f.unblock_event("after", 2, function ()
+				add_simple_event(nil, nil, function ()
+					local x = pseudorandom('apartfalling_sprite', 1, 5)
+					if x == card.ability.extra.current_screen then
+						x = (x == 5) and (1) or (x + 1)
+					end
+					card:set_sprite_state(x)
+					card.ability.extra.current_screen = x
+				end)
+			end)
+		end
+
+		if context.ovn_run_started then
+			card:set_sprite_state(card.ability.extra.current_screen)
 		end
 	end
 }
@@ -1895,7 +1890,9 @@ SMODS.Joker { key = "apache_tears",
 	add_to_deck = function (self, card, from_debuff)
 		change_tear_sprite(card)
 	end,
-
+	load = function (self, card, card_table, other_card)
+		change_tear_sprite(card)
+	end,
 	calculate = function (self, card, context)
 		if (
 			context.individual
@@ -1947,10 +1944,6 @@ SMODS.Joker { key = "apache_tears",
 			card.ability.extra.track_corrupts[context.ovn_former_form_key] = true
 			change_tear_sprite(card)
 			card:juice_up()
-		end
-
-		if context.ovn_run_started then
-			change_tear_sprite(card)
 		end
 	end,
 }
