@@ -11,6 +11,9 @@
 ---| 'm_ovn_dense'
 ---| 'm_ovn_ion'
 
+---@alias Editions
+---| 'e_ovn_miasma'
+
 ---@alias Seals
 ---| 'ovn_indigo'
 ---| 'ovn_ruby_mark'
@@ -19,8 +22,7 @@
 ---| 'ovn_amethyst_mark'
 ---| 'ovn_iolite_mark'
 
----@alias Editions
----| 'e_ovn_miasma'
+-- stickers
 
 ---@alias PokerHands
 ---| 'ovn_Spectrum'
@@ -28,9 +30,13 @@
 ---| 'ovn_Spectrum House'
 ---| 'ovn_Spectrum Five'
 
+-- ranks
+
 ---@alias Suits
 ---| 'ovn_Optics'
 
 ---@alias Rarities
 ---| 'ovn_corrupted'
 ---| 'ovn_supercorrupted'
+
+-- playareas
