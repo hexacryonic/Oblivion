@@ -15,7 +15,51 @@
 ---- INTERNAL FUNCTIONS ----
 ----------------------------
 
+-- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
+-- Event function will always return true, so "return true" is not required.\
+-- Consequently, do not use this function if the event function needs to return a non-true value\
+-- or if other parameters such as blocking require specification.
+---@param trigger string | nil
+---@param delay number | nil
+---@param func function
+---@return nil
+Ovn_f.add_simple_event = function(trigger, delay, func)
+	if trigger == "instant" then func(); return end
+	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
+	G.E_MANAGER:add_event(Event {
+		trigger = trigger,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
 local add_simple_event = Ovn_f.add_simple_event
+
+-- Adds a nested simple event to G.E_MANAGER, allowing the specified function to be cleanly delayed.\
+-- Event function will always return true, so "return true" is not required.\
+Ovn_f.nested_event = function (count, trigger, delay, func)
+	if count == 0 then
+		Ovn_f.add_simple_event(trigger, delay, func)
+	else
+		G.E_MANAGER:add_event(Event {function ()
+			Ovn_f.nested_event(count - 1, trigger, delay, func)
+			return true
+		end})
+	end
+end
+
+-- Adds a simple event to G.E_MANAGER that is also unblocking and unblockable.\
+-- Event function will always return true, so "return true" is not required.\
+Ovn_f.unblock_event = function (trigger, delay, func)
+	if trigger == "instant" then func(); return end
+	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
+	G.E_MANAGER:add_event(Event {
+		blocking = false,
+		blockable = false,
+		trigger = trigger,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
 
 -- Returns `censored` if family friendly is enabled, else returns `normal`.
 ---@param normal any

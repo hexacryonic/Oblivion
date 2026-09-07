@@ -93,6 +93,6 @@ table.insert(jokerless_restrictions.banned_tags,  {id = 'tag_ovn_stygiantag'})
 table.insert(jokerless_restrictions.banned_other, {id = 'bl_ovn_purity', type = 'blind'})
 table.insert(jokerless_restrictions.banned_other, {id = 'bl_ovn_stygian', type = 'blind'})
 
-SMODS.Joker:take_ownership('jokerless_1', {
+SMODS.Challenge:take_ownership('jokerless_1', {
 	restrictions = jokerless_restrictions
 }, true)

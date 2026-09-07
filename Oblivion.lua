@@ -60,51 +60,15 @@ PlayLog = PlayLog or {
 	LogType = function() end,
 }
 
--- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value\
--- or if other parameters such as blocking require specification.
----@param trigger string | nil
----@param delay number | nil
----@param func function
+-- Try to load a file.
+---@param file_name string
 ---@return nil
-Ovn_f.add_simple_event = function(trigger, delay, func)
-	if trigger == "instant" then func(); return end
-	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
-	G.E_MANAGER:add_event(Event {
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
+function Ovn_f.try_load_file(file_name)
+	print("[OBLIVION] Loading file " .. file_name)
+	local file_func, err = SMODS.load_file(file_name)
+	if err then error(err) end
+	if file_func then file_func() end
 end
-
--- Adds a nested simple event to G.E_MANAGER, allowing the specified function to be cleanly delayed.\
--- Event function will always return true, so "return true" is not required.\
-Ovn_f.nested_event = function (count, trigger, delay, func)
-	if count == 0 then
-		Ovn_f.add_simple_event(trigger, delay, func)
-	else
-		G.E_MANAGER:add_event(Event {function ()
-			Ovn_f.nested_event(count - 1, trigger, delay, func)
-			return true
-		end})
-	end
-end
-
--- Adds a simple event to G.E_MANAGER that is also unblocking and unblockable.\
--- Event function will always return true, so "return true" is not required.\
-Ovn_f.unblock_event = function (trigger, delay, func)
-	if trigger == "instant" then func(); return end
-	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
-	G.E_MANAGER:add_event(Event {
-		blocking = false,
-		blockable = false,
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
-
 
 -- Loads all Lua files in a directory.
 ---@param folder_name string
@@ -113,31 +77,40 @@ end
 function Ovn_f.load_directory(folder_name, condition_function)
 	local mod_path = Oblivion.mod_path
 	local files = SMODS.NFS.getDirectoryItems(mod_path .. folder_name)
-
-	print("[OBLIVION] == Loading directory " .. folder_name .. " ==")
-	for _,file_name in ipairs(files) do if file_name:match("%.lua$") then
-		local condition_is_met = true
-		if condition_function then condition_is_met = condition_function(file_name) end
-
-		if condition_is_met then
-			print("[OBLIVION] Loading file " .. file_name)
-			local file_format = "%s/%s"
-			local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
-			if err then error(err) end
-			if file_func then file_func() end
+	local condition = function (file_name)
+		local condition_function_check = true
+		if condition_function then
+			condition_function_check = condition_function(file_name)
 		end
-	end end
+		return (
+			file_name:match("%.lua$")
+			and not file_name:match("%.d.lua$")
+			and condition_function_check
+		)
+	end
+
+	for _,file_name in ipairs(files) do
+		if condition(file_name) then
+			Ovn_f.try_load_file(folder_name .. "/" .. file_name)
+		end
+	end
 end
 
-Ovn_f.load_directory("modules")
+Ovn_f.try_load_file("modules/funcs.lua")
+Ovn_f.try_load_file("modules/hooks.lua")
+Ovn_f.try_load_file("modules/jtml.lua")
+Ovn_f.try_load_file("modules/objects.lua")
+Ovn_f.try_load_file("modules/ui_funcs.lua")
+Ovn_f.try_load_file("modules/ui_hook.lua")
+
+Ovn_f.load_directory("modules/item-specific")
 Ovn_f.load_directory("load-assets")
-Ovn_f.load_directory("items", function (file_name)
-	-- Stasis purposefully does not get loaded, so skip it here
-	return file_name ~= "-1-0. Stasis.lua"
-end)
+Ovn_f.load_directory("items")
 Ovn_f.load_directory("data")
 Ovn_f.load_directory("cross-mod", function (file_name)
 	-- Cross-mod files (named with mod ID) only loaded if mod is loaded
 	-- Cryptid is loaded by a patch into Cryptid, so skip it here
-	return file_name ~= "Cryptid.lua" and (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
+	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
+
+Ovn_f.try_load_file("modules/post-load.lua")
