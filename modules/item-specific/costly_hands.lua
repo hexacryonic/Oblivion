@@ -1,7 +1,3 @@
--- modules/item-specific/costly_hands.lua
--- Not as complex as Corrupt Green Deck (pun not intended)
--- but still good to collect things in one place
-
 -- Other files associated with costly hands/Corrupt Yellow Deck:
 ---- items/3-0. Decks.lua                 - Corrupt Yellow Deck register
 ---- modules/ui_hooks.lua                 - function create_UIBox_HUD

@@ -1,6 +1,3 @@
--- modules/item-specific/ghastly_adversary.lua
--- This thing's pretty big, hence own file
-
 -- Other files associated with the ghastly adversary/Corrupt Ghost Deck:
 ---- items/3-0. Decks.lua         - Corrupt Ghost Deck register
 ---- data/corrupt_ghost_logic.lua - Logic for Spectral Card usage

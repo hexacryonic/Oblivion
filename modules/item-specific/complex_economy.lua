@@ -1,6 +1,3 @@
--- modules/item-specific/complex_economy.lua
--- So many edge cases to consider...
-
 -- Other files associated with vomplex economy/Corrupt Green Deck:
 ---- items/3-0. Decks.lua        - Corrupt Green Deck register
 ---- lib/hooks.lua               - function Game:start_run

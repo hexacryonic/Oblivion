@@ -3,7 +3,6 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# lovely/constant_parameters.toml
 # "parameters" refer to scoring parameters
 # All of these changes enable Instability to not change when the hand is being evaluated.
 

@@ -1,6 +1,3 @@
--- modules/item-specific/datcard.lua
--- Collection of functions and hooks associated with datcarding
-
 -- Other files associated with datcarding/Corrupt Red Deck:
 ---- items/3-0. Decks.lua - Corrupt Red Deck register
 ---- lib/ui_hooks.lua     - function create_UIBox_buttons

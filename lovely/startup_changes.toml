@@ -3,7 +3,6 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# lovely/startup_changes.toml
 # Changes specific to start-up, main menu, and background of Corrupt Decks
 
 # ----

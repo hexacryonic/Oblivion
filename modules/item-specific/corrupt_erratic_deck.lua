@@ -1,5 +1,3 @@
--- lib/corrupt_erratic_deck.lua
--- holy $!@%
 -- Much of this code was written/initiated by lily.felli; all our gratitudes to her
 
 -- Other files associated with Corrupt Erratic Deck:

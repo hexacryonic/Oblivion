@@ -1,10 +1,7 @@
--- modules/item-specific/instability.lua
--- Keeping everything related to instability in one file
-
 -- Other files associated with Instability/Corrupt Plasma Deck:
 ---- items/0-2. Instability.lua - Scoring calculation registers
 ---- items/3-0. Decks.lua       - Corrupt Plasma Deck register
----- lovely/constnat_parameters - Make the instability parameter constant
+---- lovely/constant_parameters - Make the instability parameter constant
 
 -- 1. FUNCTIONS
 -- 2. HOOKS

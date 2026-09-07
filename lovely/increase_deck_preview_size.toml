@@ -3,7 +3,6 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# lovely/increase_deck_preview_size.toml
 # All patches here change G.UIDEF.view_deck in SMODS src/overrides.lua
 # to display 5 suits
 
