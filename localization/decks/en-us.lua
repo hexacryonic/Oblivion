@@ -1,15 +1,16 @@
-local function corrupt_deck_unlock()
-    return {
-        "Win a run with",
-        "{C:attention}#1# {}on at least",
-        "{V:1}#2# {}difficulty"
-    }
-end
-
 return { descriptions = { Back = {
 
 ----------------------------------
 
+b_ovn_locked_c_deck = {
+    name = "",
+    text = {""},
+    unlock = {
+        "Win a run with",
+        "{C:attention}#1# {}on at least",
+        "{V:1}#2# {}difficulty"
+    },
+},
 b_ovn_ocular = {
     name = "Ocular Deck",
     text = {
@@ -26,7 +27,6 @@ b_ovn_c_red = {
         "After a hand, {C:mult}discard{} up to",
         "{C:attention}5{} held cards at random"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_blue = {
     name = 'Corrupt Blue Deck',
@@ -35,7 +35,6 @@ b_ovn_c_blue = {
         "Hands {C:mult}never reset{}",
         "{C:chips}+3{} Hands when {C:attention}Boss Blind{} defeated",
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_yellow = {
     name = 'Corrupt Yellow Deck',
@@ -47,7 +46,6 @@ b_ovn_c_yellow = {
         "{s:0.3} {}",
         "At less than {C:money}$1{}, {C:mult}Game Over{}",
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_green = {
     name = 'Corrupt Green Deck',
@@ -58,7 +56,6 @@ b_ovn_c_green = {
         "{s:0.3} {}",
         "Shop prices are {C:green}complex",
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_black = {
     name = 'Corrupt Black Deck',
@@ -70,7 +67,6 @@ b_ovn_c_black = {
         "{s:0.3} {}",
         "{C:inactive,s:0.7}(Yeah, this one's just cruel)"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_magic = {
     name = 'Corrupt Magic Deck',
@@ -82,7 +78,6 @@ b_ovn_c_magic = {
         "Swaps to {C:attention}Corrupt Nebula",
         "{C:attention}Deck {}after each ante"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_nebula = {
     name = 'Corrupt Nebula Deck',
@@ -93,7 +88,6 @@ b_ovn_c_nebula = {
         "Swaps to {C:attention}Corrupt Magic",
         "{C:attention}Deck {}after each ante"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_ghost = {
     name = 'Corrupt Ghost Deck',
@@ -103,7 +97,6 @@ b_ovn_c_ghost = {
         "When starting a round, a {C:attention}random",
         "{C:spectral}Spectral {}card is used against you"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_abandoned = {
     name = 'Corrupt Abandoned Deck',
@@ -111,7 +104,6 @@ b_ovn_c_abandoned = {
         "Starting deck has {C:attention}no cards{}",
         "Start with {C:attention}#1# {C:attention,T:tag_standard}#2#s"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_checkered = {
     name = 'Corrupt Checkered Deck',
@@ -131,7 +123,6 @@ b_ovn_c_painted = {
         "{C:attention}+5{} hand size",
         "{C:mult}Jokerless{}"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_anaglyph = {
     name = 'Corrupt Anaglyph Deck',
@@ -143,7 +134,6 @@ b_ovn_c_anaglyph = {
         "{C:attention}Small Blinds{} are",
         "{C:mult}automatically skipped{}"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_plasma = {
     name = 'Corrupt Plasma Deck',
@@ -154,7 +144,6 @@ b_ovn_c_plasma = {
         "Start with {C:attention,T:j_joker}#2#{},",
         "{C:attention,T:c_ovn_abyss}#3#{}, and {C:attention,T:c_ovn_perception}#4#{}"
     },
-    unlock = corrupt_deck_unlock()
 },
 b_ovn_c_erratic = {
     name = 'Corrupt Erratic Deck',
@@ -165,7 +154,6 @@ b_ovn_c_erratic = {
         "{C:attention}{C:red}!! SEIZURE WARNING !!",
         "{C:attention}Reduce visuals in config",
     },
-    unlock = corrupt_deck_unlock()
 },
 
 ----------------------------------

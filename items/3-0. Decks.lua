@@ -17,13 +17,16 @@ local function corrupt_deck_lockedvars(self, info_queue, card)
 		}
 	end
 
-	return { vars = {
-		other_name,
-		localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
-		colours = {
-			get_stake_col(4)
+	return {
+		key = "b_ovn_locked_c_deck",
+		vars = {
+			other_name,
+			localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
+			colours = {
+				get_stake_col(4)
+			}
 		}
-	} }
+	}
 end
 
 ----------------
