@@ -481,7 +481,7 @@ SMODS.Back { key = "c_checkered",
 				for i=1,self.config.card_count do
 					local target,index = pseudorandom_element(other_cards, "ovn_c_checkered_get_" .. i)
 					if i ~= self.config.card_count then
-						table.remove(other_cards, index)
+						table.remove(other_cards, index--[[@as integer]])
 					end
 					add_simple_event("after", 0.5, function ()
 						card:juice_up()
