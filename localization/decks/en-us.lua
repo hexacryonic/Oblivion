@@ -72,6 +72,29 @@ b_ovn_c_black = {
     },
     unlock = corrupt_deck_unlock()
 },
+b_ovn_c_magic = {
+    name = 'Corrupt Magic Deck',
+    text = {
+        "Apply a {C:tarot}Mark of Amethyst",
+        "to the {C:attention}first #1# cards",
+        "drawn each round",
+        "{C:attention}+#2# {}consumable slots",
+        "Swaps to {C:attention}Corrupt Nebula",
+        "{C:attention}Deck {}after each ante"
+    },
+    unlock = corrupt_deck_unlock()
+},
+b_ovn_c_nebula = {
+    name = 'Corrupt Nebula Deck',
+    text = {
+        "Planet cards are {C:attention}#1#X {}stronger",
+        "per {C:attention}consecutive {C:planet}Planet {}card used",
+        "{C:red}No consumable slots",
+        "Swaps to {C:attention}Corrupt Magic",
+        "{C:attention}Deck {}after each ante"
+    },
+    unlock = corrupt_deck_unlock()
+},
 b_ovn_c_ghost = {
     name = 'Corrupt Ghost Deck',
     text = {

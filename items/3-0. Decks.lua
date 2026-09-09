@@ -215,6 +215,155 @@ SMODS.Back { key = "c_black",
 	end
 }
 
+----------------------
+-- Corrupt Magic Deck
+-- Corrupt Nebula Deck
+----------------------
+
+local function c_magicnebula_switch(force_key)
+	add_simple_event(nil, nil, function ()
+		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
+		if G.GAME.ovn_c_magicnebula == "magic" or force_key == "nebula" then
+			G.GAME.ovn_c_magicnebula = "nebula"
+
+			-- Disable C.Magic Deck
+			if not force_key then
+				G.consumeables:change_size(-c_magic.config.extra.consumable_slots)
+			end
+
+			-- Enable C.Nebula Deck
+			add_simple_event(nil, nil, function () -- because apparently changing cardarea size makes events >:(
+				G.GAME.ovn_old_consumable_limit = G.consumeables.config.card_limit
+				G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
+			end)
+			if G.GAME.ovn_c_nebula_planet_buff then
+				for _,hand in pairs(G.GAME.hands) do
+					hand.l_chips = hand.l_chips*G.GAME.ovn_c_nebula_planet_buff
+					hand.l_mult  = hand.l_mult *G.GAME.ovn_c_nebula_planet_buff
+				end
+			end
+
+		elseif G.GAME.ovn_c_magicnebula == "nebula" or force_key == "magic" then
+			G.GAME.ovn_c_magicnebula = "magic"
+
+			-- Disable C.Nebula Deck
+			if not force_key then
+				G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
+				add_simple_event(nil, nil, function ()
+					G.GAME.ovn_old_consumable_limit = nil
+				end)
+				if G.GAME.ovn_c_nebula_planet_buff then
+					for _,hand in pairs(G.GAME.hands) do
+						hand.l_chips = hand.l_chips/G.GAME.ovn_c_nebula_planet_buff
+						hand.l_mult  = hand.l_mult /G.GAME.ovn_c_nebula_planet_buff
+					end
+				end
+			end
+
+			-- Enable C.Magic Deck
+			G.consumeables:change_size(c_magic.config.extra.consumable_slots)
+		end
+	end)
+end
+
+local function c_magicnebula_calculate(self, back, context)
+	if G.GAME.ovn_c_magicnebula == "magic" then
+		if context.hand_drawn and context.first_hand_drawn then
+			local c_magic = G.P_CENTERS["b_ovn_c_magic"]
+			for i=1,c_magic.config.extra.cards_applied do
+				context.hand_drawn[i]:set_seal("ovn_amethyst_mark")
+			end
+		end
+	elseif G.GAME.ovn_c_magicnebula == "nebula" then
+		if context.using_consumeable then
+			if context.consumeable.ability.set == "Planet" then
+				local c_nebula = G.P_CENTERS["b_ovn_c_nebula"]
+				G.GAME.ovn_c_nebula_planet_buff = (G.GAME.ovn_c_nebula_planet_buff or 1)*c_nebula.config.extra.planet_buff
+				for _,hand in pairs(G.GAME.hands) do
+					hand.l_chips = hand.l_chips*c_nebula.config.extra.planet_buff
+					hand.l_mult  = hand.l_mult *c_nebula.config.extra.planet_buff
+				end
+			elseif G.GAME.ovn_c_nebula_planet_buff then
+				for _,hand in pairs(G.GAME.hands) do
+					hand.l_chips = hand.l_chips/G.GAME.ovn_c_nebula_planet_buff
+					hand.l_mult  = hand.l_mult /G.GAME.ovn_c_nebula_planet_buff
+				end
+				G.GAME.ovn_c_nebula_planet_buff = nil
+			end
+		end
+	end
+	if context.end_of_round and context.main_eval and context.beat_boss then
+		c_magicnebula_switch()
+	end
+end
+
+SMODS.Back { key = "c_magic",
+	ovn_corrupt_deck = true,
+	ovn_pure_version = "b_magic",
+
+	atlas = "decks_corrupt",
+	pos = { x = 0, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
+
+	config = {
+		extra = {
+			cards_applied = 2,
+			consumable_slots = 4
+		}
+	},
+	loc_vars = function (self, info_queue, back)
+		-- next line disabled due to stack overflow error
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
+		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
+		return {vars = {
+			self.config.extra.cards_applied,
+			self.config.extra.consumable_slots,
+		}}
+	end,
+
+	apply = function (self, back)
+		if not G.GAME.ovn_c_magicnebula then
+			c_magicnebula_switch("magic")
+		end
+	end,
+	calculate = c_magicnebula_calculate
+}
+
+SMODS.Back { key = "c_nebula",
+	ovn_corrupt_deck = true,
+	ovn_pure_version = "b_nebula",
+
+	atlas = "decks_corrupt",
+	pos = { x = 1, y = 1 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
+
+	config = {
+		extra = {
+			planet_buff = 1.5,
+		}
+	},
+	loc_vars = function (self, info_queue, back)
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
+		return {vars = {
+			self.config.extra.planet_buff,
+		}}
+	end,
+
+	apply = function (self, back)
+		if not G.GAME.ovn_c_magicnebula then
+			c_magicnebula_switch("nebula")
+		end
+	end,
+	calculate = c_magicnebula_calculate
+}
+
+
 ---------------------
 -- Corrupt Ghost Deck
 ---------------------
