@@ -11,6 +11,16 @@ b_ovn_locked_c_deck = {
         "{V:1}#2# {}difficulty"
     },
 },
+b_ovn_locked_c_magicnebula = {
+    name = "",
+    text = {""},
+    unlock = {
+        "Win a run with",
+        "{C:attention}#1# {}and",
+        "{C:attention}#2# {}on at least",
+        "{V:1}#3# {}difficulty"
+    }
+},
 b_ovn_ocular = {
     name = "Ocular Deck",
     text = {

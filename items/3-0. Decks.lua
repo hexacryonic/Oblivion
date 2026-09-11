@@ -228,6 +228,11 @@ local function c_magicnebula_switch(force_key)
 		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
 		if G.GAME.ovn_c_magicnebula == "magic" or force_key == "nebula" then
 			G.GAME.ovn_c_magicnebula = "nebula"
+			G.GAME.selected_back.loc_name = localize{
+				type = 'name_text',
+				set = 'Back',
+				key = "b_ovn_c_nebula"
+			}
 
 			-- Disable C.Magic Deck
 			if not force_key then
@@ -248,6 +253,11 @@ local function c_magicnebula_switch(force_key)
 
 		elseif G.GAME.ovn_c_magicnebula == "nebula" or force_key == "magic" then
 			G.GAME.ovn_c_magicnebula = "magic"
+			G.GAME.selected_back.loc_name = localize{
+				type = 'name_text',
+				set = 'Back',
+				key = "b_ovn_c_magic"
+			}
 
 			-- Disable C.Nebula Deck
 			if not force_key then
@@ -265,6 +275,10 @@ local function c_magicnebula_switch(force_key)
 
 			-- Enable C.Magic Deck
 			G.consumeables:change_size(c_magic.config.extra.consumable_slots)
+		end
+
+		if force_key then
+			G.GAME.poo = G.deck:save()
 		end
 	end)
 end
@@ -296,8 +310,98 @@ local function c_magicnebula_calculate(self, back, context)
 		end
 	end
 	if context.end_of_round and context.main_eval and context.beat_boss then
-		c_magicnebula_switch()
+		G.GAME.ovn_bossbeat = true
 	end
+	if context.modify_final_cashout and G.GAME.ovn_bossbeat then
+		G.GAME.ovn_bossbeat = nil
+		add_simple_event(nil, nil, function ()
+			c_magicnebula_switch()
+
+			-- Swap to other set of playing cards
+			local other_deck = G.GAME.poo
+			G.GAME.poo = G.deck:save()
+			remove_all(G.deck.cards)
+			G.deck:load(other_deck)
+			for _,loaded_card in ipairs(G.deck.cards) do
+				table.insert(G.playing_cards, loaded_card)
+			end
+
+			play_sound("ovn_corrupting_joker", 0.8)
+		end)
+	end
+end
+
+local function c_magicnebula_locvars(self, info_queue, back)
+	local mode = G.GAME.ovn_c_magicnebula
+	if not mode then
+		if self.key == "b_ovn_c_magic" then
+			mode = "magic"
+		elseif self.key == "b_ovn_c_nebula" then
+			mode = "nebula"
+		end
+	end
+
+	if mode == "magic" then
+		local proto = G.P_CENTERS["b_ovn_c_magic"]
+		-- next line disabled due to stack overflow error
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
+		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
+		return {
+			vars = {
+				proto.config.extra.cards_applied,
+				proto.config.extra.consumable_slots,
+			},
+			key = "b_ovn_c_magic"
+		}
+	elseif mode == "nebula" then
+		local proto = G.P_CENTERS["b_ovn_c_nebula"]
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
+		return {
+			vars = {
+				proto.config.extra.planet_buff,
+			},
+			key = "b_ovn_c_nebula"
+		}
+	end
+end
+
+local function c_magicnebula_unlock(self, args)
+	return (
+		args.type == "win_deck"
+		and get_deck_win_stake("b_magic") >= 4
+		and get_deck_win_stake("b_nebula") >= 4
+	)
+end
+
+local function c_magicnebula_lockedvars(self, info_queue, card)
+	local b_magic_name_1 = localize('k_unknown')
+	if G.P_CENTERS[self.ovn_pure_version].unlocked then
+		b_magic_name_1 = localize {
+			type = 'name_text',
+			set = 'Back',
+			key = "b_magic"
+		}
+	end
+	local b_nebula_name_2 = localize('k_unknown')
+	if G.P_CENTERS[self.ovn_pure_version].unlocked then
+		b_nebula_name_2 = localize {
+			type = 'name_text',
+			set = 'Back',
+			key = "b_nebula"
+		}
+	end
+
+	return {
+		key = "b_ovn_locked_c_magicnebula",
+		vars = {
+			b_magic_name_1,
+			b_nebula_name_2,
+			localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
+			colours = {
+				get_stake_col(4)
+			}
+		}
+	}
 end
 
 SMODS.Back { key = "c_magic",
@@ -308,8 +412,8 @@ SMODS.Back { key = "c_magic",
 	pos = { x = 0, y = 1 },
 
 	unlocked = false,
-	check_for_unlock = corrupt_deck_unlock,
-	locked_loc_vars = corrupt_deck_lockedvars,
+	check_for_unlock = c_magicnebula_unlock,
+	locked_loc_vars = c_magicnebula_lockedvars,
 
 	config = {
 		extra = {
@@ -317,15 +421,7 @@ SMODS.Back { key = "c_magic",
 			consumable_slots = 4
 		}
 	},
-	loc_vars = function (self, info_queue, back)
-		-- next line disabled due to stack overflow error
-		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
-		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
-		return {vars = {
-			self.config.extra.cards_applied,
-			self.config.extra.consumable_slots,
-		}}
-	end,
+	loc_vars = c_magicnebula_locvars,
 
 	apply = function (self, back)
 		if not G.GAME.ovn_c_magicnebula then
@@ -343,20 +439,15 @@ SMODS.Back { key = "c_nebula",
 	pos = { x = 1, y = 1 },
 
 	unlocked = false,
-	check_for_unlock = corrupt_deck_unlock,
-	locked_loc_vars = corrupt_deck_lockedvars,
+	check_for_unlock = c_magicnebula_unlock,
+	locked_loc_vars = c_magicnebula_lockedvars,
 
 	config = {
 		extra = {
 			planet_buff = 1.5,
 		}
 	},
-	loc_vars = function (self, info_queue, back)
-		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
-		return {vars = {
-			self.config.extra.planet_buff,
-		}}
-	end,
+	loc_vars = c_magicnebula_locvars,
 
 	apply = function (self, back)
 		if not G.GAME.ovn_c_magicnebula then
