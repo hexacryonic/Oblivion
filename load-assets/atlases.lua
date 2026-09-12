@@ -2,67 +2,59 @@
 	return (SMODS.Mods["Cryptid"] or {}).can_load
 end]]
 
-local dim = {
+local D = {
 	CARD = { 71, 95 },
 	TAG = { 34, 34 },
-	SUIT_ICON = {18, 18}
+	SUIT_ICON = { 18, 18 },
+	BLIND = { 34, 34 }
 }
 
-local atlases = {
-	{      dim.CARD, "booster_packs"             },
-	{      dim.CARD, "consumables"               },
-	{      dim.CARD, "decks"                     },
-	{      dim.CARD, "decks_corrupt"             },
-	{      dim.CARD, "enhancements"              },
-	{      dim.CARD, "jokers"                    },
-	{      dim.CARD, "jokers_corrupt"            },
-	{      dim.CARD, "mutations"                 },
-	{      dim.CARD, "optics"                    },
-	{      dim.CARD, "optics_hc"                 },
-	{      dim.CARD, "placeholder"               },
-	{      dim.CARD, "seals"                     },
-	{      dim.CARD, "seals_marks"               },
-	{ dim.SUIT_ICON, "suits"                     },
-	{ dim.SUIT_ICON, "suits_hc"                  },
-	{       dim.TAG, "tags"                      },
-	{      dim.CARD, "vouchers"                  },
-	{      dim.CARD, "itemspecific/apache_tears" },
-	--{      dim.CARD, "crossmod/cryptid_planets", cryptid_is_loaded },
-	-- Deck skin atlases are found in load-assets/deckskins.lua
-}
-
-for _,def in ipairs(atlases) do
-	local condition = def[3]
+local function load_atlas(dims, path, cfg)
+	cfg = cfg or {}
+	local condition = cfg.condition
 	if (condition and not condition()) then return end
 
-	local path = def[2]
-	local px, py = def[1][1], def[1][2]
-
+	local px, py = dims[1], dims[2]
 	local file_name = path .. ".png"
 	local key = path:gsub("/", "_")
 
+	local mode, frames
+	if type(cfg.anim) == "number" then
+		frames = cfg.anim
+		mode = "ANIMATION_ATLAS"
+	elseif cfg.anim == "state" then
+		mode = "STATE_ATLAS"
+	end
+
 	SMODS.Atlas { key = key,
 		path = file_name,
-		px = px, py = py
+		px = px, py = py,
+		atlas_table = mode,
+		frames = frames
 	}
 end
 
-----
-
-SMODS.Atlas {
-	key = "blinds",
-	path = "blinds.png",
-	px = 34, py = 34,
-	atlas_table = "ANIMATION_ATLAS",
-	frames = 21
-}
-
-SMODS.Atlas {
-	key = "itemspecific_apartfalling",
-	path = "itemspecific/apartfalling.png",
-	px = 71, py = 95,
-	atlas_table = "STATE_ATLAS",
-}
+load_atlas(     D.BLIND, "blinds", {anim=21} )
+load_atlas(      D.CARD, "booster_packs"     )
+load_atlas(      D.CARD, "consumables"       )
+load_atlas(      D.CARD, "decks"             )
+load_atlas(      D.CARD, "decks_corrupt"     )
+load_atlas(      D.CARD, "enhancements"      )
+load_atlas(      D.CARD, "jokers"            )
+load_atlas(      D.CARD, "jokers_corrupt"    )
+load_atlas(      D.CARD, "mutations"         )
+load_atlas(      D.CARD, "optics"            )
+load_atlas(      D.CARD, "optics_hc"         )
+load_atlas(      D.CARD, "placeholder"       )
+load_atlas(      D.CARD, "seals"             )
+load_atlas(      D.CARD, "seals_marks"       )
+load_atlas( D.SUIT_ICON, "suits"             )
+load_atlas( D.SUIT_ICON, "suits_hc"          )
+load_atlas(       D.TAG, "tags"              )
+load_atlas(      D.CARD, "vouchers"          )
+load_atlas(      D.CARD, "itemspecific/apache_tears" )
+load_atlas(      D.CARD, "itemspecific/apartfalling", {anim="state"} )
+--load_atlas(      D.CARD, "crossmod/cryptid_planets", {condition=cryptid_is_loaded} )
 
 ----
 
