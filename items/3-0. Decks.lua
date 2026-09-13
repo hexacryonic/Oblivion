@@ -375,7 +375,7 @@ end
 
 local function c_magicnebula_lockedvars(self, info_queue, card)
 	local b_magic_name_1 = localize('k_unknown')
-	if G.P_CENTERS[self.ovn_pure_version].unlocked then
+	if G.P_CENTERS['b_magic'].unlocked then
 		b_magic_name_1 = localize {
 			type = 'name_text',
 			set = 'Back',
@@ -383,7 +383,7 @@ local function c_magicnebula_lockedvars(self, info_queue, card)
 		}
 	end
 	local b_nebula_name_2 = localize('k_unknown')
-	if G.P_CENTERS[self.ovn_pure_version].unlocked then
+	if G.P_CENTERS['b_nebula'].unlocked then
 		b_nebula_name_2 = localize {
 			type = 'name_text',
 			set = 'Back',
