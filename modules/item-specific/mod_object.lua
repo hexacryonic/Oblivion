@@ -222,6 +222,8 @@ Oblivion.obj.reset_game_globals = function (run_start)
 		end
 	end
 
+	Ovn_f.change_deck_visually(G.GAME.ovn_override_deck_visual)
+
 	if not run_start then return end
 end
 

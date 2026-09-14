@@ -195,6 +195,35 @@ Ovn_f.on_deck = function (deck_key, mod_prefix)
 	return G.GAME.selected_back and (G.GAME.selected_back.effect.center.key == (prefix .. deck_key)) or false
 end
 
+-- Change the name, description, and sprite of the current deck. This is a purely visual change.
+---@param key? string If undefined, default to the key of the current deck.
+---@return nil
+function Ovn_f.change_deck_visually(key)
+	if not G.GAME then return end
+	key = key or G.GAME.selected_back.effect.center.key
+
+	if key == G.GAME.selected_back.effect.center.key then
+		G.GAME.ovn_override_deck_visual = nil
+	else
+		G.GAME.ovn_override_deck_visual = key
+	end
+	G.GAME.selected_back.loc_name = localize{
+		type = 'name_text',
+		set = 'Back',
+		key = key
+	}
+
+	local deck_proto = G.P_CENTERS[key]
+	for _,card in ipairs(G.I.CARD) do
+		if getmetatable(card.children.back) == Sprite then
+			card.children.back.atlas = SMODS.get_atlas(deck_proto.atlas or "centers")
+			card.children.back:set_sprite_pos(deck_proto.pos)
+    		card.children.back:reset()
+		end
+	end
+end
+-- See also: G.UIDEF.view_deck hook
+
 
 
 ---------------------------

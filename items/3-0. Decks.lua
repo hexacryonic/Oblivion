@@ -228,11 +228,6 @@ local function c_magicnebula_switch(force_key)
 		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
 		if G.GAME.ovn_c_magicnebula == "magic" or force_key == "nebula" then
 			G.GAME.ovn_c_magicnebula = "nebula"
-			G.GAME.selected_back.loc_name = localize{
-				type = 'name_text',
-				set = 'Back',
-				key = "b_ovn_c_nebula"
-			}
 
 			-- Disable C.Magic Deck
 			if not force_key then
@@ -250,14 +245,10 @@ local function c_magicnebula_switch(force_key)
 					hand.l_mult  = hand.l_mult *G.GAME.ovn_c_nebula_planet_buff
 				end
 			end
+			Ovn_f.change_deck_visually("b_ovn_c_nebula")
 
 		elseif G.GAME.ovn_c_magicnebula == "nebula" or force_key == "magic" then
 			G.GAME.ovn_c_magicnebula = "magic"
-			G.GAME.selected_back.loc_name = localize{
-				type = 'name_text',
-				set = 'Back',
-				key = "b_ovn_c_magic"
-			}
 
 			-- Disable C.Nebula Deck
 			if not force_key then
@@ -275,6 +266,7 @@ local function c_magicnebula_switch(force_key)
 
 			-- Enable C.Magic Deck
 			G.consumeables:change_size(c_magic.config.extra.consumable_slots)
+			Ovn_f.change_deck_visually("b_ovn_c_magic")
 		end
 
 		if force_key then

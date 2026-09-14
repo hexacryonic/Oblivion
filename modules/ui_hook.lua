@@ -217,6 +217,18 @@ function G.UIDEF.run_setup_option(type)
 	return t
 end
 
+-- Hook to define G.ovn_backdesc_override
+local uidef_viewdeck_ref = G.UIDEF.view_deck
+function G.UIDEF.view_deck(unplayed_only)
+	if G.GAME.ovn_override_viewdeck_desc then
+		G.ovn_backdesc_override = G.GAME.ovn_override_viewdeck_desc
+	end
+	local ret = uidef_viewdeck_ref(unplayed_only)
+	G.ovn_backdesc_override = nil
+	return ret
+end
+-- See also: function Back:generate_UI patch, miscellaneous.toml
+
 
 
 ---------------------------

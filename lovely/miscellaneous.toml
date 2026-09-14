@@ -122,3 +122,21 @@ payload = '''
 v.button_colour = v.button_colour or (v.ovn_corrupt_challenge and G.C.RARITY['ovn_corrupted']) or nil
 '''
 match_indent = true
+
+# ----
+
+# function Back:generate_UI(_page)
+# If G.ovn_backdesc_override is defined, override `self`
+[[patches]]
+[patches.pattern]
+target = 'back.lua'
+pattern = '''
+local back_config = other or self.effect.center
+'''
+position = "before"
+payload = '''
+if G.ovn_backdesc_override and not other then
+    other = G.P_CENTERS[G.ovn_backdesc_override]
+end
+'''
+match_indent = true
