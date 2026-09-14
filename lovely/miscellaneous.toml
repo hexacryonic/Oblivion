@@ -135,6 +135,7 @@ local back_config = other or self.effect.center
 '''
 position = "before"
 payload = '''
+-- Flag is only true when this method is called from G.UIDEF.view_deck
 if G.ovn_backdesc_override and not other then
     other = G.P_CENTERS[G.ovn_backdesc_override]
 end

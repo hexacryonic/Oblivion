@@ -323,40 +323,6 @@ local function c_magicnebula_calculate(self, back, context)
 	end
 end
 
-local function c_magicnebula_locvars(self, info_queue, back)
-	local mode = G.GAME.ovn_c_magicnebula
-	if not mode then
-		if self.key == "b_ovn_c_magic" then
-			mode = "magic"
-		elseif self.key == "b_ovn_c_nebula" then
-			mode = "nebula"
-		end
-	end
-
-	if mode == "magic" then
-		local proto = G.P_CENTERS["b_ovn_c_magic"]
-		-- next line disabled due to stack overflow error
-		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
-		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
-		return {
-			vars = {
-				proto.config.extra.cards_applied,
-				proto.config.extra.consumable_slots,
-			},
-			key = "b_ovn_c_magic"
-		}
-	elseif mode == "nebula" then
-		local proto = G.P_CENTERS["b_ovn_c_nebula"]
-		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
-		return {
-			vars = {
-				proto.config.extra.planet_buff,
-			},
-			key = "b_ovn_c_nebula"
-		}
-	end
-end
-
 local function c_magicnebula_unlock(self, args)
 	return (
 		args.type == "win_deck"
@@ -413,7 +379,15 @@ SMODS.Back { key = "c_magic",
 			consumable_slots = 4
 		}
 	},
-	loc_vars = c_magicnebula_locvars,
+	loc_vars = function (self, info_queue, card)
+		-- next line disabled due to stack overflow error
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
+		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
+		return {vars = {
+			self.config.extra.cards_applied,
+			self.config.extra.consumable_slots,
+		}}
+	end,
 
 	apply = function (self, back)
 		if not G.GAME.ovn_c_magicnebula then
@@ -439,7 +413,12 @@ SMODS.Back { key = "c_nebula",
 			planet_buff = 1.5,
 		}
 	},
-	loc_vars = c_magicnebula_locvars,
+	loc_vars = function (self, info_queue, card)
+		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
+		return {vars = {
+			self.config.extra.planet_buff,
+		}}
+	end,
 
 	apply = function (self, back)
 		if not G.GAME.ovn_c_magicnebula then

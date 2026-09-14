@@ -220,8 +220,8 @@ end
 -- Hook to define G.ovn_backdesc_override
 local uidef_viewdeck_ref = G.UIDEF.view_deck
 function G.UIDEF.view_deck(unplayed_only)
-	if G.GAME.ovn_override_viewdeck_desc then
-		G.ovn_backdesc_override = G.GAME.ovn_override_viewdeck_desc
+	if G.GAME.ovn_override_deck_visual then
+		G.ovn_backdesc_override = G.GAME.ovn_override_deck_visual
 	end
 	local ret = uidef_viewdeck_ref(unplayed_only)
 	G.ovn_backdesc_override = nil
