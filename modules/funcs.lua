@@ -1,104 +1,16 @@
 -- These commonly called functions are used across the mod
 
--- 1. INTERNAL FUNCTIONS
--- 2. DECK PROPERTIES
--- 3. MASTER OF PUPPETS
--- 4. OTHER GAMEPLAY
+-- 1. EVENTS
+-- 2. INTERNAL FUNCTIONS
+-- 3. DECK PROPERTIES
+-- 4. MASTER OF PUPPETS
+-- 5. OTHER GAMEPLAY
 
 
 
-----------------------------
----- INTERNAL FUNCTIONS ----
-----------------------------
-
--- Returns `censored` if family friendly is enabled, else returns `normal`.
----@param normal any
----@param censored any
----@return any
-function Ovn_f.f_f(normal, censored)
-	return Oblivion.config.family_friendly and censored or normal
-end
-
----@return nil
-function Ovn_f.reload_localization()
-	SMODS.load_mod_localization(Oblivion.mod_path, Oblivion.obj.id)
-	init_localization()
-end
-
--- Determines whether the player is holding the Joker of specified card key.
----@param card_key string
----@return boolean
-Ovn_f.has_joker = function(card_key)
-	return next(SMODS.find_card(card_key)) and true or false
-end
-
--- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a chain of tables.
----@param input_table any[] Values correspond to table keys.
----@return any The value of the final key in `input_table`.
-Ovn_f.descend_table = function(input_table)
-	local current_table = input_table[1]
-	if type(current_table) ~= "table" then return nil end
-	for i = 2, #input_table do
-		local key = input_table[i]
-		current_table = current_table[key]
-		if ( -- True if not indexable (includes nil)
-			type(current_table) ~= "table"
-			and i ~= #input_table
-		) then return nil end
-	end
-	return current_table
-end
-
--- Copies a table and any table it contains.
----@param tbl table
----@return table
-Ovn_f.bi_shallow_copy = function(tbl)
-	local new_table = SMODS.shallow_copy(tbl)
-	for i,item in pairs(new_table) do
-		new_table[i] = type(item) == "table" and SMODS.shallow_copy(item) or item
-	end
-	return new_table
-end
-
--- DEBUG: Compile a list of credited users and their contributions.
----@return {string: string[]}
-Ovn_f.credited_users = function()
-	local users = {}
-	for key,center in pairs(G.P_CENTERS) do
-		if center.credits then
-			for role,usernames in pairs(center.credits) do
-				local split_usernames = usernames:gmatch("([^,]+)")
-				for username in split_usernames do
-					username = username:gsub("^ +", ""):gsub(" +$", "")
-					users[username] = users[username] or {}
-					table.insert(users[username], role .. " - " .. key)
-				end
-			end
-		end
-	end
-	return users
-end
-
--- DEBUG: Call this function inside a function to see exactly where this function is being called from.
--- It is recommended to print the return value.
----@return string
-Ovn_f.calling_func = function()
-	local traceback = debug.traceback()
-	local lines = {}
-	for str in traceback:gmatch("[^\n]+") do
-		table.insert(lines, str)
-		if #lines == 4 then break end
-	end
-	if #lines ~= 4 then return "???" end
-	local function_thats_calling_the_function_this_function_is_in_ig = lines[4]:gsub("^ +", "")
-	return function_thats_calling_the_function_this_function_is_in_ig
-end
-
-
-
--------------------------
----- DECK PROPERTIES ----
--------------------------
+----------------
+---- EVENTS ----
+----------------
 
 Ovn_f.event = {}
 
@@ -197,6 +109,93 @@ Ovn_f.event.seq = function(event_func_list, delay, offset)
 		-- :(
 		Ovn_f.event.seq(event_func_list, delay, offset + 1)
 	end)
+end
+
+----------------------------
+---- INTERNAL FUNCTIONS ----
+----------------------------
+
+-- Returns `censored` if family friendly is enabled, else returns `normal`.
+---@param normal any
+---@param censored any
+---@return any
+function Ovn_f.f_f(normal, censored)
+	return Oblivion.config.family_friendly and censored or normal
+end
+
+---@return nil
+function Ovn_f.reload_localization()
+	SMODS.load_mod_localization(Oblivion.mod_path, Oblivion.obj.id)
+	init_localization()
+end
+
+-- Determines whether the player is holding the Joker of specified card key.
+---@param card_key string
+---@return boolean
+Ovn_f.has_joker = function(card_key)
+	return next(SMODS.find_card(card_key)) and true or false
+end
+
+-- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a chain of tables.
+---@param input_table any[] Values correspond to table keys.
+---@return any The value of the final key in `input_table`.
+Ovn_f.descend_table = function(input_table)
+	local current_table = input_table[1]
+	if type(current_table) ~= "table" then return nil end
+	for i = 2, #input_table do
+		local key = input_table[i]
+		current_table = current_table[key]
+		if ( -- True if not indexable (includes nil)
+			type(current_table) ~= "table"
+			and i ~= #input_table
+		) then return nil end
+	end
+	return current_table
+end
+
+-- Copies a table and any table it contains.
+---@param tbl table
+---@return table
+Ovn_f.bi_shallow_copy = function(tbl)
+	local new_table = SMODS.shallow_copy(tbl)
+	for i,item in pairs(new_table) do
+		new_table[i] = type(item) == "table" and SMODS.shallow_copy(item) or item
+	end
+	return new_table
+end
+
+-- DEBUG: Compile a list of credited users and their contributions.
+---@return {string: string[]}
+Ovn_f.credited_users = function()
+	local users = {}
+	for key,center in pairs(G.P_CENTERS) do
+		if center.credits then
+			for role,usernames in pairs(center.credits) do
+				local split_usernames = usernames:gmatch("([^,]+)")
+				for username in split_usernames do
+					username = username:gsub("^ +", ""):gsub(" +$", "")
+					users[username] = users[username] or {}
+					table.insert(users[username], role .. " - " .. key)
+				end
+			end
+		end
+	end
+	return users
+end
+
+-- DEBUG: Call this function inside a function to see exactly where this function is being called from.
+-- It is recommended to print the return value.
+---@return string
+Ovn_f.calling_func = function()
+	local traceback = debug.traceback()
+	local lines = {}
+	for str in traceback:gmatch("[^\n]+") do
+		table.insert(lines, str)
+		if #lines == 4 then break end
+	end
+	if #lines ~= 4 then return "???" end
+	local function_thats_calling_the_function_this_function_is_in_ig = lines[4]:gsub("^ +", "")
+	return function_thats_calling_the_function_this_function_is_in_ig
 end
 
 
