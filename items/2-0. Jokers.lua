@@ -1,5 +1,3 @@
-local add_simple_event = Ovn_f.add_simple_event
-
 ---@param card Card
 ---@param target string
 ---@param scalar string
@@ -151,7 +149,7 @@ SMODS.Joker { key = 'ovn',
 			and not context.game_over
 			and context.beat_boss
 		) then
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				local leftmost_joker = G.jokers.cards[1]
 				leftmost_joker:set_edition("e_ovn_miasma")
 				leftmost_joker:juice_up()
@@ -452,7 +450,7 @@ SMODS.Joker { key = 'crystal_joker',
 					- card.ability.extra.extra_plays
 				)
 				if playing_card.ability.extra.plays_left <= 0 then
-					add_simple_event(nil, nil, function ()
+					Ovn_f.event.simple(nil, function ()
 						play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
 						SMODS.destroy_cards(playing_card)
 					end)
@@ -1294,11 +1292,11 @@ SMODS.Joker { key = 'apartfalling',
 			and context.ovn_corrupted_card ~= card
 		) then
 			simple_scale(card, "x_mult", "xmult_increase", G.C.MULT, "a_xmult")
-			Ovn_f.unblock_event("after", 0.25, function ()
+			Ovn_f.event.unblock(0.25, function ()
 				card:set_sprite_state("static")
 			end)
-			Ovn_f.unblock_event("after", 2, function ()
-				add_simple_event(nil, nil, function ()
+			Ovn_f.event.unblock(2, function ()
+				Ovn_f.event.simple(nil, function ()
 					local x = pseudorandom('apartfalling_sprite', 1, 5)
 					if x == card.ability.extra.current_screen then
 						x = (x == 5) and (1) or (x + 1)
@@ -1609,7 +1607,7 @@ SMODS.Joker { key = 'spiral_of_addiction',
 		end
 
 		if context.setting_blind and card_extra.do_handsize_change then
-			add_simple_event(nil, nil, function()
+			Ovn_f.event.simple(nil, function()
 				Ovn_f.temp_handsize_change(card_extra.handsize_change)
 				SMODS.calculate_effect(
 					{ message = localize {
@@ -1752,7 +1750,7 @@ SMODS.Joker { key = 'yolo',
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
 			ease_hands_played(-G.GAME.current_round.hands_left)
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				G.GAME.current_round.hands_left = '-nan'
 			end)
 		end
@@ -1766,10 +1764,10 @@ SMODS.Joker { key = 'yolo',
 		end
 
 		if context.after then
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				G.GAME.current_round.hands_left = 0
 			end)
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				if G.GAME.chips < G.GAME.blind.chips then
 					G.STATE = G.STATES.GAME_OVER
 					G.STATE_COMPLETE = false
@@ -2141,7 +2139,7 @@ SMODS.Joker { key = 'master_of_puppets',
 			end
 
 			-- Finally add modifiers
-			add_simple_event(nil, nil, function()
+			Ovn_f.event.simple(nil, function()
 				for _,modifier in ipairs(modifiers_list) do
 					local modi_def = Oblivion.modifier_def[modifier]
 					local options = all_options[modifier]
@@ -2210,7 +2208,7 @@ SMODS.Joker { key = 'bottled_ship_of_theseus',
 				if removed_card.config.center.key ~= "m_glass" then
 					local rank = removed_card.base.value
 					local suit = removed_card.base.suit
-					add_simple_event(nil, nil, function ()
+					Ovn_f.event.simple(nil, function ()
 						SMODS.add_card { -- Random enhanced 3 of Clubs
 							set = "Enhanced",
 							rank = rank,

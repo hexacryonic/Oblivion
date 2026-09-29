@@ -8,8 +8,6 @@
 -- 3. MODIFIER TRANSMUTATION
 -- 4. CALCULATION MACROS
 
-local simple_event = Ovn_f.add_simple_event
-
 
 
 -----------------------------
@@ -37,7 +35,7 @@ Ovn_f.corrupt_joker = function(card)
 	end
 
 	PlayLog.log{ type = "ovn_transmute_joker", transmute_type = "corrupt", from = card_key, to = corrupted_card_key }
-    simple_event(nil, nil, function()
+    Ovn_f.event.simple(nil, function()
         play_sound("ovn_corrupting_joker")
 
 		if not card_destroyed then
@@ -76,13 +74,13 @@ Ovn_f.purify_joker = function(card)
 	end
 
 	PlayLog.log{ type = "ovn_transmute_joker", transmute_type = "purify", from = card_key, to = pure_card_key }
-    simple_event(nil, nil, function()
+    Ovn_f.event.simple(nil, function()
         play_sound("ovn_purifying")
 		card:juice_up(0.3, 0.5)
 		card:calculate_joker(Ovn_f.calculate_purified_from(card_key, ability))
 		SMODS.calculate_context(Ovn_f.calculate_purification_occurred("Joker", card_key, card))
     end)
-	simple_event('after', 1, function() G.GAME.purifyingJoker = false end)
+	Ovn_f.event.simple(1, function() G.GAME.purifyingJoker = false end)
 end
 
 
@@ -228,7 +226,7 @@ Ovn_f.corrupt_modifiers = function(card)
 	if transmuted then
 		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "corrupt", card = card, from = old_keys, to = corrupt_keys }
 
-		simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 
@@ -255,7 +253,7 @@ Ovn_f.corrupt_enhancement = function(card)
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
 		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "corrupt", card = card, from = enhancement_key, to = new_enhancement }
-		simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			play_sound('ovn_optic', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 			card:calculate_enhancement(Ovn_f.calculate_corrupted_from(enhancement_key))
@@ -298,7 +296,7 @@ Ovn_f.purify_modifiers = function(card)
 	if transmuted then
 		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "purify", card = card, from = old_keys, to = pure_keys }
 
-		simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 
@@ -325,7 +323,7 @@ Ovn_f.purify_enhancement = function(card)
 	if new_enhancement then
 		card:set_ability(G.P_CENTERS[new_enhancement], nil, true)
 		PlayLog.log{ type = "ovn_transmute_modifiers", transmute_type = "purify", card = card, from = enhancement_key, to = new_enhancement }
-		simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			play_sound('ovn_purifying', 1, 1.1)
 			card:juice_up(0.5, 0.5)
 			card:calculate_enhancement(Ovn_f.calculate_purified_from(enhancement_key))

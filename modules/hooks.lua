@@ -12,8 +12,6 @@
 ---- GLOBAL FUNCTIONS ----
 --------------------------
 
-local add_simple_event = Ovn_f.add_simple_event
-
 -- Hook for Event Horizon effect
 local lvluphand_hook = level_up_hand
 function level_up_hand(card, hand, instant, amount)
@@ -37,7 +35,7 @@ function level_up_hand(card, hand, instant, amount)
 			local speed = 1 + (i-1)*0.1
 
 			local function juice_param_ui(event_delay, param, colour)
-				Ovn_f.add_simple_event('after', event_delay/speed, function()
+				Ovn_f.event.simple(event_delay/speed, function()
 					play_sound('tarot1')
 					if card then card:juice_up(0.8, 0.5) end
 					event_horizon:juice_up(0.8, 0.5)
@@ -61,7 +59,7 @@ function level_up_hand(card, hand, instant, amount)
 			event_horizon.ability.extra.mult >= 198
 			and event_horizon.ability.extra.chips >= 1730
 		) then
-			Ovn_f.add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				check_for_unlock({type = 'ovn_eventhoz_scale'})
 			end)
 		end
@@ -297,7 +295,7 @@ local game_startrun_hook = Game.start_run
 function Game:start_run(args)
 	game_startrun_hook(self, args)
 	if G.GAME.ovn_complex_economy then
-		add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			for _,joker_card in ipairs(G.jokers.cards) do
 				joker_card:set_cost()
 			end
@@ -370,7 +368,7 @@ local game_menu_hook = Game.main_menu
 function Game:main_menu(context)
 	game_menu_hook(self, context)
 	if not Oblivion.config.first_install_notif then
-		Ovn_f.add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			local loc = G.localization.descriptions.Other.ovn_first_install_notif
 			Ovn_f.notification({
 				Ovn_f.JTML.flex{mode="row", style={colour=G.C.WHITE,padding=0.2,roundCorners=true}, {

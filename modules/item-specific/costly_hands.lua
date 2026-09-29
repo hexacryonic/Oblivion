@@ -6,8 +6,6 @@
 -- 1. FUNCTIONS
 -- 2. HOOKS
 
-local add_simple_event = Ovn_f.add_simple_event
-
 
 
 -------------------
@@ -93,7 +91,7 @@ Ovn_f.try_punish_unaffordable_hand = function()
 		and G.GAME.ovn_costly_hands.punish_unaffordable
 		and G.GAME.ovn_costly_hands.hand_cost ~= 0
 	) then return end
-	Ovn_f.nested_event(1, nil, nil, function ()
+	Ovn_f.event.nested(1, nil, function ()
 		if G.GAME.dollars < G.GAME.ovn_costly_hands.hand_cost then
 			G.STATE = G.STATES.GAME_OVER
 			G.STATE_COMPLETE = false
@@ -143,7 +141,7 @@ Ovn_f.ease_hand_cost = function(amount, instant)
 		play_sound('coin6')
 	end
 
-	add_simple_event(instant and 'instant' or 'immediate', nil, function()
+	Ovn_f.event.simple(instant and 'instant' or nil, function()
 		_mod(amount)
 	end)
 end
@@ -189,7 +187,7 @@ Ovn_f.ease_discard_cost = function(amount, instant)
 		play_sound('coin6')
 	end
 
-	add_simple_event(instant and 'instant' or 'immediate', nil, function()
+	Ovn_f.event.simple(instant and 'instant' or nil, function()
 		_mod(amount)
 	end)
 end

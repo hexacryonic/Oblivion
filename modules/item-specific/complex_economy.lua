@@ -9,8 +9,6 @@
 -- 3. UI FUNCTIONS
 -- 4. UI HOOKS
 
-local add_simple_event = Ovn_f.add_simple_event
-
 
 
 -------------------
@@ -218,7 +216,7 @@ Ovn_f.ease_complex_dollars = function(mod, mod_i, instant)
 		play_sound('coin1')
 	end
 
-	add_simple_event(instant and 'instant' or 'immediate', nil, function()
+	Ovn_f.event.simple(instant and 'instant' or nil, function()
 		_mod(mod, mod_i)
 	end)
 end
@@ -297,7 +295,7 @@ Ovn_f.add_complex_roundeval_row = function(config)
 	local dollars_txt = (dollars ~= 1 and dollars or "") .. "i"
 	local scale = 0.9
 
-	add_simple_event('after', 0.5, function ()
+	Ovn_f.event.simple(0.5, function ()
 		local left_text = {}
 		if config.name == 'hands' then
 			table.insert(left_text, {n=G.UIT.T, config={
@@ -379,7 +377,7 @@ Ovn_f.add_complex_roundeval_row = function(config)
 	end)
 
 	local dollar_row = 0
-	add_simple_event('before', 0.38, function ()
+	Ovn_f.event.simple({0.38}, function ()
 		G.round_eval:add_child(
 			{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(dollar_row+1)..'_'..config.name}, nodes={
 				{n=G.UIT.O, config={object = DynaText({string = {localize('$')..dollars_txt}, colours = {G.C.MONEY}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
@@ -406,7 +404,7 @@ Ovn_f.add_complex_cashout_button = function(dollars, dollars_i)
 	local scale = 0.9
 
 	delay(0.4)
-	add_simple_event('before', 0.5, function ()
+	Ovn_f.event.simple({0.5}, function ()
 		UIBox{
 			definition =
 			{n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={

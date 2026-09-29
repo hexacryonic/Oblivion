@@ -1,5 +1,3 @@
-local add_simple_event = Ovn_f.add_simple_event
-
 local function change_rank(card, new_rank)
 	local new_code = ({
 		Diamonds = 'D_',
@@ -70,7 +68,7 @@ SMODS.Enhancement { key = "radiant",
 			local card_chip = card.base.nominal + card.ability.extra.bonus_chips
 			for _,other_card in ipairs(context.scoring_hand) do
 				other_card.ability.bonus = other_card.ability.bonus + card_chip
-				add_simple_event(nil, nil, function ()
+				Ovn_f.event.simple(nil, function ()
 					other_card:juice_up()
 				end)
 			end
@@ -213,7 +211,7 @@ SMODS.Enhancement { key = "ice",
 			and c_extra.current_x_mult <= (1 + card.ability.extra.x_mult_loss)
 		) then
 			card.ice_melted = true
-			add_simple_event(nil, nil, function()
+			Ovn_f.event.simple(nil, function()
 				play_sound("tarot1")
 			end)
 			return {remove = true}
@@ -302,7 +300,7 @@ SMODS.Enhancement { key = "crystal",
 			and context.cardarea == "unscored"
 			and card.ability.extra.plays_left <= 0
 		) then
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				play_sound('glass'..math.random(1, 6), math.random()*0.5 + 1.2,0.5)
 			end)
 			return {remove = true}
@@ -461,7 +459,7 @@ SMODS.Seal { key = 'indigo',
 			and card.area == G.hand
 		) then
 			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-			add_simple_event('before', 0, function ()
+			Ovn_f.event.simple({0}, function ()
 				local created_spectral = SMODS.add_card({ set = 'Spectral' })
 				card:juice_up(0.3, 0.5)
 				G.GAME.consumeable_buffer = 0
@@ -678,7 +676,7 @@ SMODS.Seal { key = 'amethyst_mark',
 
 	calculate = function (self, card, context)
 		if context.main_scoring and context.cardarea == G.play then
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				SMODS.add_card{
 					key = "c_fool",
 					edition = "e_negative"
@@ -712,7 +710,7 @@ SMODS.Seal { key = 'iolite_mark',
 		if context.using_consumeable and context.cardarea == G.hand then
 			if context.consumeable.ability.set ~= "Spectral" then return end
 			local consumable_key = context.consumeable.config.center.key
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				SMODS.add_card{
 					key = consumable_key,
 					edition = "e_negative"
@@ -802,7 +800,7 @@ SMODS.Edition { key = "miasma",
 		if context.after and context.cardarea == G.jokers then
 			-- Card is corruptable, proceed to corrupt
 			if Ovn_f.joker_is_corruptible(card.config.center.key) then
-				add_simple_event('after', 0.1, function ()
+				Ovn_f.event.simple(0.1, function ()
 					Ovn_f.corrupt_joker(card)
 					card:set_edition(nil)
 				end)
@@ -814,7 +812,7 @@ SMODS.Edition { key = "miasma",
 
 			-- Card cannot be corrupted, self-destruct
 			else
-				add_simple_event('after', 0.0, function ()
+				Ovn_f.event.simple(0.0, function ()
 					play_sound("ovn_optic", nil, 0.2)
 					card:start_dissolve({G.C.RARITY['ovn_corrupted']})
 				end)
@@ -824,7 +822,7 @@ SMODS.Edition { key = "miasma",
 		-- Corrupt non-Optic cards
 		if context.after and play_or_sludgehand(self, card, context) then
 			if card.base.suit ~= 'ovn_Optics' then
-				add_simple_event('after', 0.1, function ()
+				Ovn_f.event.simple(0.1, function ()
 					card:set_edition(nil)
 					card:change_suit('ovn_Optics')
 				end)

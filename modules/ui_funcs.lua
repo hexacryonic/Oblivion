@@ -58,7 +58,7 @@ function G.FUNCS.supply_empty(e)
 		force_stickers = true,
 	}
 
-	Ovn_f.add_simple_event('after', 0.1, function ()
+	Ovn_f.event.simple(0.1, function ()
 		SMODS.calculate_effect({
 			message = localize("empty"),
 			colour = G.C.DARK_EDITION
@@ -110,7 +110,7 @@ function G.FUNCS.supply_store(e)
 	check_for_unlock({type = 'ovn_sell_supply_drop'})
 
 	-- i think you can use smods.destroy_cards but idk, too lazy to check -oin
-	Ovn_f.add_simple_event('after', 0.1, function ()
+	Ovn_f.event.simple(0.1, function ()
 		left_joker:start_dissolve({G.C.RARITY['ovn_corrupted']})
 		SMODS.calculate_effect({
 			message = localize("stored"),
@@ -210,7 +210,7 @@ function Ovn_f.update_suit_chart(instant)
 	local full_w = w + 2*outline + shadow_offset
 
 	local c = G.ovn_suit_chart:get_UIE_by_ID("canvas").config.object.canvas
-	Ovn_f.add_simple_event(instant and "instant" or "after", 0, function ()
+	Ovn_f.event.simple(instant and "instant" or 0, function ()
 		c:renderTo(function ()
 			local middle = w/2 + outline
 			local radius = w/2

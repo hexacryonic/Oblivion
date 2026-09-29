@@ -119,7 +119,7 @@ Ovn_f.activate_ghostly_adversary = function()
 	local selected_cards, select_areas = ghast_select_cards(selected_spec)
 
 	-- Run animations
-	Ovn_f.add_simple_event(nil, nil, function()
+	Ovn_f.event.simple(nil, function()
 		G.CONTROLLER.locks.use = true -- Prevents interaction
 		G.STATE = G.STATES.PLAY_TAROT -- Move cards like when consumable is being used
 		local spectral = SMODS.add_card{
@@ -160,6 +160,6 @@ Ovn_f.activate_ghostly_adversary = function()
 			save_run()
 		end)
 
-		Ovn_f.event_sequence(event_sequence)
+		Ovn_f.event.seq(event_sequence)
 	end)
 end

@@ -11,52 +11,6 @@
 ---- INTERNAL FUNCTIONS ----
 ----------------------------
 
--- A shorthand of adding an event to G.E_MANAGER that only defines the properties trigger, delay, and func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value\
--- or if other parameters such as blocking require specification.
----@param trigger string | nil
----@param delay number | nil
----@param func function
----@return nil
-Ovn_f.add_simple_event = function(trigger, delay, func)
-	if trigger == "instant" then func(); return end
-	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
-	G.E_MANAGER:add_event(Event {
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
-local add_simple_event = Ovn_f.add_simple_event
-
--- Adds a nested simple event to G.E_MANAGER, allowing the specified function to be cleanly delayed.\
--- Event function will always return true, so "return true" is not required.\
-Ovn_f.nested_event = function (count, trigger, delay, func)
-	if count == 0 then
-		Ovn_f.add_simple_event(trigger, delay, func)
-	else
-		G.E_MANAGER:add_event(Event {function ()
-			Ovn_f.nested_event(count - 1, trigger, delay, func)
-			return true
-		end})
-	end
-end
-
--- Adds a simple event to G.E_MANAGER that is also unblocking and unblockable.\
--- Event function will always return true, so "return true" is not required.\
-Ovn_f.unblock_event = function (trigger, delay, func)
-	if trigger == "instant" then func(); return end
-	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
-	G.E_MANAGER:add_event(Event {
-		blocking = false,
-		blockable = false,
-		trigger = trigger,
-		delay = delay,
-		func = function() func(); return true end
-	})
-end
-
 -- Returns `censored` if family friendly is enabled, else returns `normal`.
 ---@param normal any
 ---@param censored any
@@ -76,28 +30,6 @@ end
 ---@return boolean
 Ovn_f.has_joker = function(card_key)
 	return next(SMODS.find_card(card_key)) and true or false
-end
-
--- Run a sequence of events, with defineable delays.
----@param event_func_list [number, function][]
----@param delay? number
----@param offset? number
----@return nil
-Ovn_f.event_sequence = function(event_func_list, delay, offset)
-	delay = delay or 0
-	offset = offset or 1
-	local event_def = event_func_list[offset]
-	if not event_def then return end
-
-	local event_delay = event_def[1] or 0
-	local event_func  = event_def[2]
-
-	delay = delay + event_delay
-	add_simple_event("after", delay, function()
-		if event_func then event_func() end
-		-- :(
-		Ovn_f.event_sequence(event_func_list, delay, offset + 1)
-	end)
 end
 
 -- Go through nested tables via a list of keys, returning nil if the entire list of keys does not correspond to a chain of tables.
@@ -160,6 +92,111 @@ Ovn_f.calling_func = function()
 	if #lines ~= 4 then return "???" end
 	local function_thats_calling_the_function_this_function_is_in_ig = lines[4]:gsub("^ +", "")
 	return function_thats_calling_the_function_this_function_is_in_ig
+end
+
+
+
+-------------------------
+---- DECK PROPERTIES ----
+-------------------------
+
+Ovn_f.event = {}
+
+-- A shorthand of adding an event to G.E_MANAGER that\
+-- only defines the properties trigger, delay, and func.\
+-- Event function will always return true, so "return true" is not required.\
+-- The behavior of the event depends on `trigger`:
+-- * `"instant"` - `func` runs independently of an event, and no event is created.
+-- * `number`    - `func` runs after the specified duration, affected by game speed, i.e. "after".
+-- * `{number}`  - The event exits the main queue after the specified duration AND `func` finishes running, i.e. "before".
+-- * `nil`       - `func` runs in an event, i.e. "immediate".
+---@param trigger "instant"|number|[number]|nil
+---@param func function
+---@return nil
+Ovn_f.event.simple = function (trigger, func)
+	if trigger == "instant" then func(); return end
+
+	local mode = "immediate"
+	local delay
+	if type(trigger) == "number" then
+		mode = "after"
+		delay = trigger
+	elseif type(trigger) == "table" then
+		mode = "before"
+		delay = trigger[1] or 0
+	end
+
+	G.E_MANAGER:add_event(Event {
+		trigger = mode,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
+
+-- Adds a nested simple event to G.E_MANAGER, allowing the specified function to be cleanly delayed.\
+-- Event function will always return true, so "return true" is not required.\
+---@param count number How many events to push `func` through.
+---@param trigger "instant"|number|[number]|nil
+---@param func function
+---@return nil
+Ovn_f.event.nested = function (count, trigger, func)
+	if count == 0 then
+		Ovn_f.event.simple(trigger, func)
+	else
+		G.E_MANAGER:add_event(Event {function ()
+			Ovn_f.event.nested(count - 1, trigger, func)
+			return true
+		end})
+	end
+end
+
+-- Adds a simple event to G.E_MANAGER that is also unblocking and unblockable.\
+-- Event function will always return true, so "return true" is not required.\
+---@param trigger "instant"|number|[number]|nil
+---@param func function
+---@return nil
+Ovn_f.event.unblock = function (trigger, func)
+	if trigger == "instant" then func(); return end
+
+	local mode = "immediate"
+	local delay
+	if type(trigger) == "number" then
+		mode = "after"
+		delay = trigger
+	elseif type(trigger) == "table" then
+		mode = "before"
+		delay = trigger[1] or 0
+	end
+
+	G.E_MANAGER:add_event(Event {
+		blocking = false,
+		blockable = false,
+		trigger = mode,
+		delay = delay,
+		func = function() func(); return true end
+	})
+end
+
+-- Run a sequence of events, with defineable delays.
+---@param event_func_list [number, function][]
+---@param delay? number
+---@param offset? number
+---@return nil
+Ovn_f.event.seq = function(event_func_list, delay, offset)
+	delay = delay or 0
+	offset = offset or 1
+	local event_def = event_func_list[offset]
+	if not event_def then return end
+
+	local event_delay = event_def[1] or 0
+	local event_func  = event_def[2]
+
+	delay = delay + event_delay
+	Ovn_f.event.simple(delay, function()
+		if event_func then event_func() end
+		-- :(
+		Ovn_f.event.seq(event_func_list, delay, offset + 1)
+	end)
 end
 
 
@@ -329,7 +366,7 @@ end
 ---@return nil
 Ovn_f.ease_blind_requirement = function(mod)
 	if not G.GAME.blind.in_blind then return end
-	add_simple_event('immediate', nil, function ()
+	Ovn_f.event.simple(nil, function ()
 		local blind_req_UI = G.HUD_blind:get_UIE_by_ID('HUD_blind_count') --[[@as UIElement]]
 		mod = mod or 0
 
@@ -441,7 +478,7 @@ Ovn_f.blackhole_upgrade_eventhorizon = function(card, all_event_horizons)
 	for i,event_horizon in ipairs(all_event_horizons) do
 		local speed = 1 + (i-1)*0.1
 		-- Mult
-		Ovn_f.add_simple_event('after', 0.2/speed, function ()
+		Ovn_f.event.simple(0.2/speed, function ()
 			play_sound('tarot1')
 			if card then card:juice_up(0.8, 0.5) end
 			event_horizon:juice_up(0.8, 0.5)
@@ -452,7 +489,7 @@ Ovn_f.blackhole_upgrade_eventhorizon = function(card, all_event_horizons)
 			})
 		end)
 		-- Chip
-		Ovn_f.add_simple_event('after', 0.9/speed, function ()
+		Ovn_f.event.simple(0.9/speed, function ()
 			play_sound('tarot1')
 			if card then card:juice_up(0.8, 0.5) end
 			event_horizon:juice_up(0.8, 0.5)

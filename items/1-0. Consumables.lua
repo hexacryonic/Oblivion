@@ -1,5 +1,3 @@
-local add_simple_event = Ovn_f.add_simple_event
-
 ------------
 -- TAROT
 -- The Abyss
@@ -243,13 +241,13 @@ SMODS.Consumable { key = "charybdis",
 
 		if #deletable_jokers > 0 then
 			local target_delete_joker = pseudorandom_element(deletable_jokers, "ovn_charybdis_DIE")
-			add_simple_event('before', 0, function ()
+			Ovn_f.event.simple({0}, function ()
 				SMODS.destroy_cards(target_delete_joker)
 			end)
 			PlayLog.log{ type = "destroys", card = card, destroyed = target_delete_joker }
 		end
 
-		add_simple_event('after', 0.4, function ()
+		Ovn_f.event.simple(0.4, function ()
 			for i = 1, math.floor(card.ability.extra.create) do
 				local created_card = SMODS.add_card{
 					set = 'Joker',
@@ -318,7 +316,7 @@ SMODS.Consumable { key = "oblivion",
 		local selected_cards = {}
 		for _,joker in ipairs(G.jokers.highlighted) do table.insert(selected_cards, joker) end
 		for _,playing_card in ipairs(G.hand.highlighted) do table.insert(selected_cards, playing_card) end
-		add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			for _,target_card in ipairs(selected_cards) do
 				play_sound('tarot1')
 				target_card:set_edition({ ovn_miasma = true })
@@ -361,17 +359,17 @@ SMODS.Consumable { key = "eidolon",
 		-- Modified version of VanillaRemade Deja Vu implementation
 		local converted_card = G.hand.highlighted[1]
 
-		add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			play_sound('tarot1')
 			card:juice_up(0.3, 0.5)
 		end)
 
-		add_simple_event('after', 0.1, function ()
+		Ovn_f.event.simple(0.1, function ()
 			converted_card:set_seal(card.ability.extra.seal, nil, true)
 			PlayLog.log{ type = "applied", card = card, applied = { converted_card }, seal = card.ability.extra.seal }
 		end)
 		delay(0.5)
-		add_simple_event('after', 0.2, function ()
+		Ovn_f.event.simple(0.2, function ()
 			G.hand:unhighlight_all()
 		end)
 	end,

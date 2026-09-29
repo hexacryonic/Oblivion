@@ -137,7 +137,7 @@ Oblivion.obj.calculate = function (self, context)
 	--------------------------------
     if context.starting_shop or context.reroll_shop then
 		-- If shop contains corrupting items, juice corruptibles
-        Ovn_f.add_simple_event(nil, nil, function ()
+        Ovn_f.event.simple(nil, function ()
             local stop_juice = true
             for _,card in ipairs(G.shop_jokers.cards) do
                 if card.config.center.corrupts_jokers then
@@ -164,7 +164,7 @@ Oblivion.obj.calculate = function (self, context)
     if context.open_booster then
         -- Juice Jokers when a booster pack contains a corrupting consumable
         -- Event delay necessary since G.pack_cards is nil when context.open_booster is sent
-        Ovn_f.add_simple_event(nil, nil, function ()
+        Ovn_f.event.simple(nil, function ()
             for _,card in ipairs(G.pack_cards.cards) do
                 if card.config.center.corrupts_jokers then
                     mass_juice_corruptibles()

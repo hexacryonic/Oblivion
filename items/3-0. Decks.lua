@@ -1,5 +1,3 @@
-local add_simple_event = Ovn_f.add_simple_event
-
 local function corrupt_deck_unlock(self, args)
 	return (
 		args.type == "win_deck"
@@ -69,7 +67,7 @@ SMODS.Back { key = "c_red",
 		Ovn_f.enable_datcard()
 	end,
 	calculate = function(self, card, context)
-		if context.after then add_simple_event(nil, nil, function ()
+		if context.after then Ovn_f.event.simple(nil, function ()
 			local any_selected = nil
 			local discarded_cards = {}
 			for _,hand_card in ipairs(G.hand.cards) do
@@ -159,7 +157,7 @@ SMODS.Back { key = "c_yellow",
 
 		if context.end_of_round and context.main_eval and context.beat_boss then
 			local cost_mult = back.effect.config.cost_mult
-			Ovn_f.add_simple_event(nil, nil, function()
+			Ovn_f.event.simple(nil, function()
 				Ovn_f.ease_hand_cost(math.floor(hand_cost*cost_mult - hand_cost))
 				delay(0.75)
 				Ovn_f.ease_discard_cost(math.floor(discard_cost*cost_mult - discard_cost))
@@ -224,7 +222,7 @@ SMODS.Back { key = "c_black",
 ----------------------
 
 local function c_magicnebula_switch(force_key)
-	add_simple_event(nil, nil, function ()
+	Ovn_f.event.simple(nil, function ()
 		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
 		if G.GAME.ovn_c_magicnebula == "magic" or force_key == "nebula" then
 			G.GAME.ovn_c_magicnebula = "nebula"
@@ -235,7 +233,7 @@ local function c_magicnebula_switch(force_key)
 			end
 
 			-- Enable C.Nebula Deck
-			add_simple_event(nil, nil, function () -- because apparently changing cardarea size makes events >:(
+			Ovn_f.event.simple(nil, function () -- because apparently changing cardarea size makes events >:(
 				G.GAME.ovn_old_consumable_limit = G.consumeables.config.card_limit
 				G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
 			end)
@@ -253,7 +251,7 @@ local function c_magicnebula_switch(force_key)
 			-- Disable C.Nebula Deck
 			if not force_key then
 				G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
-				add_simple_event(nil, nil, function ()
+				Ovn_f.event.simple(nil, function ()
 					G.GAME.ovn_old_consumable_limit = nil
 				end)
 				if G.GAME.ovn_c_nebula_planet_buff then
@@ -306,7 +304,7 @@ local function c_magicnebula_calculate(self, back, context)
 	end
 	if context.modify_final_cashout and G.GAME.ovn_bossbeat then
 		G.GAME.ovn_bossbeat = nil
-		add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			c_magicnebula_switch()
 
 			-- Swap to other set of playing cards
@@ -454,11 +452,11 @@ SMODS.Back { key = "c_ghost",
 			and context.ovn_run_started
 			and G.STATE == G.STATES.SELECTING_HAND
 		) then
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				Ovn_f.activate_ghostly_adversary()
 			end)
 
-			add_simple_event(nil, nil, function ()
+			Ovn_f.event.simple(nil, function ()
 				G.GAME.ovn_cghost_first_hand_drawn = true
 			end)
 		end
@@ -490,7 +488,7 @@ SMODS.Back { key = "c_abandoned",
 	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self)
-		add_simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			for _ = 1, self.config.tag_count do
 				add_tag(Tag("tag_standard"))
 			end
@@ -525,7 +523,7 @@ SMODS.Back { key = "c_checkered",
 	locked_loc_vars = corrupt_deck_lockedvars,
 
 	apply = function (self, back)
-		add_simple_event(nil, nil, function ()
+		Ovn_f.event.simple(nil, function ()
 			Ovn_f.initialize_suit_chart()
 		end)
 	end,
@@ -545,7 +543,7 @@ SMODS.Back { key = "c_checkered",
 					if i ~= self.config.card_count then
 						table.remove(other_cards, index--[[@as integer]])
 					end
-					add_simple_event("after", 0.5, function ()
+					Ovn_f.event.simple(0.5, function ()
 						card:juice_up()
 						play_sound('tarot1')
 					end)
@@ -561,7 +559,7 @@ SMODS.Back { key = "c_checkered",
 				track_suits[card.base.suit] = (track_suits[card.base.suit] or 0) + 1
 				if track_suits[card.base.suit] > (#G.deck.cards*self.config.lose_condition) then
 					print("thing")
-					Ovn_f.nested_event(1, nil, nil, function ()
+					Ovn_f.event.nested(1, nil, function ()
 						G.STATE = G.STATES.GAME_OVER
 						G.STATE_COMPLETE = false
 					end)
@@ -643,7 +641,7 @@ SMODS.Back { key = "c_anaglyph",
 
 	apply = function (self)
 		G.GAME.ovn_c_anaglyph_tag_count = self.config.tag_count
-		add_simple_event('immediate', nil, function()
+		Ovn_f.event.simple(nil, function()
 			for _ = 1, G.GAME.ovn_c_anaglyph_tag_count do
 				add_tag(Tag("tag_double"))
 			end
@@ -656,7 +654,7 @@ SMODS.Back { key = "c_anaglyph",
 
 		if context.beat_boss and not card.count_increase then
 			card.count_increase = true
-			add_simple_event(nil, nil, function()
+			Ovn_f.event.simple(nil, function()
 				card.skip_triggered = false
 				G.GAME.ovn_c_anaglyph_tag_count = G.GAME.ovn_c_anaglyph_tag_count + 0.5
 				for _ = 1, G.GAME.ovn_c_anaglyph_tag_count do
@@ -675,7 +673,7 @@ SMODS.Back { key = "c_anaglyph",
 		) then
 			card.skip_triggered = true
 			card.count_increase = false
-			Ovn_f.nested_event(3, "after", 1, function ()
+			Ovn_f.event.nested(3, 1, function ()
 				Ovn_f.detached_skip_blind()
 			end)
 		end
@@ -750,7 +748,7 @@ SMODS.Back {
 		G.GAME.erratic_fx_block_probability = 0
 		G.GAME.erratic_fx_matrix_colour = HEX("00ff00")
 
-		add_simple_event(nil, nil, function()
+		Ovn_f.event.simple(nil, function()
 			Ovn_f.erratic_randomize_deck("starting_deck")
 		end)
 	end,

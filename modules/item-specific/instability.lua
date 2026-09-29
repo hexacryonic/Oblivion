@@ -16,7 +16,7 @@
 function Ovn_f.enable_instability()
     if G.GAME.ovn_has_instability then return end
     G.GAME.ovn_has_instability = true
-	Ovn_f.add_simple_event(nil, nil, function ()
+	Ovn_f.event.simple(nil, function ()
 		SMODS.set_scoring_calculation("ovn_instable")
 	end)
 end
@@ -25,7 +25,7 @@ end
 function Ovn_f.disable_instability()
     if not G.GAME.ovn_has_instability then return end
     G.GAME.ovn_has_instability = nil
-	Ovn_f.add_simple_event(nil, nil, function ()
+	Ovn_f.event.simple(nil, function ()
     	SMODS.set_scoring_calculation("multiply")
 	end)
 end
@@ -35,7 +35,7 @@ end
 ---@return nil
 Ovn_f.change_instability = function(amount)
 	if not G.GAME.ovn_has_instability then return end
-	Ovn_f.add_simple_event(nil, nil, function ()
+	Ovn_f.event.simple(nil, function ()
 		delay(0.25)
 		SMODS.Scoring_Parameters.ovn_instability:modify(amount)
 		update_hand_text({immediate = true, delay = 0}, {["ovn_instability"] = G.GAME.ovn_instability})

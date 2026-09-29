@@ -1,12 +1,10 @@
 --[[ Shhhh
 
-local add_simple_event = Ovn_f.add_simple_event
-
 G.FUNCS.welcometohell = function()
 	G.GAME.imcoming = true
 	local text = nil
 
-	add_simple_event('after', 0.4, function ()
+	Ovn_f.event.simple(0.4, function ()
 		text = DynaText {
 			string = {"I see you."},
 			colours = { G.C.WHITE },
@@ -21,7 +19,7 @@ G.FUNCS.welcometohell = function()
 		}
 	end)
 
-	add_simple_event('after', 2.6, function ()
+	Ovn_f.event.simple(2.6, function ()
 		text:pop_out(4)
 		ease_background_colour{new_colour = G.ARGS.LOC_COLOURS.ovn_corrupted, contrast = 1}
 	end)
@@ -47,7 +45,7 @@ end
 ----
 
 local function ominous_consumable_consequence(consumable_name, card_obj, sound_per, sound_vol)
-	add_simple_event('after', 0.4, function ()
+	Ovn_f.event.simple(0.4, function ()
 		card_obj:juice_up(0.3, 0.4)
 		play_sound("ovn_use_" .. consumable_name, sound_per, sound_vol)
 		card_obj.children.center.pinch.x = true

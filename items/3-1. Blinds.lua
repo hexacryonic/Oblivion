@@ -1,5 +1,3 @@
-local add_simple_event = Ovn_f.add_simple_event
-
 ------------
 -- The Nerve
 ------------
@@ -82,7 +80,7 @@ SMODS.Blind { key = 'purity',
 
 	defeat = function(self, silent)
 		if G.GAME.current_round.hands_left > 0 then
-			add_simple_event(nil, nil, purify_all_jokers)
+			Ovn_f.event.simple(nil, purify_all_jokers)
 		end
 	end,
 	disable = function(self, silent) purify_all_jokers() end,
