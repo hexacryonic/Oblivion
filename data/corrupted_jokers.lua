@@ -56,6 +56,8 @@ map["j_bloodstone"]          = "j_ovn_apache_tears"
 map["j_onyx_agate"]          = "j_ovn_apache_tears"
 map["j_rough_gem"]           = "j_ovn_apache_tears"
 map["j_ovn_prism"]           = "j_ovn_blacklight"
+map["j_vampire"]             = "j_ovn_insatiable_hunger"
+map["j_madness"]             = "j_ovn_insatiable_hunger"
     --[[sic]]
 map["j_caino"]               = "j_ovn_nyarlathotep"
 map["j_triboulet"]           = "j_ovn_nyarlathotep"
