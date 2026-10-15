@@ -55,6 +55,32 @@ SMODS.Tag:take_ownership('orbital', {
 	end
 }, true)
 
+-- Ownership of Glass Cards for Black Knife functionality
+local glass_calc_hook = G.P_CENTERS['m_glass'].calculate
+SMODS.Enhancement:take_ownership('glass', {
+	set_ability = function (self, card, initial, delay_sprites)
+		if #SMODS.find_card('j_ovn_black_knife') > 0 then
+			card.ability.Xmult  = G.P_CENTERS['j_ovn_black_knife'].config.extra.new_glass_xmult
+			card.ability.x_mult = G.P_CENTERS['j_ovn_black_knife'].config.extra.new_glass_xmult
+		end
+	end,
+	calculate = function (self, card, context)
+		local ret = glass_calc_hook(self, card, context)
+		if type(ret) ~= "table" then return ret end
+		if (
+			context.destroy_card
+			and context.cardarea == G.play
+			and context.destroy_card == card
+			and #SMODS.find_card('j_ovn_black_knife') > 0
+			and ret.remove == true
+		) then
+			ret.remove = nil
+			card.ovn_saved_blackknife = true
+		end
+		return ret
+	end
+}, true)
+
 -- Ownership of all default JimboQuips to use THE SHOW NEVER ENDS
 for i=1,10 do
 	SMODS.JimboQuip:take_ownership('lq_' .. i, {

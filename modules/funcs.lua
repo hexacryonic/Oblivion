@@ -539,6 +539,18 @@ function Ovn_f.insatiable_hunger_active()
 	return false
 end
 
+function Ovn_f.find_enhancement(key, count_debuffed)
+    if not G.hand or not G.hand.cards then return {} end
+
+	local results = {}
+	for _, v in pairs(G.playing_cards) do
+		if v and type(v) == 'table' and v.config.center.key == key and (count_debuffed or not v.debuff) then
+			table.insert(results, v)
+		end
+    end
+    return results
+end
+
 -- Skips blind without needing a button attached
 ---@return nil
 function Ovn_f.detached_skip_blind()

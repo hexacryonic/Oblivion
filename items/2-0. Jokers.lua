@@ -770,6 +770,78 @@ SMODS.Joker { key = 'prideful',
 	end
 }
 
+--------------
+-- CORRUPTED
+-- Black Knife
+--------------
+SMODS.Joker { key = 'black_knife',
+	credits = {
+		concept = {"Hyperspade"},
+		code = {"Oinite"},
+		-- art
+	},
+
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.new_glass_xmult,
+			card.ability.extra.xmult_gain,
+			card.ability.extra.xmult,
+		}}
+	end,
+	config = {
+		extra = {
+			new_glass_xmult = 1.5,
+			xmult = 1,
+			xmult_gain = 0.1,
+		}
+	},
+
+	-- atlas
+
+	attributes = { "xmult", "enhancements", "scaling" },
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	rarity = "ovn_corrupted",
+	cost = 9,
+	enhancement_gate = "m_ovn_glass",
+
+	add_to_deck = function (self, card, from_debuff)
+		if not (#SMODS.find_card("j_ovn_black_knife") == 0) then return end
+		for _,pl_card in ipairs(Ovn_f.find_enhancement("m_glass")) do
+			pl_card.ability.Xmult  = card.ability.extra.new_glass_xmult
+			pl_card.ability.x_mult = card.ability.extra.new_glass_xmult
+		end
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		if not (#SMODS.find_card("j_ovn_black_knife") == 0) then return end
+		for _,pl_card in ipairs(Ovn_f.find_enhancement("m_glass")) do
+			pl_card.ability.Xmult  = pl_card.config.center.config.Xmult
+			pl_card.ability.x_mult = pl_card.config.center.config.Xmult
+		end
+	end,
+	calculate = function (self, card, context)
+		if context.joker_main then
+			return {xmult = card.ability.extra.xmult}
+		end
+
+		if context.after then
+			for _,other_card in ipairs(context.scoring_hand) do
+				if other_card.ovn_saved_blackknife then
+					other_card.ovn_saved_blackknife = nil
+					SMODS.calculate_effect({ message = localize('k_safe_ex'), colour=G.C.BLACK }, other_card)
+					Ovn_f.event.simple(0, function ()
+						other_card:juice_up()
+					end)
+					simple_scale(card, "xmult", "xmult_gain", G.C.RED, "a_xmult")
+				end
+			end
+		end
+	end
+}
+-- Additional functionality in:
+	-- Glass Card take-ownership
+
 -----------------------------
 -- CORRUPTED
 -- Edge of a Collapsing World

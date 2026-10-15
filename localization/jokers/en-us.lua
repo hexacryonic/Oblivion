@@ -162,6 +162,20 @@ return {
                     "the {C:attention}Sinful Jokers"
                 }
             },
+            j_ovn_black_knife = {
+                name = "Black Knife",
+                text = {
+                    "Glass cards {C:attention}no longer shatter",
+                    "but now give {C:white,X:mult}X#1# {} Mult",
+                    "If a Glass card would have",
+                    "shattered, this Joker",
+                    "gains {C:white,X:mult}X#2# {} Mult",
+                    "{C:inactive}(Currently {C:white,X:mult}X#3# {C:inactive} Mult)"
+                },
+                corrupted_from = {
+                    "{C:attention}Ceremonial Dagger"
+                }
+            },
             j_ovn_collapsing_world = {
                 name = "Edge of a Collapsing World",
                 text = {
@@ -567,6 +581,12 @@ return {
                     "{E:ovn_betterfloat,C:ovn_corrupted}banana {E:ovn_betterfloat}extinct."
                 }
             },
+            ovn_corrupt_condition_has_glass = {
+                name = "Corruption condition",
+                text = {
+                    "get a glass card ok"
+                }
+            }
         },
     },
 
