@@ -1283,7 +1283,7 @@ SMODS.Joker { key = 'insatiable_hunger',
 			and not context.buying_self
 			and not card.ability.extra.first_item_bought
 		) then
-			local mult_scale = context.card.sell_cost -- modify as needed
+			local mult_scale = context.card.cost -- modify as needed
 			card.ability.extra.devoured_items[context.card.config.center.key] = true
 			SMODS.scale_card(card, {
 				ref_table = card.ability.extra,
