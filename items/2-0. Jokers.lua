@@ -1265,12 +1265,12 @@ SMODS.Joker { key = 'insatiable_hunger',
 	attributes = { "mult", "scaling", "destroy_card", "shop" },
 	blueprint_compat = true,
 	eternal_compat = true,
-	perishable_compat = true,
+	perishable_compat = false,
 	rarity = "ovn_corrupted",
 	cost = 12,
 
 	calculate = function (self, card, context)
-		if context.starting_shop then
+		if context.starting_shop and not context.blueprint then
 			card.ability.extra.first_item_bought = false
 		end
 
@@ -1280,6 +1280,7 @@ SMODS.Joker { key = 'insatiable_hunger',
 				and not context.buying_self
 				or context.ovn_cancelled_booster
 			)
+			and not context.blueprint
 			and not card.ability.extra.first_item_bought
 			and not (
 				context.card.ability.set == "Default"
@@ -1315,7 +1316,7 @@ SMODS.Joker { key = 'insatiable_hunger',
 			card.ability.extra.first_item_bought = true
 		end
 
-		if context.ending_shop then
+		if context.ending_sho and not context.blueprint then
 			card.ability.extra.first_item_bought = true
 		end
 
