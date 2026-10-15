@@ -1275,16 +1275,34 @@ SMODS.Joker { key = 'insatiable_hunger',
 		end
 
 		if (
-			context.buying_card
-			and (
-				context.card.config.center.set == "Joker"
-				or context.card.ability.consumeable
+			(
+				context.buying_card
+				and not context.buying_self
+				or context.ovn_cancelled_booster
 			)
-			and not context.buying_self
 			and not card.ability.extra.first_item_bought
+			and not (
+				context.card.ability.set == "Default"
+				or context.card.ability.set == "Enhanced"
+			)
 		) then
 			local mult_scale = context.card.cost -- modify as needed
-			card.ability.extra.devoured_items[context.card.config.center.key] = true
+			if context.card.ability.consumeable then
+				-- nothing
+			elseif context.card.ability.set == "Joker" then
+				mult_scale = mult_scale + 1
+			elseif context.card.ability.set == "Booster" then
+				mult_scale = mult_scale + 1
+			elseif context.card.ability.set == "Voucher" then
+				mult_scale = mult_scale + 2
+			end
+
+			Ovn_f.event.simple(nil, function ()
+				if not context.card.getting_sliced then
+					context.card.getting_sliced = true
+					SMODS.destroy_cards(context.card)
+				end
+			end)
 			SMODS.scale_card(card, {
 				ref_table = card.ability.extra,
 				ref_value = "mult",
@@ -1293,12 +1311,7 @@ SMODS.Joker { key = 'insatiable_hunger',
 				message_key = "a_mult",
 				message_colour = G.C.RED,
 			})
-			Ovn_f.event.simple(nil, function ()
-				if not context.card.getting_sliced then
-					context.card.getting_sliced = true
-					SMODS.destroy_cards(context.card)
-				end
-			end)
+			card.ability.extra.devoured_items[context.card.config.center.key] = true
 			card.ability.extra.first_item_bought = true
 		end
 
@@ -1321,11 +1334,15 @@ Oblivion.DescriptionDummy { key = "insatiable_hunger_banishing",
 
 		local keys = {}
 		for key in pairs(specific_vars) do
-			table.insert(keys, localize{
-				type = "name_text",
-				set = G.P_CENTERS[key].set,
-				key = key
-			})
+			if G.P_CENTERS[key].group_key then
+				table.insert(keys, localize(G.P_CENTERS[key].group_key))
+			else
+				table.insert(keys, localize{
+					type = "name_text",
+					set = G.P_CENTERS[key].set,
+					key = key
+				})
+			end
 		end
 		table.sort(keys)
 
@@ -1343,6 +1360,9 @@ Oblivion.DescriptionDummy { key = "insatiable_hunger_banishing",
 		if type(final_latest_tbl) == "table" then
 			---@diagnostic disable-next-line: assign-type-mismatch
 			groups_of_three[#groups_of_three] = table.concat(final_latest_tbl, ", ")
+			if groups_of_three[#groups_of_three] == "" then
+				table.remove(groups_of_three, #groups_of_three)
+			end
 		end
 
 		local list_ui = Ovn_f.localize_desc(groups_of_three, {

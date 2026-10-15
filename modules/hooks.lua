@@ -270,6 +270,112 @@ function Card:stop_drag()
 	if G.hand and self.area == G.hand then G.hand:parse_highlighted() end
 end
 
+-- Hook to implement Ovn_f.do_cancel_shopuse
+local card_redeem_hook = Card.redeem
+function Card:redeem()
+	if not Ovn_f.do_cancel_shopuse(self) then
+		return card_redeem_hook(self)
+	end
+
+	stop_use()
+	if not self.config.center.discovered then
+		discover_card(self.config.center)
+	end
+	G.STATE = G.STATES.SMODS_REDEEM_VOUCHER
+
+	self.states.hover.can = false
+	if self.cost ~= 0 then
+		if G.GAME.ovn_complex_economy then
+			local cost, cost_i = Ovn_f.get_complex_cost(self)
+			Ovn_f.ease_complex_dollars(-cost, -cost_i)
+		else
+			ease_dollars(-self.cost)
+		end
+		inc_career_stat('c_shop_dollars_spent', self.cost)
+	end
+	inc_career_stat('c_vouchers_bought', 1)
+	--[[
+	set_voucher_usage(self)
+	check_for_unlock({type = 'run_redeem'})
+	]]
+	delay(0.6)
+	SMODS.calculate_context({buying_card = true, card = self})
+	if G.GAME.modifiers.inflation then
+		G.GAME.inflation = G.GAME.inflation + 1
+		Ovn_f.event.simple(nil, function ()
+			for k, v in pairs(G.I.CARD) do
+				if v.set_cost then v:set_cost() end
+			end
+		end)
+	end
+end
+
+-- Hook to implement Ovn_f.do_cancel_shopuse
+local card_open_hook = Card.open
+function Card:open()
+	if not Ovn_f.do_cancel_shopuse(self) then
+		return card_open_hook(self)
+	end
+
+	stop_use()
+	if not self.config.center.discovered then
+		discover_card(self.config.center)
+	end
+	self.states.hover.can = false
+	if self.cost > 0 then 
+		Ovn_f.event.simple(0.2, function ()
+			inc_career_stat('c_shop_dollars_spent', self.cost)
+			self:juice_up()
+		end )
+		if G.GAME.ovn_complex_economy then
+			local cost, cost_i = Ovn_f.get_complex_cost(self)
+			Ovn_f.ease_complex_dollars(-cost, -cost_i)
+		else
+			ease_dollars(-self.cost)
+		end
+	else
+		delay(0.2)
+	end
+
+	Ovn_f.event.simple(0.4, function ()
+		SMODS.calculate_context({ovn_cancelled_booster = true, card = self})
+		if G.GAME.modifiers.inflation then
+			G.GAME.inflation = G.GAME.inflation + 1
+			Ovn_f.event.simple(nil, function()
+				for k, v in pairs(G.I.CARD) do
+					if v.set_cost then v:set_cost() end
+				end
+			end)
+		end
+	end)
+
+	Ovn_f.event.simple(0.2, function()
+		SMODS.destroy_cards(self)
+		Ovn_f.event.simple(0.2, function()
+			if G.shop and G.shop.alignment.offset.py then
+				G.shop.alignment.offset.y = G.shop.alignment.offset.py
+				G.shop.alignment.offset.py = nil
+			end
+			if G.blind_select and G.blind_select.alignment.offset.py then
+				G.blind_select.alignment.offset.y = G.blind_select.alignment.offset.py
+				G.blind_select.alignment.offset.py = nil
+			end
+			if G.round_eval and G.round_eval.alignment.offset.py then
+				G.round_eval.alignment.offset.y = G.round_eval.alignment.offset.py
+				G.round_eval.alignment.offset.py = nil
+			end
+			G.CONTROLLER.interrupt.focus = true
+	
+			Ovn_f.event.simple(nil, function()
+				if G.shop then G.CONTROLLER:snap_to({node = G.shop:get_UIE_by_ID('next_round_button')}) end
+			end)
+			G.STATE = G.GAME.PACK_INTERRUPT
+			ease_background_colour_blind(G.GAME.PACK_INTERRUPT)
+			G.GAME.PACK_INTERRUPT = nil
+		end)
+	end)
+end
+
 
 
 --------------------

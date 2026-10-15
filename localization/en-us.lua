@@ -146,6 +146,7 @@ return {
 			b_ovn_switch = "SWITCH",
 			b_ovn_store = "STORE",
 			b_ovn_empty = "EMPTY",
+			b_ovn_feed = "FEED",
 			stored = "Stored!",
 			empty = "Emptied!",
 			k_inactive_ex = "Inactive!",

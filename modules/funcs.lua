@@ -52,7 +52,7 @@ end
 ---@param func function
 ---@return nil
 Ovn_f.event.nested = function (count, trigger, func)
-	if count == 0 then
+	if count <= 0 then
 		Ovn_f.event.simple(trigger, func)
 	else
 		G.E_MANAGER:add_event(Event {function ()
@@ -510,13 +510,31 @@ Ovn_f.blackhole_upgrade_eventhorizon = function(card, all_event_horizons)
 	end
 end
 
--- Determines if a Joker should be out of all pools.
+-- Determines if a card should be out of all pools.
 ---@param card_key string
 ---@return boolean
 Ovn_f.is_banished = function(card_key)
 	if Ovn_f.is_corruptbanished(card_key) then return true end
 	for _,joker in ipairs(SMODS.find_card("j_ovn_insatiable_hunger")) do
 		if joker.ability.extra.devoured_items[card_key] then return true end
+	end
+	return false
+end
+
+-- Determines if a card's use effect should be cancelled in the shop.
+function Ovn_f.do_cancel_shopuse(card)
+	if card.ability.set == "Voucher" or card.ability.set == "Booster" then
+		return Ovn_f.insatiable_hunger_active()
+	end
+	return false
+end
+
+-- Checks if Insatiable Hunger is active.
+function Ovn_f.insatiable_hunger_active()
+	for _,kronos in ipairs(SMODS.find_card('j_ovn_insatiable_hunger')) do
+		if not kronos.ability.extra.first_item_bought then
+			return true
+		end
 	end
 	return false
 end
