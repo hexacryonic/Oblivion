@@ -206,10 +206,9 @@ SMODS.DynaTextEffect { key = "glitched",
 -- DESCRIPTION DUMMY
 -- Card credits
 --------------------
-Oblivion.DescriptionDummy {
-	key = "credits",
+Oblivion.DescriptionDummy { key = "credits",
 	generate_ui = function (self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-		-- specific_vars is sent by generate_card_ui (patched by corruption.toml)
+		-- specific_vars is sent by Ovn_f.additional_infoqueue_tooltips
 		-- It is a string-keyed table based on a card's `credits` value
 		if not card then card = self:create_fake_card() end
 

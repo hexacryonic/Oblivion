@@ -1225,6 +1225,140 @@ SMODS.Joker { key = 'cultivar',
     end
 }
 
+--------------------
+-- CORRUPTED
+-- Insatiable Hunger
+--------------------
+SMODS.Joker { key = 'insatiable_hunger',
+	credits = {
+		concept = {"SyntaxTsundere", "HexaCryonic"},
+		code = "Oinite",
+		-- art = ??
+	},
+
+	loc_vars = function (self, info_queue, card)
+		if next(card.ability.extra.devoured_items) then
+			-- Only way to attach vars to send to the description dummy
+			G.P_CENTERS['dd_ovn_insatiable_hunger_banishing'].specific_vars = card.ability.extra.devoured_items
+			table.insert(info_queue, G.P_CENTERS['dd_ovn_insatiable_hunger_banishing'])
+		end
+
+		local activity_text = localize('k_active_ex')
+		if card.ability.extra.first_item_bought then
+			activity_text = localize('k_inactive_ex')
+		end
+		return {vars = {
+			activity_text,
+			card.ability.extra.mult
+		}}
+	end,
+	config = {
+		extra = {
+			mult = 0,
+			devoured_items = {}, -- set
+			first_item_bought = false
+		}
+	},
+
+	-- atlas
+
+	attributes = { "mult", "scaling", "destroy_card", "shop" },
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = "ovn_corrupted",
+	cost = 12,
+
+	calculate = function (self, card, context)
+		if context.starting_shop then
+			card.ability.extra.first_item_bought = false
+		end
+
+		if (
+			context.buying_card
+			and (
+				context.card.config.center.set == "Joker"
+				or context.card.ability.consumeable
+			)
+			and not context.buying_self
+			and not card.ability.extra.first_item_bought
+		) then
+			local mult_scale = context.card.sell_cost -- modify as needed
+			card.ability.extra.devoured_items[context.card.config.center.key] = true
+			SMODS.scale_card(card, {
+				ref_table = card.ability.extra,
+				ref_value = "mult",
+				scalar_table = {poopshit = mult_scale},
+				scalar_value = "poopshit",
+				message_key = "a_mult",
+				message_colour = G.C.RED,
+			})
+			Ovn_f.event.simple(nil, function ()
+				if not context.card.getting_sliced then
+					context.card.getting_sliced = true
+					SMODS.destroy_cards(context.card)
+				end
+			end)
+			card.ability.extra.first_item_bought = true
+		end
+
+		if context.ending_shop then
+			card.ability.extra.first_item_bought = true
+		end
+
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+}
+Oblivion.DescriptionDummy { key = "insatiable_hunger_banishing",
+	generate_ui = function (self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+		-- specific_vars is sent by Insatiable Hunger's loc_vars function
+		-- It is a set of item keys
+		if not card then card = self:create_fake_card() end
+
+		local keys = {}
+		for key in pairs(specific_vars) do
+			table.insert(keys, localize{
+				type = "name_text",
+				set = G.P_CENTERS[key].set,
+				key = key
+			})
+		end
+		table.sort(keys)
+
+		local groups_of_three = { {} }
+		for _,key in ipairs(keys) do
+			local latest_tbl = groups_of_three[#groups_of_three]
+			table.insert(latest_tbl, key)
+			if #latest_tbl == 3 then
+				---@diagnostic disable-next-line: assign-type-mismatch
+				groups_of_three[#groups_of_three] = table.concat(latest_tbl, ", ")
+				table.insert(groups_of_three, {})
+			end
+		end
+		local final_latest_tbl = groups_of_three[#groups_of_three]
+		if type(final_latest_tbl) == "table" then
+			---@diagnostic disable-next-line: assign-type-mismatch
+			groups_of_three[#groups_of_three] = table.concat(final_latest_tbl, ", ")
+		end
+
+		local list_ui = Ovn_f.localize_desc(groups_of_three, {
+			text_colour = G.C.UI.TEXT_DARK,
+			scale = 1,
+			align = "middle",
+		})
+		desc_nodes.name = localize{
+			type = 'name_text',
+			key = 'dd_ovn_insatiable_hunger_banishing',
+			set = "DescriptionDummy"
+		}
+		table.insert(desc_nodes, {list_ui})
+	end
+}
+
 -----------------
 -- CORRUPTED
 -- A Part Falling

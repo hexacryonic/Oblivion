@@ -510,6 +510,17 @@ Ovn_f.blackhole_upgrade_eventhorizon = function(card, all_event_horizons)
 	end
 end
 
+-- Determines if a Joker should be out of all pools.
+---@param card_key string
+---@return boolean
+Ovn_f.is_banished = function(card_key)
+	if Ovn_f.is_corruptbanished(card_key) then return true end
+	for _,joker in ipairs(SMODS.find_card("j_ovn_insatiable_hunger")) do
+		if joker.ability.extra.devoured_items[card_key] then return true end
+	end
+	return false
+end
+
 -- Skips blind without needing a button attached
 ---@return nil
 function Ovn_f.detached_skip_blind()

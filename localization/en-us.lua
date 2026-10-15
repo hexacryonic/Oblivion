@@ -51,6 +51,10 @@ return {
 					"{C:ovn_corrupted}+0.025{} when obtaining an {C:ovn_optic}Optics {}card",
 				}
 			},
+			dd_ovn_insatiable_hunger_banishing = {
+				name = "Currently banishing:",
+				text = {""},
+			},
 		},
 
 		Other = {
@@ -144,6 +148,7 @@ return {
 			b_ovn_empty = "EMPTY",
 			stored = "Stored!",
 			empty = "Emptied!",
+			k_inactive_ex = "Inactive!",
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
 			k_ovn_wicked_pack = "Wicked Pack",

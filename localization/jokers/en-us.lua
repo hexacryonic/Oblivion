@@ -272,6 +272,27 @@ return {
                     "{C:attention}Cavendish"
                 }
             },
+            j_ovn_insatiable_hunger = {
+                name = 'Insatiable Hunger',
+                text = {
+                    {
+                        "The {C:attention}first item {}purchased",
+                        "each shop is {C:red}devoured",
+                        "{C:inactive}(#1#)",
+                        "Devoured items are {C:red}banished",
+                        "while this Joker is held",
+                    },
+                    {
+                        "This Joker gains {C:red}Mult {}for",
+                        "each devoured item based",
+                        "on its {C:money}cost {}and {C:attention}type",
+                        "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)"
+                    }
+                },
+                corrupted_from = {
+                    "{C:attention}Vampire {}and {C:attention}Madness"
+                }
+            },
             j_ovn_apartfalling = {
                 name = 'A Part Falling',
                 text = {
