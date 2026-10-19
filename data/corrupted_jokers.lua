@@ -59,6 +59,7 @@ map["j_ovn_prism"]           = "j_ovn_blacklight"
 map["j_vampire"]             = "j_ovn_insatiable_hunger"
 map["j_madness"]             = "j_ovn_insatiable_hunger"
 map["j_ceremonial"]          = "j_ovn_black_knife"
+map["j_ovn_black_knife"]     = "j_ovn_white_cloak"
     --[[sic]]
 map["j_caino"]               = "j_ovn_nyarlathotep"
 map["j_triboulet"]           = "j_ovn_nyarlathotep"
@@ -78,9 +79,10 @@ cond["j_arrowhead"]        = {"has_optic",   has_optic}
 cond["j_bloodstone"]       = {"has_optic",   has_optic}
 cond["j_onyx_agate"]       = {"has_optic",   has_optic}
 cond["j_rough_gem"]        = {"has_optic",   has_optic}
-cond["j_ceremonial"]       = {"has_glass", function ()
-    return #Ovn_f.find_enhancement("m_glass") > 0
-end}
 cond["j_gros_michel"]      = {"gros_michel", function()
 	return G.GAME and G.GAME.corruptiblemichel
 end}
+cond["j_ceremonial"]       = {"has_glass", function ()
+    return #Ovn_f.find_enhancement("m_glass") > 0
+end}
+cond["j_ovn_black_knife"]  = {"weird", function () return false end}

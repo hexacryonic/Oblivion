@@ -184,6 +184,11 @@ SMODS.Enhancement { key = "ice",
 		is_melting = false
 	}},
 
+	set_ability = function (self, card, initial, delay_sprites)
+		if #SMODS.find_card('j_ovn_white_cloak') > 0 then
+			card.ability.extra.current_x_mult = G.P_CENTERS['j_ovn_white_cloak'].config.extra.new_ice_xmult
+		end
+	end,
 	calculate = function(self, card, context)
 		local c_extra = card.ability.extra
 

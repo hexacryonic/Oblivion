@@ -812,6 +812,9 @@ SMODS.Joker { key = 'black_knife',
 			pl_card.ability.Xmult  = card.ability.extra.new_glass_xmult
 			pl_card.ability.x_mult = card.ability.extra.new_glass_xmult
 		end
+		Ovn_f.event.simple(nil, function ()
+			eval_card(card, {ovn_force_blackknife_juicecheck = true})
+		end)
 	end,
 	remove_from_deck = function (self, card, from_debuff)
 		if not (#SMODS.find_card("j_ovn_black_knife") == 0) then return end
@@ -819,6 +822,7 @@ SMODS.Joker { key = 'black_knife',
 			pl_card.ability.Xmult  = pl_card.config.center.config.Xmult
 			pl_card.ability.x_mult = pl_card.config.center.config.Xmult
 		end
+		G.GAME.ovn_icemagic_juicing = nil
 	end,
 	calculate = function (self, card, context)
 		if context.joker_main then
@@ -837,6 +841,46 @@ SMODS.Joker { key = 'black_knife',
 				end
 			end
 		end
+
+		-- juice-untils
+		if (
+			context.hand_drawn
+			or context.other_drawn
+			or context.using_consumeable
+			or context.card_added
+			or context.ovn_force_blackknife_juicecheck -- see this Joker's add_to_deck
+		) then
+			Ovn_f.event.simple(nil, function ()
+				local has_ice = false
+				local has_magician = false
+				local juice_cards = {}
+				for _,pcard in ipairs(G.hand.cards) do
+					if pcard.config.center.key == 'm_ovn_ice' then
+						has_ice = true
+						table.insert(juice_cards, pcard)
+					end
+				end
+				for _,consumable in ipairs(G.consumeables.cards) do
+					if consumable.config.center.key == 'c_magician' then
+						has_magician = true
+						table.insert(juice_cards, consumable)
+					end
+				end
+
+				G.GAME.ovn_icemagic_juicing = nil
+				if not (has_ice and has_magician) then
+					return
+				end
+
+				G.GAME.ovn_icemagic_juicing = true
+				for _,other_card in ipairs(juice_cards) do
+					juice_card_until(other_card, function (poopshit)
+						return G.GAME.ovn_icemagic_juicing
+					end)
+				end
+			end)
+		end
+
 	end
 }
 -- Additional functionality in:
@@ -2497,6 +2541,44 @@ SMODS.Joker { key = 'nexus_point',
 			}
 		end
 	end
+}
+
+--------------
+-- CORRUPTED
+-- White Cloak
+--------------
+SMODS.Joker { key = 'white_cloak',
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.new_ice_xmult
+		}}
+	end,
+	config = {
+		extra = {
+			new_ice_xmult = 3
+		}
+	},
+	credits = {
+		concept = {"Hyperspade", "SyntaxTsundere"},
+		code = "Oinite",
+		-- art
+	},
+
+	-- atlas
+
+	attributes = { "enhancement" },
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
+	rarity = 'ovn_corrupted',
+	cost = 12,
+	in_pool = function (self, args)
+		return false
+	end,
+
+	-- Functionality in:
+		-- Ice Card register
+		-- Card:set_ability hook
 }
 
 ---------------

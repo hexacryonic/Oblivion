@@ -535,6 +535,19 @@ return {
                     "{C:attention}Purifier {}or {C:attention}Nexus Point"
                 }
             },
+            j_ovn_white_cloak = {
+                name = "White Cloak",
+                text = {
+                    "{C:attention}Ice Cards {}start at {C:white,X:mult}X#1# {} Mult",
+                    "{C:attention}Ice Cards {C:red}cannot be changed",
+                    "into another enhancement",
+                    "Trying such turns {C:attention}adjacent",
+                    "cards into {C:attention}Ice Cards"
+                },
+                corrupted_from = {
+                    "{C:attention}Black Knife"
+                }
+            },
             j_ovn_nyarlathotep = {
                 name = "Nyarlathotep",
                 text = {
@@ -588,7 +601,14 @@ return {
                     "something in your pocket.",
                     "It feels like {E:ovn_betterfloat,C:ovn_corrupted}glass{}, but..."
                 }
-            }
+            },
+            ovn_corrupt_condition_weird = {
+                name = "Corruption condition",
+                text = {
+                    "THE FORBIDDEN PATH",
+                    "BEGAN WITH {E:ovn_betterfloat,C:ovn_corrupted}ICE MAGIC{}."
+                }
+            },
         },
     },
 

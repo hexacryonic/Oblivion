@@ -228,9 +228,56 @@ function Card:change_suit(new_suit)
 	if transmute_func then transmute_func(self) end
 end
 
--- Hook for corrupting enhancements on Optic cards if set (by Tarots, etc)
+-- Hook for:
+	-- White Cloak functionality
+	-- corrupting enhancements on Optic cards if set (by Tarots, etc)
 local card_setability_hook = Card.set_ability
 function Card:set_ability(center, initial, delay_sprites)
+	if (
+		self.config.center.key == "m_ovn_ice"
+		and (center == "m_lucky" or center == G.P_CENTERS["m_lucky"])
+		and not Ovn_f.has_joker('j_ovn_white_cloak')
+	) then
+		card_setability_hook(self, "m_ovn_ice", initial, delay_sprites)
+
+		for _,knife in ipairs(SMODS.find_card('j_ovn_black_knife')) do
+			local corrupted_card_key = "j_ovn_white_cloak"
+			G.GAME.justcorrupted = corrupted_card_key
+			Ovn_f.corrupt_joker(knife)
+			G.GAME.justcorrupted = nil
+		end
+
+		return
+	end
+
+	if (
+		self.config.center.key == "m_ovn_ice"
+		and center ~= "m_ovn_ice"
+		and Ovn_f.has_joker('j_ovn_white_cloak')
+	) then
+		card_setability_hook(self, "m_ovn_ice", initial, delay_sprites)
+
+		local pos = self.rank
+		local left_card  = self.area.cards[pos-1]
+		local right_card = self.area.cards[pos+1]
+		if left_card and left_card.config.center.key ~= "m_ovn_ice" then
+			Ovn_f.event.simple(0.2, function ()
+				left_card:set_ability("m_ovn_ice")
+				left_card:juice_up()
+				play_sound('ovn_optic', 0.8)
+			end)
+		end
+		if right_card and right_card.config.center.key ~= "m_ovn_ice" then
+			Ovn_f.event.simple(0.2, function ()
+				right_card:set_ability("m_ovn_ice")
+				right_card:juice_up()
+				play_sound('ovn_optic', 0.8)
+			end)
+		end
+
+		return
+	end
+
 	card_setability_hook(self, center, initial, delay_sprites)
 	if (
 		self.config.card
