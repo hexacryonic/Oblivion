@@ -584,7 +584,9 @@ return {
             ovn_corrupt_condition_has_glass = {
                 name = "Corruption condition",
                 text = {
-                    "get a glass card ok"
+                    "There is a small shard of",
+                    "something in your pocket.",
+                    "It feels like {E:ovn_betterfloat,C:ovn_corrupted}glass{}, but..."
                 }
             }
         },
