@@ -796,7 +796,9 @@ SMODS.Joker { key = 'black_knife',
 		}
 	},
 
-	-- atlas
+	atlas = "placeholder",
+	pos = {x=0, y=0},
+	uses_placeholder_sprite = true,
 
 	attributes = { "xmult", "enhancements", "scaling" },
 	blueprint_compat = true,
@@ -1376,7 +1378,9 @@ SMODS.Joker { key = 'insatiable_hunger',
 		}
 	},
 
-	-- atlas
+	atlas = "placeholder",
+	pos = {x=0, y=0},
+	uses_placeholder_sprite = true,
 
 	attributes = { "mult", "scaling", "destroy_card", "shop" },
 	blueprint_compat = true,
@@ -1693,7 +1697,9 @@ SMODS.Joker { key = 'tiger_drop',
 		}
 	},
 
-	-- atlas
+	atlas = "placeholder",
+	pos = {x=0, y=0},
+	uses_placeholder_sprite = true,
 
 	attributes = {
 		"boss_blind", "mult"
@@ -2690,7 +2696,9 @@ SMODS.Joker { key = 'white_cloak',
 		-- art
 	},
 
-	-- atlas
+	atlas = "placeholder",
+	pos = {x=0, y=0},
+	uses_placeholder_sprite = true,
 
 	attributes = { "enhancement" },
 	blueprint_compat = false,
