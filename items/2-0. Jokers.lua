@@ -1638,6 +1638,132 @@ SMODS.Joker { key = 'philosophers_stone',
 	end
 }
 
+-------------
+-- CORRUPTED
+-- Tiger Drop
+-------------
+
+Oblivion.tdrop_compat = {}
+Oblivion.tdrop_compat.apply_on_start = {
+	["bl_wall"] = true,
+	["bl_water"] = true,
+	["bl_manacle"] = true,
+	["bl_needle"] = true,
+	["bl_final_acorn"] = true,
+	["bl_final_vessel"] = true,
+	["bl_ovn_stygian"] = true,
+}
+Oblivion.tdrop_compat.on_draw_hand_down = {
+	["bl_house"] = true,
+	["bl_fish"] = true,
+	["bl_serpent"] = true,
+}
+Oblivion.tdrop_compat.on_draw_card_down = {
+	["bl_wheel"] = true,
+	["bl_mark"] = true,
+}
+Oblivion.tdrop_compat.on_play_hand = {
+	["bl_hook"] = true,
+}
+Oblivion.tdrop_compat.on_play_card = {
+	["bl_tooth"] = true,
+}
+Oblivion.tdrop_compat.every_hand = {
+	["bl_final_heart"] = true,
+	["bl_final_bell"] = true,
+}
+
+SMODS.Joker { key = 'tiger_drop',
+	credits = {
+		concept = {"QueenChloe", "HexaCryonic"},
+		code = "Oinite",
+		-- art
+	},
+
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.mult_gain,
+			card.ability.extra.mult,
+		}}
+	end,
+	config = {
+		extra = {
+			mult_gain = 2,
+			mult = 0
+		}
+	},
+
+	-- atlas
+
+	attributes = {
+		"boss_blind", "mult"
+	},
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	rarity = 'ovn_corrupted',
+	cost = 9,
+
+	calculate = function (self, card, context)
+		-- Conditions same as Matador
+		if (context.debuffed_hand or context.joker_main) and G.GAME.blind.triggered then
+			simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+		end
+		if Oblivion.tdrop_compat.apply_on_start[G.GAME.blind.config.blind.key] then
+			if context.hand_drawn and context.first_hand_drawn then
+				simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+			end
+		end
+		if Oblivion.tdrop_compat.on_draw_hand_down[G.GAME.blind.config.blind.key] then
+			if context.hand_drawn then
+				local all_cards_down = true
+				for _,other_card in ipairs(context.hand_drawn) do
+					if other_card.facing ~= "back" then
+						all_cards_down = false
+					end
+				end
+				if all_cards_down then
+					simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+				end
+			end
+		end
+		if Oblivion.tdrop_compat.on_draw_card_down[G.GAME.blind.config.blind.key] then
+			if context.hand_drawn then
+				for _,other_card in ipairs(context.hand_drawn) do
+					if other_card.facing == "back" then
+						simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+					end
+				end
+			end
+		end
+		if Oblivion.tdrop_compat.on_play_hand[G.GAME.blind.config.blind.key] then
+			if context.press_play then
+				simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+			end
+		end
+		if Oblivion.tdrop_compat.on_play_card[G.GAME.blind.config.blind.key] then
+			if context.before then
+				for _,other_card in ipairs(context.scoring_hand) do
+					simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+				end
+			end
+		end
+		if Oblivion.tdrop_compat.every_hand[G.GAME.blind.config.blind.key] then
+			if (context.hand_drawn and context.first_hand_drawn) or context.after then
+				simple_scale(card, "mult", "mult_gain", G.C.RED, 'a_mult')
+			end
+		end
+
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+}
+-- Additional functionality in:
+	-- The Nerve (Blind) register
+
 --------------
 -- CORRUPTED
 -- Supply Drop

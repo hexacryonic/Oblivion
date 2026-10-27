@@ -330,6 +330,18 @@ return {
                     "{C:attention}Midas Mask"
                 }
             },
+            j_ovn_tiger_drop = {
+                name = "Tiger Drop",
+                text = {
+                    "This Joker gains {C:mult}+#1# {}Mult",
+                    "whenever anything related to",
+                    "a {C:attention}Boss Blind's effect {}occurs",
+                    "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)"
+                },
+                corrupted_from = {
+                    "{C:attention}Luchador {}or {C:attention}Matador"
+                }
+            },
             j_ovn_supplydrop = {
                 name = 'Supply Drop',
                 text = {

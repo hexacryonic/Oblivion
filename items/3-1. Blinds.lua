@@ -33,27 +33,32 @@ SMODS.Blind { key = 'nerve',
 	end,
 }
 
+-------------
+-- The Purity
+-------------
+
 local function purify_all_jokers()
 	for _,joker in pairs(G.jokers.cards) do
 		local joker_key = joker.config.center.key
+		if joker_key == "j_ovn_tiger_drop" then
+			SMODS.calculate_effect({
+				message = localize('k_nope_ex'),
+				colour = G.C.RED
+			}, joker)
+			SMODS.scale_card(joker, {
+				ref_table = joker.ability.extra,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_key = 'a_mult',
+				message_colour = G.C.RED
+			})
+		end
 		if Ovn_f.joker_is_purifiable(joker_key) then
 			Ovn_f.purify_joker(joker)
 		end
 	end
 end
 
-local function corrupt_all_jokers()
-	for _,joker in pairs(G.jokers.cards) do
-		local joker_key = joker.config.center.key
-		if Ovn_f.joker_is_corruptible(joker_key) then
-			Ovn_f.corrupt_joker(joker)
-		end
-	end
-end
-
--------------
--- The Purity
--------------
 SMODS.Blind { key = 'purity',
 	loc_vars = function(self, info_queue, card)
 		return { }
@@ -89,6 +94,16 @@ SMODS.Blind { key = 'purity',
 ----------------
 -- Stygian Sigil
 ----------------
+
+local function corrupt_all_jokers()
+	for _,joker in pairs(G.jokers.cards) do
+		local joker_key = joker.config.center.key
+		if Ovn_f.joker_is_corruptible(joker_key) then
+			Ovn_f.corrupt_joker(joker)
+		end
+	end
+end
+
 SMODS.Blind { key = 'stygian',
 	loc_vars = function(self, info_queue, card)
 		return { vars = {self.config.stygian_cslmod} }
