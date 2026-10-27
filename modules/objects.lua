@@ -16,6 +16,138 @@ Oblivion.DescriptionDummy = SMODS.Center:extend {
 	end
 }
 
+Oblivion.PassiveEffects = {}
+Oblivion.PassiveEffectsOrder = {}
+Oblivion.PassiveEffect = SMODS.GameObject:extend {
+	class_prefix = 'pfx',
+	set = 'PassiveEffect',
+	required_params = {
+		'key',
+	},
+
+	obj_buffer = {},
+	obj_table = Oblivion.PassiveEffects,
+
+	register = function (self)
+		self.name = self.name or self.key
+		Oblivion.PassiveEffect.super.register(self)
+	end,
+	inject = function (self, i)
+		table.insert(Oblivion.PassiveEffectsOrder, self)
+	end,
+	-- not actually ready but i already prepared this so it stays
+	generate_ui = function (self, info_queue, desc_nodes, specific_vars, full_UI_table)
+		local target = {
+			type = 'descriptions',
+			key = self.key,
+			set = self.set,
+			nodes = desc_nodes,
+			AUT = full_UI_table,
+			vars = specific_vars or {}
+		}
+		local res = {}
+		if self.loc_vars and type(self.loc_vars) == 'function' then
+			res = self:loc_vars(info_queue) or {}
+			target.vars = res.vars or target.vars
+			target.key = res.key or target.key
+			target.set = res.set or target.set
+			target.scale = res.scale
+			target.text_colour = res.text_colour
+			if desc_nodes == full_UI_table.main then
+				full_UI_table.box_starts = res.box_starts
+				full_UI_table.box_ends = res.box_ends
+			end
+		end
+
+		if desc_nodes == full_UI_table.main and not full_UI_table.name then
+			full_UI_table.name = localize {
+				type = 'name',
+				set = res.name_set or target.set,
+				key = res.name_key or target.key,
+				nodes = full_UI_table.name,
+				vars = res.name_vars or target.vars or {}
+			}
+		elseif desc_nodes ~= full_UI_table.main and not desc_nodes.name then
+			desc_nodes.name = localize{
+				type = 'name_text',
+				key = res.name_key or target.key,
+				set = res.name_set or target.set,
+				vars = res.name_vars or target.vars or {}
+			}
+
+			if (
+				(
+					not full_UI_table.from_detailed_tooltip
+					or full_UI_table.info[1] == desc_nodes
+				)
+				and not full_UI_table.no_styled_name
+			) then
+				desc_nodes.name_styled = {}
+
+				localize{
+					type = 'name',
+					key = res.name_key or target.key,
+					set = res.name_set or target.set,
+					nodes = desc_nodes.name_styled,
+					fixed_scale = 0.63,
+					no_pop_in = true,
+					no_shadow = true,
+					y_offset = 0,
+					no_spacing = true,
+					no_bump = true,
+					vars = res.name_vars or target.vars
+				}
+				desc_nodes.name_styled = SMODS.info_queue_desc_from_rows(desc_nodes.name_styled, true)
+				desc_nodes.name_styled.config.align = "cm"
+			end
+		end
+		if res.main_start then
+			desc_nodes[#desc_nodes + 1] = res.main_start
+		end
+
+		localize(target)
+		if res.main_end then
+			desc_nodes[#desc_nodes + 1] = res.main_end
+		end
+		desc_nodes.background_colour = res.background_colour
+	end,
+
+	activate = function (self)
+		if type(G.GAME.active_passive_effects) ~= 'table' then
+			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not activated.'):format(self.key))
+			return
+		end
+		if type(self.add_to_deck) == "function" then
+			self:add_to_deck()
+		end
+		G.GAME.active_passive_effects[self.key] = true
+	end,
+	deactivate = function (self)
+		if type(G.GAME.active_passive_effects) ~= 'table' then
+			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not deactivated.'):format(self.key))
+			return
+		end
+		if type(self.remove_from_deck) == "function" then
+			self:remove_from_deck()
+		end
+		G.GAME.active_passive_effects[self.key] = true
+	end,
+}
+
+function Ovn_f.get_passive_effects_scoring_targets(_context)
+    local ret = {}
+	if not G.GAME.active_passive_effects then return ret end
+
+	local func = type(_context) == "string" and _context or 'calculate'
+    for _, pfx in ipairs(Oblivion.PassiveEffectsOrder) do
+		if G.GAME.active_passive_effects[pfx.key] and type(pfx[func]) == "function" then
+			table.insert(ret, pfx)
+		end
+    end
+
+	return ret
+end
+
 
 
 --------------------------

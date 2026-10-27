@@ -1,0 +1,18 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# function SMODS.get_card_areas
+# Add passive effects
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = "-- TARGET: add your own individual scoring targets"
+position = "before"
+payload = '''
+for _, pfx in ipairs(Ovn_f.get_passive_effects_scoring_targets(_context)) do
+    t[#t + 1] = { object = pfx, scored_card = G.deck and G.deck.cards[1] or G.deck, set = "PassiveEffect", key = pfx.key }
+end
+'''
+match_indent = true
