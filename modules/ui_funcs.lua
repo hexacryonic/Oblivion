@@ -339,14 +339,14 @@ function Ovn_f.additional_infoqueue_tooltips(_c, card, info_queue)
 	if getmetatable(card) == Tag and card.for_collection then
 		local tag_proto = SMODS.Tags[card.key]
 		-- Credits
-		if tag_proto.credits then
+		if tag_proto and tag_proto.credits then
 			-- Only way to attach vars to send to the description dummy
 			G.P_CENTERS['dd_ovn_credits'].specific_vars = tag_proto.credits
 			table.insert(info_queue, G.P_CENTERS['dd_ovn_credits'])
 		end
 
 		-- Placeholder note
-		if tag_proto.uses_placeholder_sprite then
+		if tag_proto and tag_proto.uses_placeholder_sprite then
 			table.insert(info_queue, {
 				key = 'ovn_placeholder_sprite',
 				set = 'Other'
