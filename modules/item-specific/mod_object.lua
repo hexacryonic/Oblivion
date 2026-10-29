@@ -227,6 +227,8 @@ Oblivion.obj.reset_game_globals = function (run_start)
 	if not run_start then return end
 
 	G.GAME.active_passive_effects = {}
+	G.GAME.interest_mult = 1
+	G.GAME.cost_multiplier = 1
 end
 
 --------------------------

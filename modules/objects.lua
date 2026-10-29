@@ -120,7 +120,7 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 		if type(self.add_to_deck) == "function" then
 			self:add_to_deck()
 		end
-		G.GAME.active_passive_effects[self.key] = true
+		G.GAME.active_passive_effects[self.key] = self
 	end,
 	deactivate = function (self)
 		if type(G.GAME.active_passive_effects) ~= 'table' then
@@ -130,7 +130,7 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 		if type(self.remove_from_deck) == "function" then
 			self:remove_from_deck()
 		end
-		G.GAME.active_passive_effects[self.key] = true
+		G.GAME.active_passive_effects[self.key] = nil
 	end,
 }
 
