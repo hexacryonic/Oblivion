@@ -423,12 +423,11 @@ function Card:open()
 	end)
 end
 
--- Hook to implement G.GAME.cost_multiplier
+-- Hook to implement G.GAME.global_cost_multiplier
 local card_costvalue_hook = Card.set_cost_value
 function Card:set_cost_value()
-    local ret = card_costvalue_hook(self)
-    ret = ret*G.GAME.cost_multiplier
-    return ret
+    card_costvalue_hook(self)
+    self.cost = self.cost*(G.GAME.global_cost_multiplier or 1)
 end
 
 

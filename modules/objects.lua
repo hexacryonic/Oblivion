@@ -117,20 +117,32 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not activated.'):format(self.key))
 			return
 		end
-		if type(self.add_to_deck) == "function" then
-			self:add_to_deck()
+		if G.GAME.active_passive_effects[self.key] then
+			sendWarnMessage(('Passive effect %s already activated.'):format(self.key))
+			return
 		end
-		G.GAME.active_passive_effects[self.key] = self
+		Ovn_f.event.simple(nil, function ()
+			if type(self.add_to_deck) == "function" then
+				self:add_to_deck()
+			end
+			G.GAME.active_passive_effects[self.key] = self
+		end)
 	end,
 	deactivate = function (self)
 		if type(G.GAME.active_passive_effects) ~= 'table' then
 			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not deactivated.'):format(self.key))
 			return
 		end
-		if type(self.remove_from_deck) == "function" then
-			self:remove_from_deck()
+		if not G.GAME.active_passive_effects[self.key] then
+			sendWarnMessage(('Passive effect %s already deactivated.'):format(self.key))
+			return
 		end
-		G.GAME.active_passive_effects[self.key] = nil
+		Ovn_f.event.simple(nil, function ()
+			if type(self.remove_from_deck) == "function" then
+				self:remove_from_deck()
+			end
+			G.GAME.active_passive_effects[self.key] = nil
+		end)
 	end,
 }
 

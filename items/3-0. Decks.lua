@@ -578,6 +578,89 @@ SMODS.Back { key = "c_checkered",
 	end
 }
 
+----------------------
+-- Corrupt Zodiac Deck
+----------------------
+
+local deck_zodiacs = {
+	"pfx_ovn_zodiac_aries",
+	"pfx_ovn_zodiac_taurus",
+	"pfx_ovn_zodiac_gemini",
+	"pfx_ovn_zodiac_cancer",
+	"pfx_ovn_zodiac_leo",
+	"pfx_ovn_zodiac_virgo",
+	"pfx_ovn_zodiac_libra",
+	"pfx_ovn_zodiac_scorpio",
+	"pfx_ovn_zodiac_sagittarius",
+	"pfx_ovn_zodiac_capricorn",
+	"pfx_ovn_zodiac_aquarius",
+	"pfx_ovn_zodiac_pisces",
+}
+
+SMODS.Back { key = "c_zodiac",
+	ovn_corrupt_deck = true,
+	ovn_pure_version = "b_zodiac",
+	config = {
+		vouchers = {
+			'v_tarot_merchant',
+			'v_planet_merchant',
+			'v_overstock_norm'
+		}
+	},
+
+	atlas = "decks_corrupt",
+	pos = { x = 0, y = 2 },
+
+	unlocked = false,
+	check_for_unlock = corrupt_deck_unlock,
+	locked_loc_vars = corrupt_deck_lockedvars,
+
+	apply = function (self, back)
+		G.GAME.current_zodiac_index = 1
+		-- 1 = forward, -1 = backward
+		G.GAME.zodiac_shift_direction = 1
+		Ovn_f.event.simple(nil, function ()
+			local current_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			Oblivion.PassiveEffects[current_zodiac_key]:activate()
+			print("Activated: " .. current_zodiac_key)
+		end)
+	end,
+
+	calculate = function (self, back, context)
+		if context.using_consumeable then
+			local index_shift = 0
+			if context.consumeable.config.center.set == "Tarot" then
+				index_shift = 1
+			elseif context.consumeable.config.center.set == "Planet" then
+				index_shift = -2
+			elseif context.consumeable.config.center.set == "Spectral" then
+				index_shift = 6
+			end
+			if index_shift == 0 then return end
+
+			local current_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			Oblivion.PassiveEffects[current_zodiac_key]:deactivate()
+			print("Deactivated: " .. current_zodiac_key)
+
+			G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + index_shift*G.GAME.zodiac_shift_direction
+			if G.GAME.current_zodiac_index > #deck_zodiacs then
+				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index - #deck_zodiacs
+			elseif G.GAME.current_zodiac_index < 1 then
+				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + #deck_zodiacs
+			end
+
+			local new_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			Oblivion.PassiveEffects[new_zodiac_key]:activate()
+			print("Activated: " .. new_zodiac_key)
+
+			if context.consumeable.config.center.set == "Spectral" then
+				G.GAME.zodiac_shift_direction = -1*G.GAME.zodiac_shift_direction
+				print("Switch direction")
+			end
+		end
+	end
+}
+
 -----------------------
 -- Corrupt Painted Deck
 -----------------------

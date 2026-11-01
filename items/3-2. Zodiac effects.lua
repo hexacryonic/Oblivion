@@ -34,12 +34,24 @@ Oblivion.PassiveEffect {
     },
     add_to_deck = function (self)
         G.GAME.interest_mult = G.GAME.interest_mult * self.config.interest_mult
+        G.GAME.force_stop_rerolls = true
     end,
     remove_from_deck = function (self)
         G.GAME.interest_mult = G.GAME.interest_mult / self.config.interest_mult
+        G.GAME.force_stop_rerolls = nil
     end,
 }
 -- todo implement interest_mult
+
+local gfuncs_canreroll_hook = G.FUNCS.can_reroll
+function G.FUNCS.can_reroll(e)
+    if G.GAME.force_stop_rerolls then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    else
+        gfuncs_canreroll_hook(e)
+    end
+end
 
 ---------
 -- Gemini
@@ -51,8 +63,14 @@ Oblivion.PassiveEffect {
         xmult_max = 0.9,
     },
     calculate = function (self, context)
-        if context.card_added and context.card.ability.consumeable then
+        if (
+            context.card_added
+            and context.card.ability.consumeable
+            and not G.GAME.ovn_stop_stupid_recursion
+        ) then
+            G.GAME.ovn_stop_stupid_recursion = true
             SMODS.copy_card(context.card)
+            G.GAME.ovn_stop_stupid_recursion = nil
         end
 
         if context.main_scoring then
@@ -112,6 +130,8 @@ function Card:get_chip_bonus()
     return ret
 end
 
+-- todo add unalterable decks
+
 --------
 -- Virgo
 --------
@@ -124,7 +144,7 @@ Oblivion.PassiveEffect {
     add_to_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands + self.config.hands
         ease_hands_played(self.config.hands)
-        G.GAME.cost_multiplier = G.GAME.cost_multiplier*self.config.cost_multiplier
+        G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier*self.config.cost_multiplier
         for _,other_card in ipairs(G.I.CARD) do
             if other_card.set_cost then other_card:set_cost() end
         end
@@ -132,7 +152,7 @@ Oblivion.PassiveEffect {
     remove_from_deck_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands - self.config.hands
         ease_hands_played(-self.config.hands)
-        G.GAME.cost_multiplier = G.GAME.cost_multiplier/self.config.cost_multiplier
+        G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier/self.config.cost_multiplier
         for _,other_card in ipairs(G.I.CARD) do
             if other_card.set_cost then other_card:set_cost() end
         end
@@ -189,13 +209,13 @@ Oblivion.PassiveEffect {
         end
     end,
     add_to_deck = function (self)
-        G.GAME.cost_multiplier = G.GAME.cost_multiplier*self.config.cost_multiplier
+        G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier*self.config.cost_multiplier
         for _,other_card in ipairs(G.I.CARD) do
             if other_card.set_cost then other_card:set_cost() end
         end
     end,
     remove_from_deck_deck = function (self)
-        G.GAME.cost_multiplier = G.GAME.cost_multiplier/self.config.cost_multiplier
+        G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier/self.config.cost_multiplier
         for _,other_card in ipairs(G.I.CARD) do
             if other_card.set_cost then other_card:set_cost() end
         end

@@ -126,6 +126,15 @@ b_ovn_c_checkered = {
         "the same suit, {C:red,E:2}Game Over"
     }
 },
+b_ovn_c_zodiac = {
+    name = 'Corrupt Zodiac Deck',
+    text = {
+        "Start run with {C:tarot}Tarot Merchant{},",
+        "{C:planet}Planet Merchant{}, and {C:attention}Overstock",
+        "The {C:dark_edition}Zodiac {}influences the run",
+        "with different {C:green}buffs {}and {C:red}penalties"
+    }
+},
 b_ovn_c_painted = {
     name = 'Corrupt Painted Deck',
     text = {
