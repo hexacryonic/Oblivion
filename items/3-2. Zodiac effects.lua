@@ -165,17 +165,60 @@ Oblivion.PassiveEffect {
 Oblivion.PassiveEffect {
     key = 'zodiac_libra',
     calculate = function (self, context)
-        if context.final_scoring_step then
+        if context.final_scoring_step and G.GAME.current_round.hands_left == 0 then
+            G.GAME.skip_cashout = true
             return {
-                balance = false,
+                balance = true,
                 func = function ()
-                    ease_dollars(0)
+                    ease_dollars(G.GAME.dollars)
                 end
             }
         end
-    end
+        if context.starting_shop then
+            G.GAME.skip_cashout = nil
+        end
+    end,
 }
--- todo: implement cashout skip
+
+local g_upd8roundeval_hook = Game.update_round_eval
+function Game:update_round_eval(e)
+    if not G.GAME.skip_cashout then
+        return g_upd8roundeval_hook(self, e)
+    end
+
+    if self.buttons then self.buttons:remove(); self.buttons = nil end
+    if self.shop then self.shop:remove(); self.shop = nil end
+
+    if not G.STATE_COMPLETE then
+        stop_use()
+        G.STATE_COMPLETE = true
+        Ovn_f.event.simple(nil, function ()
+            G.GAME.facing_blind = nil
+            save_run()
+            ease_background_colour_blind(G.STATES.ROUND_EVAL)
+            -- this required as G.FUNCS.cash_out checks for G.round_eval
+            G.round_eval = UIBox{
+                definition = create_UIBox_round_evaluation(),
+                config = {align="bm", offset = {x=0,y=G.ROOM.T.y + 19},major = G.hand, bond = 'Weak'}
+            }
+            Ovn_f.event.simple(nil, function ()
+                delay(0.1)
+                -- G.FUNCS.evaluate_round would occur here
+                Ovn_f.event.simple({0.7}, function ()
+                    G.GAME.blind:defeat()
+                end)
+                delay(0.2)
+                Ovn_f.event.simple(nil, function ()
+                    ease_background_colour_blind(G.STATES.ROUND_EVAL, '')
+                end)
+                -- Cash-out button would be clicked here
+                -- input table required as G.FUNCS.cash_out checks for e.config.button
+                G.FUNCS.cash_out({config={}})
+            end)
+        end)
+    end
+end
+-- See also: G.FUNCS.cash_out patch, complex_economy.toml
 
 ----------
 -- Scorpio

@@ -25,7 +25,9 @@ target = "functions/button_callbacks.lua"
 pattern = "ease_dollars(G.GAME.current_round.dollars)"
 position = "at"
 payload = '''
-if not G.GAME.ovn_complex_economy then
+if G.GAME.skip_cashout then
+  -- do nothing
+elseif not G.GAME.ovn_complex_economy then
   ease_dollars(G.GAME.current_round.dollars)
 else
   Ovn_f.ease_complex_dollars(G.GAME.current_round.dollars, G.GAME.current_round.dollars_i)
