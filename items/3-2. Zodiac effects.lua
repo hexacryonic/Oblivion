@@ -41,7 +41,7 @@ Oblivion.PassiveEffect {
         G.GAME.force_stop_rerolls = nil
     end,
 }
--- todo implement interest_mult
+-- For G.GAME.interest_mult, see also: G.FUNCS.evaluate_round patch, complex_economy.toml
 
 local gfuncs_canreroll_hook = G.FUNCS.can_reroll
 function G.FUNCS.can_reroll(e)

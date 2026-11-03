@@ -351,20 +351,36 @@ Ovn_f.add_complex_roundeval_row = function(config)
 				shadow = true,
 				juice = true
 			}})
-			table.insert(left_text,{n=G.UIT.O, config={
-				object = DynaText({
+			table.insert(left_text, {n=G.UIT.O, config={object = DynaText({
+				string = {" "..localize{
+					type = 'variable',
+					key = 'interest_i',
+					vars = {
+						G.GAME.interest_amount,
+						5,
+						G.GAME.interest_amount*G.GAME.interest_cap/5
+					}
+				}},
+				colours = {G.C.UI.TEXT_LIGHT},
+				shadow = true,
+				pop_in = 0,
+				scale = 0.4*scale,
+				silent = true
+			})}})
+			if G.GAME.interest_mult ~= 1 then
+				table.insert(left_text, {n=G.UIT.O, config={object = DynaText({
 					string = {" "..localize{
 						type = 'variable',
-						key = 'interest_i',
-						vars = {G.GAME.interest_amount, 5, G.GAME.interest_amount*G.GAME.interest_cap/5}
+						key = 'interest_multiplier',
+						vars = {G.GAME.interest_mult}
 					}},
-					colours = {G.C.UI.TEXT_LIGHT},
+					colours = {G.C.MONEY},
 					shadow = true,
 					pop_in = 0,
 					scale = 0.4*scale,
 					silent = true
-				})
-			}})
+				})}})
+			end
 		end
 
 		local full_row = {n=G.UIT.R, config={align = "cm", minw = 5}, nodes={
