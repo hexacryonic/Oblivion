@@ -114,6 +114,12 @@ Oblivion.PassiveEffect {
     config = {
         chips_multiplier = 3,
     },
+    add_to_deck = function (self)
+        G.GAME.immutable_deck = true
+    end,
+    remove_from_deck = function (self)
+        G.GAME.immutable_deck = nil
+    end,
 }
 
 local card_chipbonus_hook = Card.get_chip_bonus
@@ -130,7 +136,19 @@ function Card:get_chip_bonus()
     return ret
 end
 
--- todo add unalterable decks
+local card_canuseconsumable_hook = Card.can_use_consumeable
+function Card:can_use_consumeable(any_state, skip_check)
+    if (
+        G.GAME.immutable_deck
+        and (
+            self:has_attribute('modify_card')
+            or self:has_attribute('destroy_card')
+        )
+    ) then
+        return false
+    end
+    return card_canuseconsumable_hook(self, any_state, skip_check)
+end
 
 --------
 -- Virgo

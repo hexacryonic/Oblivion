@@ -98,3 +98,47 @@ if self.ability.name == 'Black Hole' then
 match_indent = true
 
 # ----
+
+# In Steamodded:
+# function SMODS.calculate_destroying_cards
+# Save playing cards from being destroyed if deck is immutable
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''
+-- TARGET: card destroyed
+'''
+position = "after"
+payload = '''
+if G.GAME.immutable_deck and SMODS.is_playing_card(card) then
+  destroyed = false
+end
+'''
+match_indent = true
+
+# ----
+
+# In Steamodded:
+# function SMODS.destroy_cards
+# Prevent cards from being destroyed via this function
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''
+local glass_shattered = {}
+'''
+position = "before"
+payload = '''
+local new_card_list = {}
+for _,other_card in ipairs(cards) do
+    if not (
+        SMODS.is_playing_card(other_card)
+        and G.GAME.immutable_deck
+        and not other_card.immutable_destroy_override
+    ) then
+        table.insert(new_card_list, other_card)
+    end
+end
+cards = new_card_list
+'''
+match_indent = true

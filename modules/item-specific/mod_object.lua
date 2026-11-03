@@ -61,6 +61,16 @@ Oblivion.obj.calculate = function (self, context)
 	-- On adding a playing card
 	---------------------------
     if context.playing_card_added then
+		if G.GAME.immutable_deck then
+			for _,other_card in ipairs(context.cards) do
+				other_card.immutable_destroy_override = true
+			end
+			SMODS.destroy_cards(context.cards, {
+				skip_anim = true,
+				skip_calc = true
+			})
+		end
+
         -- Increase instability when Optic playing cards are added
         local optics_count = 0
         for _,playing_card in ipairs(context.cards) do
