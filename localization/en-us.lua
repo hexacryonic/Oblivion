@@ -1,14 +1,3 @@
-local macro = {
-	p_ovn_wicked_normal = {
-		name = "Wicked Pack",
-		text = {
-			"Choose {C:attention}#1# {}of up to {C:attention}#2#",
-			"{C:ovn_corrupted}Corrupted {C:joker}Joker {}cards",
-			"or a {C:attention}#3#"
-		}
-	}
-}
-
 return {
     descriptions = {
 		Mod = {
@@ -102,10 +91,14 @@ return {
 					"be created {C:blue}later."
 				}
 			},
-			p_ovn_wicked_normal_1 = macro.p_ovn_wicked_normal,
-			p_ovn_wicked_normal_2 = macro.p_ovn_wicked_normal,
-			p_ovn_wicked_normal_3 = macro.p_ovn_wicked_normal,
-			p_ovn_wicked_normal_4 = macro.p_ovn_wicked_normal,
+			p_ovn_wicked_normal = {
+				name = "Wicked Pack",
+				text = {
+					"Choose {C:attention}#1# {}of up to {C:attention}#2#",
+					"{C:ovn_corrupted}Corrupted {C:joker}Joker {}cards",
+					"or a {C:attention}#3#"
+				}
+			}
 		},
 
 		Blind = {

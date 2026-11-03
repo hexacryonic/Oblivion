@@ -74,7 +74,8 @@ local function booster_wicked_normal(num)
 					card.ability.choose,
 					card.ability.extra - 1,
 					localize { type = 'name_text', key = 'c_ovn_abyss', set = 'Tarot' }
-				}
+				},
+				key = "p_ovn_wicked_normal"
 			}
 		end,
 
