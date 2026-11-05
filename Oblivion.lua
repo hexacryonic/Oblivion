@@ -113,4 +113,10 @@ Ovn_f.load_directory("cross-mod", function (file_name)
 	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
 
-Ovn_f.try_load_file("modules/post-load.lua")
+-- Special loading for post-load (only runs immediately after initialization)
+print("[OBLIVION] Loading file " .. "modules/post-load.lua")
+local postload_file_func, postload_err = SMODS.load_file("modules/post-load.lua")
+if postload_err then error(postload_err) end
+if postload_file_func then
+	Ovn_f.event.unblock(nil, postload_file_func)
+end
