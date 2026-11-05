@@ -7,6 +7,16 @@ Oblivion.PassiveEffect {
         xmult = 1.5,
         discards = -1
     },
+    loc_vars = function (self, info_queue)
+        return {vars = {
+            self.config.xmult,
+            self.config.discards,
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=0, y=0},
+
     calculate = function (self, context)
         if context.main_scoring then
             return {
@@ -32,6 +42,15 @@ Oblivion.PassiveEffect {
     config = {
         interest_mult = 2,
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.interest_mult
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=1, y=0},
+
     add_to_deck = function (self)
         G.GAME.interest_mult = G.GAME.interest_mult * self.config.interest_mult
         G.GAME.force_stop_rerolls = true
@@ -62,6 +81,16 @@ Oblivion.PassiveEffect {
         xmult_min = 0.5,
         xmult_max = 0.9,
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.xmult_min,
+            self.config.xmult_max,
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=2, y=0},
+
     calculate = function (self, context)
         if (
             context.card_added
@@ -91,6 +120,16 @@ Oblivion.PassiveEffect {
         hand_size = 2,
         dollars = -2
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.hand_size,
+            self.config.dollars
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=3, y=0},
+
     calculate = function (self, context)
         if context.press_play then
             return {
@@ -114,6 +153,15 @@ Oblivion.PassiveEffect {
     config = {
         chips_multiplier = 3,
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.chips_multiplier
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=0, y=1},
+
     add_to_deck = function (self)
         G.GAME.immutable_deck = true
     end,
@@ -159,6 +207,15 @@ Oblivion.PassiveEffect {
         cost_multiplier = 0.5,
         hands = -1
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.hands
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=1, y=1},
+
     add_to_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands + self.config.hands
         ease_hands_played(self.config.hands)
@@ -182,6 +239,10 @@ Oblivion.PassiveEffect {
 --------
 Oblivion.PassiveEffect {
     key = 'zodiac_libra',
+
+    atlas = "zodiacs",
+    pos = {x=2, y=1},
+
     calculate = function (self, context)
         if context.final_scoring_step and G.GAME.current_round.hands_left == 0 then
             G.GAME.skip_cashout = true
@@ -243,6 +304,9 @@ end
 ----------
 Oblivion.PassiveEffect {
     key = 'zodiac_scorpio',
+
+    atlas = "zodiacs",
+    pos = {x=3, y=1},
 }
 
 --------------
@@ -254,6 +318,15 @@ Oblivion.PassiveEffect {
         mult_per_card = 3,
         cost_multiplier = 2
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.mult_per_card
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=0, y=2},
+
     calculate = function (self, context)
         if context.individual then
             for _,other_card in ipairs(context.scoring_hand) do
@@ -288,6 +361,10 @@ Oblivion.PassiveEffect {
 ------------
 Oblivion.PassiveEffect {
     key = 'zodiac_capricorn',
+
+    atlas = "zodiacs",
+    pos = {x=1, y=2},
+
 }
 
 -----------
@@ -295,6 +372,10 @@ Oblivion.PassiveEffect {
 -----------
 Oblivion.PassiveEffect {
     key = 'zodiac_aquarius',
+
+    atlas = "zodiacs",
+    pos = {x=2, y=2},
+
 }
 
 ---------
@@ -306,6 +387,16 @@ Oblivion.PassiveEffect {
         hands = 1,
         discards = 1
     },
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            self.config.hands,
+            self.config.discards,
+        }}
+    end,
+
+    atlas = "zodiacs",
+    pos = {x=3, y=2},
+
     calculate = function (self, context)
         if context.stay_flipped and context.to_area == G.hand then
             return {

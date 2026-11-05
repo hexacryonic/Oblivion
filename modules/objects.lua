@@ -1,3 +1,5 @@
+local JTML = Ovn_f.JTML
+
 ---------------------------
 ---- CLASS DEFINITIONS ----
 ---------------------------
@@ -24,6 +26,7 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 	required_params = {
 		'key',
 	},
+	badge_colour = HEX "f112a6",
 
 	obj_buffer = {},
 	obj_table = Oblivion.PassiveEffects,
@@ -35,8 +38,45 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 	inject = function (self, i)
 		table.insert(Oblivion.PassiveEffectsOrder, self)
 	end,
+
+	atlas = "tag",
+	pos = {x=0,y=0},
+
+	activate = function (self)
+		if type(G.GAME.active_passive_effects) ~= 'table' then
+			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not activated.'):format(self.key))
+			return
+		end
+		if G.GAME.active_passive_effects[self.key] then
+			sendWarnMessage(('Passive effect %s already activated.'):format(self.key))
+			return
+		end
+		Ovn_f.event.simple(nil, function ()
+			if type(self.add_to_deck) == "function" then
+				self:add_to_deck()
+			end
+			G.GAME.active_passive_effects[self.key] = self
+		end)
+	end,
+	deactivate = function (self)
+		if type(G.GAME.active_passive_effects) ~= 'table' then
+			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not deactivated.'):format(self.key))
+			return
+		end
+		if not G.GAME.active_passive_effects[self.key] then
+			sendWarnMessage(('Passive effect %s already deactivated.'):format(self.key))
+			return
+		end
+		Ovn_f.event.simple(nil, function ()
+			if type(self.remove_from_deck) == "function" then
+				self:remove_from_deck()
+			end
+			G.GAME.active_passive_effects[self.key] = nil
+		end)
+	end,
+
 	-- not actually ready but i already prepared this so it stays
-	generate_ui = function (self, info_queue, desc_nodes, specific_vars, full_UI_table)
+	generate_ui = function (self, info_queue, element, desc_nodes, specific_vars, full_UI_table)
 		local target = {
 			type = 'descriptions',
 			key = self.key,
@@ -111,39 +151,6 @@ Oblivion.PassiveEffect = SMODS.GameObject:extend {
 		end
 		desc_nodes.background_colour = res.background_colour
 	end,
-
-	activate = function (self)
-		if type(G.GAME.active_passive_effects) ~= 'table' then
-			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not activated.'):format(self.key))
-			return
-		end
-		if G.GAME.active_passive_effects[self.key] then
-			sendWarnMessage(('Passive effect %s already activated.'):format(self.key))
-			return
-		end
-		Ovn_f.event.simple(nil, function ()
-			if type(self.add_to_deck) == "function" then
-				self:add_to_deck()
-			end
-			G.GAME.active_passive_effects[self.key] = self
-		end)
-	end,
-	deactivate = function (self)
-		if type(G.GAME.active_passive_effects) ~= 'table' then
-			sendWarnMessage(('Global table G.GAME.active_passive_effects not defined, passive effect %s not deactivated.'):format(self.key))
-			return
-		end
-		if not G.GAME.active_passive_effects[self.key] then
-			sendWarnMessage(('Passive effect %s already deactivated.'):format(self.key))
-			return
-		end
-		Ovn_f.event.simple(nil, function ()
-			if type(self.remove_from_deck) == "function" then
-				self:remove_from_deck()
-			end
-			G.GAME.active_passive_effects[self.key] = nil
-		end)
-	end,
 }
 
 function Ovn_f.get_passive_effects_scoring_targets(_context)
@@ -158,6 +165,65 @@ function Ovn_f.get_passive_effects_scoring_targets(_context)
     end
 
 	return ret
+end
+
+
+
+function Ovn_f.generate_pfx_ui(key, cfg)
+	cfg = cfg or {}
+	cfg.size = cfg.size or 1
+	local pfx_proto = Oblivion.PassiveEffects[key]
+
+	local atlas = SMODS.get_atlas(pfx_proto.atlas)
+	local spr = SMODS.create_sprite(0, 0, cfg.size, cfg.size, atlas, pfx_proto.pos, pfx_proto.sprite_args)
+    spr.T.scale = 1
+    spr:define_draw_steps({
+        {shader = 'dissolve', shadow_height = 0.05},
+        {shader = 'dissolve'},
+    })
+    spr.float = true
+    spr.states.hover.can = true
+    spr.states.drag.can = false
+    spr.states.collide.can = true
+    spr.config = {tag = pfx_proto, force_focus = true}
+
+	spr.hover = function(_self)
+        if G.CONTROLLER.dragging.target and not G.CONTROLLER.using_touch then return end
+		if _self.hovering or not _self.states.visible then return end
+
+		_self.hovering = true
+		if _self == spr then
+			_self:juice_up(0.05, 0.02)
+			play_sound('paper1', math.random()*0.1 + 0.55, 0.42)
+			play_sound('tarot2', math.random()*0.1 + 0.55, 0.09)
+		end
+
+		local badges = {}
+		badges.card_type = 'PassiveEffect'
+		spr.ability_UIBox_table = generate_card_ui(pfx_proto, nil, nil, 'PassiveEffect', badges, nil, nil, nil, nil)
+		_self.config.center = pfx_proto
+		_self.ability = {}
+		_self.config.h_popup =  G.UIDEF.card_h_popup(_self)
+		_self.config.h_popup_config = (_self.T.x > G.ROOM.T.w*0.4) and
+			{align =  'cl', offset = {x=-0.1,y=0},parent = _self} or
+			{align =  'cr', offset = {x=0.1,y=0},parent = _self}
+		Node.hover(_self)
+		if _self.children.alert then
+			_self.children.alert:remove()
+			_self.children.alert = nil
+		end
+	end
+
+    spr.stop_hover = function(_self)
+		_self.hovering = false
+		Node.stop_hover(_self)
+		_self.hover_tilt = 0
+	end
+
+	return
+	JTML.flex{ self_mode="row", style={ align="center-middle", reference = {pfx_proto} }, {
+		JTML.object{ style={ WH={cfg.size,cfg.size}, colour=G.C.BLUE }, object=spr }
+	}}
 end
 
 

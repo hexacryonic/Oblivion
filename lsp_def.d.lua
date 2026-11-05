@@ -44,10 +44,22 @@
 ---@class Oblivion.PassiveEffect: SMODS.GameObject
 ---@field key string
 ---@field config? table
+-- Key to the passive effect's atlas.
+---@field atlas? string
+-- Position of the center's sprite.
+---@field pos? table|{x: integer, y: integer}
+-- Provides complex control over the UI display of the card.
+-- See [`generate_ui`](https://docs.smods.dev/API%20Documentation/Localization#generate_ui-advanced) documentation for details. 
+---@field generate_ui? fun(self: Oblivion.PassiveEffect|table, info_queue: table, element: table, desc_nodes: table, specific_vars: table, full_UI_table: table)
+-- Provides simple control over displaying descriptions and tooltips of the card.
+-- See [`loc_vars`](https://docs.smods.dev/API%20Documentation/Localization#loc_vars) documentation for return value details. 
+---@field loc_vars? fun(self: SMODS.Center|table, info_queue: table, card: Card|table): table?
 -- Calculates effects based on parameters in `context`. See [SMODS calculation](https://docs.smods.dev/API%20Documentation/Calculate-Functions) docs for details.
 ---@field calculate? fun(self: Oblivion.PassiveEffect|table, context: CalcContext|table): table?, boolean?
+-- Avoid calling this; instead, call `activate`.\
 -- Allows modifying the game state when the passive effect is being activated.
 ---@field add_to_deck? fun(self: Oblivion.PassiveEffect|table)
+-- Avoid calling this; instead, call `deactivate`.\
 -- Allows modifying the game state when the passive effect is being deactivated.
 ---@field remove_from_deck? fun(self: Oblivion.PassiveEffect|table)
 -- Marks the passive effect as active.

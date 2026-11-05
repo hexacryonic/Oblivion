@@ -157,6 +157,7 @@ return {
 			k_toggle = "Toggle",
 			k_name = "Name",
 			k_description = "Description",
+			k_passiveeffect = "Passive Effect",
 
 			k_ovn_c_erratic_warn_1 = "Are you sure? Select again to confirm",
 			k_ovn_c_erratic_warn_2 = "Are you REALLY sure? Select again to confirm",
