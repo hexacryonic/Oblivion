@@ -543,6 +543,13 @@ function Game:main_menu(context)
 	Oblivion.ovn_c_erratic_warn = localize("k_ovn_c_erratic_warn_1")
 end
 
+-- Hook for removing G.ovn_suit_chart when leaving run
+local game_delrun_hook = Game.delete_run
+function Game:delete_run()
+	game_delrun_hook(self)
+	G.ovn_suit_chart = nil
+end
+
 
 
 --------------------------
