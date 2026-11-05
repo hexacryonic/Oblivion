@@ -58,3 +58,23 @@ for _,tarot_proto in ipairs(G.P_CENTER_POOLS.Tarot) do
 		Oblivion.suit_changing_tarots[tarot_proto.key] = true
 	end
 end
+
+-- Map all booster packs of the same type+size+selection to a specific key
+Oblivion.booster_groups = {}
+for _,booster_proto in ipairs(G.P_CENTER_POOLS.Booster) do
+	if (
+		booster_proto.config
+		and booster_proto.config.extra
+		and booster_proto.config.choose
+	) then
+		local booster_group_key = ("%s__%s__%s"):format(
+			booster_proto.group_key,
+			booster_proto.config.extra or "X",
+			booster_proto.config.choose or "X"
+		)
+		booster_proto.sizeselect_key = booster_group_key
+
+		Oblivion.booster_groups[booster_group_key] = Oblivion.booster_groups[booster_group_key] or {}
+		table.insert(Oblivion.booster_groups[booster_group_key], booster_proto.key)
+	end
+end

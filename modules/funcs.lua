@@ -515,8 +515,14 @@ end
 ---@return boolean
 Ovn_f.is_banished = function(card_key)
 	if Ovn_f.is_corruptbanished(card_key) then return true end
+	if not G.P_CENTERS[card_key] then return false end
+
+	local booster_group_key
+	if G.P_CENTERS[card_key].set == "Booster" then
+		booster_group_key = G.P_CENTERS[card_key].sizeselect_key
+	end
 	for _,joker in ipairs(SMODS.find_card("j_ovn_insatiable_hunger")) do
-		if joker.ability.extra.devoured_items[card_key] then return true end
+		if joker.ability.extra.devoured_items[booster_group_key or card_key] then return true end
 	end
 	return false
 end

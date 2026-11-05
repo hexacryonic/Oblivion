@@ -1408,12 +1408,17 @@ SMODS.Joker { key = 'insatiable_hunger',
 			)
 		) then
 			local mult_scale = context.card.cost -- modify as needed
+			local devoured_key = context.card.config.center.key
 			if context.card.ability.consumeable then
 				-- nothing
 			elseif context.card.ability.set == "Joker" then
 				mult_scale = mult_scale + 1
 			elseif context.card.ability.set == "Booster" then
 				mult_scale = mult_scale + 1
+				local booster_group_key = context.card.config.center.sizeselect_key
+				if booster_group_key then
+					devoured_key = booster_group_key
+				end
 			elseif context.card.ability.set == "Voucher" then
 				mult_scale = mult_scale + 2
 			end
@@ -1432,7 +1437,7 @@ SMODS.Joker { key = 'insatiable_hunger',
 				message_key = "a_mult",
 				message_colour = G.C.RED,
 			})
-			card.ability.extra.devoured_items[context.card.config.center.key] = true
+			card.ability.extra.devoured_items[devoured_key] = true
 			card.ability.extra.first_item_bought = true
 		end
 
@@ -1455,7 +1460,16 @@ Oblivion.DescriptionDummy { key = "insatiable_hunger_banishing",
 
 		local keys = {}
 		for key in pairs(specific_vars) do
-			if G.P_CENTERS[key].group_key then
+			if Oblivion.booster_groups[key] then
+				local representative_booster_key = Oblivion.booster_groups[key][1]
+				local repr_booster = G.P_CENTERS[representative_booster_key]
+				local localize_key = repr_booster:loc_vars().key
+				table.insert(keys, localize{
+					type = "name_text",
+					set = "Other",
+					key = localize_key
+				})
+			elseif G.P_CENTERS[key].group_key then
 				table.insert(keys, localize(G.P_CENTERS[key].group_key))
 			else
 				table.insert(keys, localize{
