@@ -423,6 +423,11 @@ Oblivion.obj.credits_tab = function ()
 				define_tab("k_sources", function()
 					return Ovn_f.localize_desc(G.localization.misc.credits_long)
 				end),
+				--[[
+				define_tab("k_additional_credits", function()
+					return Ovn_f.generate_pfx_ui('pfx_ovn_zodiac_aries')
+				end),
+				]]
 			}
 		}
 	}}

@@ -107,7 +107,7 @@ local function planet_loc_vars(self, info_queue, card)
 end
 
 local function galilean_moon_badge(self, card, badges)
-	badges[1] = create_badge('Galilean Moon', G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
+	badges[1] = create_badge(localize('galilean_moon', 'labels'), G.ARGS.LOC_COLOURS.ovn_corrupted, G.C.WHITE, 1.2)
 end
 
 -----------

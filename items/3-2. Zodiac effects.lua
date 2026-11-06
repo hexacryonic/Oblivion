@@ -1,3 +1,7 @@
+local function zodiac_badge (self, element, badges)
+    badges[1] = create_badge(localize('zodiac', 'labels'), G.C.GOLD, G.C.WHITE, 1.2)
+end
+
 --------
 -- Aries
 --------
@@ -16,6 +20,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=0, y=0},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if context.main_scoring then
@@ -50,6 +55,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=1, y=0},
+    set_card_type_badge = zodiac_badge,
 
     add_to_deck = function (self)
         G.GAME.interest_mult = G.GAME.interest_mult * self.config.interest_mult
@@ -90,6 +96,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=2, y=0},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if (
@@ -129,6 +136,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=3, y=0},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if context.press_play then
@@ -161,6 +169,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=0, y=1},
+    set_card_type_badge = zodiac_badge,
 
     add_to_deck = function (self)
         G.GAME.immutable_deck = true
@@ -215,6 +224,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=1, y=1},
+    set_card_type_badge = zodiac_badge,
 
     add_to_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands + self.config.hands
@@ -242,6 +252,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=2, y=1},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if context.final_scoring_step and G.GAME.current_round.hands_left == 0 then
@@ -307,6 +318,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=3, y=1},
+    set_card_type_badge = zodiac_badge,
 }
 
 --------------
@@ -326,6 +338,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=0, y=2},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if context.individual then
@@ -364,6 +377,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=1, y=2},
+    set_card_type_badge = zodiac_badge,
 
 }
 
@@ -375,6 +389,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=2, y=2},
+    set_card_type_badge = zodiac_badge,
 
 }
 
@@ -396,6 +411,7 @@ Oblivion.PassiveEffect {
 
     atlas = "zodiacs",
     pos = {x=3, y=2},
+    set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
         if context.stay_flipped and context.to_area == G.hand then

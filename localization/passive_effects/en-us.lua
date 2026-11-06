@@ -3,7 +3,7 @@ return {descriptions = {PassiveEffect = {
 ------
 
 pfx_ovn_zodiac_aries = {
-    name = 'Zodiac: Aries',
+    name = 'Aries',
     text = {
         {
             "Courageous and determined",
@@ -17,7 +17,7 @@ pfx_ovn_zodiac_aries = {
     }
 },
 pfx_ovn_zodiac_taurus = {
-    name = 'Zodiac: Taurus',
+    name = 'Taurus',
     text = {
         {
             "Responsible and patient",
@@ -31,7 +31,7 @@ pfx_ovn_zodiac_taurus = {
     }
 },
 pfx_ovn_zodiac_gemini = {
-    name = 'Zodiac: Gemini',
+    name = 'Gemini',
     text = {
         {
             "Curious and adaptable",
@@ -46,7 +46,7 @@ pfx_ovn_zodiac_gemini = {
     }
 },
 pfx_ovn_zodiac_cancer = {
-    name = 'Zodiac: Cancer',
+    name = 'Cancer',
     text = {
         {
             "Tenacious and creative",
@@ -60,7 +60,7 @@ pfx_ovn_zodiac_cancer = {
     }
 },
 pfx_ovn_zodiac_leo = {
-    name = 'Zodiac: Leo',
+    name = 'Leo',
     text = {
         {
             "Warm-hearted and passionate",
@@ -76,7 +76,7 @@ pfx_ovn_zodiac_leo = {
     }
 },
 pfx_ovn_zodiac_virgo = {
-    name = 'Zodiac: Virgo',
+    name = 'Virgo',
     text = {
         {
             "Analytical and kind",
@@ -91,7 +91,7 @@ pfx_ovn_zodiac_virgo = {
     }
 },
 pfx_ovn_zodiac_libra = {
-    name = 'Zodiac: Libra',
+    name = 'Libra',
     text = {
         {
             "Cooperative and fair-minded",
@@ -106,7 +106,7 @@ pfx_ovn_zodiac_libra = {
     }
 },
 pfx_ovn_zodiac_scorpio = {
-    name = 'Zodiac: Scorpio',
+    name = 'Scorpio',
     text = {
         {
             "tbd",
@@ -119,7 +119,7 @@ pfx_ovn_zodiac_scorpio = {
     }
 },
 pfx_ovn_zodiac_sagittarius = {
-    name = 'Zodiac: Sagittarius',
+    name = 'Sagittarius',
     text = {
         {
             "Idealistic and humorous",
@@ -135,7 +135,7 @@ pfx_ovn_zodiac_sagittarius = {
     }
 },
 pfx_ovn_zodiac_capricorn = {
-    name = 'Zodiac: Capricorn',
+    name = 'Capricorn',
     text = {
         {
             "tbd",
@@ -148,7 +148,7 @@ pfx_ovn_zodiac_capricorn = {
     }
 },
 pfx_ovn_zodiac_aquarius = {
-    name = 'Zodiac: Aquarius',
+    name = 'Aquarius',
     text = {
         {
             "tbd",
@@ -161,7 +161,7 @@ pfx_ovn_zodiac_aquarius = {
     }
 },
 pfx_ovn_zodiac_pisces = {
-    name = 'Zodiac: Pisces',
+    name = 'Pisces',
     text = {
         {
             "Intuitive and wise",

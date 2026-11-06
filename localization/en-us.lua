@@ -129,12 +129,6 @@ return {
     },
 
     misc = {
-		labels = {
-				-- Developer's note: Corrupted and Supercorrupted are superficially equivalent, hence they should have the same text
-			k_ovn_corrupted = "Corrupted",
-			k_ovn_supercorrupted = "Corrupted",
-		},
-
 		dictionary = {
 			b_ovn_switch = "SWITCH",
 			b_ovn_store = "STORE",
@@ -143,6 +137,7 @@ return {
 			stored = "Stored!",
 			empty = "Emptied!",
 			k_inactive_ex = "Inactive!",
+				-- Developer's note: Corrupted and Supercorrupted are superficially equivalent, hence they should have the same text
 			k_ovn_corrupted = "Corrupted",
 			k_ovn_supercorrupted = "Corrupted",
 			k_ovn_wicked_pack = "Wicked Pack",
@@ -162,6 +157,11 @@ return {
 			k_ovn_c_erratic_warn_1 = "Are you sure? Select again to confirm",
 			k_ovn_c_erratic_warn_2 = "Are you REALLY sure? Select again to confirm",
 			k_ovn_c_erratic_warn_3 = "I warned you. Select again to confirm",
+		},
+
+		labels = {
+			galilean_moon = "Galilean Moon",
+			zodiac = "Zodiac"
 		},
 
 		v_dictionary = {
