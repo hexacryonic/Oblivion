@@ -48,12 +48,12 @@
 ---@field atlas? string
 -- Position of the center's sprite.
 ---@field pos? table|{x: integer, y: integer}
--- Provides complex control over the UI display of the card.
+-- Provides complex control over the UI display of the passive effect.
 -- See [`generate_ui`](https://docs.smods.dev/API%20Documentation/Localization#generate_ui-advanced) documentation for details. 
 ---@field generate_ui? fun(self: Oblivion.PassiveEffect|table, info_queue: table, element: table, desc_nodes: table, specific_vars: table, full_UI_table: table)
--- Provides simple control over displaying descriptions and tooltips of the card.
+-- Provides simple control over displaying descriptions and tooltips of the passive effect.
 -- See [`loc_vars`](https://docs.smods.dev/API%20Documentation/Localization#loc_vars) documentation for return value details. 
----@field loc_vars? fun(self: SMODS.Center|table, info_queue: table, card: Card|table): table?
+---@field loc_vars? fun(self: SMODS.Center|table, info_queue: table): table?
 -- Calculates effects based on parameters in `context`. See [SMODS calculation](https://docs.smods.dev/API%20Documentation/Calculate-Functions) docs for details.
 ---@field calculate? fun(self: Oblivion.PassiveEffect|table, context: CalcContext|table): table?, boolean?
 -- Avoid calling this; instead, call `activate`.\
