@@ -41,7 +41,7 @@ pfx_ovn_zodiac_gemini = {
         {
             "{C:attention}Duplicate {}obtained consumables",
             "{C:inactive}(Can overflow)",
-            "{C:white,X:mult}X#1#-#2# {}Mult"
+            "{C:white,X:mult}X#1#-#2# {} Mult"
         }
     }
 },
@@ -55,7 +55,7 @@ pfx_ovn_zodiac_cancer = {
         },
         {
             "{C:blue}+#1# {}hand size",
-            "{C:red}$#2# {}when hand played"
+            "{C:money}$#2# {}when hand played"
         }
     }
 },
@@ -68,8 +68,8 @@ pfx_ovn_zodiac_leo = {
             "Sign of the Lion"
         },
         {
-            "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}, and",
-            "{C:ovn_optic}Optics {}give {C:blue}triple {}Chips",
+            "{C:hearts}Heart{}, {C:diamonds}Diamond{}, and {C:ovn_optic}Optic",
+            "cards give {C:blue}triple {}their Chips",
             "Your deck is {C:red}fixed to",
             "its current state"
         }
@@ -84,8 +84,8 @@ pfx_ovn_zodiac_virgo = {
             "Sign of the Maiden"
         },
         {
-            "Shop prices are {C:money}half off{},",
-            "sell values remain normal",
+            "Shop prices are {C:money}half off",
+            "{C:inactive}(Sell values remain normal)",
             "{C:red}#1# {}Hand"
         }
     }
@@ -101,7 +101,8 @@ pfx_ovn_zodiac_libra = {
         {
             "On {C:attention}final hand {}of round:",
             "Balance {C:chips}Chips {}and {C:mult}Mult",
-            "Set money to {C:money}$0 {}and {C:red}skip cash-out"
+            "Set money to {C:money}$0",
+            "and {C:red}skip cash-out"
         }
     }
 },
@@ -127,10 +128,10 @@ pfx_ovn_zodiac_sagittarius = {
             "Sign of the Archer"
         },
         {
-            "{C:spades}Spades{}, {C:clubs}Clubs{}, and",
-            "{C:ovn_optic}Optics {}give {C:mult}+#1# {}Mult",
-            "Shop prices are {C:red}doubled{},",
-            "sell values remain normal"
+            "{C:spades}Spade{}, {C:clubs}Club{}, and {C:ovn_optic}Optic",
+            "cards give {C:mult}+#1# {}Mult",
+            "Shop prices are {C:red}doubled",
+            "{C:inactive}(Sell values remain normal)",
         }
     }
 },
@@ -165,7 +166,7 @@ pfx_ovn_zodiac_pisces = {
     text = {
         {
             "Intuitive and wise",
-            "yet looking for an escape from reality",
+            "yet seeks escape from reality",
             "Sign of the Fish"
         },
         {

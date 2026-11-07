@@ -556,7 +556,7 @@ function Ovn_f.zodiac_cycle_ui()
 		return new_list
 	end
 
-	local zodiac_order = shift_list(G.GAME.zodiacs, (G.GAME.current_zodiac_index or 1) - 1)
+	local zodiac_order = shift_list(G.GAME.zodiacs, -((G.GAME.current_zodiac_index or 1) - 1))
 	local cardinal_space_hoz = {2.245*2 + 1, 1}
 	return
 	JTML.flex{mode="row", {
