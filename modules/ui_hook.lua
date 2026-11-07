@@ -229,6 +229,23 @@ function G.UIDEF.view_deck(unplayed_only)
 end
 -- See also: function Back:generate_UI patch, miscellaneous.toml
 
+-- Hook to set flag for lazy-catch
+local uidef_runinfo_hook = G.UIDEF.run_info
+function G.UIDEF.run_info(...)
+	G.lazycatch_runinfo_tabs = true
+	return uidef_runinfo_hook(...)
+end
+
+-- Hook to lazy-catch contents for deck info tabs
+local createtabs_hook = create_tabs
+function create_tabs(args)
+	if G.lazycatch_runinfo_tabs and type(args.tabs) == "table" then
+		G.lazycatch_runinfo_tabs = nil
+		Ovn_f.modify_run_info_tabs(args.tabs)
+	end
+	return createtabs_hook(args)
+end
+
 
 
 ---------------------------

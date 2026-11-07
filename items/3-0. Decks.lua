@@ -581,22 +581,6 @@ SMODS.Back { key = "c_checkered",
 ----------------------
 -- Corrupt Zodiac Deck
 ----------------------
-
-local deck_zodiacs = {
-	"pfx_ovn_zodiac_aries",
-	"pfx_ovn_zodiac_taurus",
-	"pfx_ovn_zodiac_gemini",
-	"pfx_ovn_zodiac_cancer",
-	"pfx_ovn_zodiac_leo",
-	"pfx_ovn_zodiac_virgo",
-	"pfx_ovn_zodiac_libra",
-	"pfx_ovn_zodiac_scorpio",
-	"pfx_ovn_zodiac_sagittarius",
-	"pfx_ovn_zodiac_capricorn",
-	"pfx_ovn_zodiac_aquarius",
-	"pfx_ovn_zodiac_pisces",
-}
-
 SMODS.Back { key = "c_zodiac",
 	ovn_corrupt_deck = true,
 	ovn_pure_version = "b_zodiac",
@@ -620,7 +604,7 @@ SMODS.Back { key = "c_zodiac",
 		-- 1 = forward, -1 = backward
 		G.GAME.zodiac_shift_direction = 1
 		Ovn_f.event.simple(nil, function ()
-			local current_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			local current_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[current_zodiac_key]:activate()
 			print("Activated: " .. current_zodiac_key)
 		end)
@@ -638,18 +622,18 @@ SMODS.Back { key = "c_zodiac",
 			end
 			if index_shift == 0 then return end
 
-			local current_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			local current_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[current_zodiac_key]:deactivate()
 			print("Deactivated: " .. current_zodiac_key)
 
 			G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + index_shift*G.GAME.zodiac_shift_direction
-			if G.GAME.current_zodiac_index > #deck_zodiacs then
-				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index - #deck_zodiacs
+			if G.GAME.current_zodiac_index > #G.GAME.zodiacs then
+				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index - #G.GAME.zodiacs
 			elseif G.GAME.current_zodiac_index < 1 then
-				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + #deck_zodiacs
+				G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + #G.GAME.zodiacs
 			end
 
-			local new_zodiac_key = deck_zodiacs[G.GAME.current_zodiac_index]
+			local new_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[new_zodiac_key]:activate()
 			print("Activated: " .. new_zodiac_key)
 

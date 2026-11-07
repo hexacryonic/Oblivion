@@ -478,3 +478,120 @@ function Ovn_f.notification(nodes, sustain)
 		end
 	end)
 end
+
+-- Modify the tabs in run_info.
+---@param tabs table
+---@return nil
+function Ovn_f.modify_run_info_tabs(tabs)
+	if Ovn_f.on_deck('c_zodiac') then
+		table.insert(tabs, {
+			label = "Zodiac",
+			tab_definition_function = Ovn_f.show_zodiac
+		})
+	end
+end
+
+function Ovn_f.zodiac_cycle_ui()
+	local JTML = Ovn_f.JTML
+
+	local function button(key)
+		local bttn_w = {1, 1}
+		return JTML.flex{mode="row", style={ WH=bttn_w, color=G.C.GOLD, roundCorners=true }, {
+			Ovn_f.generate_pfx_ui(key)
+		}}
+	end
+	local function space(dims)
+		return JTML.flex{style={WH=dims}}
+	end
+
+	local function swap(tbl)
+		tbl[1], tbl[2] = tbl[2], tbl[1]
+	end
+
+	local opp = {
+		["top-left"] = "bottom-right",
+		["top-right"] = "bottom-left",
+		["bottom-left"] = "top-right",
+		["bottom-right"] = "top-left",
+	}
+	local function quadrant(vert, hoz, pole_key, far_key)
+		local quad_w = {3.245, 3.245}
+		local col_pole = {1.623, 2.810}
+		local col_far = {1.188, 2.810}
+		local col_far_displace = {1, 1.188}
+
+		local align = ("%s-%s"):format(vert, hoz)
+		local opp_align = opp[align]
+
+		local pole_elements = { button(pole_key) }
+		local far_elements = { space(col_far_displace), button(far_key) }
+		if vert == "bottom" then swap(far_elements) end
+
+		local quad_elements = {
+			JTML.flex{mode="row", style={ WH=col_far, align=align }, far_elements},
+			JTML.flex{mode="column", style={ WH=col_pole, align=align }, pole_elements},
+		}
+		if hoz == "right" then swap(quad_elements) end
+
+		return
+		JTML.flex{mode="column", style={ WH=quad_w, align=opp_align }, quad_elements}
+	end
+
+	local function pole(vert, key)
+		local cardinal_space_vert = {1, 2.245}
+		local elements = { button(key), space(cardinal_space_vert) }
+		if vert == "bottom" then swap(elements) end
+		return JTML.flex{mode="row", elements}
+	end
+
+	local function shift_list(list, amount)
+		amount = amount % #list
+		if amount == 0 then return SMODS.shallow_copy(list) end
+		local new_list = {}
+		for i in ipairs(list) do
+			local disp = i+amount
+			if disp > #list then disp = disp % #list end
+			new_list[disp] = list[i]
+		end
+		return new_list
+	end
+
+	local zodiac_order = shift_list(G.GAME.zodiacs, (G.GAME.current_zodiac_index or 1) - 1)
+	local cardinal_space_hoz = {2.245*2 + 1, 1}
+	return
+	JTML.flex{mode="row", {
+		-- top 2 quadrants
+		JTML.flex{mode="column", {
+			-- top-left quadrant
+			quadrant("top", "left", zodiac_order[12], zodiac_order[11]),
+			-- north
+			pole("top", zodiac_order[1]),
+			-- top-right quadrant
+			quadrant("top", "right", zodiac_order[2], zodiac_order[3]),
+		}},
+		-- east-west
+		JTML.flex{mode="column", {
+			button(zodiac_order[10]),
+			JTML.flex{style={ WH=cardinal_space_hoz }},
+			button(zodiac_order[4])
+		}},
+		-- bottom 2 quadrants
+		JTML.flex{mode="column", {
+			-- bottom-left quadrant
+			quadrant("bottom", "left", zodiac_order[8], zodiac_order[9]),
+			-- south
+			pole("bottom", zodiac_order[7]),
+			-- bottom-right quadrant
+			quadrant("bottom", "right", zodiac_order[6], zodiac_order[5]),
+		}},
+	}}
+end
+
+function Ovn_f.show_zodiac()
+	local JTML = Ovn_f.JTML
+
+	return
+	JTML.flex{mode="column", style={ color=G.C.CLEAR }, {
+		Ovn_f.zodiac_cycle_ui()
+	}}
+end

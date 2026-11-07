@@ -235,7 +235,20 @@ Oblivion.obj.reset_game_globals = function (run_start)
 	Ovn_f.change_deck_visually(G.GAME.ovn_override_deck_visual)
 
 	if not run_start then return end
-
+	G.GAME.zodiacs = {
+		"pfx_ovn_zodiac_aries",
+		"pfx_ovn_zodiac_taurus",
+		"pfx_ovn_zodiac_gemini",
+		"pfx_ovn_zodiac_cancer",
+		"pfx_ovn_zodiac_leo",
+		"pfx_ovn_zodiac_virgo",
+		"pfx_ovn_zodiac_libra",
+		"pfx_ovn_zodiac_scorpio",
+		"pfx_ovn_zodiac_sagittarius",
+		"pfx_ovn_zodiac_capricorn",
+		"pfx_ovn_zodiac_aquarius",
+		"pfx_ovn_zodiac_pisces",
+	}
 	G.GAME.active_passive_effects = {}
 	G.GAME.interest_mult = 1
 	G.GAME.global_cost_multiplier = 1
