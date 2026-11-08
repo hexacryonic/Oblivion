@@ -234,7 +234,7 @@ Oblivion.PassiveEffect {
             if other_card.set_cost then other_card:set_cost() end
         end
     end,
-    remove_from_deck_deck = function (self)
+    remove_from_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands - self.config.hands
         ease_hands_played(-self.config.hands)
         G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier/self.config.cost_multiplier
@@ -361,7 +361,7 @@ Oblivion.PassiveEffect {
             if other_card.set_cost then other_card:set_cost() end
         end
     end,
-    remove_from_deck_deck = function (self)
+    remove_from_deck = function (self)
         G.GAME.global_cost_multiplier = G.GAME.global_cost_multiplier/self.config.cost_multiplier
         for _,other_card in ipairs(G.I.CARD) do
             if other_card.set_cost then other_card:set_cost() end
@@ -426,7 +426,7 @@ Oblivion.PassiveEffect {
         G.GAME.round_resets.discards = G.GAME.round_resets.discards + self.config.discards
         ease_discard(self.config.discards)
     end,
-    remove_from_deck_deck = function (self)
+    remove_from_deck = function (self)
         G.GAME.round_resets.hands = G.GAME.round_resets.hands - self.config.hands
         ease_hands_played(-self.config.hands)
         G.GAME.round_resets.discards = G.GAME.round_resets.discards - self.config.discards
