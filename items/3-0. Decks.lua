@@ -221,6 +221,21 @@ SMODS.Back { key = "c_black",
 -- Corrupt Nebula Deck
 ----------------------
 
+local function toggle_planet_buff(mode)
+	if not G.GAME.ovn_c_nebula_planet_buff then return end
+	if mode == "on" then
+		for _,hand in pairs(G.GAME.hands) do
+			hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
+			hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
+		end
+	elseif mode == "off" then
+		for _,hand in pairs(G.GAME.hands) do
+			hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
+			hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
+		end
+	end
+end
+
 local function c_magicnebula_switch(force_key)
 	Ovn_f.event.simple(nil, function ()
 		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
@@ -238,10 +253,7 @@ local function c_magicnebula_switch(force_key)
 				G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
 			end)
 			if G.GAME.ovn_c_nebula_planet_buff then
-				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
-					hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
-				end
+				toggle_planet_buff("on")
 			end
 			Ovn_f.change_deck_visually("b_ovn_c_nebula")
 
@@ -255,10 +267,7 @@ local function c_magicnebula_switch(force_key)
 					G.GAME.ovn_old_consumable_limit = nil
 				end)
 				if G.GAME.ovn_c_nebula_planet_buff then
-					for _,hand in pairs(G.GAME.hands) do
-						hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
-						hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
-					end
+					toggle_planet_buff("off")
 				end
 			end
 
@@ -287,23 +296,14 @@ local function c_magicnebula_calculate(self, back, context)
 				local c_nebula = G.P_CENTERS["b_ovn_c_nebula"]
 				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff or 0
 				if G.GAME.ovn_c_nebula_planet_buff == c_nebula.config.extra.max_bonus then return end
-				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
-					hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
-				end
+				toggle_planet_buff("off")
 				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff + c_nebula.config.extra.planet_buff
 				if G.GAME.ovn_c_nebula_planet_buff > c_nebula.config.extra.max_bonus then
 					G.GAME.ovn_c_nebula_planet_buff = c_nebula.config.extra.max_bonus
 				end
-				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
-					hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
-				end
+				toggle_planet_buff("on")
 			elseif G.GAME.ovn_c_nebula_planet_buff then
-				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
-					hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
-				end
+				toggle_planet_buff("off")
 				G.GAME.ovn_c_nebula_planet_buff = nil
 			end
 		end
