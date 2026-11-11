@@ -252,6 +252,94 @@ end
 ---- MISCELLANEOUS ----
 -----------------------
 
+-- Generates the definition for the Zodiac cycle UI.
+---@return table
+function Ovn_f.zodiac_cycle_ui()
+	--local JTML = Ovn_f.JTML
+	local opp = {
+		["top-left"]    = "bottom-right", ["top-right"]    = "bottom-left",
+		["bottom-left"] = "top-right",    ["bottom-right"] = "top-left",
+	}
+
+	local function swap(tbl) tbl[1], tbl[2] = tbl[2], tbl[1] end
+	local function space(dims) return JTML.flex{style={WH=dims}} end
+	local function button(index)
+		index = (index + (G.GAME.current_zodiac_index or 1) - 1)
+		if index > #G.GAME.zodiacs then index = index % #G.GAME.zodiacs end
+		local key = G.GAME.zodiacs[index]
+
+		local button_width = {1, 1}
+		return
+		JTML.flex{mode="row", style={ WH=button_width, color=G.C.GOLD, roundCorners=true }, {
+			Ovn_f.generate_pfx_ui(key)
+		}}
+	end
+	local function quadrant(align, pole_index, far_index)
+		-- where pole_index is the index for zodiac near POLE,
+			-- far_index is the index for zodiac FAR from pole
+		local col_far_space = {1, 1.188}
+		local col_far   = {1.188, 2.810}
+		local col_pole  = {1.623, 2.810}
+		local quad_w    = {3.245, 3.245}
+
+		local pole_elements     = { button(pole_index) }
+		local far_elements      = { button(far_index), space(col_far_space) }
+		local quadrant_elements = {
+			JTML.flex{mode="column", style={ WH=col_pole, align=align }, pole_elements},
+			JTML.flex{mode="row",    style={ WH=col_far,  align=align }, far_elements },
+		}
+		local full_quadrant =
+		JTML.flex{mode="column", style={ WH=quad_w, align=opp[align] }, quadrant_elements}
+
+		if (align == "top-left" or align == "top-right")   then swap(far_elements) end
+		if (align == "top-left" or align == "bottom-left") then swap(quadrant_elements) end
+
+		return full_quadrant
+	end
+	local function pole(vert, key)
+		local pole_space = {1, 2.245}
+		local pole_elements = { button(key), space(pole_space) }
+		if vert == "bottom" then swap(pole_elements) end
+		return JTML.flex{mode="row", pole_elements}
+	end
+
+	local cardinal_space_hoz = {2.245*2 + 1, 1}
+	return -- integers are positions on an offset Zodiac cycle
+	JTML.flex{mode="row", {
+		JTML.flex{mode="column", {
+			quadrant("top-left", 12, 11),   -- top-left quadrant
+			pole("top", 1),                 -- north pole
+			quadrant("top-right", 2, 3),    -- top-right quadrant
+		}},
+		JTML.flex{mode="column", {
+			button(10),                     -- east
+			space(cardinal_space_hoz),      -- equator
+			button(4),                      -- west
+		}},
+		JTML.flex{mode="column", {
+			quadrant("bottom-left", 8, 9),  -- bottom-left quadrant
+			pole("bottom", 7),              -- south pole
+			quadrant("bottom-right", 6, 5), -- bottom-right quadrant
+		}},
+	}}
+end
+
+-- Generates the definition for the Zodiac tab UI.
+---@return table
+function Ovn_f.show_zodiac()
+	--local JTML = Ovn_f.JTML
+	return
+	JTML.flex{mode="column", style={ color=G.C.CLEAR }, {
+		Ovn_f.zodiac_cycle_ui()
+	}}
+end
+
+
+
+-----------------------
+---- MISCELLANEOUS ----
+-----------------------
+
 -- Applies additional tooltips to the hovered card.
 ---@param _c SMODS.Center honestly idek what the types are
 ---@param card Card
@@ -396,59 +484,55 @@ function Ovn_f.localize_desc(desc, config)
 	JTML.flex{self_mode=(config.node_type or "row"), mode="row", style={align=align}, row_nodes}
 end
 
-local function notif_event(delay, func, dont_trigger_after)
-	G.E_MANAGER:add_event(Event {
-		no_delete = true,
-		pause_force = true,
-		timer = 'UPTIME',
-		trigger = not dont_trigger_after and 'after' or nil,
-		delay = delay,
-		func = function()
-			func()
-			return true
-		end,
-	}, 'achievement')
-end
-
--- Spawns a notification, similar in behavior to achievements.
+-- Spawns a notification, similar in behavior to achievement popups.
 ---@param nodes UINode[]
 ---@return nil
 function Ovn_f.notification(nodes, sustain)
-	local style = {
-		["root"] = { ---@type JTML.flex.style
-			align = "center-left",
-			roundCorners = true,
-			padding = 0.06,
-			colour = G.C.UI.TRANSPARENT_DARK
-		},
-		["notif_container"] = {
-			align = "center-left",
-			padding = 0.2,
-			WH = {20, nil},
-			roundCorners = true,
-			colour = G.C.BLACK,
-			outline = {1.5, G.C.GREY},
-		},
-		["node_container"] = {
-			align = "center-middle",
-			roundCorners = true,
-		}
+	local style_root = {
+		align = "center-left",
+		padding = 0.06,
+		colour = G.C.UI.TRANSPARENT_DARK,
+		roundCorners = true,
+	}
+	local style_notif_container = {
+		align = "center-left",
+		padding = 0.2,
+		WH = {20, nil},
+		colour = G.C.BLACK,
+		roundCorners = true,
+		outline = {1.5, G.C.GREY},
+	}
+	local style_node_container = {
+		align = "center-middle",
+		roundCorners = true,
 	}
 
-	local def =
-	JTML.flex{mode="row", style=style.root, {
-		JTML.flex{mode="row", style=style.notif_container, {
-			JTML.flex{mode="row", style=style.node_container, nodes}
-		}}
-	}}
+	local function notif_event(delay, func)
+		G.E_MANAGER:add_event(Event {
+			no_delete = true,
+			pause_force = true,
+			timer = 'UPTIME',
+			trigger = delay and 'after' or nil,
+			delay = delay,
+			func = function()
+				func()
+				return true
+			end,
+		}, 'achievement')
+	end
 
 	notif_event(nil, function ()
 		if G.achievement_notification then
 			G.achievement_notification:remove()
 			G.achievement_notification = nil
 		end
-		G.achievement_notification = G.achievement_notification or UIBox{
-			definition = def,
+		G.achievement_notification = UIBox{
+			definition =
+			JTML.flex{mode="row", style=style_root, {
+				JTML.flex{mode="row", style=style_notif_container, {
+					JTML.flex{mode="row", style=style_node_container, nodes}
+				}}
+			}},
 			config = {
 				align = 'cr',
 				offset = {x=20,y=0},
@@ -456,12 +540,11 @@ function Ovn_f.notification(nodes, sustain)
 				bond = 'Weak'
 			}
 		}
-	end, true)
+	end)
 	notif_event(0.1, function ()
+		local notif_contents = G.achievement_notification.UIRoot.children[1].children[1]
 		G.achievement_notification.alignment.offset.x = (
-			G.ROOM.T.x
-			- G.achievement_notification.UIRoot.children[1].children[1].T.w
-			- 0.8
+			G.ROOM.T.x - notif_contents.T.w - 0.8
 		)
 	end)
 	notif_event(0.1, function ()
@@ -489,82 +572,4 @@ function Ovn_f.modify_run_info_tabs(tabs)
 			tab_definition_function = Ovn_f.show_zodiac
 		})
 	end
-end
-
-function Ovn_f.zodiac_cycle_ui()
-	--local JTML = Ovn_f.JTML
-	local opp = {
-		["top-left"]    = "bottom-right", ["top-right"]    = "bottom-left",
-		["bottom-left"] = "top-right",    ["bottom-right"] = "top-left",
-	}
-
-	local function swap(tbl) tbl[1], tbl[2] = tbl[2], tbl[1] end
-	local function space(dims) return JTML.flex{style={WH=dims}} end
-	local function button(index)
-		index = (index + (G.GAME.current_zodiac_index or 1) - 1)
-		if index > #G.GAME.zodiacs then index = index % #G.GAME.zodiacs end
-		local key = G.GAME.zodiacs[index]
-
-		local button_width = {1, 1}
-		return
-		JTML.flex{mode="row", style={ WH=button_width, color=G.C.GOLD, roundCorners=true }, {
-			Ovn_f.generate_pfx_ui(key)
-		}}
-	end
-	local function quadrant(align, pole_index, far_index)
-		-- where pole_index is the index for zodiac near POLE,
-			-- far_index is the index for zodiac FAR from pole
-		local col_far_space = {1, 1.188}
-		local col_far   = {1.188, 2.810}
-		local col_pole  = {1.623, 2.810}
-		local quad_w    = {3.245, 3.245}
-
-		local pole_elements     = { button(pole_index) }
-		local far_elements      = { button(far_index), space(col_far_space) }
-		local quadrant_elements = {
-			JTML.flex{mode="column", style={ WH=col_pole, align=align }, pole_elements},
-			JTML.flex{mode="row",    style={ WH=col_far,  align=align }, far_elements },
-		}
-		local full_quadrant =
-		JTML.flex{mode="column", style={ WH=quad_w, align=opp[align] }, quadrant_elements}
-
-		if (align == "top-left" or align == "top-right")   then swap(far_elements) end
-		if (align == "top-left" or align == "bottom-left") then swap(quadrant_elements) end
-
-		return full_quadrant
-	end
-	local function pole(vert, key)
-		local pole_space = {1, 2.245}
-		local pole_elements = { button(key), space(pole_space) }
-		if vert == "bottom" then swap(pole_elements) end
-		return JTML.flex{mode="row", pole_elements}
-	end
-
-	local cardinal_space_hoz = {2.245*2 + 1, 1}
-	return -- integers are positions on an offset Zodiac cycle
-	JTML.flex{mode="row", {
-		JTML.flex{mode="column", {
-			quadrant("top-left", 12, 11),   -- top-left quadrant
-			pole("top", 1),                 -- north pole
-			quadrant("top-right", 2, 3),    -- top-right quadrant
-		}},
-		JTML.flex{mode="column", {
-			button(10),                     -- east
-			space(cardinal_space_hoz),      -- equator
-			button(4),                      -- west
-		}},
-		JTML.flex{mode="column", {
-			quadrant("bottom-left", 8, 9),  -- bottom-left quadrant
-			pole("bottom", 7),              -- south pole
-			quadrant("bottom-right", 6, 5), -- bottom-right quadrant
-		}},
-	}}
-end
-
-function Ovn_f.show_zodiac()
-	--local JTML = Ovn_f.JTML
-	return
-	JTML.flex{mode="column", style={ color=G.C.CLEAR }, {
-		Ovn_f.zodiac_cycle_ui()
-	}}
 end
