@@ -20,7 +20,7 @@ SMODS.Achievement { key = "ace_combat",
 	order = 2,
 	unlock_condition = function(self, args)
 		local has_pmo = Ovn_f.has_joker('j_ovn_pmo')
-		local has_pareidolia = Ovn_f.has_joker('j_ovn_pareidolia')
+		local has_pareidolia = Ovn_f.has_joker('j_pareidolia')
 		if has_pmo and has_pareidolia then return true end
 	end
 }
