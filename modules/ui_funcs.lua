@@ -492,69 +492,67 @@ function Ovn_f.modify_run_info_tabs(tabs)
 end
 
 function Ovn_f.zodiac_cycle_ui()
-	local JTML = Ovn_f.JTML
-
-	local function swap(tbl) tbl[1], tbl[2] = tbl[2], tbl[1] end
-	local function space(dims) return JTML.flex{style={WH=dims}} end
-	local function button(index)
-		local bttn_w = {1, 1}
-
-		index = (index + (G.GAME.current_zodiac_index or 1) - 1)
-		if index > #G.GAME.zodiacs then index = index % #G.GAME.zodiacs end
-		local key = G.GAME.zodiacs[index]
-
-		return JTML.flex{mode="row", style={ WH=bttn_w, color=G.C.GOLD, roundCorners=true }, {
-			Ovn_f.generate_pfx_ui(key)
-		}}
-	end
-
+	--local JTML = Ovn_f.JTML
 	local opp = {
 		["top-left"]    = "bottom-right", ["top-right"]    = "bottom-left",
 		["bottom-left"] = "top-right",    ["bottom-right"] = "top-left",
 	}
-	local function quadrant(align, pole_index, far_index)
-		local opposite_align = opp[align]
-		local quad_w        = {3.245, 3.245}
-		local col_far_space = {1, 1.188}
-		local col_far       = {1.188, 2.810}
-		local col_pole      = {1.623, 2.810}
 
-		local pole_elements = { button(pole_index) }
-		local far_elements = { space(col_far_space), button(far_index) }
-		if align == "bottom-left" or align == "bottom-right" then swap(far_elements) end
+	local function swap(tbl) tbl[1], tbl[2] = tbl[2], tbl[1] end
+	local function space(dims) return JTML.flex{style={WH=dims}} end
+	local function button(index)
+		index = (index + (G.GAME.current_zodiac_index or 1) - 1)
+		if index > #G.GAME.zodiacs then index = index % #G.GAME.zodiacs end
+		local key = G.GAME.zodiacs[index]
 
-		local quad_elements = {
-			JTML.flex{mode="row", style={ WH=col_far, align=align }, far_elements},
-			JTML.flex{mode="column", style={ WH=col_pole, align=align }, pole_elements},
-		}
-		if align == "top-right" or align == "bottom-right" then swap(quad_elements) end
-
-		return JTML.flex{mode="column", style={ WH=quad_w, align=opposite_align }, quad_elements}
+		local button_width = {1, 1}
+		return
+		JTML.flex{mode="row", style={ WH=button_width, color=G.C.GOLD, roundCorners=true }, {
+			Ovn_f.generate_pfx_ui(key)
+		}}
 	end
+	local function quadrant(align, pole_index, far_index)
+		-- where pole_index is the index for zodiac near POLE,
+			-- far_index is the index for zodiac FAR from pole
+		local col_far_space = {1, 1.188}
+		local col_far   = {1.188, 2.810}
+		local col_pole  = {1.623, 2.810}
+		local quad_w    = {3.245, 3.245}
 
+		local pole_elements     = { button(pole_index) }
+		local far_elements      = { button(far_index), space(col_far_space) }
+		local quadrant_elements = {
+			JTML.flex{mode="column", style={ WH=col_pole, align=align }, pole_elements},
+			JTML.flex{mode="row",    style={ WH=col_far,  align=align }, far_elements },
+		}
+		local full_quadrant =
+		JTML.flex{mode="column", style={ WH=quad_w, align=opp[align] }, quadrant_elements}
+
+		if (align == "top-left" or align == "top-right")   then swap(far_elements) end
+		if (align == "top-left" or align == "bottom-left") then swap(quadrant_elements) end
+
+		return full_quadrant
+	end
 	local function pole(vert, key)
 		local pole_space = {1, 2.245}
-		local elements = { button(key), space(pole_space) }
-		if vert == "bottom" then swap(elements) end
-		return JTML.flex{mode="row", elements}
+		local pole_elements = { button(key), space(pole_space) }
+		if vert == "bottom" then swap(pole_elements) end
+		return JTML.flex{mode="row", pole_elements}
 	end
 
 	local cardinal_space_hoz = {2.245*2 + 1, 1}
 	return -- integers are positions on an offset Zodiac cycle
 	JTML.flex{mode="row", {
-		-- top 2 quadrants
 		JTML.flex{mode="column", {
-			quadrant("top-left", 12, 11), -- top-left quadrant
-			pole("top", 1),               -- north pole
-			quadrant("top-right", 2, 3),  -- top-right quadrant
+			quadrant("top-left", 12, 11),   -- top-left quadrant
+			pole("top", 1),                 -- north pole
+			quadrant("top-right", 2, 3),    -- top-right quadrant
 		}},
-		-- east-west
 		JTML.flex{mode="column", {
-			button(10),                -- east
-			space(cardinal_space_hoz), -- equator
-			button(4),                 -- west
+			button(10),                     -- east
+			space(cardinal_space_hoz),      -- equator
+			button(4),                      -- west
 		}},
-		-- bottom 2 quadrants
 		JTML.flex{mode="column", {
 			quadrant("bottom-left", 8, 9),  -- bottom-left quadrant
 			pole("bottom", 7),              -- south pole
@@ -564,8 +562,7 @@ function Ovn_f.zodiac_cycle_ui()
 end
 
 function Ovn_f.show_zodiac()
-	local JTML = Ovn_f.JTML
-
+	--local JTML = Ovn_f.JTML
 	return
 	JTML.flex{mode="column", style={ color=G.C.CLEAR }, {
 		Ovn_f.zodiac_cycle_ui()
