@@ -268,7 +268,7 @@ local function c_magicnebula_switch(force_key)
 		end
 
 		if force_key then
-			G.GAME.poo = G.deck:save()
+			G.GAME.the_other_deck = G.deck:save()
 		end
 	end)
 end
@@ -317,8 +317,8 @@ local function c_magicnebula_calculate(self, back, context)
 			c_magicnebula_switch()
 
 			-- Swap to other set of playing cards
-			local other_deck = G.GAME.poo
-			G.GAME.poo = G.deck:save()
+			local other_deck = G.GAME.the_other_deck
+			G.GAME.the_other_deck = G.deck:save()
 			remove_all(G.deck.cards)
 			G.deck:load(other_deck)
 			for _,loaded_card in ipairs(G.deck.cards) do
