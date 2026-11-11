@@ -9,3 +9,7 @@ loc_col.ovn_corrupt1  = HEX('04248f')
 --loc_col.ovn_mutation  = G.C.SET.Mutation
 loc_col.ovn_optics    = G.C.SUITS.ovn_Optics
 loc_col.ovn_indigo    = HEX('252fe3')
+
+loc_col.ovn_zred    = HEX('993131')
+loc_col.ovn_zyellow = HEX('998131')
+loc_col.ovn_zblue   = HEX('316A99')
