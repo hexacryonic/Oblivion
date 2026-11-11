@@ -328,10 +328,29 @@ end
 ---@return table
 function Ovn_f.show_zodiac()
 	--local JTML = Ovn_f.JTML
-	return
+	local function background_el(sprite_x)
+		return UIBox {
+			config = {},
+			definition =
+			JTML.flex{mode="row", style={ color=G.C.CLEAR }, {
+				JTML.sprite{sprite={ atlas="ovn_zodiac_thing", pos={sprite_x,0} }, style={ WH={7.49,7.49} }}
+			}}
+		}
+	end
+
+	local arrow_sprite_x = 1
+	-- backwards case
+	if G.GAME.zodiac_shift_direction == -1 then
+		arrow_sprite_x = 2
+	end
+
+	local ret =
 	JTML.flex{mode="column", style={ color=G.C.CLEAR }, {
-		Ovn_f.zodiac_cycle_ui()
+		JTML.object{object=background_el(0), style={WH={0,0}}},
+		JTML.object{object=background_el(arrow_sprite_x), style={WH={0,0}}},
+		Ovn_f.zodiac_cycle_ui(),
 	}}
+	return ret
 end
 
 
