@@ -155,7 +155,7 @@ return {
                 name = 'Prideful Joker',
                 text = {
                     "Played cards with",
-                    "{C:ovn_optic}Optic{} suit give",
+                    "{C:ovn_optics}Optic{} suit give",
                     "{C:mult}+#1#{} Mult when scored",
                 },
                 corrupted_from = {
@@ -382,7 +382,7 @@ return {
                 text = {
                     "{C:attention}Standard Packs",
                     "only contain",
-                    "modified {C:ovn_optic}Optic cards"
+                    "modified {C:ovn_optics}Optic cards"
                 },
                 corrupted_from = {
                     "{C:attention}Hallucination"
@@ -448,9 +448,9 @@ return {
             j_ovn_apache_tears = {
                 name = 'Apache Tears',
                 text = {
-                    "Scored {C:ovn_optic}Optic {}cards give",
+                    "Scored {C:ovn_optics}Optic {}cards give",
                     "{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
-                    "{C:attention}Every#4# {C:ovn_optic}Optic {}cards",
+                    "{C:attention}Every#4# {C:ovn_optics}Optic {}cards",
                     "scored {C:inactive}(#5#) {}gives {C:money}$#6#",
                     Oblivion.sp,
                     "{C:attention}Pure forms {}are not banished",
@@ -465,9 +465,9 @@ return {
             j_ovn_apache_tears_every_card_cash = {
                 name = 'Apache Tears',
                 text = {
-                    "Scored {C:ovn_optic}Optic {}cards give",
+                    "Scored {C:ovn_optics}Optic {}cards give",
                     "{C:chips}+#1# {}Chips, {C:mult}+#2# {}Mult, and {X:mult,C:white}X#3# {} Mult",
-                    "{C:attention}Every {C:ovn_optic}Optic {}card scored gives {C:money}$#4#",
+                    "{C:attention}Every {C:ovn_optics}Optic {}card scored gives {C:money}$#4#",
                     Oblivion.sp,
                     "{C:attention}Pure forms {}are not banished",
                     "This Joker {C:ovn_corrupted}absorbs {}and banishes",
@@ -595,8 +595,8 @@ return {
             ovn_corrupt_condition_has_optic = {
                 name = "Corruption condition",
                 text = {
-                    "{E:ovn_betterfloat}Let {E:ovn_betterfloat,C:ovn_optic}prying eyes",
-                    "{E:ovn_betterfloat,C:ovn_optic}perceive {E:ovn_betterfloat}your deck."
+                    "{E:ovn_betterfloat}Let {E:ovn_betterfloat,C:ovn_optics}prying eyes",
+                    "{E:ovn_betterfloat,C:ovn_optics}perceive {E:ovn_betterfloat}your deck."
                 }
             },
             ovn_corrupt_condition_gros_michel = {

@@ -25,7 +25,7 @@ b_ovn_ocular = {
     name = "Ocular Deck",
     text = {
         "Start with a full set",
-        "of {C:ovn_optic}Optics {}in addition",
+        "of {C:ovn_optics}Optics {}in addition",
         "to the standard deck"
     }
 },

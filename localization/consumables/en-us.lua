@@ -34,7 +34,7 @@ Tarot = {
         text = {
             "{C:ovn_corrupted}Corrupts{} up to",
             "{C:attention}#1#{} selected cards",
-            "to {C:ovn_optic}Optics"
+            "to {C:ovn_optics}Optics"
         }
     }
 },

@@ -10,8 +10,8 @@ return {
 					'Use many new {C:ovn_corrupted}Corrupted Jokers{},',
 					'which act as sidegrades to existing Jokers.',
 					' ',
-					'Discover the special {C:ovn_optic}Optics{} suit that twists Enhancements',
-					'and Seals, featuring the {C:ovn_optic}Spectrum{} hand types.',
+					'Discover the special {C:ovn_optics}Optics{} suit that twists Enhancements',
+					'and Seals, featuring the {C:ovn_optics}Spectrum{} hand types.',
 					' ',
 					'Test your mettle in {C:ovn_corrupted}Corrupt Challenges{}, buffed',
 					'versions of the 20 vanilla challenges for the truly daring.',
@@ -37,7 +37,7 @@ return {
 				text = {
 					"{C:ovn_corrupted}-0.05{} after playing a hand",
 					"{C:ovn_corrupted}+0.2{} when obtaining a {C:ovn_corrupted}Corrupted Joker",
-					"{C:ovn_corrupted}+0.025{} when obtaining an {C:ovn_optic}Optics {}card",
+					"{C:ovn_corrupted}+0.025{} when obtaining an {C:ovn_optics}Optics {}card",
 				}
 			},
 			dd_ovn_insatiable_hunger_banishing = {

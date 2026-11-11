@@ -1,21 +1,11 @@
 G.C.INST = HEX('04248F')
 G.C.UI_INST = G.C.INST
 
-local lc_hook = loc_colour
-function loc_colour(_c, _default)
-	if not G.ARGS.LOC_COLOURS then lc_hook() end
-
-	local loc_c = G.ARGS.LOC_COLOURS
-	loc_c.ovn_corrupted = G.C.RARITY['ovn_corrupted']
-	loc_c.ovn_corrupt2  = HEX('001764')
-	loc_c.ovn_corrupt1  = HEX('04248f')
-	loc_c.ovn_mutation  = G.C.SET.Mutation
-	loc_c.heart         = G.C.SUITS.Hearts
-	loc_c.diamond       = G.C.SUITS.Diamonds
-	loc_c.spade         = G.C.SUITS.Spades
-	loc_c.club          = G.C.SUITS.Clubs
-	loc_c.ovn_optic     = G.C.SUITS.ovn_Optics
-	loc_c.ovn_indigo    = HEX('252fe3')
-
-	return lc_hook(_c, _default)
-end
+loc_colour()
+local loc_col = G.ARGS.LOC_COLOURS
+loc_col.ovn_corrupted = G.C.RARITY['ovn_corrupted']
+loc_col.ovn_corrupt2  = HEX('001764')
+loc_col.ovn_corrupt1  = HEX('04248f')
+--loc_col.ovn_mutation  = G.C.SET.Mutation
+loc_col.ovn_optics    = G.C.SUITS.ovn_Optics
+loc_col.ovn_indigo    = HEX('252fe3')

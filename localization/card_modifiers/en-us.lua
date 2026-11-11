@@ -102,7 +102,7 @@ return {
 				name = "Miasma",
 				text = {
 					"{C:attention}Retriggers{} thrice,",
-					"then {C:ovn_corrupted}corrupts{} into {C:ovn_optic}Optics",
+					"then {C:ovn_corrupted}corrupts{} into {C:ovn_optics}Optics",
 				}
 			},
 			e_ovn_miasma_corruptible_joker = {

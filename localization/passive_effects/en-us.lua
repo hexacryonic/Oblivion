@@ -68,7 +68,7 @@ pfx_ovn_zodiac_leo = {
             "Sign of the Lion"
         },
         {
-            "{C:hearts}Heart{}, {C:diamonds}Diamond{}, and {C:ovn_optic}Optic",
+            "{C:hearts}Heart{}, {C:diamonds}Diamond{}, and {C:ovn_optics}Optic",
             "cards give {C:blue}triple {}their Chips",
             "Your deck is {C:red}fixed to",
             "its current state"
@@ -128,7 +128,7 @@ pfx_ovn_zodiac_sagittarius = {
             "Sign of the Archer"
         },
         {
-            "{C:spades}Spade{}, {C:clubs}Club{}, and {C:ovn_optic}Optic",
+            "{C:spades}Spade{}, {C:clubs}Club{}, and {C:ovn_optics}Optic",
             "cards give {C:mult}+#1# {}Mult",
             "Shop prices are {C:red}doubled",
             "{C:inactive}(Sell values remain normal)",
