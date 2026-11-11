@@ -1,29 +1,3 @@
-local function change_rank(card, new_rank)
-	local new_code = ({
-		Diamonds = 'D_',
-		Spades   = 'S_',
-		Clubs    = 'C_',
-		Hearts   = 'H_',
-		ovn_Optics = 'ovn_O_'
-	})[card.base.suit]
-
-	local new_val = ({
-		Ace    = 'A',
-		King   = 'K',
-		Queen  = 'Q',
-		Jack   = 'J',
-		['10'] = 'T'
-	})[new_rank] or new_rank
-
-	local new_card_key = new_code .. new_val
-	local new_card = G.P_CARDS[new_card_key]
-
-	card:flip()
-	card:set_base(new_card)
-	G.GAME.blind:debuff_card(card)
-	card:flip()
-end
-
 local function play_or_sludgehand(center, card, context)
 	return (
 		card.area == G.play
@@ -151,7 +125,9 @@ SMODS.Enhancement { key = "coord",
 			local other_card_value = card_table[card_index - 1].base.value
 			if card.base.value == other_card_value then return end
 
-			change_rank(card, other_card_value)
+			card:flip()
+			assert(SMODS.change_base(card, nil, other_card_value))
+			card:flip()
 		end
 	end,
 }
