@@ -239,8 +239,8 @@ local function c_magicnebula_switch(force_key)
 			end)
 			if G.GAME.ovn_c_nebula_planet_buff then
 				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips*G.GAME.ovn_c_nebula_planet_buff
-					hand.l_mult  = hand.l_mult *G.GAME.ovn_c_nebula_planet_buff
+					hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
+					hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
 				end
 			end
 			Ovn_f.change_deck_visually("b_ovn_c_nebula")
@@ -256,8 +256,8 @@ local function c_magicnebula_switch(force_key)
 				end)
 				if G.GAME.ovn_c_nebula_planet_buff then
 					for _,hand in pairs(G.GAME.hands) do
-						hand.l_chips = hand.l_chips/G.GAME.ovn_c_nebula_planet_buff
-						hand.l_mult  = hand.l_mult /G.GAME.ovn_c_nebula_planet_buff
+						hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
+						hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
 					end
 				end
 			end
@@ -285,15 +285,24 @@ local function c_magicnebula_calculate(self, back, context)
 		if context.using_consumeable then
 			if context.consumeable.ability.set == "Planet" then
 				local c_nebula = G.P_CENTERS["b_ovn_c_nebula"]
-				G.GAME.ovn_c_nebula_planet_buff = (G.GAME.ovn_c_nebula_planet_buff or 1)*c_nebula.config.extra.planet_buff
+				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff or 0
+				if G.GAME.ovn_c_nebula_planet_buff == c_nebula.config.extra.max_bonus then return end
 				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips*c_nebula.config.extra.planet_buff
-					hand.l_mult  = hand.l_mult *c_nebula.config.extra.planet_buff
+					hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
+					hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
+				end
+				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff + c_nebula.config.extra.planet_buff
+				if G.GAME.ovn_c_nebula_planet_buff > c_nebula.config.extra.max_bonus then
+					G.GAME.ovn_c_nebula_planet_buff = c_nebula.config.extra.max_bonus
+				end
+				for _,hand in pairs(G.GAME.hands) do
+					hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
+					hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
 				end
 			elseif G.GAME.ovn_c_nebula_planet_buff then
 				for _,hand in pairs(G.GAME.hands) do
-					hand.l_chips = hand.l_chips/G.GAME.ovn_c_nebula_planet_buff
-					hand.l_mult  = hand.l_mult /G.GAME.ovn_c_nebula_planet_buff
+					hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
+					hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
 				end
 				G.GAME.ovn_c_nebula_planet_buff = nil
 			end
@@ -408,7 +417,8 @@ SMODS.Back { key = "c_nebula",
 
 	config = {
 		extra = {
-			planet_buff = 1.5,
+			planet_buff = 0.2,
+			max_bonus = 4,
 		}
 	},
 	loc_vars = function (self, info_queue, card)
