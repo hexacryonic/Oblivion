@@ -424,7 +424,8 @@ SMODS.Back { key = "c_nebula",
 	loc_vars = function (self, info_queue, card)
 		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
 		return {vars = {
-			self.config.extra.planet_buff,
+			self.config.extra.planet_buff*100,
+			self.config.extra.max_bonus*100,
 		}}
 	end,
 

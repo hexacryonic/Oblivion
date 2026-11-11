@@ -92,8 +92,9 @@ b_ovn_c_magic = {
 b_ovn_c_nebula = {
     name = 'Corrupt Nebula Deck',
     text = {
-        "Planet cards are {C:attention}#1#X {}stronger",
+        "Planet cards are {C:attention}#1#% {}stronger",
         "per {C:attention}consecutive {C:planet}Planet {}card used",
+        "{C:inactive}(Max #2#%)",
         "{C:red}No consumable slots",
         "Swaps to {C:attention}Corrupt Magic",
         "{C:attention}Deck {}after each ante"
