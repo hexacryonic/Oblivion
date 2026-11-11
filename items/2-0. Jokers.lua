@@ -885,6 +885,31 @@ SMODS.Joker { key = 'black_knife',
 
 	end
 }
+
+local card_dissolve_ref = Card.start_dissolve
+function Card:start_dissolve(...)
+	if not (
+		SMODS.has_enhancement(self, "m_glass")
+		and #SMODS.find_card('j_ovn_black_knife') > 0
+	) then return card_dissolve_ref(self, ...) end
+	self.getting_sliced = nil
+	self.shattered = nil
+	self.destroyed = nil
+	self.area:remove_from_highlighted(self)
+end
+
+local card_shatter_ref = Card.shatter
+function Card:shatter(...)
+	if not (
+		SMODS.has_enhancement(self, "m_glass")
+		and #SMODS.find_card('j_ovn_black_knife') > 0
+	) then return card_shatter_ref(self, ...) end
+	self.getting_sliced = nil
+	self.shattered = nil
+	self.destroyed = nil
+	self.area:remove_from_highlighted(self)
+end
+
 -- Additional functionality in:
 	-- Glass Card take-ownership
 

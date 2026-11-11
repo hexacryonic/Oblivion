@@ -142,3 +142,19 @@ end
 cards = new_card_list
 '''
 match_indent = true
+
+# ----
+
+# function G.FUNCS.draw_from_play_to_discard
+# Draw Glass Cards that are saved from destruction
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+if (not v.shattered) and (not v.destroyed) then
+'''
+position = "at"
+payload = '''
+if (not v.shattered) and (not v.destroyed) or (SMODS.has_enhancement(v, "m_glass") and #SMODS.find_card('j_ovn_black_knife')) then
+'''
+match_indent = true

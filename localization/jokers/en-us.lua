@@ -165,8 +165,10 @@ return {
             j_ovn_black_knife = {
                 name = "Black Knife",
                 text = {
-                    "Glass cards {C:attention}no longer shatter",
+                    "Glass cards are",
+                    "{C:attention}no longer destructible",
                     "but now give {C:white,X:mult}X#1# {} Mult",
+                    Oblivion.sp,
                     "If a Glass card would have",
                     "shattered, this Joker",
                     "gains {C:white,X:mult}X#2# {} Mult",

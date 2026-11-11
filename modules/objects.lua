@@ -265,7 +265,7 @@ SMODS.Tag:take_ownership('orbital', {
 	end
 }, true)
 
--- Ownership of Glass Cards for Black Knife functionality
+-- Ownership of Glass Cards for Black Knife effect and flagging
 local glass_calc_hook = G.P_CENTERS['m_glass'].calculate
 SMODS.Enhancement:take_ownership('glass', {
 	set_ability = function (self, card, initial, delay_sprites)
@@ -284,7 +284,6 @@ SMODS.Enhancement:take_ownership('glass', {
 			and #SMODS.find_card('j_ovn_black_knife') > 0
 			and ret.remove == true
 		) then
-			ret.remove = nil
 			card.ovn_saved_blackknife = true
 		end
 		return ret
