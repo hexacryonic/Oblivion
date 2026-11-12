@@ -332,18 +332,14 @@ Oblivion.PassiveEffect { key = 'zodiac_sagittarius',
     set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
-        if context.individual then
-            for _,other_card in ipairs(context.scoring_hand) do
-                if (
-                    other_card:is_suit("Spades")
-                    or other_card:is_suit("Clubs")
-                    or other_card:is_suit("ovn_Optics")
-                ) then
-                    return {
-                        mult = self.config.mult_per_card
-                    }
-                end
-            end
+        if context.individual and context.cardarea == G.play and (
+            context.other_card:is_suit("Spades")
+            or context.other_card:is_suit("Clubs")
+            or context.other_card:is_suit("ovn_Optics")
+        ) then
+            return {
+                mult = self.config.mult_per_card
+            }
         end
     end,
     add_to_deck = function (self)
