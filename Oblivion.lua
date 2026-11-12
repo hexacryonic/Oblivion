@@ -43,12 +43,16 @@ if (
 
 
 
+-={ YOU CAN READ THIS CRASH LOG ! }=-
 
-====== HOW TO FIX THIS CRASH ======
+
+---==={ How to fix this crash }===---
 1. Uninstall Talisman
 2. Install Amulet
 https://github.com/frostice482/amulet
 
+
+-={ YOU CAN READ THIS CRASH LOG ! }=-
 
 
 ]])
@@ -65,8 +69,7 @@ PlayLog = PlayLog or {
 ---@return nil
 function Ovn_f.try_load_file(file_name)
 	print("[OBLIVION] Loading file " .. file_name)
-	local file_func, err = SMODS.load_file(file_name)
-	if err then error(err) end
+	local file_func = assert(SMODS.load_file(file_name))
 	if file_func then file_func() end
 end
 
@@ -77,6 +80,7 @@ end
 function Ovn_f.load_directory(folder_name, condition_function)
 	local mod_path = Oblivion.mod_path
 	local files = SMODS.NFS.getDirectoryItems(mod_path .. folder_name)
+
 	local condition = function (file_name)
 		local condition_function_check = true
 		if condition_function then
