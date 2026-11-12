@@ -5,8 +5,7 @@ end
 --------
 -- Aries
 --------
-Oblivion.PassiveEffect {
-    key = 'zodiac_aries',
+Oblivion.PassiveEffect { key = 'zodiac_aries',
     config = {
         xmult = 1.5,
         discards = -1
@@ -42,8 +41,7 @@ Oblivion.PassiveEffect {
 --------
 -- Taurus
 --------
-Oblivion.PassiveEffect {
-    key = 'zodiac_taurus',
+Oblivion.PassiveEffect { key = 'zodiac_taurus',
     config = {
         interest_mult = 2,
     },
@@ -81,8 +79,7 @@ end
 ---------
 -- Gemini
 ---------
-Oblivion.PassiveEffect {
-    key = 'zodiac_gemini',
+Oblivion.PassiveEffect { key = 'zodiac_gemini',
     config = {
         xmult_min = 0.5,
         xmult_max = 0.9,
@@ -121,8 +118,7 @@ Oblivion.PassiveEffect {
 ---------
 -- Cancer
 ---------
-Oblivion.PassiveEffect {
-    key = 'zodiac_cancer',
+Oblivion.PassiveEffect { key = 'zodiac_cancer',
     config = {
         hand_size = 2,
         dollars = -2
@@ -156,8 +152,7 @@ Oblivion.PassiveEffect {
 ------
 -- Leo
 ------
-Oblivion.PassiveEffect {
-    key = 'zodiac_leo',
+Oblivion.PassiveEffect { key = 'zodiac_leo',
     config = {
         chips_multiplier = 3,
     },
@@ -210,8 +205,7 @@ end
 --------
 -- Virgo
 --------
-Oblivion.PassiveEffect {
-    key = 'zodiac_virgo',
+Oblivion.PassiveEffect { key = 'zodiac_virgo',
     config = {
         cost_multiplier = 0.5,
         hands = -1
@@ -247,8 +241,7 @@ Oblivion.PassiveEffect {
 --------
 -- Libra
 --------
-Oblivion.PassiveEffect {
-    key = 'zodiac_libra',
+Oblivion.PassiveEffect { key = 'zodiac_libra',
 
     atlas = "zodiacs",
     pos = {x=2, y=1},
@@ -313,8 +306,7 @@ end
 ----------
 -- Scorpio
 ----------
-Oblivion.PassiveEffect {
-    key = 'zodiac_scorpio',
+Oblivion.PassiveEffect { key = 'zodiac_scorpio',
 
     atlas = "zodiacs",
     pos = {x=3, y=1},
@@ -324,8 +316,7 @@ Oblivion.PassiveEffect {
 --------------
 -- Sagittarius
 --------------
-Oblivion.PassiveEffect {
-    key = 'zodiac_sagittarius',
+Oblivion.PassiveEffect { key = 'zodiac_sagittarius',
     config = {
         mult_per_card = 3,
         cost_multiplier = 2
@@ -372,8 +363,7 @@ Oblivion.PassiveEffect {
 ------------
 -- Capricorn
 ------------
-Oblivion.PassiveEffect {
-    key = 'zodiac_capricorn',
+Oblivion.PassiveEffect { key = 'zodiac_capricorn',
 
     atlas = "zodiacs",
     pos = {x=1, y=2},
@@ -384,8 +374,7 @@ Oblivion.PassiveEffect {
 -----------
 -- Aquarius
 -----------
-Oblivion.PassiveEffect {
-    key = 'zodiac_aquarius',
+Oblivion.PassiveEffect { key = 'zodiac_aquarius',
 
     atlas = "zodiacs",
     pos = {x=2, y=2},
@@ -396,8 +385,7 @@ Oblivion.PassiveEffect {
 ---------
 -- Pisces
 ---------
-Oblivion.PassiveEffect {
-    key = 'zodiac_pisces',
+Oblivion.PassiveEffect { key = 'zodiac_pisces',
     config = {
         hands = 1,
         discards = 1
