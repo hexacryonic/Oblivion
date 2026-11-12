@@ -638,7 +638,7 @@ SMODS.Back { key = "c_zodiac",
 
 			local current_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[current_zodiac_key]:deactivate()
-			print("Deactivated: " .. current_zodiac_key)
+			--print("Deactivated: " .. current_zodiac_key)
 
 			G.GAME.current_zodiac_index = G.GAME.current_zodiac_index + index_shift*G.GAME.zodiac_shift_direction
 			if G.GAME.current_zodiac_index > #G.GAME.zodiacs then
@@ -649,11 +649,11 @@ SMODS.Back { key = "c_zodiac",
 
 			local new_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[new_zodiac_key]:activate()
-			print("Activated: " .. new_zodiac_key)
+			--print("Activated: " .. new_zodiac_key)
 
 			if context.consumeable.config.center.set == "Spectral" then
 				G.GAME.zodiac_shift_direction = -1*G.GAME.zodiac_shift_direction
-				print("Switch direction")
+				--print("Switch direction")
 			end
 
 			Ovn_f.event.simple(nil, function ()

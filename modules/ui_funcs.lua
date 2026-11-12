@@ -202,7 +202,7 @@ function Ovn_f.update_suit_chart(instant)
 		end
 		return suit_count[a] < suit_count[b]
 	end)
-	print(suit_count)
+	--print(suit_count)
 
 	local w = G.ovn_suit_chart_cfg.w
 	local outline = G.ovn_suit_chart_cfg.outline
