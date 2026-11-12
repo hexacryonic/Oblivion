@@ -185,7 +185,7 @@ function Ovn_f.generate_pfx_ui(key, cfg)
     spr.states.hover.can = true
     spr.states.drag.can = false
     spr.states.collide.can = true
-    spr.config = {tag = pfx_proto, force_focus = true}
+    spr.config = {pfx = pfx_proto, force_focus = true}
 
 	spr.hover = function(_self)
         if G.CONTROLLER.dragging.target and not G.CONTROLLER.using_touch then return end

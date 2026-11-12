@@ -248,9 +248,34 @@ end
 
 
 
------------------------
----- MISCELLANEOUS ----
------------------------
+--------------------
+---- THE ZODIAC ----
+--------------------
+
+-- Updates the Zodiac display.
+---@return nil
+function Ovn_f.update_zodiac_display()
+	if G.ovn_zodiac_display then
+		G.ovn_zodiac_display:remove()
+		G.ovn_zodiac_display = nil
+	end
+	local button_width = {1, 1}
+	local key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
+	G.ovn_zodiac_display = UIBox{
+		definition =
+		JTML.flex{mode="column", style={colour={0,0,0,0}}, {
+			JTML.flex{mode="row", style={ WH=button_width, color=G.C.GOLD, roundCorners=true }, {
+				Ovn_f.generate_pfx_ui(key)
+			}}
+		}},
+		config = {
+			major = G.deck,
+			align = 'tm',
+			offset = {x=0.2, y=-0.4},
+			bond = 'Weak'
+		}
+	}
+end
 
 -- Generates the definition for the Zodiac cycle UI.
 ---@return table

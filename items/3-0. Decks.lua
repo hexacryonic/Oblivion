@@ -618,6 +618,9 @@ SMODS.Back { key = "c_zodiac",
 			local current_zodiac_key = G.GAME.zodiacs[G.GAME.current_zodiac_index]
 			Oblivion.PassiveEffects[current_zodiac_key]:activate()
 			print("Activated: " .. current_zodiac_key)
+			Ovn_f.event.simple(nil, function ()
+				Ovn_f.update_zodiac_display()
+			end)
 		end)
 	end,
 
@@ -652,6 +655,12 @@ SMODS.Back { key = "c_zodiac",
 				G.GAME.zodiac_shift_direction = -1*G.GAME.zodiac_shift_direction
 				print("Switch direction")
 			end
+
+			Ovn_f.event.simple(nil, function ()
+				Ovn_f.update_zodiac_display()
+				G.ovn_zodiac_display:juice_up(0.75)
+				play_sound("tarot1")
+			end)
 		end
 	end
 }
