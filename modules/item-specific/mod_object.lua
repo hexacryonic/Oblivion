@@ -149,7 +149,7 @@ Oblivion.obj.calculate = function (self, context)
 		-- If shop contains corrupting items, juice corruptibles
         Ovn_f.event.simple(nil, function ()
             local stop_juice = true
-            for _,card in ipairs(G.shop_jokers.cards) do
+            for _,card in ipairs(G.shop_jokers.cards or {}) do
                 if card.config.center.corrupts_jokers then
                     mass_juice_corruptibles()
                     stop_juice = false

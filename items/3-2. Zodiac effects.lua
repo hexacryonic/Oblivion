@@ -253,7 +253,7 @@ Oblivion.PassiveEffect { key = 'zodiac_libra',
             return {
                 balance = true,
                 func = function ()
-                    ease_dollars(G.GAME.dollars)
+                    ease_dollars(-G.GAME.dollars)
                 end
             }
         end
@@ -398,10 +398,16 @@ Oblivion.PassiveEffect { key = 'zodiac_pisces',
     set_card_type_badge = zodiac_badge,
 
     calculate = function (self, context)
-        if context.stay_flipped and context.to_area == G.hand then
+        if context.setting_blind or context.hand_drawn then
+            G.GAME.prepped = nil
+        end
+        if context.stay_flipped and context.to_area == G.hand and G.GAME.prepped then
             return {
                 stay_flipped = true
             }
+        end
+        if context.press_play then
+            G.GAME.prepped = true
         end
     end,
     add_to_deck = function (self)

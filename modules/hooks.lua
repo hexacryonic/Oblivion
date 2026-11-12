@@ -427,7 +427,17 @@ end
 local card_costvalue_hook = Card.set_cost_value
 function Card:set_cost_value()
     card_costvalue_hook(self)
+	G.card_setcost_old = self.cost
     self.cost = self.cost*(G.GAME.global_cost_multiplier or 1)
+	self.cost = math.floor(self.cost)
+end
+local card_sellvalue_hook = Card.set_sell_value
+function Card:set_sell_value()
+	local current_self_cost = self.cost
+	self.cost = G.card_setcost_old
+	card_sellvalue_hook(self)
+	self.cost = current_self_cost
+	G.card_setcost_old = nil
 end
 
 
