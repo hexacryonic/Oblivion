@@ -221,93 +221,19 @@ SMODS.Back { key = "c_black",
 -- Corrupt Nebula Deck
 ----------------------
 
-local function toggle_planet_buff(mode)
-	if not G.GAME.ovn_c_nebula_planet_buff then return end
-	if mode == "on" then
-		for _,hand in pairs(G.GAME.hands) do
-			hand.l_chips = hand.l_chips*(G.GAME.ovn_c_nebula_planet_buff + 1)
-			hand.l_mult  = hand.l_mult *(G.GAME.ovn_c_nebula_planet_buff + 1)
-		end
-	elseif mode == "off" then
-		for _,hand in pairs(G.GAME.hands) do
-			hand.l_chips = hand.l_chips/(G.GAME.ovn_c_nebula_planet_buff + 1)
-			hand.l_mult  = hand.l_mult /(G.GAME.ovn_c_nebula_planet_buff + 1)
-		end
-	end
-end
-
-local function c_magicnebula_switch(force_key)
+local function c_magicnebula_switch()
+	local opp = { magic = "nebula", nebula = "magic" }
+	local current_mode = G.GAME.ovn_c_magicnebula
+	local new_mode = opp[current_mode]
 	Ovn_f.event.simple(nil, function ()
-		local c_magic  = G.P_CENTERS["b_ovn_c_magic"]
-		if G.GAME.ovn_c_magicnebula == "magic" or force_key == "nebula" then
-			G.GAME.ovn_c_magicnebula = "nebula"
-
-			-- Disable C.Magic Deck
-			if not force_key then
-				G.consumeables:change_size(-c_magic.config.extra.consumable_slots)
-			end
-
-			-- Enable C.Nebula Deck
-			Ovn_f.event.simple(nil, function () -- because apparently changing cardarea size makes events >:(
-				G.GAME.ovn_old_consumable_limit = G.consumeables.config.card_limit
-				G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
-			end)
-			if G.GAME.ovn_c_nebula_planet_buff then
-				toggle_planet_buff("on")
-			end
-			Ovn_f.change_deck_visually("b_ovn_c_nebula")
-
-		elseif G.GAME.ovn_c_magicnebula == "nebula" or force_key == "magic" then
-			G.GAME.ovn_c_magicnebula = "magic"
-
-			-- Disable C.Nebula Deck
-			if not force_key then
-				G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
-				Ovn_f.event.simple(nil, function ()
-					G.GAME.ovn_old_consumable_limit = nil
-				end)
-				if G.GAME.ovn_c_nebula_planet_buff then
-					toggle_planet_buff("off")
-				end
-			end
-
-			-- Enable C.Magic Deck
-			G.consumeables:change_size(c_magic.config.extra.consumable_slots)
-			Ovn_f.change_deck_visually("b_ovn_c_magic")
-		end
-
-		if force_key then
-			G.GAME.the_other_deck = G.deck:save()
-		end
+		G.GAME.ovn_c_magicnebula = new_mode
+		Oblivion.PassiveEffects['pfx_ovn_deck_c' .. current_mode]:deactivate()
+		Oblivion.PassiveEffects['pfx_ovn_deck_c' .. new_mode]:activate()
+		Ovn_f.change_deck_visually("b_ovn_c_" .. new_mode)
 	end)
 end
 
 local function c_magicnebula_calculate(self, back, context)
-	if G.GAME.ovn_c_magicnebula == "magic" then
-		if context.hand_drawn and context.first_hand_drawn then
-			local c_magic = G.P_CENTERS["b_ovn_c_magic"]
-			for i=1,c_magic.config.extra.cards_applied do
-				context.hand_drawn[i]:set_seal("ovn_amethyst_mark")
-			end
-		end
-	elseif G.GAME.ovn_c_magicnebula == "nebula" then
-		if context.using_consumeable then
-			if context.consumeable.ability.set == "Planet" then
-				local c_nebula = G.P_CENTERS["b_ovn_c_nebula"]
-				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff or 0
-				if G.GAME.ovn_c_nebula_planet_buff == c_nebula.config.extra.max_bonus then return end
-				toggle_planet_buff("off")
-				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff + c_nebula.config.extra.planet_buff
-				if G.GAME.ovn_c_nebula_planet_buff > c_nebula.config.extra.max_bonus then
-					G.GAME.ovn_c_nebula_planet_buff = c_nebula.config.extra.max_bonus
-				end
-				toggle_planet_buff("on")
-			elseif G.GAME.ovn_c_nebula_planet_buff then
-				toggle_planet_buff("off")
-				G.GAME.ovn_c_nebula_planet_buff = nil
-			end
-		end
-	end
 	if context.end_of_round and context.main_eval and context.beat_boss then
 		G.GAME.ovn_bossbeat = true
 	end
@@ -318,16 +244,26 @@ local function c_magicnebula_calculate(self, back, context)
 
 			-- Swap to other set of playing cards
 			local other_deck = G.GAME.the_other_deck
-			G.GAME.the_other_deck = G.deck:save()
+			G.GAME.the_other_deck = recursive_table_cull(G.deck:save())
 			remove_all(G.deck.cards)
 			G.deck:load(other_deck)
 			for _,loaded_card in ipairs(G.deck.cards) do
 				table.insert(G.playing_cards, loaded_card)
 			end
 
+			G.deck.cards[1]:juice_up()
 			play_sound("ovn_corrupting_joker", 0.8)
 		end)
 	end
+end
+
+local function c_magicnebula_apply(self, back)
+	local current_mode = self.ovn_mode
+	Ovn_f.event.simple(nil, function ()
+		G.GAME.ovn_c_magicnebula = current_mode
+		Oblivion.PassiveEffects['pfx_ovn_deck_c' .. current_mode]:activate()
+		G.GAME.the_other_deck = recursive_table_cull(G.deck:save())
+	end)
 end
 
 local function c_magicnebula_unlock(self, args)
@@ -339,28 +275,20 @@ local function c_magicnebula_unlock(self, args)
 end
 
 local function c_magicnebula_lockedvars(self, info_queue, card)
-	local b_magic_name_1 = localize('k_unknown')
+	local b_magic_name  = localize('k_unknown')
+	local b_nebula_name = localize('k_unknown')
 	if G.P_CENTERS['b_magic'].unlocked then
-		b_magic_name_1 = localize {
-			type = 'name_text',
-			set = 'Back',
-			key = "b_magic"
-		}
+		b_magic_name = localize { type = 'name_text', set = 'Back', key = "b_magic" }
 	end
-	local b_nebula_name_2 = localize('k_unknown')
 	if G.P_CENTERS['b_nebula'].unlocked then
-		b_nebula_name_2 = localize {
-			type = 'name_text',
-			set = 'Back',
-			key = "b_nebula"
-		}
+		b_nebula_name = localize { type = 'name_text', set = 'Back', key = "b_nebula" }
 	end
 
 	return {
 		key = "b_ovn_locked_c_magicnebula",
 		vars = {
-			b_magic_name_1,
-			b_nebula_name_2,
+			b_magic_name,
+			b_nebula_name,
 			localize { type = 'name_text', set = 'Stake', key = 'stake_black' },
 			colours = {
 				get_stake_col(4)
@@ -372,6 +300,7 @@ end
 SMODS.Back { key = "c_magic",
 	ovn_corrupt_deck = true,
 	ovn_pure_version = "b_magic",
+	ovn_mode = "magic",
 
 	atlas = "decks_corrupt",
 	pos = { x = 0, y = 1 },
@@ -380,26 +309,18 @@ SMODS.Back { key = "c_magic",
 	check_for_unlock = c_magicnebula_unlock,
 	locked_loc_vars = c_magicnebula_lockedvars,
 
-	config = {
-		extra = {
-			cards_applied = 2,
-			consumable_slots = 4
-		}
-	},
 	loc_vars = function (self, info_queue, card)
 		-- next line disabled due to stack overflow error
 		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_nebula"])
 		table.insert(info_queue, G.P_SEALS["ovn_amethyst_mark"])
 		return {vars = {
-			self.config.extra.cards_applied,
-			self.config.extra.consumable_slots,
+			Oblivion.PassiveEffects['pfx_ovn_deck_cmagic'].config.cards_applied,
+			Oblivion.PassiveEffects['pfx_ovn_deck_cmagic'].config.consumable_slots,
 		}}
 	end,
 
 	apply = function (self, back)
-		if not G.GAME.ovn_c_magicnebula then
-			c_magicnebula_switch("magic")
-		end
+		c_magicnebula_apply(self, back)
 	end,
 	calculate = c_magicnebula_calculate
 }
@@ -407,6 +328,7 @@ SMODS.Back { key = "c_magic",
 SMODS.Back { key = "c_nebula",
 	ovn_corrupt_deck = true,
 	ovn_pure_version = "b_nebula",
+	ovn_mode = "nebula",
 
 	atlas = "decks_corrupt",
 	pos = { x = 1, y = 1 },
@@ -415,27 +337,105 @@ SMODS.Back { key = "c_nebula",
 	check_for_unlock = c_magicnebula_unlock,
 	locked_loc_vars = c_magicnebula_lockedvars,
 
-	config = {
-		extra = {
-			planet_buff = 0.2,
-			max_bonus = 4,
-		}
-	},
 	loc_vars = function (self, info_queue, card)
 		-- table.insert(info_queue, G.P_CENTERS["b_ovn_c_magic"])
 		return {vars = {
-			self.config.extra.planet_buff*100,
-			self.config.extra.max_bonus*100,
+			Oblivion.PassiveEffects['pfx_ovn_deck_cnebula'].config.planet_buff*100,
+			Oblivion.PassiveEffects['pfx_ovn_deck_cnebula'].config.max_bonus*100,
 		}}
 	end,
 
 	apply = function (self, back)
-		if not G.GAME.ovn_c_magicnebula then
-			c_magicnebula_switch("nebula")
-		end
+		c_magicnebula_apply(self, back)
 	end,
 	calculate = c_magicnebula_calculate
 }
+
+Oblivion.PassiveEffect { key = "deck_cmagic",
+	config = {
+		cards_applied = 2,
+		consumable_slots = 4
+	},
+	-- loc_vars
+	-- atlas
+
+	calculate = function (self, context)
+		if context.hand_drawn and context.first_hand_drawn then
+			for i=1, self.config.cards_applied do
+				context.hand_drawn[i]:set_seal("ovn_amethyst_mark")
+			end
+		end
+	end,
+	add_to_deck = function (self)
+		G.consumeables:change_size(self.config.consumable_slots)
+	end,
+	remove_from_deck = function (self)
+		G.consumeables:change_size(-self.config.consumable_slots)
+	end,
+}
+
+local function toggle_planet_buff(mode)
+	if not G.GAME.ovn_c_nebula_planet_buff then return end
+	local planet_buff = G.GAME.ovn_c_nebula_planet_buff + 1
+	if mode == "on" then
+		for _,hand in pairs(G.GAME.hands) do
+			hand.l_chips = hand.l_chips*planet_buff
+			hand.l_mult  = hand.l_mult *planet_buff
+		end
+	elseif mode == "off" then
+		for _,hand in pairs(G.GAME.hands) do
+			hand.l_chips = hand.l_chips/planet_buff
+			hand.l_mult  = hand.l_mult /planet_buff
+		end
+	end
+end
+
+Oblivion.PassiveEffect { key = "deck_cnebula",
+	config = {
+		planet_buff = 0.2,
+		max_bonus = 4
+	},
+	-- loc_vars
+	-- atlas
+
+	calculate = function (self, context)
+		if context.using_consumeable then
+			if context.consumeable.ability.set == "Planet" then
+				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff or 0
+				if G.GAME.ovn_c_nebula_planet_buff == self.config.max_bonus then return end
+				toggle_planet_buff("off")
+				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff + self.config.planet_buff
+				if G.GAME.ovn_c_nebula_planet_buff > self.config.max_bonus then
+					G.GAME.ovn_c_nebula_planet_buff = self.config.max_bonus
+				end
+				toggle_planet_buff("on")
+			elseif G.GAME.ovn_c_nebula_planet_buff then
+				toggle_planet_buff("off")
+				G.GAME.ovn_c_nebula_planet_buff = nil
+			end
+		end
+	end,
+	add_to_deck = function (self)
+		Ovn_f.event.simple(nil, function () -- because apparently changing cardarea size makes events >:(
+			G.GAME.ovn_old_consumable_limit = G.consumeables.config.card_limit
+			G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
+		end)
+		if G.GAME.ovn_c_nebula_planet_buff then
+			toggle_planet_buff("on")
+		end
+		Ovn_f.change_deck_visually("b_ovn_c_nebula")
+	end,
+	remove_from_deck = function (self)
+		G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
+		Ovn_f.event.simple(nil, function ()
+			G.GAME.ovn_old_consumable_limit = nil
+		end)
+		if G.GAME.ovn_c_nebula_planet_buff then
+			toggle_planet_buff("off")
+		end
+	end,
+}
+
 
 
 ---------------------
