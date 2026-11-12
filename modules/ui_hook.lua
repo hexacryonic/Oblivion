@@ -402,3 +402,30 @@ function G.FUNCS.change_tab(e)
 	funcs_changetab_hook(e)
 	if G.OVERLAY_MENU then G.OVERLAY_MENU:recalculate() end
 end
+
+-- Hook to prevent buying playing cards if deck is immutable
+local funcs_canbuy_hook = G.FUNCS.can_buy
+function G.FUNCS.can_buy(e)
+	if (
+		G.GAME.immutable_deck
+		and SMODS.is_playing_card(e.config.ref_table)
+	) then
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+	else
+		funcs_canbuy_hook(e)
+	end
+end
+-- Hook to prevent selecting playing cards from Standard Packs
+local funcs_canselect_hook = G.FUNCS.can_select_card
+function G.FUNCS.can_select_card(e)
+	if (
+		G.GAME.immutable_deck
+		and SMODS.is_playing_card(e.config.ref_table)
+	) then
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	else
+		funcs_canselect_hook(e)
+	end
+end
