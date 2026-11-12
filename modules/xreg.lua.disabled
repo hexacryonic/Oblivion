@@ -1,0 +1,93 @@
+-- Xreg = "extended register"
+
+local registers = {
+    Joker = SMODS.Joker
+}
+local containers = {}
+local order_tracking = {}
+Oblivion.Xreg = {}
+
+local function eq3(a,b,c) return a == c and b == c end
+
+-- Modifies `a_tbl` to receive the contents of `b_tbl`.
+local function deep_merge_into(a_tbl, b_tbl)
+    for b_key,b_val in pairs(b_tbl) do
+        if eq3(type(a_tbl[b_key]), type(b_val), "table") then
+            deep_merge_into(a_tbl[b_key], b_val)
+        else
+            a_tbl[b_key] = b_val
+        end
+    end
+end
+
+-- Set up Xregs
+for type in pairs(registers) do
+    containers[type] = {}
+    order_tracking[type] = 0
+
+    Oblivion.Xreg[type] = function (def)
+        local item_key = def.key
+
+        -- First time the item is registered
+        if not containers[type][item_key] then
+            containers[type][item_key] = def
+            if not containers[type][item_key].ovn_order then
+                containers[type][item_key].ovn_order = order_tracking[type]
+                order_tracking[type] = order_tracking[type] + 1
+            end
+
+        -- Other times the item is registered:
+        -- Hook, merge, or overwrite with existign register
+        else
+            local existing_reg = containers[type][item_key]
+            for k_new,v_new in pairs(def) do
+                local type_v_new = type(v_new)
+                local type_v_old = type(existing_reg[k_new])
+
+                -- Function hook
+                -- If the new function returns a truthy value,
+                -- ONLY it will be calculated
+                if eq3(type_v_new, type_v_old, "function") then
+                    local v_hook = existing_reg[k_new]
+                    existing_reg[k_new] = function (...)
+                        return v_new(...) or v_hook(...)
+                    end
+
+                -- Table merge
+                -- Merge subtables, or new value overwrite old value
+                elseif eq3(type_v_new, type_v_old, "table") then
+                    deep_merge_into(def[k_new], v_new)
+
+                -- Overwriting other old values
+                else
+                    existing_reg[k_new] = v_new
+                end
+            end
+        end
+    end
+
+end
+
+function Ovn_f.override_order_tracker(type, val)
+    order_tracking[type] = val
+end
+
+function Ovn_f.__enable_xregs()
+    for type,container in pairs(containers) do
+        local ordered_container = {}
+        for _,def in pairs(container) do
+            table.insert(ordered_container, def)
+        end
+
+        table.sort(ordered_container, function (a, b)
+            if a.ovn_order == b.ovn_order then
+                return a.key < b.key
+            end
+            return a.ovn_order < b.ovn_order
+        end)
+
+        for _,def in pairs(ordered_container) do
+            registers[type](def)
+        end
+    end
+end
