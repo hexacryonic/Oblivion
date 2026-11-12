@@ -412,7 +412,7 @@ function Card:open()
 				G.round_eval.alignment.offset.py = nil
 			end
 			G.CONTROLLER.interrupt.focus = true
-	
+
 			Ovn_f.event.simple(nil, function()
 				if G.shop then G.CONTROLLER:snap_to({node = G.shop:get_UIE_by_ID('next_round_button')}) end
 			end)
@@ -504,15 +504,14 @@ function Game:update(dt)
 
 	-- If all held cards are Unobtainium, lose the run
 	if G.STATE == G.STATES.SELECTING_HAND then
-		local unob_tally = 0
-
+		local has_card_that_isnt_unob = false
 		for _,card in ipairs(G.hand.cards) do
-			if card.config.center.key == 'm_ovn_unob' then
-				unob_tally = unob_tally + 1
+			if not SMODS.has_enhancement(card, 'm_ovn_unob') then
+				has_card_that_isnt_unob = true
+				break
 			end
 		end
-
-		if unob_tally >= G.hand.config.card_limit and G.GAME.current_round.discards_left <= 0 then
+		if not has_card_that_isnt_unob and G.GAME.current_round.discards_left <= 0 then
 			check_for_unlock({type = 'ovn_lol_lmao_even'})
 			G.STATE = G.STATES.GAME_OVER
 			G.STATE_COMPLETE = false
