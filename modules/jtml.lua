@@ -536,11 +536,11 @@ local sprite_objdef_aliases = {
 	end,
 	scale = function (value, mode, style, obj_def)
 		if type(value) == "number" then
-			obj_def.W = 2.4*obj_def.new_sprite_atlas.px/82*value
-			obj_def.H = 2.4*obj_def.new_sprite_atlas.py/82*value
+			obj_def.W = obj_def.new_sprite_atlas.px*2.4/82*value
+			obj_def.H = obj_def.new_sprite_atlas.py*2.4/82*value
 		elseif type(value) == "table" then
-			obj_def.W = 2.4*obj_def.new_sprite_atlas.px/82*value[1]
-			obj_def.H = 2.4*obj_def.new_sprite_atlas.py/82*value[2]
+			obj_def.W = obj_def.new_sprite_atlas.px*2.4/82*value[1]
+			obj_def.H = obj_def.new_sprite_atlas.py*2.4/82*value[2]
 		end
 	end,
 }
@@ -552,25 +552,15 @@ JTML.sprite = function (node)
 		error("Sprite requires target sprite to render")
 	end
 
-	-- If atlas is directly specified, animation must also be specified
-	local is_animated = node.sprite.animated
-	if node.sprite.atlas_def then
-		obj_def.new_sprite_atlas = node.sprite.atlas_def
-	elseif G.ANIMATION_ATLAS[node.sprite.atlas] then
-		is_animated = true
-		obj_def.new_sprite_atlas = G.ANIMATION_ATLAS[node.sprite.atlas]
-	elseif G.ASSET_ATLAS[node.sprite.atlas] then
-		is_animated = false
-		obj_def.new_sprite_atlas = G.ASSET_ATLAS[node.sprite.atlas]
+	obj_def.new_sprite_atlas = SMODS.get_atlas(node.sprite.atlas)
+	if node.sprite.pos then
+		obj_def.sprite_pos = {
+			x = node.sprite.pos[1],
+			y = node.sprite.pos[2]
+		}
 	end
 
-	obj_def.sprite_pos = {
-		x = node.sprite.pos[1],
-		y = node.sprite.pos[2]
-	}
-
 	JTML.f.handle_alias.config(object_config_aliases, "object", node, config)
-
 	if node.style then
 		if #node.style == 0 then node.style = {node.style} end
 		for _,single_style in ipairs(node.style) do
@@ -579,13 +569,14 @@ JTML.sprite = function (node)
 		end
 	end
 
-	config.object = (is_animated and AnimatedSprite or Sprite)(
+	config.object = SMODS.create_sprite(
 		obj_def.X or 0,
 		obj_def.Y or 0,
-		obj_def.W or 2.4*obj_def.new_sprite_atlas.px/82,
-		obj_def.H or 2.4*obj_def.new_sprite_atlas.py/82,
+		obj_def.W or obj_def.new_sprite_atlas.px*2.4/82,
+		obj_def.H or obj_def.new_sprite_atlas.py*2.4/82,
 		obj_def.new_sprite_atlas,
-		obj_def.sprite_pos or {x=0, y=0}
+		obj_def.sprite_pos or {x=0, y=0},
+		node.sprite.anim_args
 	)
 
 	local uinode = {n=G.UIT.O, config=config}
@@ -781,6 +772,22 @@ end
 ---@field silent? boolean If true, letters do not click when popping in.
 ---@field pitchShift? number Added to the pitch of the next letter's pop-in sound. Positive - pitch increase. Negative - pitch decrease. Zero - constant pitch.
 
+---@class anim_args
+---@field start_pos? { x: number, y: number }
+---@field frames? number
+---@field end_pos? { x: number, y: number }
+---@field flipped_h? boolean
+---@field flipped_w? boolean
+---@field fps? number
+---@field frame_duration? number
+---@field frame_durations? { [integer]: number }
+---@field frame_order? string|{ [integer]: number }|fun(sprite): integer
+
+---@class state_args: anim_args
+---@field default_state? string
+---@field states_offset? { x: number, y: number }
+---@field states? { [string]: table|anim_args|{ exit_to: string|fun(state_table, sprite): string } }
+
 ---@class JTML.sprite_def
 --- A string in G.ASSET_ATLAS, G.ANIMATION_ATLAS, or SMODS.Atlases.
 --- Attempts to automatically determine if atlas is animated.
@@ -789,8 +796,9 @@ end
 --- First value is X, second value is Y. (0-indexed)
 --- If atlas is animated, second value dictates which row on the animation atlas to use.
 ---@field pos? [number, number]
----@field atlas_def? SMODS.Atlas|table Overrides `atlas`.
----@field animated? boolean Must be specified if `atlas_def` is specified; if true, interpret `atlas_def` as an animation atlas.
+--- On animated atlases, coordinate of the starting sprite in the animation.
+--- First value is X, second value is Y. (0-indexed)
+---@field anim_args? anim_args|state_args
 
 --#endregion
 ----------------------------
