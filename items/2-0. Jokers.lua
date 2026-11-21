@@ -796,8 +796,8 @@ SMODS.Joker { key = 'black_knife',
 		}
 	},
 
-	atlas = "placeholder",
-	pos = {x=0, y=0},
+	atlas = "jokers_corrupt",
+	pos = {x=5, y=4},
 	uses_placeholder_sprite = true,
 
 	attributes = { "xmult", "enhancements", "scaling" },
@@ -809,7 +809,7 @@ SMODS.Joker { key = 'black_knife',
 	enhancement_gate = "m_ovn_glass",
 
 	add_to_deck = function (self, card, from_debuff)
-		if not (#SMODS.find_card("j_ovn_black_knife") == 0) then return end
+		if not Ovn_f.has_joker("j_ovn_black_knife") then return end
 		for _,pl_card in ipairs(Ovn_f.find_enhancement("m_glass")) do
 			pl_card.ability.Xmult  = card.ability.extra.new_glass_xmult
 			pl_card.ability.x_mult = card.ability.extra.new_glass_xmult
@@ -819,7 +819,7 @@ SMODS.Joker { key = 'black_knife',
 		end)
 	end,
 	remove_from_deck = function (self, card, from_debuff)
-		if not (#SMODS.find_card("j_ovn_black_knife") == 0) then return end
+		if not Ovn_f.has_joker("j_ovn_black_knife") then return end
 		for _,pl_card in ipairs(Ovn_f.find_enhancement("m_glass")) do
 			pl_card.ability.Xmult  = pl_card.config.center.config.Xmult
 			pl_card.ability.x_mult = pl_card.config.center.config.Xmult
@@ -856,6 +856,7 @@ SMODS.Joker { key = 'black_knife',
 				local has_ice = false
 				local has_magician = false
 				local juice_cards = {}
+
 				for _,pcard in ipairs(G.hand.cards) do
 					if pcard.config.center.key == 'm_ovn_ice' then
 						has_ice = true
@@ -870,9 +871,7 @@ SMODS.Joker { key = 'black_knife',
 				end
 
 				G.GAME.ovn_icemagic_juicing = nil
-				if not (has_ice and has_magician) then
-					return
-				end
+				if not (has_ice and has_magician) then return end
 
 				G.GAME.ovn_icemagic_juicing = true
 				for _,other_card in ipairs(juice_cards) do
@@ -882,7 +881,6 @@ SMODS.Joker { key = 'black_knife',
 				end
 			end)
 		end
-
 	end
 }
 
