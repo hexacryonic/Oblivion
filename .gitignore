@@ -3,3 +3,6 @@
 .ignore
 .luarc.json
 *.code-workspace
+*.kra
+*.kra~
+*.png~
