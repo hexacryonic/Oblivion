@@ -375,18 +375,13 @@ Oblivion.PassiveEffect { key = "deck_cmagic",
 }
 
 local function toggle_planet_buff(mode)
-	if not G.GAME.ovn_c_nebula_planet_buff then return end
-	local planet_buff = G.GAME.ovn_c_nebula_planet_buff + 1
-	if mode == "on" then
-		for _,hand in pairs(G.GAME.hands) do
-			hand.l_chips = hand.l_chips*planet_buff
-			hand.l_mult  = hand.l_mult *planet_buff
-		end
-	elseif mode == "off" then
-		for _,hand in pairs(G.GAME.hands) do
-			hand.l_chips = hand.l_chips/planet_buff
-			hand.l_mult  = hand.l_mult /planet_buff
-		end
+	if not G.GAME.ovn_c_nebula_buff then return end
+	local planet_buff = G.GAME.ovn_c_nebula_buff + 1
+	if mode == "off" then planet_buff = 1/planet_buff end
+
+	for _,hand in pairs(G.GAME.hands) do
+		hand.l_chips = hand.l_chips*planet_buff
+		hand.l_mult  = hand.l_mult *planet_buff
 	end
 end
 
@@ -399,40 +394,36 @@ Oblivion.PassiveEffect { key = "deck_cnebula",
 	-- atlas
 
 	calculate = function (self, context)
-		if context.using_consumeable then
-			if context.consumeable.ability.set == "Planet" then
-				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff or 0
-				if G.GAME.ovn_c_nebula_planet_buff == self.config.max_bonus then return end
-				toggle_planet_buff("off")
-				G.GAME.ovn_c_nebula_planet_buff = G.GAME.ovn_c_nebula_planet_buff + self.config.planet_buff
-				if G.GAME.ovn_c_nebula_planet_buff > self.config.max_bonus then
-					G.GAME.ovn_c_nebula_planet_buff = self.config.max_bonus
-				end
-				toggle_planet_buff("on")
-			elseif G.GAME.ovn_c_nebula_planet_buff then
-				toggle_planet_buff("off")
-				G.GAME.ovn_c_nebula_planet_buff = nil
+		if not context.using_consumeable then return end
+
+		if context.consumeable.ability.set == "Planet" then
+			G.GAME.ovn_c_nebula_buff = G.GAME.ovn_c_nebula_buff or 0
+			if G.GAME.ovn_c_nebula_buff == self.config.max_bonus then return end
+			toggle_planet_buff("off")
+			G.GAME.ovn_c_nebula_buff = G.GAME.ovn_c_nebula_buff + self.config.planet_buff
+			if G.GAME.ovn_c_nebula_buff > self.config.max_bonus then
+				G.GAME.ovn_c_nebula_buff = self.config.max_bonus
 			end
+			toggle_planet_buff("on")
+		elseif G.GAME.ovn_c_nebula_buff then
+			toggle_planet_buff("off")
+			G.GAME.ovn_c_nebula_buff = nil
 		end
 	end,
 	add_to_deck = function (self)
-		Ovn_f.event.simple(nil, function () -- because apparently changing cardarea size makes events >:(
+		-- because apparently changing cardarea size makes events >:(
+		Ovn_f.event.simple(nil, function ()
 			G.GAME.ovn_old_consumable_limit = G.consumeables.config.card_limit
 			G.consumeables:change_size(-G.GAME.ovn_old_consumable_limit)
 		end)
-		if G.GAME.ovn_c_nebula_planet_buff then
-			toggle_planet_buff("on")
-		end
-		Ovn_f.change_deck_visually("b_ovn_c_nebula")
+		toggle_planet_buff("on")
 	end,
 	remove_from_deck = function (self)
-		G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
 		Ovn_f.event.simple(nil, function ()
+			G.consumeables:change_size(G.GAME.ovn_old_consumable_limit)
 			G.GAME.ovn_old_consumable_limit = nil
 		end)
-		if G.GAME.ovn_c_nebula_planet_buff then
-			toggle_planet_buff("off")
-		end
+		toggle_planet_buff("off")
 	end,
 }
 
