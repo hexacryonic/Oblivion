@@ -7,7 +7,7 @@ return {
 					'An expansion to Balatro themed around an',
 					'{C:ovn_corrupted}otherworldly corruption{}!',
 					' ',
-					'Use many new {C:ovn_corrupted}Corrupted Jokers{},',
+					'Use many new {C:ovn_corrupted}Corrupt Jokers{},',
 					'which act as sidegrades to existing Jokers.',
 					' ',
 					'Discover the special {C:ovn_optics}Optics{} suit that twists Enhancements',
@@ -36,7 +36,7 @@ return {
 				name = "Instability",
 				text = {
 					"{C:ovn_corrupted}-0.05{} after playing a hand",
-					"{C:ovn_corrupted}+0.2{} when obtaining a {C:ovn_corrupted}Corrupted Joker",
+					"{C:ovn_corrupted}+0.2{} when obtaining a {C:ovn_corrupted}Corrupt Joker",
 					"{C:ovn_corrupted}+0.025{} when obtaining an {C:ovn_optics}Optics {}card",
 				}
 			},
@@ -95,7 +95,7 @@ return {
 				name = "Wicked Pack",
 				text = {
 					"Choose {C:attention}#1# {}of up to {C:attention}#2#",
-					"{C:ovn_corrupted}Corrupted {C:joker}Joker {}cards",
+					"{C:ovn_corrupted}Corrupt {C:joker}Joker {}cards",
 					"or a {C:attention}#3#"
 				}
 			}
@@ -113,7 +113,7 @@ return {
 				name = 'The Purity',
 				text = {
 					'When defeated or disabled:',
-					'Purify all Corrupted Jokers',
+					'Purify all Corrupt Jokers',
 					'if any hands remain'
 				}
 			},
@@ -121,7 +121,7 @@ return {
 				name = 'Stygian Sigil',
 				text = {
 					'-1 card selection limit',
-					'per Corrupted Joker owned',
+					'per Corrupt Joker owned',
 					'upon entry (min. -4)'
 				}
 			},
@@ -137,9 +137,9 @@ return {
 			stored = "Stored!",
 			empty = "Emptied!",
 			k_inactive_ex = "Inactive!",
-				-- Developer's note: Corrupted and Supercorrupted are superficially equivalent, hence they should have the same text
-			k_ovn_corrupted = "Corrupted",
-			k_ovn_supercorrupted = "Corrupted",
+				-- Developer's note: Corrupt and Supercorrupt are superficially equivalent, hence they should have the same text
+			k_ovn_corrupted = "Corrupt",
+			k_ovn_supercorrupted = "Corrupt",
 			k_ovn_wicked_pack = "Wicked Pack",
 			k_primary_contributors = "Primary contributors",
 			k_additional_credits = "Additional credits",

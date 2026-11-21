@@ -62,7 +62,7 @@ Spectral = {
         name = 'Charybdis',
         text = {
             "Create {C:attention}#1#{} random {C:dark_edition}Negative{}",
-            "{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
+            "{C:ovn_corrupted}Corrupt{} {C:attention}Joker{}",
             "Destroy {C:attention}1{} other {C:attention}Joker{}"
         }
     },
@@ -118,7 +118,7 @@ Tag = {
         name = 'Corrupted Tag',
         text = {
             "Shop has a free",
-            "{C:ovn_corrupted}Corrupted{} {C:attention}Joker{}",
+            "{C:ovn_corrupted}Corrupt{} {C:attention}Joker{}",
         }
     },
     tag_ovn_miasmatag = {
@@ -151,7 +151,7 @@ Voucher = {
     v_ovn_call_of_the_void = {
         name = 'Call of the Void',
         text = {
-            "{C:ovn_corrupted}Corrupted Jokers {}now",
+            "{C:ovn_corrupted}Corrupt Jokers {}now",
             "appear in the Joker pool"
         }
     }

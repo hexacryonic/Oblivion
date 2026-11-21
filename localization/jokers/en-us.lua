@@ -26,7 +26,7 @@ return {
                 name = 'John Oblivion',
                 text = {
                     "Creates a",
-                    "{C:ovn_corrupted}Corrupted {C:attention}Joker",
+                    "{C:ovn_corrupted}Corrupt {C:attention}Joker",
                     "when sold"
                 }
             },
@@ -119,7 +119,7 @@ return {
                 name = "Purifier",
                 text = {
                     "When Blind is selected,",
-                    "the {C:attention}leftmost {C:ovn_corrupted}Corrupted {}Joker",
+                    "the {C:attention}leftmost {C:ovn_corrupted {}Joker",
                     "is {C:blue}purified {}to give",
                     "this card {C:red}+#1# {}Mult",
                     "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
@@ -409,7 +409,7 @@ return {
                 text = {
                     "{C:green}Uncommon {}Jokers always",
                     "spawn with {C:dark_edition}Miasma",
-                    "{C:ovn_corrupted}Corrupted {}Jokers each",
+                    "{C:ovn_corrupted}Corrupt {}Jokers each",
                     "give {X:mult,C:white}X#1# {} Mult",
                 },
                 corrupted_from = {
@@ -479,7 +479,7 @@ return {
             j_ovn_showneverends = {
                 name = 'THE SHOW NEVER ENDS',
                 text = {
-                    "{C:ovn_corrupted}Corrupted {C:attention}Jokers",
+                    "{C:ovn_corrupted}Corrupt {C:attention}Jokers",
                     "no longer banish or",
                     "destroy their counterparts"
                 },
@@ -566,7 +566,7 @@ return {
                 name = "Nyarlathotep",
                 text = {
                     "{C:attention}Retrigger {}all scoring cards",
-                    "once {C:attention}per held Corrupted Joker",
+                    "once {C:attention}per held Corrupt Joker",
                     "{C:inactive}(Currently {C:attention}#1# {C:inactive}retriggers)",
                     "Scoring cards gain",
                     "{C:white,X:mult}+X#2# {} Mult per trigger",
