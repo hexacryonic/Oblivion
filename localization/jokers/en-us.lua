@@ -119,7 +119,7 @@ return {
                 name = "Purifier",
                 text = {
                     "When Blind is selected,",
-                    "the {C:attention}leftmost {C:ovn_corrupted {}Joker",
+                    "the {C:attention}leftmost {C:ovn_corrupted}Corrupt {}Joker",
                     "is {C:blue}purified {}to give",
                     "this card {C:red}+#1# {}Mult",
                     "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)",
