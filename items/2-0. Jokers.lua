@@ -776,9 +776,9 @@ SMODS.Joker { key = 'prideful',
 --------------
 SMODS.Joker { key = 'black_knife',
 	credits = {
-		concept = {"Hyperspade"},
-		code = {"Oinite"},
-		-- art
+		concept = "Hyperspade",
+		code = "Oinite",
+		art = "Oinite"
 	},
 
 	loc_vars = function (self, info_queue, card)
