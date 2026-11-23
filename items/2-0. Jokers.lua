@@ -2730,12 +2730,11 @@ SMODS.Joker { key = 'white_cloak',
 	credits = {
 		concept = {"Hyperspade", "SyntaxTsundere"},
 		code = "Oinite",
-		-- art
+		art = "Oinite",
 	},
 
-	atlas = "placeholder",
-	pos = {x=0, y=0},
-	uses_placeholder_sprite = true,
+	atlas = "jokers_corrupt",
+	pos = {x=0, y=5},
 
 	attributes = { "enhancement" },
 	blueprint_compat = false,
